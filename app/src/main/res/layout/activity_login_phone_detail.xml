@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="24dip"
+    android:paddingRight="24dip"
+    tools:context=".ui.user.LoginPhoneDetailActivity">
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="16dip"
+        android:layout_height="16dip"
+        android:layout_marginTop="36dip"
+        android:src="@mipmap/common_back" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="118dip"
+        android:text="设置新密码："
+        android:textColor="#ff3c3b41"
+        android:textSize="24dip" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dip"
+        android:text="6-12位字符"
+        android:textColor="#ffb9b8c1"
+        android:textSize="12dip" />
+
+    <EditText
+        android:id="@+id/main_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dip"
+        android:gravity="center"
+        android:inputType="textPassword"
+        android:maxLength="12" />
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:layout_marginLeft="52.5dip"
+        android:layout_marginTop="45dip"
+        android:layout_marginRight="52.5dip"
+        android:background="@drawable/build_user_save_bg"
+        android:text="下一步"
+        android:textColor="#ffffff"
+        android:textSize="15dip" />
+</LinearLayout>

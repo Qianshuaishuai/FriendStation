@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
@@ -30,6 +31,20 @@ public class CodeActivity extends BaseActivity {
 
     @ViewInject(R.id.tip)
     private TextView tip;
+
+    @ViewInject(R.id.layout_code)
+    private LinearLayout codeLayout;
+
+    @ViewInject(R.id.layout_password)
+    private LinearLayout passwordLayout;
+
+    @ViewInject(R.id.main_input)
+    private EditText mainInput;
+
+    @Event(R.id.login)
+    private void login(View view) {
+
+    }
 
     @Event(R.id.back)
     private void backClick(View view) {
