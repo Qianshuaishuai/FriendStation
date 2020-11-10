@@ -1,7 +1,9 @@
-package com.babyraising.friendstation;
+package com.babyraising.friendstation.ui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.babyraising.friendstation.R;
 
 public class MainActivity extends AppCompatActivity {
 

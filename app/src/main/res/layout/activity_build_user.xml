@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.user.BuildUserActivity">
+
+    <RelativeLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="48dip">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:src="@mipmap/common_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="新建用户信息"
+            android:textColor="#ff3c3b41"
+            android:textSize="17dip" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_alignParentBottom="true"
+            android:background="#D4D4D4"></View>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/layout_top"
+        android:background="#FAF9FE"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dip"
+            android:layout_marginLeft="15dip"
+            android:layout_marginTop="10dip"
+            android:layout_marginRight="15dip"
+            android:background="@drawable/build_user_dialog_bg"
+            android:orientation="vertical"
+            android:paddingLeft="15dip"
+            android:paddingRight="15dip">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dip"
+                android:layout_marginBottom="15dip">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="头像："
+                    android:textColor="#ff37445a"
+                    android:textSize="12dip" />
+
+                <ImageView
+                    android:id="@+id/head"
+                    android:layout_width="60dip"
+                    android:layout_height="60dip"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/login_logo" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:background="#D8D8D8"></View>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dip"
+                android:layout_marginBottom="20dip">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="昵称："
+                    android:textColor="#ff37445a"
+                    android:textSize="12dip" />
+
+                <EditText
+                    android:id="@+id/username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@null"
+                    android:text="伊丽莎白·班纳特"
+                    android:textColor="#ffa6a8ad"
+                    android:textSize="12dip" />
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:background="#D8D8D8"></View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dip"
+                android:layout_marginBottom="14dip"
+                android:gravity="right|center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="随机头像与昵称"
+                    android:textColor="#F75184"
+                    android:textSize="12dip" />
+
+                <ImageView
+                    android:id="@+id/refresh"
+                    android:layout_width="21dip"
+                    android:layout_height="21dip"
+                    android:layout_marginLeft="8dip"
+                    android:src="@mipmap/build_user_refresh" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:layout_marginLeft="52.5dip"
+            android:layout_marginTop="30dip"
+            android:layout_marginRight="52.5dip"
+            android:background="@drawable/build_user_save_bg"
+            android:text="保存"
+            android:textColor="#ffffff"
+            android:textSize="15dip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_take_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/layout_camera"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="17dip"
+                android:layout_height="14.5dip"
+                android:src="@mipmap/build_user_camera" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:text="拍照"
+                android:textColor="#3C3B41"
+                android:textSize="14dip" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:layout_marginLeft="15dip"
+            android:layout_marginRight="15dip"
+            android:background="#D4D4D4"></View>
+
+        <LinearLayout
+            android:id="@+id/layout_photo"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="18dip"
+                android:layout_height="18dip"
+                android:src="@mipmap/build_user_photo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:text="从手机相册选择"
+                android:textColor="#3C3B41"
+                android:textSize="14dip" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:background="#D4D4D4"></View>
+
+        <LinearLayout
+            android:id="@+id/layout_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:text="取消"
+                android:textColor="#3C3B41"
+                android:textSize="14dip" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

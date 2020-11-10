@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAF9FE"
+    android:orientation="vertical"
+    tools:context=".ui.main.InviteFriendActivity">
+
+    <RelativeLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="48dip">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:src="@mipmap/common_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="邀请好友"
+            android:textColor="#ff3c3b41"
+            android:textSize="17dip" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_alignParentBottom="true"
+            android:background="#D4D4D4"></View>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="358dip"
+                android:layout_marginLeft="25dip"
+                android:layout_marginTop="22.5dip"
+                android:layout_marginRight="25dip"
+                android:background="@drawable/shape_invite_friend_logo_bg"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="296dip"
+                    android:layout_height="296dip"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/invite_content_logo" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:orientation="horizontal"
+                    android:paddingBottom="18dip">
+
+                    <ImageView
+                        android:layout_width="50dip"
+                        android:layout_height="50dip"
+                        android:src="@mipmap/login_logo" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dip"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="寻他"
+                            android:textColor="#37445A"
+                            android:textSize="14dip" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dip"
+                            android:text="身边的社交"
+                            android:textColor="#37445A"
+                            android:textSize="14dip" />
+                    </LinearLayout>
+                </LinearLayout>
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="34dip"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="92dip"
+                    android:layout_height="4dip"
+                    android:src="@drawable/shape_invite_friend_left" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dip"
+                    android:layout_marginRight="8dip"
+                    android:text="立即邀请"
+                    android:textColor="#37445A"
+                    android:textSize="15dip" />
+
+                <ImageView
+                    android:layout_width="92dip"
+                    android:layout_height="4dip"
+                    android:src="@drawable/shape_invite_friend_right" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dip"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/layout_wechat"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="36dip"
+                        android:layout_height="36dip"
+                        android:src="@mipmap/invite_wechat_icon" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dip"
+                        android:text="微信"
+                        android:textColor="#B9B8C1"
+                        android:textSize="13dip" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/layout_wechat_moment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dip"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="36dip"
+                        android:layout_height="36dip"
+                        android:src="@mipmap/invite_wechat_moment" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dip"
+                        android:text="朋友圈"
+                        android:textColor="#B9B8C1"
+                        android:textSize="13dip" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/save"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:layout_marginLeft="52.5dip"
+                android:layout_marginTop="22dip"
+                android:layout_marginRight="52.5dip"
+                android:background="@drawable/build_user_save_bg"
+                android:text="保存"
+                android:textColor="#ffffff"
+                android:textSize="15dip" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

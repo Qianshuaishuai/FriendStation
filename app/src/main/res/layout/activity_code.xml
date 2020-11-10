@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="24dip"
+    android:paddingRight="24dip"
+    tools:context=".ui.user.CodeActivity">
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="16dip"
+        android:layout_height="16dip"
+        android:layout_marginTop="36dip"
+        android:src="@mipmap/common_back" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="118dip"
+        android:text="输入验证码"
+        android:textColor="#ff3c3b41"
+        android:textSize="24dip" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dip"
+        android:text="请输入手机验证码"
+        android:textColor="#ffb9b8c1"
+        android:textSize="12dip" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="86dip"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/code1"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:paddingBottom="12dip"
+            android:textSize="36dip" />
+
+        <EditText
+            android:id="@+id/code2"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dip"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:paddingBottom="12dip"
+            android:textSize="36dip" />
+
+        <EditText
+            android:id="@+id/code3"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dip"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:paddingBottom="12dip"
+            android:textSize="36dip" />
+
+        <EditText
+            android:id="@+id/code4"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dip"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="1"
+            android:paddingBottom="12dip"
+            android:textSize="36dip" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dip"
+        android:layout_marginTop="24dip"
+        android:layout_marginRight="6dip"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已发送至+86 15677889900"
+            android:textColor="#ff3c3b41"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/resend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="重新发送"
+            android:textColor="#fff75184"
+            android:textSize="12dip" />
+    </RelativeLayout>
+</LinearLayout>
