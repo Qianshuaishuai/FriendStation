@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dip"
+        android:layout_marginBottom="15dip"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:layout_marginLeft="20dip"
+            android:src="@mipmap/task_common_icon" />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dip"
+            android:text="新手任务"
+            android:textColor="#3C3B41"
+            android:textSize="15dip" />
+
+        <TextView
+            android:id="@+id/tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:text="上传真是头像"
+            android:textColor="#B9B8C1"
+            android:textSize="12dip" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:text="+ 2金币"
+                android:textColor="#FD7E41"
+                android:textSize="12dip" />
+
+            <ImageView
+                android:layout_width="12dip"
+                android:layout_height="12dip"
+                android:layout_marginLeft="8dip"
+                android:layout_marginRight="15dip"
+                android:src="@mipmap/common_right" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dip"
+        android:layout_marginLeft="56dip"
+        android:background="#D4D4D4"></View>
+</LinearLayout>
