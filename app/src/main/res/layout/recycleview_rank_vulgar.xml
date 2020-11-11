@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dip"
+    android:background="#FAF9FE"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="69dip"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/layout_number"
+            android:layout_width="20dip"
+            android:layout_height="20dip"
+            android:layout_marginLeft="20dip"
+            android:background="@mipmap/rank_number_bg">
+
+            <TextView
+                android:id="@+id/rank_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="1"
+                android:textColor="#ffffff"
+                android:textSize="12dip" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/rank_normal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dip"
+            android:text="4"
+            android:textColor="#5B4FBD"
+            android:textSize="12dip"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="17.5dip">
+
+            <ImageView
+                android:id="@+id/iv_head"
+                android:layout_width="50dip"
+                android:layout_height="50dip"
+                android:src="@mipmap/look_me_head" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="56dip"
+            android:text="香香"
+            android:textColor="#444463"
+            android:textSize="15dip" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|right"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="25dip"
+                android:background="@drawable/shape_rank_close_tip_bg"
+                android:paddingLeft="10dip"
+                android:paddingTop="2dip"
+                android:paddingRight="10dip"
+                android:paddingBottom="2dip"
+                android:text="今日土豪值1000"
+                android:textColor="#9A4AC1"
+                android:textSize="12dip" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="#d4d4d4"></View>
+</LinearLayout>

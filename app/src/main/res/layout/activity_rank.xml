@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.main.RankActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="48dip">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:src="@mipmap/common_back" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/close_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="亲密榜"
+                android:textColor="#9692B1"
+                android:textSize="15dip"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/close_selected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="亲密榜"
+                android:textColor="#ff3c3b41"
+                android:textSize="17dip"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/vulgar_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="78dip"
+                android:text="土豪榜"
+                android:textColor="#9692B1"
+                android:textSize="15dip" />
+
+            <TextView
+                android:id="@+id/vulgar_selected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="78dip"
+                android:text="土豪榜"
+                android:textColor="#ff3c3b41"
+                android:textSize="17dip"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dip"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/layout_day"
+            android:layout_width="wrap_content"
+            android:layout_height="40dip">
+
+            <TextView
+                android:id="@+id/day_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="日榜"
+                android:textColor="#37445A"
+                android:textSize="14dip" />
+
+            <View
+                android:id="@+id/day_view"
+                android:layout_width="15dip"
+                android:layout_height="1.5dip"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="#3C3B41"></View>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_all"
+            android:layout_width="wrap_content"
+            android:layout_height="40dip"
+            android:layout_marginLeft="160dip">
+
+            <TextView
+                android:id="@+id/all_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="总榜"
+                android:textColor="#A6A8AD"
+                android:textSize="14dip" />
+
+            <View
+                android:id="@+id/all_view"
+                android:layout_width="15dip"
+                android:layout_height="1.5dip"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="#3C3B41"
+                android:visibility="gone"></View>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/close_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/vulgar_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"></android.support.v7.widget.RecyclerView>
+</LinearLayout>
