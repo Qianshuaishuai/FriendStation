@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ui.main.LookMeRecordActivity"></activity>
+        <activity android:name=".ui.other.HelpActivity"></activity>
+        <activity android:name=".ui.main.LookMeRecordActivity" />
         <activity android:name=".ui.main.GiftActivity" />
         <activity android:name=".ui.user.LoginPhoneDetailActivity" />
         <activity android:name=".ui.main.CommonWordActivity" />
