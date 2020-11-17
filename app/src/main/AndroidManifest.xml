@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ui.main.IntegralMallActivity"></activity>
+        <activity android:name=".ui.main.RechargeActivity"></activity>
+        <activity android:name=".ui.main.IntegralMallActivity" />
         <activity android:name=".ui.main.SignActivity" />
         <activity android:name=".ui.main.MyEarningActivity" />
         <activity android:name=".ui.main.PersonAuthActivity" />

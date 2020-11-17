@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAF9FE"
+    tools:context=".ui.main.RechargeActivity">
+
+    <RelativeLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="48dip">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:src="@mipmap/common_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="充值"
+            android:textColor="#ff3c3b41"
+            android:textSize="17dip" />
+
+        <TextView
+            android:id="@+id/record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dip"
+            android:text="收支记录"
+            android:textColor="#F75184"
+            android:textSize="14dip" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_alignParentBottom="true"
+            android:background="#D4D4D4"></View>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_top_top"
+        android:layout_width="match_parent"
+        android:layout_height="171dip"
+        android:layout_below="@+id/layout_top"
+        android:layout_marginLeft="15dip"
+        android:layout_marginTop="10dip"
+        android:layout_marginRight="15dip"
+        android:background="@mipmap/recharge_top_bg"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="80dip"
+            android:layout_height="80dip"
+            android:layout_marginTop="24dip"
+            android:src="@mipmap/recharge_icon_small" />
+
+        <TextView
+            android:id="@+id/count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dip"
+            android:text="558"
+            android:textColor="#FD7E41"
+            android:textSize="14dip" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dip"
+            android:text="金币余额"
+            android:textColor="#3C3B41"
+            android:textSize="14dip" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_top_top"></android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dip"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="如有疑问，可查看"
+            android:textColor="#B9B8C1"
+            android:textSize="12dip" />
+
+        <TextView
+            android:id="@+id/question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dip"
+            android:text="金币问题"
+            android:textColor="#F75184"
+            android:textSize="12dip" />
+    </LinearLayout>
+</RelativeLayout>

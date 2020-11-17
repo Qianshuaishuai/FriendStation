@@ -13,8 +13,8 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
-@ContentView(R.layout.activity_integral_mall)
-public class IntegralMallActivity extends BaseActivity {
+@ContentView(R.layout.activity_recharge)
+public class RechargeActivity extends BaseActivity {
 
     @Event(R.id.back)
     private void back(View view) {
