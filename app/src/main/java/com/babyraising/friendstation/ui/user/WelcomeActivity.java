@@ -37,7 +37,7 @@ public class WelcomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        initView();
+//        initView();
     }
 
     private void initView() {
