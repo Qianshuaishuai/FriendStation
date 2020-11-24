@@ -47,6 +47,6 @@ public class LoginPhoneActivity extends BaseActivity {
     }
 
     private void initView() {
-        know.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+//        know.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
     }
 }

@@ -37,12 +37,12 @@
                 android:textColor="#ff5b4fbd"
                 android:textSize="15dip" />
 
-            <view
+            <View
                 android:layout_width="1dip"
                 android:layout_height="9dip"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
-                android:background="#D4D4D4"></view>
+                android:background="#D4D4D4"></View>
 
             <EditText
                 android:id="@+id/phone"
@@ -69,11 +69,11 @@
             </LinearLayout>
         </LinearLayout>
 
-        <view
+        <View
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_marginTop="12dip"
-            android:background="#D4D4D4"></view>
+            android:background="#D4D4D4"></View>
     </LinearLayout>
 
     <TextView
