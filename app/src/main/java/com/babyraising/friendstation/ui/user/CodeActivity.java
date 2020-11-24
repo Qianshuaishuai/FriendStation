@@ -1,21 +1,36 @@
 package com.babyraising.friendstation.ui.user;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.response.UmsGetCodeResponse;
+import com.babyraising.friendstation.response.UmsLoginByMobileResponse;
+import com.babyraising.friendstation.util.T;
+import com.google.gson.Gson;
 
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 @ContentView(R.layout.activity_code)
 public class CodeActivity extends BaseActivity {
+
+    private String currentPhone = "";
+    private int currentStatus = 0;
+    private String[] currentCode = {"0", "0", "0", "0"};
 
     @ViewInject(R.id.code1)
     private EditText code1;
@@ -43,17 +58,48 @@ public class CodeActivity extends BaseActivity {
 
     @Event(R.id.login)
     private void login(View view) {
-
+        passwordLogin();
     }
 
     @Event(R.id.back)
     private void backClick(View view) {
-
+        finish();
     }
 
     @Event(R.id.resend)
     private void resendClick(View view) {
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_GET_CODE);
+        params.addQueryStringParameter("mobile", currentPhone);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsGetCodeResponse response = gson.fromJson(result, UmsGetCodeResponse.class);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("重新发送成功");
+                        break;
+                    default:
+                        T.s("请求验证码失败，请稍候重试");
+                        break;
+                }
+            }
 
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     @Override
@@ -61,8 +107,185 @@ public class CodeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         initView();
+        initData();
+    }
+
+    private void initData() {
+        Intent intent = getIntent();
+        currentPhone = intent.getStringExtra("phone");
+        tip.setText("已发送至+86 " + currentPhone);
+
+        currentStatus = intent.getIntExtra("status", 1);
+
+        switch (currentStatus) {
+            case 1:
+                codeLayout.setVisibility(View.VISIBLE);
+                passwordLayout.setVisibility(View.GONE);
+                break;
+            case 2:
+                codeLayout.setVisibility(View.GONE);
+                passwordLayout.setVisibility(View.VISIBLE);
+                break;
+            default:
+                codeLayout.setVisibility(View.VISIBLE);
+                passwordLayout.setVisibility(View.GONE);
+                break;
+        }
     }
 
     private void initView() {
+        code1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                currentCode[0] = charSequence.toString();
+                code2.setFocusable(true);
+                code2.setFocusableInTouchMode(true);
+                code2.requestFocus();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        code2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                currentCode[1] = charSequence.toString();
+                code3.setFocusable(true);
+                code3.setFocusableInTouchMode(true);
+                code3.requestFocus();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        code3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                currentCode[2] = charSequence.toString();
+                code4.setFocusable(true);
+                code4.setFocusableInTouchMode(true);
+                code4.requestFocus();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        code4.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                currentCode[3] = charSequence.toString();
+                codeLogin();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    private void passwordLogin() {
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_LOGINBYPASSWORD);
+        params.addQueryStringParameter("mobile", currentPhone);
+        params.addQueryStringParameter("password", mainInput.getText().toString());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsLoginByMobileResponse response = gson.fromJson(result, UmsLoginByMobileResponse.class);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("登录成功");
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void codeLogin() {
+        String codeStr = "";
+        for (int i = 0; i < currentCode.length; i++) {
+            codeStr = codeStr + currentCode[i];
+        }
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_LOGINBYMOBILE);
+        params.addQueryStringParameter("mobile", currentPhone);
+        params.addQueryStringParameter("verifyCode", codeStr);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsLoginByMobileResponse response = gson.fromJson(result, UmsLoginByMobileResponse.class);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("登录成功");
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }

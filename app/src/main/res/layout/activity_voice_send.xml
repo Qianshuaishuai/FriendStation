@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/voice_send_bg"
+    tools:context=".ui.main.VoiceSendActivity">
+
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="56dip"
+        android:layout_height="56dip"
+        android:layout_marginLeft="11dip"
+        android:layout_marginTop="16dip"
+        android:src="@mipmap/voice_send_close" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dip"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="190dip"
+            android:layout_height="195dip"
+            android:src="@mipmap/voice_send_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="语音快速配对有缘人，请稍后…"
+            android:textColor="#3c3B41"
+            android:textSize="15dip" />
+
+        <ImageView
+            android:id="@+id/head"
+            android:layout_width="93dip"
+            android:layout_height="93dip"
+            android:layout_marginTop="58dip"
+            android:background="#ffffff" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dip"
+            android:text="Jerry"
+            android:textColor="#485CC1"
+            android:textSize="15dip" />
+
+        <RelativeLayout
+            android:id="@+id/layout_success"
+            android:layout_width="110dip"
+            android:layout_height="32dip"
+            android:layout_marginTop="15dip"
+            android:background="@drawable/shape_voice_send_top_one_bg">
+
+            <RelativeLayout
+                android:layout_width="100dip"
+                android:layout_height="22dip"
+                android:layout_centerInParent="true"
+                android:background="@drawable/shape_voice_send_top_two_bg">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="配对成功"
+                    android:textColor="#485CC1"
+                    android:textSize="15dip" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_start"
+            android:layout_width="260dip"
+            android:layout_height="75dip"
+            android:layout_marginTop="20dip"
+            android:background="@drawable/shape_voice_send_bottom_one_bg">
+
+            <RelativeLayout
+                android:layout_width="250dip"
+                android:layout_height="65dip"
+                android:layout_centerInParent="true"
+                android:background="@drawable/shape_voice_send_bottom_two_bg">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="开始语音聊天"
+                    android:textColor="#ffffff"
+                    android:textSize="15dip" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

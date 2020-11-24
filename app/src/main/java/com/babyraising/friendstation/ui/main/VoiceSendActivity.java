@@ -3,6 +3,7 @@ package com.babyraising.friendstation.ui.main;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
@@ -12,21 +13,22 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
-@ContentView(R.layout.activity_voice_tip)
-public class VoiceTipActivity extends BaseActivity {
+@ContentView(R.layout.activity_voice_send)
+public class VoiceSendActivity extends BaseActivity {
 
-    @Event(R.id.layout_close)
-    private void closeLayoutClick(View view) {
-
+    @Event(R.id.close)
+    private void closeClick(View view) {
+        finish();
     }
 
-    @Event(R.id.layout_receipt)
-    private void receiptLayoutClick(View view) {
+    @ViewInject(R.id.layout_success)
+    private RelativeLayout successLayout;
 
-    }
+    @ViewInject(R.id.layout_start)
+    private RelativeLayout startLayout;
 
-    @ViewInject(R.id.content)
-    private TextView content;
+    @ViewInject(R.id.name)
+    private TextView name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

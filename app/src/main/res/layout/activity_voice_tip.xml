@@ -15,6 +15,7 @@
         android:src="@mipmap/voice_head_icon" />
 
     <RelativeLayout
+        android:id="@+id/layout_tip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -49,11 +50,73 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="50dip"
+        android:layout_marginRight="50dip"
+        android:layout_marginBottom="78dip"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-    </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/layout_close"
+            android:layout_width="113dip"
+            android:layout_height="75dip"
+            android:background="@drawable/shape_voice_tip_left_one_bg">
+
+            <LinearLayout
+                android:layout_width="103dip"
+                android:layout_height="65dip"
+                android:layout_centerInParent="true"
+                android:background="@drawable/shape_voice_tip_left_two_bg"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dip"
+                    android:layout_height="25dip"
+                    android:src="@mipmap/voice_close" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dip"
+                    android:text="挂断"
+                    android:textColor="#7671A2"
+                    android:textSize="15dip" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_receipt"
+            android:layout_width="113dip"
+            android:layout_height="75dip"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/shape_voice_tip_right_one_bg">
+
+            <LinearLayout
+                android:layout_width="103dip"
+                android:layout_height="65dip"
+                android:layout_centerInParent="true"
+                android:background="@drawable/shape_voice_tip_right_two_bg"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="25dip"
+                    android:layout_height="25dip"
+                    android:src="@mipmap/voice_receipt" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dip"
+                    android:text="接听"
+                    android:textColor="#ffffff"
+                    android:textSize="15dip" />
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
 </RelativeLayout>
