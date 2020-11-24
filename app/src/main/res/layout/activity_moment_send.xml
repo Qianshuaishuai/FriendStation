@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAF9FE"
+    tools:context=".ui.main.MomentSendActivity">
+
+    <RelativeLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="48dip">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:src="@mipmap/common_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="发布动态"
+            android:textColor="#ff3c3b41"
+            android:textSize="17dip" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_alignParentBottom="true"
+            android:background="#D4D4D4"></View>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dip"
+            android:text="发布"
+            android:textColor="#F75184"
+            android:textSize="14dip" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_top"
+        android:layout_marginTop="25dip"
+        android:background="@null"
+        android:hint="此时的想法…"
+        android:maxLines="6"
+        android:paddingLeft="15dip"
+        android:paddingRight="15dip" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/photo_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/content"
+        android:layout_marginTop="24dip"></android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/layout_voice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="28dip"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="点击开始录音"
+            android:textColor="#B9B8C1"
+            android:textSize="14dip" />
+
+        <ImageView
+            android:layout_width="90dip"
+            android:layout_height="90dip"
+            android:layout_marginTop="12.5dip"
+            android:src="@mipmap/moment_send_voice" />
+    </LinearLayout>
+</RelativeLayout>

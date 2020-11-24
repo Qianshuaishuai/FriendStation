@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ui.main.VoiceSendActivity"></activity>
+        <activity android:name=".ui.main.MomentSendActivity"></activity>
+        <activity android:name=".ui.main.VoiceSendActivity" />
         <activity android:name=".ui.main.VoiceTipActivity" />
         <activity android:name=".ui.main.CloseActivity" />
         <activity android:name=".ui.main.ScrollImageActivity" />
@@ -19,10 +20,10 @@
         <activity android:name=".ui.main.IntegralMallActivity" />
         <activity android:name=".ui.main.SignActivity" />
         <activity android:name=".ui.main.MyEarningActivity" />
-        <activity android:name=".ui.main.PersonAuthActivity"></activity>
+        <activity android:name=".ui.main.PersonAuthActivity" />
         <activity android:name=".ui.main.MyInfoActivity" />
         <activity android:name=".ui.main.SettingActivity" />
-        <activity android:name=".ui.main.InviteFriendDetailActivity"></activity>
+        <activity android:name=".ui.main.InviteFriendDetailActivity" />
         <activity android:name=".ui.main.RankActivity" />
         <activity android:name=".ui.main.TaskActivity" />
         <activity android:name=".ui.other.HelpActivity" />
@@ -30,11 +31,11 @@
         <activity android:name=".ui.main.GiftActivity" />
         <activity android:name=".ui.user.LoginPhoneDetailActivity" />
         <activity android:name=".ui.main.CommonWordActivity" />
-        <activity android:name=".ui.main.ExchangeRecordActivity"></activity>
-        <activity android:name=".ui.main.InviteFriendActivity"></activity>
-        <activity android:name=".ui.pay.PayActivity"></activity>
-        <activity android:name=".ui.user.NoticeActivity"></activity>
-        <activity android:name=".ui.user.BuildUserNameActivity"></activity>
+        <activity android:name=".ui.main.ExchangeRecordActivity" />
+        <activity android:name=".ui.main.InviteFriendActivity" />
+        <activity android:name=".ui.pay.PayActivity" />
+        <activity android:name=".ui.user.NoticeActivity" />
+        <activity android:name=".ui.user.BuildUserNameActivity" />
         <activity android:name=".ui.user.BuildUserSexActivity" />
         <activity android:name=".ui.user.BuildUserActivity" />
         <activity android:name=".ui.user.CodeActivity" />
@@ -45,7 +46,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.user.WelcomeActivity"></activity>
+        <activity android:name=".ui.user.WelcomeActivity" />
         <activity android:name=".ui.user.LoginActivity" />
         <activity android:name=".ui.MainActivity" />
     </application>

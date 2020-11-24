@@ -2,7 +2,9 @@ package com.babyraising.friendstation.ui.main;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
@@ -27,6 +29,12 @@ public class LookMeRecordActivity extends BaseActivity {
 
     @ViewInject(R.id.look_count)
     private TextView lookCount;
+
+    @ViewInject(R.id.content)
+    private EditText content;
+
+    @ViewInject(R.id.photo_list)
+    private RecyclerView photoList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
