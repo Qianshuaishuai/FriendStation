@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -11,10 +12,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
+import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.request.CodeBodyRequest;
+import com.babyraising.friendstation.request.LoginPasswordRequest;
+import com.babyraising.friendstation.request.SetUserExtraDateRequest;
 import com.babyraising.friendstation.response.UmsGetCodeResponse;
 import com.babyraising.friendstation.response.UmsLoginByMobileResponse;
+import com.babyraising.friendstation.ui.MainActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -58,6 +64,10 @@ public class CodeActivity extends BaseActivity {
 
     @Event(R.id.login)
     private void login(View view) {
+        if (TextUtils.isEmpty(mainInput.getText().toString())) {
+            T.s("请先输入密码");
+            return;
+        }
         passwordLogin();
     }
 
@@ -121,6 +131,38 @@ public class CodeActivity extends BaseActivity {
             case 1:
                 codeLayout.setVisibility(View.VISIBLE);
                 passwordLayout.setVisibility(View.GONE);
+                RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_GET_CODE);
+                params.addQueryStringParameter("mobile", currentPhone);
+                x.http().get(params, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        Gson gson = new Gson();
+                        UmsGetCodeResponse response = gson.fromJson(result, UmsGetCodeResponse.class);
+                        switch (response.getCode()) {
+                            case 200:
+                                T.s("发送验证码成功");
+                                break;
+                            default:
+                                T.s("请求验证码失败，请稍候重试");
+                                break;
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+                        System.out.println("错误处理:" + ex);
+                    }
+
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+
+                    @Override
+                    public void onFinished() {
+
+                    }
+                });
                 break;
             case 2:
                 codeLayout.setVisibility(View.GONE);
@@ -131,6 +173,8 @@ public class CodeActivity extends BaseActivity {
                 passwordLayout.setVisibility(View.GONE);
                 break;
         }
+
+
     }
 
     private void initView() {
@@ -142,10 +186,13 @@ public class CodeActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                currentCode[0] = charSequence.toString();
-                code2.setFocusable(true);
-                code2.setFocusableInTouchMode(true);
-                code2.requestFocus();
+                if (!TextUtils.isEmpty(charSequence.toString())) {
+                    currentCode[0] = charSequence.toString();
+                    code2.setFocusable(true);
+                    code2.setFocusableInTouchMode(true);
+                    code2.requestFocus();
+                }
+
             }
 
             @Override
@@ -162,10 +209,12 @@ public class CodeActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                currentCode[1] = charSequence.toString();
-                code3.setFocusable(true);
-                code3.setFocusableInTouchMode(true);
-                code3.requestFocus();
+                if (!TextUtils.isEmpty(charSequence.toString())) {
+                    currentCode[1] = charSequence.toString();
+                    code3.setFocusable(true);
+                    code3.setFocusableInTouchMode(true);
+                    code3.requestFocus();
+                }
             }
 
             @Override
@@ -182,10 +231,12 @@ public class CodeActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                currentCode[2] = charSequence.toString();
-                code4.setFocusable(true);
-                code4.setFocusableInTouchMode(true);
-                code4.requestFocus();
+                if (!TextUtils.isEmpty(charSequence.toString())) {
+                    currentCode[2] = charSequence.toString();
+                    code4.setFocusable(true);
+                    code4.setFocusableInTouchMode(true);
+                    code4.requestFocus();
+                }
             }
 
             @Override
@@ -202,8 +253,10 @@ public class CodeActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                currentCode[3] = charSequence.toString();
-                codeLogin();
+                if (!TextUtils.isEmpty(charSequence.toString())) {
+                    currentCode[3] = charSequence.toString();
+                    codeLogin();
+                }
             }
 
             @Override
@@ -214,17 +267,25 @@ public class CodeActivity extends BaseActivity {
     }
 
     private void passwordLogin() {
+        LoginPasswordRequest request = new LoginPasswordRequest();
+        request.setMobile(currentPhone);
+        request.setPassword(mainInput.getText().toString());
+
+        Gson gson = new Gson();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_LOGINBYPASSWORD);
-        params.addQueryStringParameter("mobile", currentPhone);
-        params.addQueryStringParameter("password", mainInput.getText().toString());
+        params.setAsJsonContent(true);
+        params.setBodyContent(gson.toJson(request));
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                System.out.println(result);
                 Gson gson = new Gson();
                 UmsLoginByMobileResponse response = gson.fromJson(result, UmsLoginByMobileResponse.class);
                 switch (response.getCode()) {
                     case 200:
                         T.s("登录成功");
+                        ((FriendStationApplication) getApplication()).saveUserInfo(response.getData());
+                        startMainActivity();
                         break;
                     default:
                         T.s(response.getMsg());
@@ -249,14 +310,27 @@ public class CodeActivity extends BaseActivity {
         });
     }
 
+    private void startMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
     private void codeLogin() {
         String codeStr = "";
         for (int i = 0; i < currentCode.length; i++) {
             codeStr = codeStr + currentCode[i];
         }
+
+        CodeBodyRequest request = new CodeBodyRequest();
+        request.setMobile(currentPhone);
+        request.setVerifyCode(codeStr);
+
+        Gson gson = new Gson();
+
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_LOGINBYMOBILE);
-        params.addQueryStringParameter("mobile", currentPhone);
-        params.addQueryStringParameter("verifyCode", codeStr);
+        params.setAsJsonContent(true);
+        params.setBodyContent(gson.toJson(request));
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -265,6 +339,8 @@ public class CodeActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         T.s("登录成功");
+                        ((FriendStationApplication) getApplication()).saveUserInfo(response.getData());
+                        startLoginDetailActivity();
                         break;
                     default:
                         T.s(response.getMsg());
@@ -287,5 +363,12 @@ public class CodeActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void startLoginDetailActivity() {
+        Intent intent = new Intent(this, LoginPhoneDetailActivity.class);
+        intent.putExtra("phone", currentPhone);
+        startActivity(intent);
+        finish();
     }
 }

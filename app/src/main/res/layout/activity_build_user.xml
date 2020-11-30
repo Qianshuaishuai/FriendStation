@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FAF9FE"
     tools:context=".ui.user.BuildUserActivity">
 
     <RelativeLayout
@@ -99,7 +100,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:background="@null"
-                    android:text="伊丽莎白·班纳特"
+                    android:gravity="right"
+                    android:hint="请填写昵称"
+                    android:text=""
                     android:textColor="#ffa6a8ad"
                     android:textSize="12dip" />
             </RelativeLayout>
@@ -150,7 +153,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical">
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/layout_camera"

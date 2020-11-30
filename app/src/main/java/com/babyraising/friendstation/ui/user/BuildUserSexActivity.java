@@ -6,12 +6,23 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.babyraising.friendstation.Constant;
+import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.request.SetUserSexRequest;
+import com.babyraising.friendstation.request.SetusernameAndIconRequest;
+import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
+import com.babyraising.friendstation.util.T;
+import com.google.gson.Gson;
 
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 @ContentView(R.layout.activity_build_user_sex)
 public class BuildUserSexActivity extends BaseActivity {
@@ -23,12 +34,12 @@ public class BuildUserSexActivity extends BaseActivity {
 
     @Event(R.id.save)
     private void saveClick(View view) {
-
+        saveUserSex();
     }
 
     @Event(R.id.iv_male_normal)
-    private void maleNormalClick(View view){
-        sexCount = 0 ;
+    private void maleNormalClick(View view) {
+        sexCount = 1;
         maleNormal.setVisibility(View.GONE);
         maleTipNormal.setVisibility(View.GONE);
         maleSelected.setVisibility(View.VISIBLE);
@@ -41,8 +52,8 @@ public class BuildUserSexActivity extends BaseActivity {
     }
 
     @Event(R.id.iv_female_normal)
-    private void femaleNormalClick(View view){
-        sexCount = 1 ;
+    private void femaleNormalClick(View view) {
+        sexCount = 2;
         maleNormal.setVisibility(View.VISIBLE);
         maleTipNormal.setVisibility(View.VISIBLE);
         maleSelected.setVisibility(View.GONE);
@@ -54,7 +65,7 @@ public class BuildUserSexActivity extends BaseActivity {
         femaleTipSelected.setVisibility(View.VISIBLE);
     }
 
-    private int sexCount = 0;
+    private int sexCount = 1;
 
     @ViewInject(R.id.iv_male_normal)
     private ImageView maleNormal;
@@ -68,16 +79,16 @@ public class BuildUserSexActivity extends BaseActivity {
     @ViewInject(R.id.iv_female_selected)
     private ImageView femaleSelected;
 
-    @ViewInject(R.id.tip_female_normal)
+    @ViewInject(R.id.tip_male_normal)
     private TextView maleTipNormal;
 
-    @ViewInject(R.id.tip_female_selected)
+    @ViewInject(R.id.tip_male_selected)
     private TextView maleTipSelected;
 
-    @ViewInject(R.id.tip_male_normal)
+    @ViewInject(R.id.tip_female_normal)
     private TextView femaleTipNormal;
 
-    @ViewInject(R.id.tip_male_selected)
+    @ViewInject(R.id.tip_female_selected)
     private TextView femaleTipSelected;
 
     @Override
@@ -89,5 +100,49 @@ public class BuildUserSexActivity extends BaseActivity {
 
     private void initView() {
 
+    }
+
+    private void saveUserSex() {
+        SetUserSexRequest request = new SetUserSexRequest();
+        request.setSex(sexCount);
+
+        Gson gson = new Gson();
+
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_UPDATE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUpdateUsernameAndIconResponse response = gson.fromJson(result, UmsUpdateUsernameAndIconResponse.class);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("保存成功");
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }

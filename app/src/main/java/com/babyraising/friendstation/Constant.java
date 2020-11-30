@@ -7,9 +7,19 @@ public class Constant {
 
     //user部分
     public static final String URL_GET_CODE = "ums/auth/verifyCode";
+    public static final String URL_IS_FIRSTLOGIN = "ums/auth/checkMobileExist";
     public static final String URL_LOGINOUT = "ums/auth/loginOut";
     public static final String URL_LOGINBYPASSWORD = "ums/auth/loginByPassword";
     public static final String URL_LOGINBYMOBILE = "ums/auth/loginByMobile";
+
+    public static final String URL_UMS_USER = "ums/user";
+    public static final String URL_UMS_USER_ALBUM_PAGE = "ums/user/album/page";
+    public static final String URL_UMS_USER_DELETE_ALBUM = "ums/user/album";
+    public static final String URL_UMS_USER_FULL = "ums/user/full";
+    public static final String URL_UMS_USER_SAVE_ALBUM = "ums/user/save/album";
+    public static final String URL_UMS_UPDATE = "ums/user/update";
+    public static final String URL_UMS_USER_UPDATE_PASSWORD = "ums/user/update/password";
+    public static final String URL_UMS_USER_UPDATE_VERIFY = "ums/user/update/verify";
 
     //friend部分
     public static final String URL_FRIENDS_MOMENT = "friends/moment";

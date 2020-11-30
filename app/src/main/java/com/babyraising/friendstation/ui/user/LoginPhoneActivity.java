@@ -8,11 +8,13 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.response.UmsGetCodeResponse;
+import com.babyraising.friendstation.response.UmsIsFirstLoginResponse;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -45,21 +47,25 @@ public class LoginPhoneActivity extends BaseActivity {
             return;
         }
 
-        if (phone.length() == 11) {
+        if (phone.length() != 11) {
             T.s("请输入正确的手机号");
             return;
         }
 
-        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_GET_CODE);
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_IS_FIRSTLOGIN);
         params.addQueryStringParameter("mobile", phone);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Gson gson = new Gson();
-                UmsGetCodeResponse response = gson.fromJson(result, UmsGetCodeResponse.class);
+                UmsIsFirstLoginResponse response = gson.fromJson(result, UmsIsFirstLoginResponse.class);
                 switch (response.getCode()) {
                     case 200:
-                        startCodeActivity(phone);
+                        if (response.getData()){
+                            startPasswordActivity(phone);
+                        }else{
+                            startCodeActivity(phone);
+                        }
                         break;
                     default:
                         T.s("请求验证码失败，请稍候重试");
@@ -89,8 +95,16 @@ public class LoginPhoneActivity extends BaseActivity {
         intent.putExtra("phone", phone);
         intent.putExtra("status", 1);
         startActivity(intent);
+        finish();
     }
 
+    private void startPasswordActivity(String phone) {
+        Intent intent = new Intent(this, CodeActivity.class);
+        intent.putExtra("phone", phone);
+        intent.putExtra("status", 2);
+        startActivity(intent);
+        finish();
+    }
 
     @Event(R.id.know)
     private void knowClick(View view) {
@@ -107,5 +121,6 @@ public class LoginPhoneActivity extends BaseActivity {
 
     private void initView() {
         know.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+        phoneInput.setText("15602335027");
     }
 }

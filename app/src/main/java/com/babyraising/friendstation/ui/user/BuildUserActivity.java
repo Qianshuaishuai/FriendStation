@@ -1,18 +1,44 @@
 package com.babyraising.friendstation.ui.user;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.babyraising.friendstation.Constant;
+import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.request.SetPasswordRequest;
+import com.babyraising.friendstation.request.SetusernameAndIconRequest;
+import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
+import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
+import com.babyraising.friendstation.util.FileUtil;
+import com.babyraising.friendstation.util.T;
+import com.google.gson.Gson;
 
+import org.xutils.common.Callback;
+import org.xutils.common.util.DensityUtil;
+import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
+
+import java.io.File;
 
 @ContentView(R.layout.activity_build_user)
 public class BuildUserActivity extends BaseActivity {
@@ -27,9 +53,20 @@ public class BuildUserActivity extends BaseActivity {
 
     }
 
+    @Event(R.id.head)
+    private void headClick(View view) {
+        if (photoLayout.getVisibility() == View.GONE) {
+            photoLayout.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Event(R.id.save)
     private void saveClick(View view) {
-
+        if (TextUtils.isEmpty(username.getText().toString())) {
+            T.s("昵称不能为空");
+            return;
+        }
+        saveUsernameAndIcon(username.getText().toString());
     }
 
     @ViewInject(R.id.head)
@@ -41,20 +78,32 @@ public class BuildUserActivity extends BaseActivity {
     @ViewInject(R.id.layout_take_photo)
     private LinearLayout takePhotoLayout;
 
-    @Event(R.id.layout_photo)
-    private void photoLayout(View view) {
-
-    }
+    @ViewInject(R.id.layout_take_photo)
+    private LinearLayout photoLayout;
 
     @Event(R.id.layout_camera)
-    private void cameraLayout(View view) {
+    private void cameraClick(View view) {
+        takePhoto();
+        photoLayout.setVisibility(View.GONE);
+    }
 
+    @Event(R.id.layout_photo)
+    private void selectPhoto(View view) {
+        choosePhoto();
+        photoLayout.setVisibility(View.GONE);
     }
 
     @Event(R.id.layout_cancel)
-    private void cancelLayout(View view) {
-
+    private void layoutAllPhoto(View view) {
+        photoLayout.setVisibility(View.GONE);
     }
+
+    public static final int RC_TAKE_PHOTO = 1;
+    public static final int RC_CHOOSE_PHOTO = 2;
+    public static final int SIGN_CODE = 101;
+
+    private String mTempPhotoPath;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,5 +114,121 @@ public class BuildUserActivity extends BaseActivity {
 
     private void initView() {
 
+    }
+
+    private void saveUsernameAndIcon(String username) {
+        SetusernameAndIconRequest request = new SetusernameAndIconRequest();
+        request.setAvatar("test");
+        request.setNickname(username);
+
+        Gson gson = new Gson();
+
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_UPDATE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUpdateUsernameAndIconResponse response = gson.fromJson(result, UmsUpdateUsernameAndIconResponse.class);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("保存成功");
+                        startInfoDateActivity();
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void startInfoDateActivity() {
+        Intent intent = new Intent(this, BuildUserNameActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void choosePhoto() {
+        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case RC_CHOOSE_PHOTO:
+                Uri uri = data.getData();
+                String filePath = FileUtil.getFilePathByUri(this, uri);
+                if (!TextUtils.isEmpty(filePath)) {
+//                    updateLoadPic(filePath);
+                } else {
+                    T.s("选择照片出错");
+                }
+                break;
+            case RC_TAKE_PHOTO:
+                if (!TextUtils.isEmpty(mTempPhotoPath)) {
+//                    ImageOptions options = new ImageOptions.Builder().
+//                            setRadius(DensityUtil.dip2px(60)).setCrop(true).build();
+                    x.image().bind(head, mTempPhotoPath);
+//                    updateLoadPic(mTempPhotoPath);
+                } else {
+                    T.s("选择照片出错");
+                }
+                break;
+
+            case SIGN_CODE:
+                if (resultCode == RESULT_OK) {
+                    if (data != null) {
+//                        editUser("", "", "", "", "", "", "", data.getStringExtra("sign"));
+//                        cardSign.setText(data.getStringExtra("sign"));
+//                        userBean.setSIGNNAME(data.getStringExtra("sign"));
+                    }
+                }
+                break;
+        }
+    }
+
+    private void takePhoto() {
+        Intent intentToTakePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File fileDir = new File(Environment.getExternalStorageDirectory() + File.separator + "photoTest" + File.separator);
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
+
+        File photoFile = new File(fileDir, "photo.jpeg");
+        mTempPhotoPath = photoFile.getAbsolutePath();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            /*7.0以上要通过FileProvider将File转化为Uri*/
+            imageUri = FileProvider.getUriForFile(this, "", photoFile);
+        } else {
+            /*7.0以下则直接使用Uri的fromFile方法将File转化为Uri*/
+            imageUri = Uri.fromFile(photoFile);
+        }
+        intentToTakePhoto.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(intentToTakePhoto, RC_TAKE_PHOTO);
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,16 +14,20 @@
         android:src="@mipmap/welcome_one" />
 
     <ImageView
+        android:id="@+id/welcome_icon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/tip"
         android:src="@mipmap/welcome_icon" />
 
     <TextView
         android:id="@+id/tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="48dip"
         android:gravity="center"
         android:text="人生何处不加友"
         android:textColor="#ff37445a"
         android:textSize="14dip" />
-</LinearLayout>
+</RelativeLayout>

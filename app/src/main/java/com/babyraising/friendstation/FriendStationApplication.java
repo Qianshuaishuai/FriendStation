@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -20,9 +21,10 @@ public class FriendStationApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        T.init(this);
         x.Ext.init(this);
         x.Ext.setDebug(BuildConfig.DEBUG);
-        T.init(this);
+
         if (Constant.DEBUG) {
             Log.d(TAG, "init Xuitils");
         }
@@ -35,4 +37,15 @@ public class FriendStationApplication extends Application {
         editor = sp.edit();
         gson = new Gson();
     }
+
+    public void saveUserInfo(CommonLoginBean bean) {
+        String beanString = gson.toJson(bean);
+        editor.putString("info", beanString);
+        editor.commit();
+    }
+
+    public CommonLoginBean getUserInfo() {
+        return gson.fromJson(sp.getString("info", ""), CommonLoginBean.class);
+    }
+
 }

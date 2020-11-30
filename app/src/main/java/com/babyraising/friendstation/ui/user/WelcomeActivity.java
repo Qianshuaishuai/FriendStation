@@ -1,6 +1,7 @@
 package com.babyraising.friendstation.ui.user;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,7 +38,7 @@ public class WelcomeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        initView();
+        initView();
     }
 
     private void initView() {
@@ -47,8 +48,10 @@ public class WelcomeActivity extends BaseActivity {
             public void run() {
                 tipCount++;
                 if (tipCount <= 2) {
-                    tip.setText(tips[tipCount]);
-                    img.setImageResource(imgs[tipCount]);
+                    Message msg = Message.obtain();
+                    msg.obj = 0;
+                    updateStatushandler.sendMessage(msg);
+
                 } else {
                     tipCount = 0;
                     timer1.cancel();
@@ -56,11 +59,22 @@ public class WelcomeActivity extends BaseActivity {
                 }
             }
         };
-        timer1.schedule(timerTask1, 1500, 1500);
+        timer1.schedule(timerTask1, 2000, 2000);
     }
 
+    private Handler updateStatushandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            tip.setText(tips[tipCount]);
+            img.setImageResource(imgs[tipCount]);
+        }
+    };
+
     private void startMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, CodeActivity.class);
+        intent.putExtra("status", 2);
         startActivity(intent);
     }
 }

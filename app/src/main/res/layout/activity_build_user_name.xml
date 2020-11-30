@@ -43,7 +43,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="175dip"
+            android:layout_height="125dip"
             android:layout_marginLeft="15dip"
             android:layout_marginTop="10dip"
             android:layout_marginRight="15dip"
@@ -58,7 +58,8 @@
                 android:layout_marginTop="15dip"
                 android:layout_marginBottom="15dip"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -90,14 +91,15 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dip"
-                android:layout_marginLeft="15dip"
-                android:layout_marginRight="15dip"
-                android:background="#D4D4D4"></View>
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="0.5dip"-->
+            <!--android:layout_marginLeft="15dip"-->
+            <!--android:layout_marginRight="15dip"-->
+            <!--android:background="#D4D4D4"></View>-->
 
             <RelativeLayout
+                android:id="@+id/layout_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dip"
@@ -116,7 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="1994年04月12日"
+                    android:text=""
                     android:textColor="#A6A8AD"
                     android:textSize="12dip" />
             </RelativeLayout>
@@ -158,7 +160,7 @@
 
                     <EditText
                         android:id="@+id/invite"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="right" />
@@ -180,4 +182,20 @@
         android:text="下一步"
         android:textColor="#ffffff"
         android:textSize="15dip" />
+
+    <RelativeLayout
+        android:id="@+id/layout_date_picker"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#b0000000"
+        android:visibility="gone">
+
+        <cn.aigestudio.datepicker.views.DatePicker
+            android:id="@+id/date_picker"
+            android:layout_width="match_parent"
+            android:layout_height="400dip"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dip"
+            android:layout_marginRight="15dip"></cn.aigestudio.datepicker.views.DatePicker>
+    </RelativeLayout>
 </RelativeLayout>
