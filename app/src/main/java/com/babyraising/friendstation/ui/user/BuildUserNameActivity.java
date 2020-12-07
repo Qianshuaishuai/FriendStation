@@ -2,6 +2,8 @@ package com.babyraising.friendstation.ui.user;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,17 +21,24 @@ import com.babyraising.friendstation.request.SetUserDateRequest;
 import com.babyraising.friendstation.request.SetUserExtraDateRequest;
 import com.babyraising.friendstation.request.SetUserSexRequest;
 import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
+import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
+import com.nanchen.compresshelper.CompressHelper;
 
 import org.xutils.common.Callback;
+import org.xutils.common.util.KeyValue;
 import org.xutils.http.RequestParams;
+import org.xutils.http.body.MultipartBody;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 @ContentView(R.layout.activity_build_user_name)
 public class BuildUserNameActivity extends BaseActivity {

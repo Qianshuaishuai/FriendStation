@@ -1,6 +1,7 @@
 package com.babyraising.friendstation.ui.user;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -25,13 +26,17 @@ import com.babyraising.friendstation.request.SetPasswordRequest;
 import com.babyraising.friendstation.request.SetusernameAndIconRequest;
 import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
 import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
+import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
+import com.nanchen.compresshelper.CompressHelper;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.DensityUtil;
+import org.xutils.common.util.KeyValue;
 import org.xutils.http.RequestParams;
+import org.xutils.http.body.MultipartBody;
 import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -39,6 +44,8 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @ContentView(R.layout.activity_build_user)
 public class BuildUserActivity extends BaseActivity {
@@ -64,6 +71,11 @@ public class BuildUserActivity extends BaseActivity {
     private void saveClick(View view) {
         if (TextUtils.isEmpty(username.getText().toString())) {
             T.s("昵称不能为空");
+            return;
+        }
+
+        if (TextUtils.isEmpty(newHeadIconUrl)) {
+            T.s("请先设置头像");
             return;
         }
         saveUsernameAndIcon(username.getText().toString());
@@ -103,6 +115,7 @@ public class BuildUserActivity extends BaseActivity {
     public static final int SIGN_CODE = 101;
 
     private String mTempPhotoPath;
+    private String newHeadIconUrl;
     private Uri imageUri;
 
     @Override
@@ -118,7 +131,7 @@ public class BuildUserActivity extends BaseActivity {
 
     private void saveUsernameAndIcon(String username) {
         SetusernameAndIconRequest request = new SetusernameAndIconRequest();
-        request.setAvatar("test");
+        request.setAvatar(newHeadIconUrl);
         request.setNickname(username);
 
         Gson gson = new Gson();
@@ -183,7 +196,7 @@ public class BuildUserActivity extends BaseActivity {
                 Uri uri = data.getData();
                 String filePath = FileUtil.getFilePathByUri(this, uri);
                 if (!TextUtils.isEmpty(filePath)) {
-//                    updateLoadPic(filePath);
+                    uploadPic(filePath);
                 } else {
                     T.s("选择照片出错");
                 }
@@ -193,7 +206,7 @@ public class BuildUserActivity extends BaseActivity {
 //                    ImageOptions options = new ImageOptions.Builder().
 //                            setRadius(DensityUtil.dip2px(60)).setCrop(true).build();
                     x.image().bind(head, mTempPhotoPath);
-//                    updateLoadPic(mTempPhotoPath);
+                    uploadPic(mTempPhotoPath);
                 } else {
                     T.s("选择照片出错");
                 }
@@ -209,6 +222,66 @@ public class BuildUserActivity extends BaseActivity {
                 }
                 break;
         }
+    }
+
+
+    private void uploadPic(String localPic) {
+
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_UPLOAD);
+        params.addHeader("Authorization", bean.getAccessToken());
+        File oldFile = new File(localPic);
+        File newFile = new CompressHelper.Builder(this)
+                .setMaxWidth(100)  // 默认最大宽度为720
+                .setMaxHeight(100) // 默认最大高度为960
+                .setQuality(80)    // 默认压缩质量为80
+                .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
+                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                .build()
+                .compressToFile(oldFile);
+        params.setAsJsonContent(true);
+        List<KeyValue> list = new ArrayList<>();
+        list.add(new KeyValue("file", newFile));
+        MultipartBody body = new MultipartBody(list, "UTF-8");
+        params.setRequestBody(body);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("result:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("上传成功");
+                        ImageOptions options = new ImageOptions.Builder().
+                                setRadius(DensityUtil.dip2px(8))
+                                .setCrop(true).build();
+                        x.image().bind(head, response.getData(), options);
+                        newHeadIconUrl = response.getData();
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void takePhoto() {

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_find"
+        android:icon="@drawable/select_main_find"
+        android:title="@string/title_find" />
+
+    <item
+        android:id="@+id/navigation_moment"
+        android:icon="@drawable/select_main_moment"
+        android:title="@string/title_moment" />
+
+    <item
+        android:id="@+id/navigation_notice"
+        android:icon="@drawable/select_main_notice"
+        android:title="@string/title_notice" />
+
+    <item
+        android:id="@+id/navigation_person"
+        android:icon="@drawable/select_main_person"
+        android:title="@string/title_person" />
+
+</menu>

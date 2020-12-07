@@ -23,4 +23,11 @@ public class Constant {
 
     //friend部分
     public static final String URL_FRIENDS_MOMENT = "friends/moment";
+    public static final String URL_FRIENDS = "friends";
+    public static final String URL_FRIENDS_GIFT = "friends/gift";
+    public static final String URL_FRIENDS_SCORE = "friends/score";
+    public static final String URL_FRIENDS_SCORE_ORDER = "friends/scoreOrder";
+    public static final String URL_FRIENDS_COIN = "friends/coin";
+    public static final String URL_FRIENDS_COIN_ORDER = "friends/coinOrder";
+    public static final String URL_FRIENDS_UPLOAD = "friends/upload";
 }

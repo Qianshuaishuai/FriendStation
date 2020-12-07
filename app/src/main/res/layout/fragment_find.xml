@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.show.FindFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dip"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="28dip"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/layout_find"
+                android:layout_width="135dip"
+                android:layout_height="60dip"
+                android:background="@drawable/shape_main_find_top_left_bg">
+
+                <ImageView
+                    android:layout_width="48dip"
+                    android:layout_height="48dip"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/main_find_top_left" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dip"
+                android:text="一键搭讪"
+                android:textColor="#B9B8C1"
+                android:textSize="12dip" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="28dip"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/layout_match"
+                android:layout_width="135dip"
+                android:layout_height="60dip"
+
+                android:background="@drawable/shape_main_find_top_right_bg">
+
+                <ImageView
+                    android:layout_width="48dip"
+                    android:layout_height="48dip"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/main_find_top_right" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dip"
+                android:text="语音配对"
+                android:textColor="#B9B8C1"
+                android:textSize="12dip" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dip"
+        android:layout_marginTop="10dip"
+        android:background="#FAF9FE">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dip"
+            android:layout_marginTop="8dip"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/shape_main_find_top_tip_bg"
+            android:orientation="horizontal"
+            android:paddingTop="6dip"
+            android:paddingRight="15dip"
+            android:paddingBottom="6dip">
+
+            <View
+                android:layout_width="2dip"
+                android:layout_height="9dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginTop="3dip"
+                android:layout_marginRight="8dip"
+                android:background="#FCA224"></View>
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="6dip"
+                android:text="18:44"
+                android:textColor="#5E5D62"
+                android:textSize="12dip" />
+
+            <TextView
+                android:id="@+id/tip_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="AA 和 BB 亲密度一天之内暴增100以上，让我们为他们祝福。"
+                android:textColor="#FF5300"
+                android:textSize="12dip" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="58dip">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dip"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/type_tv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="同城"
+                    android:textColor="#B9B8C1"
+                    android:textSize="15dip" />
+
+                <View
+                    android:id="@+id/type_view1"
+                    android:layout_width="13dip"
+                    android:layout_height="0.5dip"
+                    android:layout_marginTop="7dip"
+                    android:background="#3C3B41"
+                    android:visibility="gone"></View>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/type_tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="附近"
+                    android:textColor="#B9B8C1"
+                    android:textSize="15dip" />
+
+                <View
+                    android:id="@+id/type_view2"
+                    android:layout_width="13dip"
+                    android:layout_height="0.5dip"
+                    android:layout_marginTop="7dip"
+                    android:background="#3C3B41"
+                    android:visibility="gone"></View>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/type_tv3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="同省"
+                    android:textColor="#B9B8C1"
+                    android:textSize="15dip" />
+
+                <View
+                    android:id="@+id/type_view3"
+                    android:layout_width="13dip"
+                    android:layout_height="0.5dip"
+                    android:layout_marginTop="7dip"
+                    android:background="#3C3B41"
+                    android:visibility="gone"></View>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dip"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="12dip"
+                android:layout_height="13dip"
+                android:src="@mipmap/main_find_rank_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dip"
+                android:text="排行榜"
+                android:textColor="#FD7E41"
+                android:textSize="13dip" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+</LinearLayout>

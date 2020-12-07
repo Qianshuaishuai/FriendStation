@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.ui.main;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +24,8 @@ public class RechargeActivity extends BaseActivity {
 
     @Event(R.id.record)
     private void recordClick(View view) {
-
+        Intent intent = new Intent(this, IncomeRecordActivity.class);
+        startActivity(intent);
     }
 
     @ViewInject(R.id.count)
