@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseFragment;
 import com.babyraising.friendstation.ui.main.RankActivity;
+import com.babyraising.friendstation.ui.main.VoiceSendActivity;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -44,7 +45,8 @@ public class FindFragment extends BaseFragment {
 
     @Event(R.id.layout_match)
     private void matchLayoutClick(View view) {
-
+        Intent intent = new Intent(getActivity(), VoiceSendActivity.class);
+        startActivity(intent);
     }
 
     @Event(R.id.layout_find)

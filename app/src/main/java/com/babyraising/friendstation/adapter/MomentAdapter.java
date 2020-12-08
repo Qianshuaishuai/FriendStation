@@ -1,5 +1,7 @@
 package com.babyraising.friendstation.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.ui.main.ScrollImageActivity;
 
 import java.util.List;
 
 public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder> {
 
     private List<String> mList;
+    private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt, sexTxt, ageTxt, contentTxt, countTxt, addressTxt;
@@ -36,20 +40,27 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
 
     }
 
-    public MomentAdapter(List<String> mList) {
+    public MomentAdapter(Context context, List<String> mList) {
+        this.context = context;
         this.mList = mList;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycleview_task, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycleview_moment, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-
+        holder.contentImgIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ScrollImageActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -65,7 +65,7 @@ public class RechargeActivity extends BaseActivity {
 
     private void initView() {
         list = new ArrayList<>();
-        adapter = new RechargeAdapter(list);
+        adapter = new RechargeAdapter(this, list);
         adapter.setOnItemClickListener(new RechargeAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {

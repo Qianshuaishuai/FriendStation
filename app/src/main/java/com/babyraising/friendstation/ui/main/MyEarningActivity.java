@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.ui.main;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -22,7 +23,8 @@ public class MyEarningActivity extends BaseActivity {
 
     @Event(R.id.charge)
     private void chargeClick(View view) {
-
+        Intent intent = new Intent(this, IntegralMallActivity.class);
+        startActivity(intent);
     }
 
     @ViewInject(R.id.drawal)

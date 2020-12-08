@@ -48,7 +48,15 @@ public class RankCloseAdapter extends RecyclerView.Adapter<RankCloseAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-
+        if (position <= 2) {
+            holder.numberLayout.setVisibility(View.VISIBLE);
+            holder.rankNomral.setVisibility(View.GONE);
+            holder.rankHeight.setText("" + (position + 1));
+        } else {
+            holder.numberLayout.setVisibility(View.GONE);
+            holder.rankNomral.setVisibility(View.VISIBLE);
+            holder.rankNomral.setText("" + (position + 1));
+        }
     }
 
     @Override

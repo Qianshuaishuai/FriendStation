@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.ui.main;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,12 @@ public class TaskActivity extends BaseActivity {
 
     private TaskAdapter adapter;
     private List<TaskDetailBean> list;
+
+    @Event(R.id.layout_invite)
+    private void inviteLayoutClick(View view){
+        Intent intent = new Intent(this,SignActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

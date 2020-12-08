@@ -29,9 +29,10 @@
         </RelativeLayout>
 
         <TextView
+            android:gravity="center"
             android:id="@+id/rank_normal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dip"
+            android:layout_height="20dip"
             android:layout_marginLeft="20dip"
             android:text="4"
             android:textColor="#5B4FBD"

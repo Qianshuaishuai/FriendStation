@@ -37,7 +37,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="380dip"
         android:layout_below="@+id/layout_top">
 
     </android.support.v7.widget.RecyclerView>
@@ -82,7 +82,7 @@
             android:layout_width="170dip"
             android:layout_height="50dip"
             android:layout_marginTop="15dip"
-            android:layout_marginBottom="50dip"
+            android:layout_marginBottom="24dip"
             android:background="@drawable/build_user_save_bg"
             android:text="换一批"
             android:textColor="#ffffff"

@@ -1,5 +1,7 @@
 package com.babyraising.friendstation.adapter;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,12 +11,14 @@ import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.bean.CoinPayDetailBean;
+import com.babyraising.friendstation.ui.pay.PayActivity;
 
 import java.util.List;
 
 public class RechargeAdapter extends RecyclerView.Adapter<RechargeAdapter.ViewHolder> {
 
     private List<CoinPayDetailBean> mList;
+    private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView countTxt, tipTxt;
@@ -29,7 +33,8 @@ public class RechargeAdapter extends RecyclerView.Adapter<RechargeAdapter.ViewHo
 
     }
 
-    public RechargeAdapter(List<CoinPayDetailBean> mList) {
+    public RechargeAdapter(Context context, List<CoinPayDetailBean> mList) {
+        this.context = context;
         this.mList = mList;
     }
 
@@ -48,7 +53,8 @@ public class RechargeAdapter extends RecyclerView.Adapter<RechargeAdapter.ViewHo
         holder.rechargeBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(context, PayActivity.class);
+                context.startActivity(intent);
             }
         });
     }

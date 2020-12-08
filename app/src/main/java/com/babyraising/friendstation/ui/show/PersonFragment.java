@@ -23,6 +23,9 @@ import com.babyraising.friendstation.ui.main.IntegralMallActivity;
 import com.babyraising.friendstation.ui.main.InviteFriendActivity;
 import com.babyraising.friendstation.ui.main.InviteFriendDetailActivity;
 import com.babyraising.friendstation.ui.main.LookMeRecordActivity;
+import com.babyraising.friendstation.ui.main.MyEarningActivity;
+import com.babyraising.friendstation.ui.main.MyInfoActivity;
+import com.babyraising.friendstation.ui.main.PersonInfoActivity;
 import com.babyraising.friendstation.ui.main.RechargeActivity;
 import com.babyraising.friendstation.ui.main.SettingActivity;
 import com.babyraising.friendstation.ui.main.TaskActivity;
@@ -82,9 +85,16 @@ public class PersonFragment extends BaseFragment {
 
     @Event(R.id.layout_income)
     private void incomeLayoutClick(View view) {
-        Intent intent = new Intent(getActivity(), IntegralMallActivity.class);
+        Intent intent = new Intent(getActivity(), MyEarningActivity.class);
         startActivity(intent);
     }
+
+    @Event(R.id.layout_person)
+    private void personLayoutClick(View view) {
+        Intent intent = new Intent(getActivity(), PersonInfoActivity.class);
+        startActivity(intent);
+    }
+
 
     @ViewInject(R.id.name)
     private TextView name;

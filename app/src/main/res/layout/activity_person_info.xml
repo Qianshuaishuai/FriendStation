@@ -178,6 +178,7 @@
                         android:textSize="14dip" />
 
                     <LinearLayout
+                        android:id="@+id/layout_auth"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
@@ -201,6 +202,8 @@
                                 android:layout_height="49dip"
                                 android:layout_marginLeft="6dip"
                                 android:background="@null"
+                                android:gravity="center_vertical"
+                                android:text="未认证"
                                 android:textColor="#B9B8C1"
                                 android:textSize="14dip" />
 

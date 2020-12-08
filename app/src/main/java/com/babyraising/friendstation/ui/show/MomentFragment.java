@@ -3,26 +3,44 @@ package com.babyraising.friendstation.ui.show;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.babyraising.friendstation.Constant;
+import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.adapter.MomentAdapter;
 import com.babyraising.friendstation.base.BaseFragment;
+import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.MomentDetailBean;
+import com.babyraising.friendstation.bean.ScoreRecordBean;
+import com.babyraising.friendstation.response.MomentResponse;
+import com.babyraising.friendstation.response.ScoreRecordResponse;
+import com.google.gson.Gson;
 
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ContentView(R.layout.fragment_moment)
 public class MomentFragment extends BaseFragment {
 
     private int selectType = 1;
+    private MomentAdapter adapter;
+    private List<MomentDetailBean> list;
 
     @ViewInject(R.id.list)
-    private RecyclerView list;
+    private RecyclerView recycleList;
 
     @ViewInject(R.id.type_tv1)
     private TextView typeTv1;
@@ -100,6 +118,8 @@ public class MomentFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         initView();
+
+        getMomentList();
     }
 
     /**
@@ -127,5 +147,59 @@ public class MomentFragment extends BaseFragment {
         typeV1.setVisibility(View.VISIBLE);
         typeV2.setVisibility(View.GONE);
         typeV3.setVisibility(View.GONE);
+
+        List<String> testList = new ArrayList<>();
+        testList.add("1");
+        testList.add("1");
+        testList.add("1");
+        testList.add("1");
+        testList.add("1");
+        adapter = new MomentAdapter(getActivity(), testList);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        recycleList.setAdapter(adapter);
+        recycleList.setLayoutManager(manager);
+    }
+
+    private void getMomentList() {
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_MOMENT);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                MomentResponse response = gson.fromJson(result, MomentResponse.class);
+                System.out.println("MomentRecord:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        list.clear();
+                        List<MomentDetailBean> newList = response.getData().getRecords();
+                        for (int l = 0; l < newList.size(); l++) {
+                            list.add(newList.get(l));
+                        }
+                        adapter.notifyDataSetChanged();
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }
