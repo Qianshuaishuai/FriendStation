@@ -4,6 +4,8 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".ui.show.NoticeFragment">
 
     <RelativeLayout
@@ -30,7 +32,7 @@
         android:layout_below="@+id/layout_top"></android.support.v7.widget.RecyclerView>
 
     <RelativeLayout
-        android:id="@+id/layout_toast"
+        android:id="@+id/layout_notice"
         android:layout_width="match_parent"
         android:layout_height="64dip"
         android:layout_marginLeft="15dip"

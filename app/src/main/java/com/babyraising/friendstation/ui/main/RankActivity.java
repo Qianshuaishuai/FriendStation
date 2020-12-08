@@ -38,6 +38,13 @@ public class RankActivity extends BaseActivity {
 
     @Event(R.id.layout_all)
     private void allLayoutClick(View view) {
+        if (numIndex != 2) {
+            dayTv.setTextColor(getResources().getColor(R.color.colorRankNormal));
+            dayView.setVisibility(View.GONE);
+            allTv.setTextColor(getResources().getColor(R.color.colorRankSelected));
+            allView.setVisibility(View.VISIBLE);
+            numIndex = 2;
+        }
 
     }
 
@@ -49,7 +56,13 @@ public class RankActivity extends BaseActivity {
 
     @Event(R.id.layout_day)
     private void dayLayoutClick(View view) {
-
+        if (numIndex != 1) {
+            dayTv.setTextColor(getResources().getColor(R.color.colorRankSelected));
+            dayView.setVisibility(View.VISIBLE);
+            allTv.setTextColor(getResources().getColor(R.color.colorRankNormal));
+            allView.setVisibility(View.GONE);
+            numIndex = 1;
+        }
     }
 
     @ViewInject(R.id.close_normal)
@@ -66,12 +79,20 @@ public class RankActivity extends BaseActivity {
 
     @Event(R.id.close_normal)
     private void closeNormalClick(View view) {
-
+        typeIndex = 1;
+        closeNormal.setVisibility(View.GONE);
+        closeSelected.setVisibility(View.VISIBLE);
+        vulgarNormal.setVisibility(View.VISIBLE);
+        vulgarSelected.setVisibility(View.GONE);
     }
 
     @Event(R.id.vulgar_normal)
     private void vulgarNormalClick(View view) {
-
+        typeIndex = 2;
+        closeNormal.setVisibility(View.VISIBLE);
+        closeSelected.setVisibility(View.GONE);
+        vulgarNormal.setVisibility(View.GONE);
+        vulgarSelected.setVisibility(View.VISIBLE);
     }
 
     @Override

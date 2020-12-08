@@ -25,7 +25,7 @@ public class NoticeFragment extends BaseFragment {
     @ViewInject(R.id.list)
     private RecyclerView list;
 
-    @ViewInject(R.id.layout_toast)
+    @ViewInject(R.id.layout_notice)
     private RelativeLayout toastLayout;
 
     @Override

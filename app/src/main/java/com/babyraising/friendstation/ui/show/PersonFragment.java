@@ -21,6 +21,7 @@ import com.babyraising.friendstation.request.SetPasswordRequest;
 import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
 import com.babyraising.friendstation.ui.main.IntegralMallActivity;
 import com.babyraising.friendstation.ui.main.InviteFriendActivity;
+import com.babyraising.friendstation.ui.main.InviteFriendDetailActivity;
 import com.babyraising.friendstation.ui.main.LookMeRecordActivity;
 import com.babyraising.friendstation.ui.main.RechargeActivity;
 import com.babyraising.friendstation.ui.main.SettingActivity;
@@ -45,7 +46,7 @@ public class PersonFragment extends BaseFragment {
 
     @Event(R.id.layout_invite)
     private void inviteLayoutClick(View view) {
-        Intent intent = new Intent(getActivity(), InviteFriendActivity.class);
+        Intent intent = new Intent(getActivity(), InviteFriendDetailActivity.class);
         startActivity(intent);
     }
 

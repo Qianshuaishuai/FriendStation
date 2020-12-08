@@ -4,4 +4,10 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorCommon">#666666</color>
+    <color name="colorInviteSelected">#3C3B41</color>
+    <color name="colorInviteNormal">#B9B8C1</color>
+    <color name="colorShowSelected">#3C3B41</color>
+    <color name="colorShowNormal">#B9B8C1</color>
+    <color name="colorRankSelected">#37445A</color>
+    <color name="colorRankNormal">#A6A8AD</color>
 </resources>
