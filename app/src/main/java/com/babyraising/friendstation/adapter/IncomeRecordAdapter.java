@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,12 +8,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.bean.CoinRecordBean;
 
 import java.util.List;
 
 public class IncomeRecordAdapter extends RecyclerView.Adapter<IncomeRecordAdapter.ViewHolder> {
 
-    private List<String> mList;
+    private List<CoinRecordBean> mList;
+    private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView dateTxt;
@@ -27,7 +30,7 @@ public class IncomeRecordAdapter extends RecyclerView.Adapter<IncomeRecordAdapte
 
     }
 
-    public IncomeRecordAdapter(List<String> mList) {
+    public IncomeRecordAdapter(Context context, List<CoinRecordBean> mList) {
         this.mList = mList;
     }
 

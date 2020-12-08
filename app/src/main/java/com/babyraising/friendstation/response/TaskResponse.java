@@ -1,14 +1,12 @@
 package com.babyraising.friendstation.response;
 
-import com.babyraising.friendstation.bean.ScoreExchangeBean;
-import com.babyraising.friendstation.bean.ScoreRecordBean;
+import com.babyraising.friendstation.bean.CoinPayBean;
+import com.babyraising.friendstation.bean.TaskBean;
 
-import java.util.ArrayList;
-
-public class ScoreRecordResponse {
+public class TaskResponse {
     private int code;
     private String msg;
-    private ArrayList<ScoreRecordBean> data;
+    private TaskBean data;
 
     public int getCode() {
         return code;
@@ -26,11 +24,11 @@ public class ScoreRecordResponse {
         this.msg = msg;
     }
 
-    public ArrayList<ScoreRecordBean> getData() {
+    public TaskBean getData() {
         return data;
     }
 
-    public void setData(ArrayList<ScoreRecordBean> data) {
+    public void setData(TaskBean data) {
         this.data = data;
     }
 }

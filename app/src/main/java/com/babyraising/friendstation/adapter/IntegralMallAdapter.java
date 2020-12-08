@@ -8,12 +8,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.bean.ScoreExchangeBean;
+import com.babyraising.friendstation.bean.ScoreExchangeDetailBean;
 
 import java.util.List;
 
 public class IntegralMallAdapter extends RecyclerView.Adapter<IntegralMallAdapter.ViewHolder> {
 
-    private List<String> mList;
+    private List<ScoreExchangeDetailBean> mList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt, integralTxt, countTxt;
@@ -29,7 +31,7 @@ public class IntegralMallAdapter extends RecyclerView.Adapter<IntegralMallAdapte
 
     }
 
-    public IntegralMallAdapter(List<String> mList) {
+    public IntegralMallAdapter(List<ScoreExchangeDetailBean> mList) {
         this.mList = mList;
     }
 
@@ -42,7 +44,10 @@ public class IntegralMallAdapter extends RecyclerView.Adapter<IntegralMallAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-
+        holder.nameTxt.setText(mList.get(position).getTitle());
+        holder.integralTxt.setText(mList.get(position).getPrice() + "积分");
+        holder.countTxt.setText(mList.get(position).getTitle());
+//        holder.nameTxt.setText(mList.get(position).getTitle());
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -46,6 +47,16 @@ public class FriendStationApplication extends Application {
 
     public CommonLoginBean getUserInfo() {
         return gson.fromJson(sp.getString("info", ""), CommonLoginBean.class);
+    }
+
+    public void saveUserAllInfo(UserAllInfoBean bean) {
+        String beanString = gson.toJson(bean);
+        editor.putString("all-info", beanString);
+        editor.commit();
+    }
+
+    public UserAllInfoBean getUserAllInfo() {
+        return gson.fromJson(sp.getString("all-info", ""), UserAllInfoBean.class);
     }
 
 }

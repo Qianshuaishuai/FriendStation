@@ -2,14 +2,14 @@ package com.babyraising.friendstation.bean;
 
 import java.util.ArrayList;
 
-public class ScoreExchangeBean {
+public class TaskBean {
     private int current;
     private boolean hitCount;
     private int pages;
     private boolean searchCount;
     private int size;
     private int total;
-    private ArrayList<ScoreExchangeDetailBean> records;
+    private ArrayList<TaskDetailBean> records;
 
     public int getCurrent() {
         return current;
@@ -59,11 +59,11 @@ public class ScoreExchangeBean {
         this.total = total;
     }
 
-    public ArrayList<ScoreExchangeDetailBean> getRecords() {
+    public ArrayList<TaskDetailBean> getRecords() {
         return records;
     }
 
-    public void setRecords(ArrayList<ScoreExchangeDetailBean> records) {
+    public void setRecords(ArrayList<TaskDetailBean> records) {
         this.records = records;
     }
 }

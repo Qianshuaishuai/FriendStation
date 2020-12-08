@@ -8,12 +8,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.bean.TaskDetailBean;
+
+import org.xutils.x;
 
 import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
-    private List<String> mList;
+    private List<TaskDetailBean> mList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView contentTxt, tipTxt, countTxt;
@@ -29,7 +32,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     }
 
-    public TaskAdapter(List<String> mList) {
+    public TaskAdapter(List<TaskDetailBean> mList) {
         this.mList = mList;
     }
 
@@ -42,6 +45,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        x.image().bind(holder.iconIv, mList.get(position).getIcon());
+        holder.contentTxt.setText(mList.get(position).getTitle());
+        holder.tipTxt.setText(mList.get(position).getSubTitle());
+        holder.countTxt.setText("+" + mList.get(position).getReword() + "金币");
 
     }
 

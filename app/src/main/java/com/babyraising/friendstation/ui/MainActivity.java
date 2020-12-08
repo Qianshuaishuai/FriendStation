@@ -19,15 +19,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.babyraising.friendstation.Constant;
+import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.response.UmsGetCodeResponse;
+import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.ui.show.FindFragment;
 import com.babyraising.friendstation.ui.show.MomentFragment;
 import com.babyraising.friendstation.ui.show.NoticeFragment;
 import com.babyraising.friendstation.ui.show.PersonFragment;
+import com.babyraising.friendstation.util.T;
+import com.google.gson.Gson;
 
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 import java.lang.reflect.Field;
 
@@ -47,6 +58,7 @@ public class MainActivity extends BaseActivity implements FindFragment.OnFragmen
     private PersonFragment personFragment;
     private Fragment[] fragments;
     private int lastfragment = 0;
+    private CommonLoginBean bean;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -110,6 +122,11 @@ public class MainActivity extends BaseActivity implements FindFragment.OnFragmen
         super.onCreate(savedInstanceState);
 
         initNavigationBar();
+        initData();
+    }
+
+    private void initData() {
+        bean = ((FriendStationApplication) getApplication()).getUserInfo();
     }
 
     private void initNavigationBar() {
@@ -184,5 +201,48 @@ public class MainActivity extends BaseActivity implements FindFragment.OnFragmen
             } catch (IllegalAccessException e) {
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getUserFullInfo();
+    }
+
+    private void getUserFullInfo() {
+
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_FULL);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
+                System.out.println(result);
+                switch (response.getCode()) {
+                    case 200:
+                        ((FriendStationApplication)getApplication()).saveUserAllInfo(response.getData());
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }

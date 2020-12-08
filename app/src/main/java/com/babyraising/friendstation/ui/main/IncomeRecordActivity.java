@@ -1,15 +1,21 @@
 package com.babyraising.friendstation.ui.main;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.adapter.ExchangeRecordAdapter;
+import com.babyraising.friendstation.adapter.IncomeRecordAdapter;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.CoinRecordBean;
 import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.ScoreRecordBean;
 import com.babyraising.friendstation.response.CoinPayResponse;
+import com.babyraising.friendstation.response.CoinRecordResponse;
 import com.google.gson.Gson;
 
 import org.xutils.common.Callback;
@@ -18,6 +24,9 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ContentView(R.layout.activity_income_record)
 public class IncomeRecordActivity extends BaseActivity {
@@ -28,13 +37,30 @@ public class IncomeRecordActivity extends BaseActivity {
     }
 
     @ViewInject(R.id.list)
-    private RecyclerView list;
+    private RecyclerView recordList;
+
+    private IncomeRecordAdapter adapter;
+    private List<CoinRecordBean> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        initView();
         getIncomeList();
+    }
+
+    private void initView() {
+        list = new ArrayList<>();
+        adapter = new IncomeRecordAdapter(this, list);
+        adapter.setOnItemClickListener(new IncomeRecordAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+
+            }
+        });
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        recordList.setLayoutManager(manager);
+        recordList.setAdapter(adapter);
     }
 
     private void getIncomeList() {
@@ -46,11 +72,16 @@ public class IncomeRecordActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 Gson gson = new Gson();
-                CoinPayResponse response = gson.fromJson(result, CoinPayResponse.class);
-                System.out.println("result:" + result);
+                CoinRecordResponse response = gson.fromJson(result, CoinRecordResponse.class);
+                System.out.println("CoinRecord:" + result);
                 switch (response.getCode()) {
                     case 200:
-
+                        list.clear();
+//                        List<CoinRecordBean> newList = response.getData();
+//                        for (int l = 0; l < newList.size(); l++) {
+//                            list.add(newList.get(l));
+//                        }
+//                        adapter.notifyDataSetChanged();
                         break;
                     default:
 

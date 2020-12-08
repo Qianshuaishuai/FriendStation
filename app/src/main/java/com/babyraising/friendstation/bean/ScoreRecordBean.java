@@ -3,67 +3,22 @@ package com.babyraising.friendstation.bean;
 import java.util.ArrayList;
 
 public class ScoreRecordBean {
-    private int current;
-    private boolean hitCount;
-    private int pages;
-    private boolean searchCount;
-    private int size;
-    private int total;
-    private ArrayList<ScoreRecordDetailBean> records;
+    private String dateTime;
+    private ArrayList<ScoreRecordDetailBean> list;
 
-    public int getCurrent() {
-        return current;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setCurrent(int current) {
-        this.current = current;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public boolean isHitCount() {
-        return hitCount;
+    public ArrayList<ScoreRecordDetailBean> getList() {
+        return list;
     }
 
-    public void setHitCount(boolean hitCount) {
-        this.hitCount = hitCount;
-    }
-
-    public int getPages() {
-        return pages;
-    }
-
-    public void setPages(int pages) {
-        this.pages = pages;
-    }
-
-    public boolean isSearchCount() {
-        return searchCount;
-    }
-
-    public void setSearchCount(boolean searchCount) {
-        this.searchCount = searchCount;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
-    }
-
-    public ArrayList<ScoreRecordDetailBean> getRecords() {
-        return records;
-    }
-
-    public void setRecords(ArrayList<ScoreRecordDetailBean> records) {
-        this.records = records;
+    public void setList(ArrayList<ScoreRecordDetailBean> list) {
+        this.list = list;
     }
 }

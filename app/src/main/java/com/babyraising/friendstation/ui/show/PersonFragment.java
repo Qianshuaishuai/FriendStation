@@ -7,23 +7,32 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseFragment;
 import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.request.SetPasswordRequest;
 import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
 import com.babyraising.friendstation.ui.main.IntegralMallActivity;
+import com.babyraising.friendstation.ui.main.InviteFriendActivity;
+import com.babyraising.friendstation.ui.main.LookMeRecordActivity;
 import com.babyraising.friendstation.ui.main.RechargeActivity;
 import com.babyraising.friendstation.ui.main.SettingActivity;
+import com.babyraising.friendstation.ui.main.TaskActivity;
+import com.babyraising.friendstation.ui.other.HelpActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
 import org.xutils.common.Callback;
+import org.xutils.common.util.DensityUtil;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -32,19 +41,24 @@ import org.xutils.x;
 @ContentView(R.layout.fragment_person)
 public class PersonFragment extends BaseFragment {
 
+    private UserAllInfoBean userInfoBean;
+
     @Event(R.id.layout_invite)
     private void inviteLayoutClick(View view) {
-
+        Intent intent = new Intent(getActivity(), InviteFriendActivity.class);
+        startActivity(intent);
     }
 
     @Event(R.id.layout_look_me)
     private void lookmeLayoutClick(View view) {
-
+        Intent intent = new Intent(getActivity(), LookMeRecordActivity.class);
+        startActivity(intent);
     }
 
     @Event(R.id.layout_help)
     private void helpLayoutClick(View view) {
-
+        Intent intent = new Intent(getActivity(), HelpActivity.class);
+        startActivity(intent);
     }
 
     @Event(R.id.layout_setting)
@@ -55,20 +69,33 @@ public class PersonFragment extends BaseFragment {
 
     @Event(R.id.layout_task)
     private void taskLayoutClick(View view) {
-
+        Intent intent = new Intent(getActivity(), TaskActivity.class);
+        startActivity(intent);
     }
 
     @Event(R.id.layout_recharge)
-    private void rechargeLayoutClick(View view){
+    private void rechargeLayoutClick(View view) {
         Intent intent = new Intent(getActivity(), RechargeActivity.class);
         startActivity(intent);
     }
 
     @Event(R.id.layout_income)
-    private void incomeLayoutClick(View view){
+    private void incomeLayoutClick(View view) {
         Intent intent = new Intent(getActivity(), IntegralMallActivity.class);
         startActivity(intent);
     }
+
+    @ViewInject(R.id.name)
+    private TextView name;
+
+    @ViewInject(R.id.number)
+    private TextView number;
+
+    @ViewInject(R.id.info)
+    private TextView info;
+
+    @ViewInject(R.id.head)
+    private ImageView head;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,5 +117,17 @@ public class PersonFragment extends BaseFragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        userInfoBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
+        ImageOptions options = new ImageOptions.Builder().
+                setRadius(DensityUtil.dip2px(8))
+                .setCrop(true).build();
+        x.image().bind(head, userInfoBean.getAvatar(), options);
 
+        name.setText(userInfoBean.getNickname());
+        number.setText("号码 | " + userInfoBean.getMobile());
+        info.setText("好友 1 | 关注 3 | 粉丝 1");
+    }
 }

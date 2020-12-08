@@ -7,12 +7,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.bean.ScoreRecordDetailBean;
 
 import java.util.List;
 
 public class ExchangeRecordDetailAdapter extends RecyclerView.Adapter<ExchangeRecordDetailAdapter.ViewHolder> {
 
-    private List<String> mList;
+    private List<ScoreRecordDetailBean> mList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView timeTxt, countTxt, detailTxt, balanceTxt;
@@ -28,7 +29,7 @@ public class ExchangeRecordDetailAdapter extends RecyclerView.Adapter<ExchangeRe
 
     }
 
-    public ExchangeRecordDetailAdapter(List<String> mList) {
+    public ExchangeRecordDetailAdapter(List<ScoreRecordDetailBean> mList) {
         this.mList = mList;
     }
 
@@ -41,7 +42,7 @@ public class ExchangeRecordDetailAdapter extends RecyclerView.Adapter<ExchangeRe
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-
+        holder.timeTxt.setText(mList.get(position).getGmtCreate());
     }
 
     @Override

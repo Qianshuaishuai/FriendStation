@@ -1,5 +1,7 @@
 package com.babyraising.friendstation.adapter;
 
+import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,12 +12,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.bean.ScoreExchangeBean;
+import com.babyraising.friendstation.bean.ScoreRecordBean;
 
 import java.util.List;
 
 public class ExchangeRecordAdapter extends RecyclerView.Adapter<ExchangeRecordAdapter.ViewHolder> {
 
-    private List<String> mList;
+    private List<ScoreRecordBean> mList;
+    private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView dateTxt;
@@ -30,8 +35,9 @@ public class ExchangeRecordAdapter extends RecyclerView.Adapter<ExchangeRecordAd
 
     }
 
-    public ExchangeRecordAdapter(List<String> mList) {
+    public ExchangeRecordAdapter(Context context, List<ScoreRecordBean> mList) {
         this.mList = mList;
+        this.context = context;
     }
 
     @Override
@@ -43,7 +49,12 @@ public class ExchangeRecordAdapter extends RecyclerView.Adapter<ExchangeRecordAd
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        holder.dateTxt.setText(mList.get(position).getDateTime());
+        LinearLayoutManager manager = new LinearLayoutManager(context);
+        holder.recordList.setLayoutManager(manager);
 
+        ExchangeRecordDetailAdapter adapter = new ExchangeRecordDetailAdapter(mList.get(position).getList());
+        holder.recordList.setAdapter(adapter);
     }
 
     @Override

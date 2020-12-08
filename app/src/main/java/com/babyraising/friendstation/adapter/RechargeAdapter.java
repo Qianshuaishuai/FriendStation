@@ -8,12 +8,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.bean.CoinPayDetailBean;
 
 import java.util.List;
 
 public class RechargeAdapter extends RecyclerView.Adapter<RechargeAdapter.ViewHolder> {
 
-    private List<String> mList;
+    private List<CoinPayDetailBean> mList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView countTxt, tipTxt;
@@ -28,7 +29,7 @@ public class RechargeAdapter extends RecyclerView.Adapter<RechargeAdapter.ViewHo
 
     }
 
-    public RechargeAdapter(List<String> mList) {
+    public RechargeAdapter(List<CoinPayDetailBean> mList) {
         this.mList = mList;
     }
 
@@ -41,7 +42,15 @@ public class RechargeAdapter extends RecyclerView.Adapter<RechargeAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        holder.countTxt.setText(mList.get(position).getTitle());
+        holder.rechargeBt.setText("￥ " + mList.get(position).getPrice());
+        holder.tipTxt.setText(mList.get(position).getSubTitle());
+        holder.rechargeBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
     }
 
     @Override
