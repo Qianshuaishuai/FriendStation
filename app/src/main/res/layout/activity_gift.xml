@@ -55,7 +55,10 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/layout_top"></android.support.v7.widget.RecyclerView>
+        android:layout_below="@+id/layout_top"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
+        android:layout_marginBottom="60dip"></android.support.v7.widget.RecyclerView>
 
     <RelativeLayout
         android:layout_width="match_parent"
