@@ -39,15 +39,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ui.main.MomentSendActivity"></activity>
+        <activity android:name=".ui.main.ChatActivity"></activity>
+        <activity android:name=".ui.main.MomentSendActivity" />
         <activity android:name=".ui.main.VoiceSendActivity" />
         <activity android:name=".ui.main.VoiceTipActivity" />
         <activity android:name=".ui.main.CloseActivity" />
         <activity android:name=".ui.main.ScrollImageActivity" />
         <activity android:name=".ui.main.PersonInfoActivity" />
-        <activity android:name=".ui.main.IncomeRecordActivity" >
-
-        </activity>
+        <activity android:name=".ui.main.IncomeRecordActivity"></activity>
         <activity android:name=".ui.main.RechargeActivity" />
         <activity android:name=".ui.main.IntegralMallActivity" />
         <activity android:name=".ui.main.SignActivity" />
@@ -67,21 +66,14 @@
         <activity android:name=".ui.main.InviteFriendActivity" />
         <activity android:name=".ui.pay.PayActivity" />
         <activity android:name=".ui.user.NoticeActivity" />
-        <activity android:name=".ui.user.BuildUserNameActivity">
-        </activity>
+        <activity android:name=".ui.user.BuildUserNameActivity"></activity>
         <activity android:name=".ui.user.BuildUserSexActivity" />
-        <activity android:name=".ui.user.BuildUserActivity">
-
-        </activity>
-        <activity android:name=".ui.user.CodeActivity"></activity>
-        <activity android:name=".ui.user.LoginPhoneActivity">
-
-        </activity>
-        <activity android:name=".ui.user.WelcomeActivity">
-
-        </activity>
+        <activity android:name=".ui.user.BuildUserActivity"></activity>
+        <activity android:name=".ui.user.CodeActivity" />
+        <activity android:name=".ui.user.LoginPhoneActivity"></activity>
+        <activity android:name=".ui.user.WelcomeActivity"></activity>
         <activity android:name=".ui.user.LoginActivity" />
-        <activity android:name=".ui.MainActivity" >
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

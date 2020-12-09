@@ -16,11 +16,6 @@ import org.xutils.view.annotation.ViewInject;
 @ContentView(R.layout.activity_voice_send)
 public class VoiceSendActivity extends BaseActivity {
 
-    @Event(R.id.close)
-    private void closeClick(View view) {
-        finish();
-    }
-
     @ViewInject(R.id.layout_success)
     private RelativeLayout successLayout;
 
@@ -29,6 +24,11 @@ public class VoiceSendActivity extends BaseActivity {
 
     @ViewInject(R.id.name)
     private TextView name;
+
+    @Event(R.id.close)
+    private void closeClick(View view) {
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

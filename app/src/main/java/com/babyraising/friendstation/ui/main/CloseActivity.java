@@ -17,6 +17,8 @@ import org.xutils.view.annotation.ViewInject;
 @ContentView(R.layout.activity_close)
 public class CloseActivity extends BaseActivity {
 
+    private int type = 1;
+
     @Event(R.id.back)
     private void back(View view) {
         finish();
@@ -24,27 +26,75 @@ public class CloseActivity extends BaseActivity {
 
     @Event(R.id.tv1)
     private void tv1Click(View view) {
+        if (type != 1) {
+            tv1.setTextColor(getResources().getColor(R.color.colorShowSelected));
+            tv1.setTextSize(17);
 
+            tv2.setTextColor(getResources().getColor(R.color.colorShowNormal));
+            tv2.setTextSize(15);
+
+            tv3.setTextColor(getResources().getColor(R.color.colorShowNormal));
+            tv3.setTextSize(15);
+
+            tv4.setTextColor(getResources().getColor(R.color.colorShowNormal));
+            tv4.setTextSize(15);
+        }
     }
 
     @Event(R.id.tv2)
     private void tv2Click(View view) {
+        if (type != 2) {
+            tv1.setTextColor(getResources().getColor(R.color.colorShowNormal));
+            tv1.setTextSize(15);
 
+            tv2.setTextColor(getResources().getColor(R.color.colorShowSelected));
+            tv2.setTextSize(17);
+
+            tv3.setTextColor(getResources().getColor(R.color.colorShowNormal));
+            tv3.setTextSize(15);
+
+            tv4.setTextColor(getResources().getColor(R.color.colorShowNormal));
+            tv4.setTextSize(15);
+        }
     }
 
     @Event(R.id.tv3)
     private void tv3Click(View view) {
+        if (type != 3) {
+            tv1.setTextColor(getResources().getColor(R.color.colorShowNormal));
+            tv1.setTextSize(15);
 
+            tv2.setTextColor(getResources().getColor(R.color.colorShowNormal));
+            tv2.setTextSize(17);
+
+            tv3.setTextColor(getResources().getColor(R.color.colorShowSelected));
+            tv3.setTextSize(15);
+
+            tv4.setTextColor(getResources().getColor(R.color.colorShowNormal));
+            tv4.setTextSize(15);
+        }
     }
 
     @Event(R.id.tv4)
     private void tv4Click(View view) {
+        if (type != 4) {
+            tv1.setTextColor(getResources().getColor(R.color.colorShowNormal));
+            tv1.setTextSize(15);
 
+            tv2.setTextColor(getResources().getColor(R.color.colorShowNormal));
+            tv2.setTextSize(15);
+
+            tv3.setTextColor(getResources().getColor(R.color.colorShowNormal));
+            tv3.setTextSize(15);
+
+            tv4.setTextColor(getResources().getColor(R.color.colorShowSelected));
+            tv4.setTextSize(17);
+        }
     }
 
     @Event(R.id.go_chat)
     private void goChatClick(View view) {
-
+        finish();
     }
 
     @ViewInject(R.id.tv1)

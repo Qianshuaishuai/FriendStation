@@ -9,8 +9,12 @@ import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.xutils.x;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FriendStationApplication extends Application {
     private String TAG = "FriendStationApplication";
@@ -31,6 +35,28 @@ public class FriendStationApplication extends Application {
         }
 
         initSp();
+
+        initCommonWord();
+    }
+
+    private void initCommonWord() {
+        List<String> commonWordList = getCommonWordData();
+        if (commonWordList == null || commonWordList.size() == 0) {
+            commonWordList = new ArrayList<>();
+            commonWordList.add("请保持网络畅通，及时接收我的思念。");
+            commonWordList.add("第一次遇到你这样的人让人心动不已");
+            commonWordList.add("拦都拦不住，手机非要给你打个招呼");
+            commonWordList.add("请保持网络畅通，及时接收我的思念。");
+            commonWordList.add("第一次遇到你这样的人让人心动不已");
+            commonWordList.add("拦都拦不住，手机非要给你打个招呼");
+            commonWordList.add("请保持网络畅通，及时接收我的思念。");
+            commonWordList.add("第一次遇到你这样的人让人心动不已");
+            commonWordList.add("拦都拦不住，手机非要给你打个招呼");
+            commonWordList.add("请保持网络畅通，及时接收我的思念。");
+            commonWordList.add("第一次遇到你这样的人让人心动不已");
+            commonWordList.add("拦都拦不住，手机非要给你打个招呼");
+            saveCommonWordData(commonWordList);
+        }
     }
 
     private void initSp() {
@@ -52,6 +78,17 @@ public class FriendStationApplication extends Application {
     public void saveUserAllInfo(UserAllInfoBean bean) {
         String beanString = gson.toJson(bean);
         editor.putString("all-info", beanString);
+        editor.commit();
+    }
+
+    public ArrayList<String> getCommonWordData() {
+        return gson.fromJson(sp.getString("common-word", ""), new TypeToken<List<String>>() {
+        }.getType());
+    }
+
+    public void saveCommonWordData(List<String> list) {
+        String beanString = gson.toJson(list);
+        editor.putString("common-word", beanString);
         editor.commit();
     }
 

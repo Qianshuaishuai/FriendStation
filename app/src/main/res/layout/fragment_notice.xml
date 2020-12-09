@@ -38,7 +38,8 @@
         android:layout_marginLeft="15dip"
         android:layout_marginTop="26dip"
         android:layout_marginRight="15dip"
-        android:background="@drawable/shape_main_notice_toast_bg">
+        android:background="@drawable/shape_main_notice_toast_bg"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tip1"

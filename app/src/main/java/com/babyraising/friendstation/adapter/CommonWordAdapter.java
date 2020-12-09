@@ -37,7 +37,7 @@ public class CommonWordAdapter extends RecyclerView.Adapter<CommonWordAdapter.Vi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-
+        holder.contentTxt.setText(mList.get(position));
     }
 
     @Override

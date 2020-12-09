@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.ui.main;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +25,8 @@ public class GiftActivity extends BaseActivity {
 
     @Event(R.id.layout_recharge)
     private void layoutRechargeClick(View view) {
-
+        Intent intent = new Intent(this, RechargeActivity.class);
+        startActivity(intent);
     }
 
     @Event(R.id.send)

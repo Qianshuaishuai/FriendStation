@@ -3,6 +3,8 @@ package com.babyraising.friendstation;
 public class Constant {
     public static final Boolean DEBUG = true;
 
+    public static final int OFFICIAL_INTO_CHAT_CODE = 999;
+
     public static final String BASE_URL = "http://8.129.108.2/api/";
 
     //user部分

@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#faf9fe"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:context=".ui.main.ChatActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="48dip">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:src="@mipmap/common_back" />
+
+        <RelativeLayout
+            android:id="@+id/layout_number"
+            android:layout_width="20dip"
+            android:layout_height="20dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="6dip"
+            android:layout_toRightOf="@id/back"
+            android:background="@mipmap/rank_number_bg">
+
+            <TextView
+                android:id="@+id/chat_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="1"
+                android:textColor="#ffffff"
+                android:textSize="12dip" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="香香"
+            android:textColor="#ff3c3b41"
+            android:textSize="17dip"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_alignParentBottom="true"
+            android:background="#D4D4D4"></View>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_official"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_top"
+        android:layout_marginTop="10dip"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="12月3日下午3:20"
+            android:textColor="#B9B8C1"
+            android:textSize="11dip" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dip"
+            android:layout_marginTop="20dip"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/official"
+                android:layout_width="38dip"
+                android:layout_height="38dip"
+                android:src="@mipmap/test2" />
+
+            <LinearLayout
+                android:layout_width="240dip"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dip"
+                android:background="@drawable/shape_chat_official_content_bg"
+                android:orientation="vertical"
+                android:paddingLeft="15dip"
+                android:paddingTop="10dip"
+                android:paddingRight="15dip"
+                android:paddingBottom="10dip">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="脱单上XXX；"
+                    android:textColor="#3C3B41"
+                    android:textSize="14dip" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dip"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tip1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="上传4张照片"
+                        android:textColor="#F75184"
+                        android:textSize="14dip" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="，领红包；"
+                        android:textColor="#3C3B41"
+                        android:textSize="14dip" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dip"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tip2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="完善个人资料"
+                        android:textColor="#F75184"
+                        android:textSize="14dip" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="，领红包；"
+                        android:textColor="#3C3B41"
+                        android:textSize="14dip" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dip"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tip3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="发布最新动态"
+                        android:textColor="#F75184"
+                        android:textSize="14dip" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="，领红包；"
+                        android:textColor="#3C3B41"
+                        android:textSize="14dip" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dip"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tip4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="提交真人认证"
+                        android:textColor="#F75184"
+                        android:textSize="14dip" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="后所有收益翻倍，"
+                        android:textColor="#3C3B41"
+                        android:textSize="14dip" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dip"
+                    android:text="交友成功率翻倍。"
+                    android:textColor="#3C3B41"
+                    android:textSize="14dip" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dip"
+        android:layout_alignParentBottom="true"
+        android:background="#ffffff"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dip"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/voice"
+                android:layout_width="20dip"
+                android:layout_height="20dip"
+                android:layout_marginLeft="20dip"
+                android:layout_marginRight="20dip"
+                android:src="@mipmap/chat_icon3" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="34dip"
+                android:layout_marginRight="20dip">
+
+                <EditText
+                    android:id="@+id/content"
+                    android:layout_width="match_parent"
+                    android:layout_height="34dip"
+                    android:background="@drawable/shape_chat_content_bg"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingLeft="12dip"
+                    android:paddingRight="32dip"
+                    android:textSize="15dip" />
+
+                <TextView
+                    android:id="@+id/common_word"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dip"
+                    android:text="..."
+                    android:textColor="#F75184"
+                    android:textSize="15dip" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dip"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="55dip"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/chat1"
+                    android:layout_width="25.5dip"
+                    android:layout_height="25.5dip"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/chat_icon2" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="55dip"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/chat2"
+                    android:layout_width="25.5dip"
+                    android:layout_height="25.5dip"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/chat_icon4" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="55dip"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/chat3"
+                    android:layout_width="25.5dip"
+                    android:layout_height="25.5dip"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/chat_icon5" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="55dip"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/chat4"
+                    android:layout_width="25.5dip"
+                    android:layout_height="25.5dip"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/chat_icon1" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dip"
+                android:layout_height="55dip"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:id="@+id/chat5"
+                    android:layout_width="25.5dip"
+                    android:layout_height="25.5dip"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/chat_icon6" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

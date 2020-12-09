@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.adapter.LookMeRecordAdapter;
 import com.babyraising.friendstation.base.BaseFragment;
 import com.babyraising.friendstation.ui.main.RankActivity;
 import com.babyraising.friendstation.ui.main.VoiceSendActivity;
@@ -17,13 +19,17 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ContentView(R.layout.fragment_find)
 public class FindFragment extends BaseFragment {
 
     private int selectType = 1;
+    private LookMeRecordAdapter adapter;
 
     @ViewInject(R.id.list)
-    private RecyclerView list;
+    private RecyclerView recycleList;
 
     @ViewInject(R.id.type_tv1)
     private TextView typeTv1;
@@ -131,6 +137,18 @@ public class FindFragment extends BaseFragment {
         typeV1.setVisibility(View.VISIBLE);
         typeV2.setVisibility(View.GONE);
         typeV3.setVisibility(View.GONE);
+
+        List<String> testList = new ArrayList<>();
+        testList.add("1");
+        testList.add("1");
+        testList.add("1");
+        testList.add("1");
+        testList.add("1");
+        testList.add("1");
+        adapter = new LookMeRecordAdapter(testList);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        recycleList.setLayoutManager(manager);
+        recycleList.setAdapter(adapter);
     }
 
     /**
