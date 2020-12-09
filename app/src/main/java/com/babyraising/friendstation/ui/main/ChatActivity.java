@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
@@ -114,6 +115,24 @@ public class ChatActivity extends BaseActivity {
 
     @ViewInject(R.id.layout_official)
     private LinearLayout officialLayout;
+
+    @ViewInject(R.id.layout_main_tip)
+    private RelativeLayout mainTipLayout;
+
+    @Event(R.id.recharge_coin)
+    private void rechargeCoin(View view) {
+        Intent intent = new Intent(this, RechargeActivity.class);
+        startActivity(intent);
+        mainTipLayout.setVisibility(View.GONE);
+    }
+
+    @Event(R.id.get_coin)
+    private void getCoin(View view) {
+        Intent intent = new Intent(this, TaskActivity.class);
+        startActivity(intent);
+        mainTipLayout.setVisibility(View.GONE);
+    }
+
 
     private int status = 0;
 

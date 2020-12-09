@@ -34,6 +34,19 @@ public class NoticeFragment extends BaseFragment {
     @ViewInject(R.id.layout_notice)
     private RelativeLayout toastLayout;
 
+    @ViewInject(R.id.layout_notice_tip)
+    private RelativeLayout noticeTipLayout;
+
+    @Event(R.id.dialog_close)
+    private void dialogCloseClick(View view) {
+        noticeTipLayout.setVisibility(View.GONE);
+    }
+
+    @Event(R.id.recall)
+    private void recallClick(View view) {
+        noticeTipLayout.setVisibility(View.GONE);
+    }
+
     private NoticeAdapter adapter;
 
     @Override
@@ -67,7 +80,7 @@ public class NoticeFragment extends BaseFragment {
         List<String> testList = new ArrayList<>();
         testList.add("1");
         testList.add("2");
-        adapter = new NoticeAdapter(getActivity(),testList);
+        adapter = new NoticeAdapter(getActivity(), testList);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recycleList.setAdapter(adapter);
         recycleList.setLayoutManager(manager);

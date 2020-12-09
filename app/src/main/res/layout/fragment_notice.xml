@@ -87,4 +87,65 @@
                 android:textSize="14dip" />
         </LinearLayout>
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_notice_tip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#48000000">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="60dip"
+            android:layout_marginRight="60dip"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_notice_send_tip"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/dialog_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dip"
+                    android:layout_marginTop="15dip"
+                    android:layout_marginRight="15dip"
+                    android:scaleType="fitXY"
+                    android:src="@mipmap/test1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dip"
+                    android:layout_marginBottom="15dip"
+                    android:text="回复消息，能赚钱！"
+                    android:textColor="#B9B8C1"
+                    android:textSize="14dip" />
+
+                <Button
+                    android:id="@+id/recall"
+                    android:layout_width="120dip"
+                    android:layout_height="50dip"
+                    android:layout_marginBottom="20dip"
+                    android:background="@drawable/build_user_save_bg"
+                    android:text="立即回复"
+                    android:textColor="#ffffff"
+                    android:textSize="15dip" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/dialog_close"
+                android:layout_width="28dip"
+                android:layout_height="28dip"
+                android:layout_marginTop="31dip"
+                android:src="@mipmap/common_dialog_close" />
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>
