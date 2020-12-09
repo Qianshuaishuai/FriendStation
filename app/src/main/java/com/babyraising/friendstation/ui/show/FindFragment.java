@@ -4,16 +4,25 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.adapter.DialogFirstShowAdapter;
 import com.babyraising.friendstation.adapter.LookMeRecordAdapter;
 import com.babyraising.friendstation.base.BaseFragment;
+import com.babyraising.friendstation.bean.FirstShowBean;
+import com.babyraising.friendstation.decoration.FirstShowSpaceItemDecoration;
+import com.babyraising.friendstation.decoration.SpaceItemDecoration;
 import com.babyraising.friendstation.ui.main.RankActivity;
 import com.babyraising.friendstation.ui.main.VoiceSendActivity;
+import com.babyraising.friendstation.util.DisplayUtils;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -27,6 +36,9 @@ public class FindFragment extends BaseFragment {
 
     private int selectType = 1;
     private LookMeRecordAdapter adapter;
+    private DialogFirstShowAdapter showAdapter;
+
+    private int isSelect = 0;
 
     @ViewInject(R.id.list)
     private RecyclerView recycleList;
@@ -57,13 +69,30 @@ public class FindFragment extends BaseFragment {
 
     @Event(R.id.layout_find)
     private void findLayoutClick(View view) {
-
+        tipFirstLayout.setVisibility(View.VISIBLE);
     }
+
+    @ViewInject(R.id.tip_list)
+    private RecyclerView tipList;
 
     @Event(R.id.layout_rank)
     private void rankLayoutClick(View view) {
         Intent intent = new Intent(getActivity(), RankActivity.class);
         startActivity(intent);
+    }
+
+    @ViewInject(R.id.select_no_show)
+    private ImageView selectNoShow;
+
+    @Event(R.id.select_no_show)
+    private void noShowClick(View view) {
+        if (isSelect == 0) {
+            selectNoShow.setImageResource(R.mipmap.dialog_check_selected1);
+            isSelect = 1;
+        } else {
+            selectNoShow.setImageResource(R.mipmap.dialog_check_normal);
+            isSelect = 0;
+        }
     }
 
     @Event(R.id.type_tv1)
@@ -96,6 +125,14 @@ public class FindFragment extends BaseFragment {
             typeV2.setVisibility(View.VISIBLE);
             typeV3.setVisibility(View.GONE);
         }
+    }
+
+    @ViewInject(R.id.layout_first_tip)
+    private RelativeLayout tipFirstLayout;
+
+    @Event(R.id.dialog_layout_bottom)
+    private void dialogLayoutBottom(View view) {
+        tipFirstLayout.setVisibility(View.GONE);
     }
 
     @Event(R.id.type_tv3)
@@ -149,6 +186,27 @@ public class FindFragment extends BaseFragment {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recycleList.setLayoutManager(manager);
         recycleList.setAdapter(adapter);
+
+        List<FirstShowBean> testList123 = new ArrayList<>();
+        testList123.add(new FirstShowBean());
+        testList123.add(new FirstShowBean());
+        testList123.add(new FirstShowBean());
+        testList123.add(new FirstShowBean());
+        testList123.add(new FirstShowBean());
+        testList123.add(new FirstShowBean());
+        testList123.add(new FirstShowBean());
+        testList123.add(new FirstShowBean());
+
+        showAdapter = new DialogFirstShowAdapter(testList123);
+        GridLayoutManager manager2 = new GridLayoutManager(getActivity(), 4);
+
+        WindowManager wm1 = this.getActivity().getWindowManager();
+        int width1 = DisplayUtils.dp2px(getActivity(), 229);
+        int itemWidth = DisplayUtils.dp2px(getActivity(), 55); //每个item的宽度
+
+        tipList.setLayoutManager(manager2);
+        tipList.setAdapter(showAdapter);
+        tipList.addItemDecoration(new FirstShowSpaceItemDecoration((width1 - itemWidth * 4) / 8));
     }
 
     /**

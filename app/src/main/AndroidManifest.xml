@@ -40,7 +40,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".ui.main.ChatActivity"></activity>
-        <activity android:name=".ui.main.MomentSendActivity" />
+        <activity
+            android:name=".ui.main.MomentSendActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+
+        </activity>
+
         <activity android:name=".ui.main.VoiceSendActivity" />
         <activity android:name=".ui.main.VoiceTipActivity" />
         <activity android:name=".ui.main.CloseActivity" />
