@@ -73,7 +73,9 @@
         <activity android:name=".ui.user.NoticeActivity" />
         <activity android:name=".ui.user.BuildUserNameActivity"></activity>
         <activity android:name=".ui.user.BuildUserSexActivity" />
-        <activity android:name=".ui.user.BuildUserActivity"></activity>
+        <activity android:name=".ui.user.BuildUserActivity">
+
+        </activity>
         <activity android:name=".ui.user.CodeActivity" />
         <activity android:name=".ui.user.LoginPhoneActivity"></activity>
         <activity android:name=".ui.user.WelcomeActivity"></activity>

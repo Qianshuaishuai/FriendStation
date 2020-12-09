@@ -20,12 +20,14 @@ public class DialogFirstShowAdapter extends RecyclerView.Adapter<DialogFirstShow
     private List<FirstShowBean> mList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView nameTxt;
         ImageView iconIv, selectIv;
 
         public ViewHolder(View view) {
             super(view);
             iconIv = (ImageView) view.findViewById(R.id.icon);
             selectIv = (ImageView) view.findViewById(R.id.select);
+            nameTxt = (TextView) view.findViewById(R.id.name);
         }
 
     }

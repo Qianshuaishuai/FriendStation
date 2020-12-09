@@ -50,10 +50,11 @@
     <EditText
         android:id="@+id/content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dip"
         android:layout_below="@+id/layout_top"
         android:layout_marginTop="25dip"
         android:background="@null"
+        android:gravity="start"
         android:hint="此时的想法…"
         android:maxLines="6"
         android:paddingLeft="15dip"
@@ -88,5 +89,85 @@
             android:layout_height="90dip"
             android:layout_marginTop="12.5dip"
             android:src="@mipmap/moment_send_voice" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_take_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/layout_camera"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="17dip"
+                android:layout_height="14.5dip"
+                android:src="@mipmap/build_user_camera" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:text="拍照"
+                android:textColor="#3C3B41"
+                android:textSize="14dip" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:layout_marginLeft="15dip"
+            android:layout_marginRight="15dip"
+            android:background="#D4D4D4"></View>
+
+        <LinearLayout
+            android:id="@+id/layout_photo"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="18dip"
+                android:layout_height="18dip"
+                android:src="@mipmap/build_user_photo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:text="从手机相册选择"
+                android:textColor="#3C3B41"
+                android:textSize="14dip" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:background="#D4D4D4"></View>
+
+        <LinearLayout
+            android:id="@+id/layout_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:text="取消"
+                android:textColor="#3C3B41"
+                android:textSize="14dip" />
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

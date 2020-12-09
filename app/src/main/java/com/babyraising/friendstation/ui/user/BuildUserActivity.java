@@ -10,8 +10,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -28,6 +30,7 @@ import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
 import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.util.FileUtil;
+import com.babyraising.friendstation.util.NameUtils;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 import com.nanchen.compresshelper.CompressHelper;
@@ -57,7 +60,7 @@ public class BuildUserActivity extends BaseActivity {
 
     @Event(R.id.refresh)
     private void refreshClick(View view) {
-
+        username.setText(NameUtils.getRandomJianHan(3));
     }
 
     @Event(R.id.head)
@@ -85,7 +88,7 @@ public class BuildUserActivity extends BaseActivity {
     private ImageView head;
 
     @ViewInject(R.id.username)
-    private TextView username;
+    private EditText username;
 
     @ViewInject(R.id.layout_take_photo)
     private LinearLayout takePhotoLayout;
@@ -126,7 +129,8 @@ public class BuildUserActivity extends BaseActivity {
     }
 
     private void initView() {
-
+//        Editable etext = username.getText();
+//        username.setSelection(etext.length());
     }
 
     private void saveUsernameAndIcon(String username) {
