@@ -139,6 +139,6 @@ public class PersonFragment extends BaseFragment {
 
         name.setText(userInfoBean.getNickname());
         number.setText("号码 | " + userInfoBean.getMobile());
-        info.setText("好友 1 | 关注 3 | 粉丝 1");
+        info.setText("好友 " + userInfoBean.getUserCount().getNumFriends() + " | 关注 " + userInfoBean.getUserCount().getNumFollow() + " | 粉丝 " + userInfoBean.getUserCount().getNumFans());
     }
 }

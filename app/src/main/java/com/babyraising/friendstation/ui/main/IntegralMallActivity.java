@@ -15,6 +15,7 @@ import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.ScoreExchangeBean;
 import com.babyraising.friendstation.bean.ScoreExchangeDetailBean;
+import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.response.ScoreExchangeResponse;
 import com.google.gson.Gson;
 
@@ -30,6 +31,8 @@ import java.util.List;
 
 @ContentView(R.layout.activity_integral_mall)
 public class IntegralMallActivity extends BaseActivity {
+
+    private UserAllInfoBean userInfoBean;
 
     @Event(R.id.back)
     private void back(View view) {
@@ -55,7 +58,13 @@ public class IntegralMallActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
+        initData();
         getIntegralList();
+    }
+
+    private void initData() {
+        userInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+        count.setText("" + userInfoBean.getUserCount().getNumScore());
     }
 
     private void initView() {

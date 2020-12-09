@@ -18,6 +18,7 @@ import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CoinPayDetailBean;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.ScoreExchangeDetailBean;
+import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.response.CoinPayResponse;
 import com.babyraising.friendstation.response.ScoreExchangeResponse;
 import com.google.gson.Gson;
@@ -34,6 +35,8 @@ import java.util.List;
 
 @ContentView(R.layout.activity_recharge)
 public class RechargeActivity extends BaseActivity {
+
+    private UserAllInfoBean userInfoBean;
 
     @Event(R.id.back)
     private void back(View view) {
@@ -60,6 +63,7 @@ public class RechargeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         initView();
+        initData();
         getRechargeList();
     }
 
@@ -77,6 +81,10 @@ public class RechargeActivity extends BaseActivity {
         recycleList.setAdapter(adapter);
     }
 
+    private void initData() {
+        userInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+        count.setText("" + userInfoBean.getUserCount().getNumCoin());
+    }
 
     private void getRechargeList() {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();

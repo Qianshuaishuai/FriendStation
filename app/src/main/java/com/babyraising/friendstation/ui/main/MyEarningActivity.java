@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.UserAllInfoBean;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -15,6 +17,8 @@ import org.xutils.view.annotation.ViewInject;
 
 @ContentView(R.layout.activity_my_earning)
 public class MyEarningActivity extends BaseActivity {
+
+    private UserAllInfoBean userInfoBean;
 
     @Event(R.id.back)
     private void backClick(View view) {
@@ -36,5 +40,12 @@ public class MyEarningActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initData();
+    }
+
+    private void initData() {
+        userInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+        balance.setText("" + userInfoBean.getUserCount().getNumScore());
     }
 }
