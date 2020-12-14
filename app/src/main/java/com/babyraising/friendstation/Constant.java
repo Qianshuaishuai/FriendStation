@@ -4,6 +4,7 @@ public class Constant {
     public static final Boolean DEBUG = true;
 
     public static final int OFFICIAL_INTO_CHAT_CODE = 999;
+    public static final int REQUEST_PERMISSION_CODE = 101;
 
     public static final String BASE_URL = "http://8.129.108.2/api/";
 
@@ -24,7 +25,8 @@ public class Constant {
     public static final String URL_UMS_USER_UPDATE_VERIFY = "ums/user/update/verify";
 
     //friend部分
-    public static final String URL_FRIENDS_MOMENT = "friends/moment";
+    public static final String URL_FRIENDS_MOMENT = "friends/moments";
+    public static final String URL_FRIENDS_MOMENT_SAVE = "friends/moments/save";
     public static final String URL_FRIENDS = "friends";
     public static final String URL_FRIENDS_GIFT = "friends/gift";
     public static final String URL_FRIENDS_TASK = "friends/task";
@@ -36,5 +38,6 @@ public class Constant {
     public static final String URL_FRIENDS_SCORE_ORDER = "friends/scoreOrder";
     public static final String URL_FRIENDS_COIN = "friends/coin";
     public static final String URL_FRIENDS_COIN_ORDER = "friends/coinOrder";
+    public static final String URL_FRIENDS_COIN_RECORD = "friends/coinRecord";
     public static final String URL_FRIENDS_UPLOAD = "friends/upload";
 }

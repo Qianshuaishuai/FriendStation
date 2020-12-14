@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.ui.user;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.request.SetUserSexRequest;
 import com.babyraising.friendstation.request.SetusernameAndIconRequest;
 import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
+import com.babyraising.friendstation.ui.MainActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -122,6 +124,7 @@ public class BuildUserSexActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         T.s("保存成功");
+                        startMainActivity();
                         break;
                     default:
                         T.s(response.getMsg());
@@ -144,5 +147,11 @@ public class BuildUserSexActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void startMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

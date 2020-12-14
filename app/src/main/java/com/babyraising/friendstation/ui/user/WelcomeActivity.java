@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.ui.MainActivity;
@@ -39,6 +40,14 @@ public class WelcomeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         initView();
+        initData();
+    }
+
+    private void initData() {
+        int status = ((FriendStationApplication) getApplication()).getIsFirstLogin();
+        if (status == 1) {
+            startMainActivity();
+        }
     }
 
     private void initView() {
@@ -56,6 +65,7 @@ public class WelcomeActivity extends BaseActivity {
                     tipCount = 0;
                     timer1.cancel();
                     startMainActivity();
+                    ((FriendStationApplication) getApplication()).saveIsFirstLogin(1);
                 }
             }
         };
@@ -73,8 +83,10 @@ public class WelcomeActivity extends BaseActivity {
     };
 
     private void startMainActivity() {
-        Intent intent = new Intent(this, CodeActivity.class);
-        intent.putExtra("status", 2);
+        Intent intent = new Intent(this, LoginPhoneActivity.class);
+//        intent.putExtra("status", 2);
         startActivity(intent);
+        finish();
+        timer1.cancel();
     }
 }

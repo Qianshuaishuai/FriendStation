@@ -49,9 +49,12 @@ import org.xutils.x;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @ContentView(R.layout.activity_build_user)
 public class BuildUserActivity extends BaseActivity {
+
+    private int[] randomHeads = {R.mipmap.test2, R.mipmap.login_logo, R.mipmap.test3, R.mipmap.test4};
 
     @Event(R.id.back)
     private void backClick(View view) {
@@ -61,6 +64,9 @@ public class BuildUserActivity extends BaseActivity {
     @Event(R.id.refresh)
     private void refreshClick(View view) {
         username.setText(NameUtils.getRandomJianHan(3));
+
+        int math = (int) (Math.random() * 3);
+        head.setImageResource(randomHeads[math]);
     }
 
     @Event(R.id.head)

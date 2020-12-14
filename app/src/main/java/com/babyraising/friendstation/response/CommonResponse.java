@@ -1,14 +1,9 @@
 package com.babyraising.friendstation.response;
 
-import com.babyraising.friendstation.bean.CoinPayBean;
-import com.babyraising.friendstation.bean.CoinRecordBean;
-
-import java.util.ArrayList;
-
-public class CoinRecordResponse {
+public class CommonResponse {
     private int code;
     private String msg;
-    private ArrayList<CoinRecordBean> data;
+    private String data;
 
     public int getCode() {
         return code;
@@ -26,11 +21,11 @@ public class CoinRecordResponse {
         this.msg = msg;
     }
 
-    public ArrayList<CoinRecordBean> getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(ArrayList<CoinRecordBean> data) {
+    public void setData(String data) {
         this.data = data;
     }
 }

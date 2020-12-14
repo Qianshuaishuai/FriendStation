@@ -2,6 +2,7 @@ package com.babyraising.friendstation.ui.main;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.AudioFormat;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -14,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.babyraising.friendstation.Constant;
@@ -22,6 +24,10 @@ import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.adapter.PhotoAdapter;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.request.CodeBodyRequest;
+import com.babyraising.friendstation.request.MomentAddRequest;
+import com.babyraising.friendstation.response.CommonResponse;
+import com.babyraising.friendstation.response.UmsLoginByMobileResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.T;
@@ -53,7 +59,17 @@ public class MomentSendActivity extends BaseActivity {
 
     @Event(R.id.layout_voice)
     private void voiceLayoutClick(View view) {
+//        RecordManager.getInstance().start();
+    }
 
+    @Event(R.id.send)
+    private void send(View view) {
+        if (TextUtils.isEmpty(content.getText().toString())) {
+            T.s("动态内容不能为空");
+            return;
+        }
+
+        momentSend();
     }
 
     @ViewInject(R.id.photo_list)
@@ -61,12 +77,16 @@ public class MomentSendActivity extends BaseActivity {
 
     private List<String> photoList;
     private PhotoAdapter adapter;
+    private String currentAudioUrl = "";
 
     @ViewInject(R.id.layout_take_photo)
     private LinearLayout takePhotoLayout;
 
     @ViewInject(R.id.layout_take_photo)
     private LinearLayout photoLayout;
+
+    @ViewInject(R.id.content)
+    private EditText content;
 
     @Event(R.id.layout_camera)
     private void cameraClick(View view) {
@@ -92,12 +112,41 @@ public class MomentSendActivity extends BaseActivity {
     private String mTempPhotoPath;
     private String newHeadIconUrl;
     private Uri imageUri;
+//    private RecordManager recordManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         initView();
+        initAudioRecorder();
+    }
+
+    private void initAudioRecorder() {
+//        RecordManager.getInstance().init(getApplication(), false);
+//        recordManager = RecordManager.getInstance();
+//        RecordManager.getInstance().changeRecordConfig(recordManager.getRecordConfig().setSampleRate(16000));
+//        RecordManager.getInstance().changeRecordConfig(recordManager.getRecordConfig().setEncodingConfig(AudioFormat.ENCODING_PCM_8BIT));
+//
+//        RecordManager.getInstance().setRecordStateListener(new RecordStateListener() {
+//            @Override
+//            public void onStateChange(RecordHelper.RecordState state) {
+//
+//            }
+//
+//            @Override
+//            public void onError(String error) {
+//
+//            }
+//
+//        });
+//
+//        RecordManager.getInstance().setRecordResultListener(new RecordResultListener() {
+//            @Override
+//            public void onResult(File result) {
+//
+//            }
+//        });
     }
 
     private void initView() {
@@ -114,6 +163,12 @@ public class MomentSendActivity extends BaseActivity {
     }
 
     public void addNewPhoto() {
+
+        if (photoList.size() >= 6) {
+            T.s("最多发布6张图片");
+            return;
+        }
+
         if (takePhotoLayout.getVisibility() == View.GONE) {
             takePhotoLayout.setVisibility(View.VISIBLE);
         }
@@ -199,6 +254,122 @@ public class MomentSendActivity extends BaseActivity {
             }
         });
     }
+
+    private void uploadAudio(final String audioPic) {
+
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_UPLOAD);
+        params.addHeader("Authorization", bean.getAccessToken());
+        File oldFile = new File(audioPic);
+        params.setAsJsonContent(true);
+        List<KeyValue> list = new ArrayList<>();
+        list.add(new KeyValue("file", oldFile));
+        MultipartBody body = new MultipartBody(list, "UTF-8");
+        params.setRequestBody(body);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("上传成功");
+                        currentAudioUrl = response.getData();
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void momentSend() {
+        MomentAddRequest request = new MomentAddRequest();
+        request.setContent(content.getText().toString());
+
+        for (int p = 0; p < photoList.size(); p++) {
+            if (!TextUtils.isEmpty(photoList.get(p))) {
+                switch (p) {
+                    case 0:
+                        request.setPicUrl1(photoList.get(p));
+                        break;
+                    case 1:
+                        request.setPicUrl2(photoList.get(p));
+                        break;
+                    case 2:
+                        request.setPicUrl3(photoList.get(p));
+                        break;
+                    case 3:
+                        request.setPicUrl4(photoList.get(p));
+                        break;
+                    case 4:
+                        request.setPicUrl5(photoList.get(p));
+                        break;
+                    case 5:
+                        request.setPicUrl6(photoList.get(p));
+                        break;
+                }
+            }
+        }
+
+
+        Gson gson = new Gson();
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_MOMENT_SAVE);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setAsJsonContent(true);
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                CommonResponse response = gson.fromJson(result, CommonResponse.class);
+                System.out.println("发送动态:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("发布成功");
+                        finish();
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
 
     private void choosePhoto() {
         Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);

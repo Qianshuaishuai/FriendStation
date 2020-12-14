@@ -11,10 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.babyraising.friendstation.Constant;
+import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.response.UmsGetCodeResponse;
 import com.babyraising.friendstation.response.UmsIsFirstLoginResponse;
+import com.babyraising.friendstation.ui.MainActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -59,11 +62,12 @@ public class LoginPhoneActivity extends BaseActivity {
             public void onSuccess(String result) {
                 Gson gson = new Gson();
                 UmsIsFirstLoginResponse response = gson.fromJson(result, UmsIsFirstLoginResponse.class);
+                System.out.println("URL_IS_FIRSTLOGIN:" + result);
                 switch (response.getCode()) {
                     case 200:
-                        if (response.getData()){
+                        if (response.getData()) {
                             startPasswordActivity(phone);
-                        }else{
+                        } else {
                             startCodeActivity(phone);
                         }
                         break;
@@ -117,10 +121,24 @@ public class LoginPhoneActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         initView();
+        initData();
+    }
+
+    private void initData() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        if (bean != null && !TextUtils.isEmpty(bean.getAccessToken())) {
+            startMainActivity();
+        }
+    }
+
+    private void startMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void initView() {
         know.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-        phoneInput.setText("15602335027");
+
     }
 }

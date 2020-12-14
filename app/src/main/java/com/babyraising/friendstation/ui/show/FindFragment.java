@@ -13,20 +13,31 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.babyraising.friendstation.Constant;
+import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.adapter.DialogFirstShowAdapter;
 import com.babyraising.friendstation.adapter.LookMeRecordAdapter;
 import com.babyraising.friendstation.base.BaseFragment;
+import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.FirstShowBean;
+import com.babyraising.friendstation.bean.FriendDetailBean;
+import com.babyraising.friendstation.bean.ScoreRecordBean;
 import com.babyraising.friendstation.decoration.FirstShowSpaceItemDecoration;
 import com.babyraising.friendstation.decoration.SpaceItemDecoration;
+import com.babyraising.friendstation.response.FriendResponse;
+import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.ui.main.RankActivity;
 import com.babyraising.friendstation.ui.main.VoiceSendActivity;
 import com.babyraising.friendstation.util.DisplayUtils;
+import com.google.gson.Gson;
 
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +48,7 @@ public class FindFragment extends BaseFragment {
     private int selectType = 1;
     private LookMeRecordAdapter adapter;
     private DialogFirstShowAdapter showAdapter;
+    private List<FriendDetailBean> mlist;
 
     private int isSelect = 0;
 
@@ -108,6 +120,7 @@ public class FindFragment extends BaseFragment {
             typeV1.setVisibility(View.VISIBLE);
             typeV2.setVisibility(View.GONE);
             typeV3.setVisibility(View.GONE);
+            getFriendList();
         }
     }
 
@@ -124,6 +137,7 @@ public class FindFragment extends BaseFragment {
             typeV1.setVisibility(View.GONE);
             typeV2.setVisibility(View.VISIBLE);
             typeV3.setVisibility(View.GONE);
+            getFriendList();
         }
     }
 
@@ -148,6 +162,7 @@ public class FindFragment extends BaseFragment {
             typeV1.setVisibility(View.GONE);
             typeV2.setVisibility(View.GONE);
             typeV3.setVisibility(View.VISIBLE);
+            getFriendList();
         }
     }
 
@@ -162,6 +177,8 @@ public class FindFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
+
+        getFriendList();
     }
 
     private void initView() {
@@ -175,9 +192,9 @@ public class FindFragment extends BaseFragment {
         typeV2.setVisibility(View.GONE);
         typeV3.setVisibility(View.GONE);
 
+        mlist = new ArrayList<>();
+
         List<String> testList = new ArrayList<>();
-        testList.add("1");
-        testList.add("1");
         testList.add("1");
         testList.add("1");
         testList.add("1");
@@ -207,6 +224,50 @@ public class FindFragment extends BaseFragment {
         tipList.setLayoutManager(manager2);
         tipList.setAdapter(showAdapter);
         tipList.addItemDecoration(new FirstShowSpaceItemDecoration((width1 - itemWidth * 4) / 8));
+    }
+
+    private void getFriendList() {
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS);
+        params.addQueryStringParameter("type", selectType);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                FriendResponse response = gson.fromJson(result, FriendResponse.class);
+                System.out.println("FriendList:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        mlist.clear();
+                        List<FriendDetailBean> newList = response.getData().getRecords();
+                        for (int l = 0; l < newList.size(); l++) {
+                            mlist.add(newList.get(l));
+                        }
+                        adapter.notifyDataSetChanged();
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     /**

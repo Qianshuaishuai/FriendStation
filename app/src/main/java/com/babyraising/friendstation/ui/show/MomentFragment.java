@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.ui.show;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,6 +21,7 @@ import com.babyraising.friendstation.bean.MomentDetailBean;
 import com.babyraising.friendstation.bean.ScoreRecordBean;
 import com.babyraising.friendstation.response.MomentResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
+import com.babyraising.friendstation.ui.main.MomentSendActivity;
 import com.google.gson.Gson;
 
 import org.xutils.common.Callback;
@@ -59,6 +61,12 @@ public class MomentFragment extends BaseFragment {
 
     @ViewInject(R.id.type_view3)
     private View typeV3;
+
+    @Event(R.id.add)
+    private void addClick(View view) {
+        Intent intent = new Intent(getContext(), MomentSendActivity.class);
+        startActivity(intent);
+    }
 
     @Event(R.id.type_tv1)
     private void typeTv1Click(View view) {
@@ -118,7 +126,11 @@ public class MomentFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         initView();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
         getMomentList();
     }
 
@@ -148,13 +160,8 @@ public class MomentFragment extends BaseFragment {
         typeV2.setVisibility(View.GONE);
         typeV3.setVisibility(View.GONE);
 
-        List<String> testList = new ArrayList<>();
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        adapter = new MomentAdapter(getActivity(), testList);
+        list = new ArrayList<>();
+        adapter = new MomentAdapter(getActivity(), list);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recycleList.setAdapter(adapter);
         recycleList.setLayoutManager(manager);

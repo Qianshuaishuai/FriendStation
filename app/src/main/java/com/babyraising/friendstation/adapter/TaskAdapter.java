@@ -49,7 +49,6 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.contentTxt.setText(mList.get(position).getTitle());
         holder.tipTxt.setText(mList.get(position).getSubTitle());
         holder.countTxt.setText("+" + mList.get(position).getReword() + "金币");
-
     }
 
     @Override

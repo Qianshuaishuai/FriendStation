@@ -1,15 +1,21 @@
 package com.babyraising.friendstation.ui;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -41,9 +47,12 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.lang.reflect.Field;
+import java.util.List;
+
+import pub.devrel.easypermissions.EasyPermissions;
 
 @ContentView(R.layout.activity_main)
-public class MainActivity extends BaseActivity implements FindFragment.OnFragmentInteractionListener, MomentFragment.OnFragmentInteractionListener, NoticeFragment.OnFragmentInteractionListener, PersonFragment.OnFragmentInteractionListener {
+public class MainActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks, FindFragment.OnFragmentInteractionListener, MomentFragment.OnFragmentInteractionListener, NoticeFragment.OnFragmentInteractionListener, PersonFragment.OnFragmentInteractionListener {
 
 
     @ViewInject(R.id.navigation_bar)
@@ -59,6 +68,16 @@ public class MainActivity extends BaseActivity implements FindFragment.OnFragmen
     private Fragment[] fragments;
     private int lastfragment = 0;
     private CommonLoginBean bean;
+
+
+    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.CHANGE_WIFI_STATE,
+            Manifest.permission.ACCESS_NETWORK_STATE,
+            Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.CAMERA,
+            Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
+            Manifest.permission.CALL_PHONE};
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -123,7 +142,77 @@ public class MainActivity extends BaseActivity implements FindFragment.OnFragmen
 
         initNavigationBar();
         initData();
+        initPermission();
     }
+
+    private void initPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int i = ContextCompat.checkSelfPermission(this, permissions[1]);
+            if (i != PackageManager.PERMISSION_GRANTED) {
+//                showWaringDialog();
+
+//                EasyPermissions.requestPermissions(
+//                        new PermissionRequest.Builder(this, RC_CAMERA_AND_LOCATION, perms)
+//                                .setRationale(R.string.camera_and_location_rationale)
+//                                .setPositiveButtonText(R.string.rationale_ask_ok)
+//                                .setNegativeButtonText(R.string.rationale_ask_cancel)
+//                                .setTheme(R.style.my_fancy_style)
+//                                .build());
+
+                EasyPermissions.requestPermissions(this, "您需要允许以下权限，才可以正常使用应用",
+                        Constant.REQUEST_PERMISSION_CODE, permissions);
+            }
+        }
+    }
+
+    private void showWaringDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle("警告！")
+                .setMessage("请前往设置->应用->加友站->权限中打开相关权限，否则功能无法正常运行！")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 一般情况下如果用户不授权的话，功能是无法运行的，做退出处理
+                        finish();
+                    }
+                }).show();
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        if (requestCode == Constant.REQUEST_PERMISSION_CODE) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("提示！")
+                    .setMessage("如拒绝权限将无法正常使用应用！")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 一般情况下如果用户不授权的话，功能是无法运行的，做退出处理
+                            finish();
+                        }
+                    }).show();
+        }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+
 
     private void initData() {
         bean = ((FriendStationApplication) getApplication()).getUserInfo();

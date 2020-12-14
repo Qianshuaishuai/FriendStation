@@ -15,7 +15,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#000000" />
+            android:background="#cccccc" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -76,6 +76,7 @@
 
             <!--土豪值-->
             <LinearLayout
+                android:id="@+id/layout_value"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
                 android:gravity="center_vertical"
@@ -231,6 +232,7 @@
 
             <!--社交号码-->
             <LinearLayout
+                android:id="@+id/layout_number"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
                 android:gravity="center_vertical"
@@ -275,6 +277,7 @@
 
             <!--内心独白-->
             <LinearLayout
+                android:id="@+id/layout_monologue"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
                 android:gravity="center_vertical"
@@ -339,6 +342,7 @@
 
             <!--基本信息-->
             <LinearLayout
+                android:id="@+id/layout_basic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"

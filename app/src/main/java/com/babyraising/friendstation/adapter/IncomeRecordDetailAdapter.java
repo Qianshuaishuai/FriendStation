@@ -7,12 +7,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.bean.CoinRecordDetailBean;
 
 import java.util.List;
 
 public class IncomeRecordDetailAdapter extends RecyclerView.Adapter<IncomeRecordDetailAdapter.ViewHolder> {
 
-    private List<String> mList;
+    private List<CoinRecordDetailBean> mList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView timeTxt, countTxt, detailTxt;
@@ -27,7 +28,7 @@ public class IncomeRecordDetailAdapter extends RecyclerView.Adapter<IncomeRecord
 
     }
 
-    public IncomeRecordDetailAdapter(List<String> mList) {
+    public IncomeRecordDetailAdapter(List<CoinRecordDetailBean> mList) {
         this.mList = mList;
     }
 

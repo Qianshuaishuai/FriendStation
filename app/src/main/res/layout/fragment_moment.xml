@@ -1,102 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAF9FE"
     android:orientation="vertical"
     tools:context=".ui.show.MomentFragment">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#ffffff"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingTop="15dip">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FAF9FE"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dip"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:background="#ffffff"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingTop="15dip">
 
-            <TextView
-                android:id="@+id/type_tv1"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="同城"
-                android:textColor="#B9B8C1"
-                android:textSize="15dip" />
+                android:layout_marginLeft="15dip"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-            <View
-                android:id="@+id/type_view1"
-                android:layout_width="13dip"
-                android:layout_height="0.5dip"
-                android:layout_marginTop="7dip"
-                android:background="#3C3B41"
-                android:visibility="gone"></View>
+                <TextView
+                    android:id="@+id/type_tv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="同城"
+                    android:textColor="#B9B8C1"
+                    android:textSize="15dip" />
+
+                <View
+                    android:id="@+id/type_view1"
+                    android:layout_width="13dip"
+                    android:layout_height="0.5dip"
+                    android:layout_marginTop="7dip"
+                    android:background="#3C3B41"
+                    android:visibility="gone"></View>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/type_tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="附近"
+                    android:textColor="#B9B8C1"
+                    android:textSize="15dip" />
+
+                <View
+                    android:id="@+id/type_view2"
+                    android:layout_width="13dip"
+                    android:layout_height="0.5dip"
+                    android:layout_marginTop="7dip"
+                    android:background="#3C3B41"
+                    android:visibility="gone"></View>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/type_tv3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="同省"
+                    android:textColor="#B9B8C1"
+                    android:textSize="15dip" />
+
+                <View
+                    android:id="@+id/type_view3"
+                    android:layout_width="13dip"
+                    android:layout_height="0.5dip"
+                    android:layout_marginTop="7dip"
+                    android:background="#3C3B41"
+                    android:visibility="gone"></View>
+            </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:background="#d4d4d4"></View>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dip"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/type_tv2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="附近"
-                android:textColor="#B9B8C1"
-                android:textSize="15dip" />
-
-            <View
-                android:id="@+id/type_view2"
-                android:layout_width="13dip"
-                android:layout_height="0.5dip"
-                android:layout_marginTop="7dip"
-                android:background="#3C3B41"
-                android:visibility="gone"></View>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dip"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/type_tv3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="同省"
-                android:textColor="#B9B8C1"
-                android:textSize="15dip" />
-
-            <View
-                android:id="@+id/type_view3"
-                android:layout_width="13dip"
-                android:layout_height="0.5dip"
-                android:layout_marginTop="7dip"
-                android:background="#3C3B41"
-                android:visibility="gone"></View>
-        </LinearLayout>
+            android:layout_marginBottom="48dip"></android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:background="#d4d4d4"></View>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="48dip"></android.support.v7.widget.RecyclerView>
-</LinearLayout>
+    <ImageView
+        android:id="@+id/add"
+        android:layout_width="75dip"
+        android:layout_height="75dip"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="15dip"
+        android:layout_marginBottom="58dip"
+        android:src="@mipmap/moment_add" />
+</RelativeLayout>

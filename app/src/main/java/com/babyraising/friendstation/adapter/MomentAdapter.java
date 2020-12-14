@@ -3,6 +3,7 @@ package com.babyraising.friendstation.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +11,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.bean.MomentDetailBean;
 import com.babyraising.friendstation.ui.main.ScrollImageActivity;
+
+import org.xutils.x;
 
 import java.util.List;
 
 public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder> {
 
-    private List<String> mList;
+    private List<MomentDetailBean> mList;
     private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -40,7 +44,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
 
     }
 
-    public MomentAdapter(Context context, List<String> mList) {
+    public MomentAdapter(Context context, List<MomentDetailBean> mList) {
         this.context = context;
         this.mList = mList;
     }
@@ -61,6 +65,12 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                 context.startActivity(intent);
             }
         });
+
+        holder.contentTxt.setText(mList.get(position).getContent());
+
+        if (!TextUtils.isEmpty(mList.get(position).getPicUrl1())) {
+            x.image().bind(holder.contentImgIv, mList.get(position).getPicUrl1());
+        }
     }
 
     @Override

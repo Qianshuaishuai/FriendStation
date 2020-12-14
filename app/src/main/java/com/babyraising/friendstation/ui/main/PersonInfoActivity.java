@@ -55,6 +55,30 @@ public class PersonInfoActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    @Event(R.id.layout_basic)
+    private void basicLayoutClick(View view){
+        Intent intent = new Intent(this, MyInfoActivity.class);
+        startActivity(intent);
+    }
+
+    @Event(R.id.layout_value)
+    private void valueLayoutClick(View view){
+        Intent intent = new Intent(this, MyInfoActivity.class);
+        startActivity(intent);
+    }
+
+    @Event(R.id.layout_number)
+    private void numberLayoutClick(View view){
+        Intent intent = new Intent(this, MyInfoActivity.class);
+        startActivity(intent);
+    }
+
+    @Event(R.id.layout_monologue)
+    private void monologueLayoutClick(View view){
+        Intent intent = new Intent(this, MyInfoActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

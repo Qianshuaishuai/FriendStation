@@ -1,18 +1,14 @@
-package com.babyraising.friendstation.bean;
+package com.babyraising.friendstation.request;
 
-public class MomentDetailBean {
+public class MomentAddRequest {
     private String content;
-    private String gmtCreate;
-    private String gmtModify;
-    private int id;
-    private int userId;
-    private String recordUrl;
     private String picUrl1;
     private String picUrl2;
     private String picUrl3;
     private String picUrl4;
     private String picUrl5;
     private String picUrl6;
+    private String recordUrl;
 
     public String getContent() {
         return content;
@@ -20,46 +16,6 @@ public class MomentDetailBean {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getGmtCreate() {
-        return gmtCreate;
-    }
-
-    public void setGmtCreate(String gmtCreate) {
-        this.gmtCreate = gmtCreate;
-    }
-
-    public String getGmtModify() {
-        return gmtModify;
-    }
-
-    public void setGmtModify(String gmtModify) {
-        this.gmtModify = gmtModify;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getRecordUrl() {
-        return recordUrl;
-    }
-
-    public void setRecordUrl(String recordUrl) {
-        this.recordUrl = recordUrl;
     }
 
     public String getPicUrl1() {
@@ -108,5 +64,13 @@ public class MomentDetailBean {
 
     public void setPicUrl6(String picUrl6) {
         this.picUrl6 = picUrl6;
+    }
+
+    public String getRecordUrl() {
+        return recordUrl;
+    }
+
+    public void setRecordUrl(String recordUrl) {
+        this.recordUrl = recordUrl;
     }
 }

@@ -64,6 +64,11 @@ public class RechargeActivity extends BaseActivity {
 
         initView();
         initData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getRechargeList();
     }
 

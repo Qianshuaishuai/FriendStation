@@ -1,38 +1,27 @@
 package com.babyraising.friendstation.bean;
 
 public class CoinRecordDetailBean {
-    private int costCoin;
-    private int getCoin;
-    private int givenId;
+    private int amount;
+    private String changeType;
     private String gmtCreate;
     private String gmtModify;
-    private int id;
-    private String orderNo;
-    private String statusOrder;
-    private int userId;
+    private String goodsName;
+    private String time;
 
-    public int getCostCoin() {
-        return costCoin;
+    public int getAmount() {
+        return amount;
     }
 
-    public void setCostCoin(int costCoin) {
-        this.costCoin = costCoin;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
-    public int getGetCoin() {
-        return getCoin;
+    public String getChangeType() {
+        return changeType;
     }
 
-    public void setGetCoin(int getCoin) {
-        this.getCoin = getCoin;
-    }
-
-    public int getGivenId() {
-        return givenId;
-    }
-
-    public void setGivenId(int givenId) {
-        this.givenId = givenId;
+    public void setChangeType(String changeType) {
+        this.changeType = changeType;
     }
 
     public String getGmtCreate() {
@@ -51,35 +40,19 @@ public class CoinRecordDetailBean {
         this.gmtModify = gmtModify;
     }
 
-    public int getId() {
-        return id;
+    public String getGoodsName() {
+        return goodsName;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public String getTime() {
+        return time;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
-    }
-
-    public String getStatusOrder() {
-        return statusOrder;
-    }
-
-    public void setStatusOrder(String statusOrder) {
-        this.statusOrder = statusOrder;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setTime(String time) {
+        this.time = time;
     }
 }

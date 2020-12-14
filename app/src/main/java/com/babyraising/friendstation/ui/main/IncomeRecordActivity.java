@@ -12,6 +12,7 @@ import com.babyraising.friendstation.adapter.ExchangeRecordAdapter;
 import com.babyraising.friendstation.adapter.IncomeRecordAdapter;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CoinRecordBean;
+import com.babyraising.friendstation.bean.CoinRecordDetailBean;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.ScoreRecordBean;
 import com.babyraising.friendstation.response.CoinPayResponse;
@@ -65,8 +66,9 @@ public class IncomeRecordActivity extends BaseActivity {
 
     private void getIncomeList() {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
-        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_COIN);
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_COIN_RECORD);
         params.setAsJsonContent(true);
+
         params.addHeader("Authorization", bean.getAccessToken());
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override

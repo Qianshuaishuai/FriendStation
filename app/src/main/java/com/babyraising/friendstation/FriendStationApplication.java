@@ -75,6 +75,15 @@ public class FriendStationApplication extends Application {
         return gson.fromJson(sp.getString("info", ""), CommonLoginBean.class);
     }
 
+    public void saveIsFirstLogin(int status) {
+        editor.putInt("is-first", status);
+        editor.commit();
+    }
+
+    public int getIsFirstLogin() {
+        return sp.getInt("is-first", 0);
+    }
+
     public void saveUserAllInfo(UserAllInfoBean bean) {
         String beanString = gson.toJson(bean);
         editor.putString("all-info", beanString);
