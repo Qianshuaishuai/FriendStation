@@ -12,10 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="375dip">
 
-        <ImageView
+        <RelativeLayout
+            android:id="@+id/layout_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#cccccc" />
+            android:background="#cccccc">
+
+            <ImageView
+                android:id="@+id/background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -34,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="Dashuai"
+                android:text=""
                 android:textColor="#ffffff"
                 android:textSize="17dip"
                 android:textStyle="bold" />
@@ -45,7 +52,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_width="10dip"
@@ -108,6 +116,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="49dip"
                             android:background="@null"
+                            android:gravity="center_vertical"
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
@@ -121,6 +130,7 @@
 
             <!--个人相册-->
             <RelativeLayout
+                android:id="@+id/layout_photo"
                 android:layout_width="match_parent"
                 android:layout_height="70dip">
 
@@ -134,19 +144,23 @@
                     android:textColor="#B9B8C1"
                     android:textSize="14dip" />
 
+                <!--<LinearLayout-->
+                <!--android:id="@+id/layout_photo"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_centerVertical="true"-->
+                <!--android:layout_toRightOf="@+id/tip"-->
+                <!--android:orientation="vertical">-->
+
+                <!---->
+                <!--</LinearLayout>-->
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/photo_list"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/tip"></android.support.v7.widget.RecyclerView>
-
-                <View
                     android:layout_width="match_parent"
-                    android:layout_height="1dip"
-                    android:layout_alignParentBottom="true"
-                    android:layout_toRightOf="@+id/tip"
-                    android:background="#d4d4d4"></View>
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dip"
+                    android:layout_toRightOf="@+id/tip"></android.support.v7.widget.RecyclerView>
 
                 <ImageView
                     android:layout_width="16dip"
@@ -264,6 +278,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="49dip"
                             android:background="@null"
+                            android:gravity="center_vertical"
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
@@ -315,6 +330,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="49dip"
                                 android:background="@null"
+                                android:gravity="center_vertical"
                                 android:textColor="#3C3B41"
                                 android:textSize="14dip" />
 
@@ -345,13 +361,11 @@
                 android:id="@+id/layout_basic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <TextView
@@ -362,26 +376,12 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/basic_list"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dip"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/basic_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dip"
-                            android:layout_marginBottom="10dip"></android.support.v7.widget.RecyclerView>
-
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dip"
+                        android:layout_marginBottom="10dip"></android.support.v7.widget.RecyclerView>
                 </LinearLayout>
             </LinearLayout>
 

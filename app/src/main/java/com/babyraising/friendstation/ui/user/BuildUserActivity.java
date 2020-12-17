@@ -23,9 +23,13 @@ import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.AvatarBean;
 import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.ScoreRecordBean;
 import com.babyraising.friendstation.request.SetPasswordRequest;
 import com.babyraising.friendstation.request.SetusernameAndIconRequest;
+import com.babyraising.friendstation.response.AvatarResponse;
+import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
 import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
@@ -54,7 +58,7 @@ import java.util.Random;
 @ContentView(R.layout.activity_build_user)
 public class BuildUserActivity extends BaseActivity {
 
-    private int[] randomHeads = {R.mipmap.test2, R.mipmap.login_logo, R.mipmap.test3, R.mipmap.test4};
+    private List<AvatarBean> randomList = new ArrayList<>();
 
     @Event(R.id.back)
     private void backClick(View view) {
@@ -65,8 +69,11 @@ public class BuildUserActivity extends BaseActivity {
     private void refreshClick(View view) {
         username.setText(NameUtils.getRandomJianHan(3));
 
-        int math = (int) (Math.random() * 3);
-        head.setImageResource(randomHeads[math]);
+        if (randomList.size() > 0) {
+            int math = (int) (Math.random() * randomList.size());
+            x.image().bind(head, randomList.get(math).getAvatarUrl());
+            newHeadIconUrl = randomList.get(math).getAvatarUrl();
+        }
     }
 
     @Event(R.id.head)
@@ -132,11 +139,53 @@ public class BuildUserActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         initView();
+        getRandomIcon();
     }
 
     private void initView() {
 //        Editable etext = username.getText();
 //        username.setSelection(etext.length());
+    }
+
+    private void getRandomIcon() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_CONFIGAVATAR);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                AvatarResponse response = gson.fromJson(result, AvatarResponse.class);
+                System.out.println("RandomIcon:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        randomList.clear();
+                        for (int l = 0; l < response.getData().size(); l++) {
+                            randomList.add(response.getData().get(l));
+                        }
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void saveUsernameAndIcon(String username) {

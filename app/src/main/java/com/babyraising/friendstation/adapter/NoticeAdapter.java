@@ -75,7 +75,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
                 }
             });
         } else if (position == 1) {
-            holder.nameTxt.setText("官方小助手");
+            holder.nameTxt.setText("官方助手");
             holder.tipTxt.setText("已经2345人在这里聊天");
             holder.timeTxt.setText("12：30");
             holder.rightIv.setVisibility(View.GONE);

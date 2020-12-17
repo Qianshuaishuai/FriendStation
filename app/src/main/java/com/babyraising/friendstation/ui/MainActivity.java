@@ -299,7 +299,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     }
 
     private void getUserFullInfo() {
-
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_FULL);
         params.addHeader("Authorization", bean.getAccessToken());
         x.http().get(params, new Callback.CommonCallback<String>() {

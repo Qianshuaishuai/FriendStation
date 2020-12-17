@@ -12,6 +12,7 @@ import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.request.SetUserSexRequest;
 import com.babyraising.friendstation.request.SetusernameAndIconRequest;
 import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
@@ -28,6 +29,8 @@ import org.xutils.x;
 
 @ContentView(R.layout.activity_build_user_sex)
 public class BuildUserSexActivity extends BaseActivity {
+
+    private int mode = 0;
 
     @Event(R.id.back)
     private void backClick(View view) {
@@ -98,6 +101,41 @@ public class BuildUserSexActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         initView();
+        initData();
+    }
+
+    private void initData() {
+        Intent intent = getIntent();
+        mode = intent.getIntExtra("mode", 0);
+        UserAllInfoBean userAllInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+        if (userAllInfoBean != null) {
+            switch (userAllInfoBean.getSex()) {
+                case 1:
+                    sexCount = 1;
+                    maleNormal.setVisibility(View.GONE);
+                    maleTipNormal.setVisibility(View.GONE);
+                    maleSelected.setVisibility(View.VISIBLE);
+                    maleTipSelected.setVisibility(View.VISIBLE);
+
+                    femaleNormal.setVisibility(View.VISIBLE);
+                    femaleTipNormal.setVisibility(View.VISIBLE);
+                    femaleSelected.setVisibility(View.GONE);
+                    femaleTipSelected.setVisibility(View.GONE);
+                    break;
+                case 2:
+                    sexCount = 2;
+                    maleNormal.setVisibility(View.VISIBLE);
+                    maleTipNormal.setVisibility(View.VISIBLE);
+                    maleSelected.setVisibility(View.GONE);
+                    maleTipSelected.setVisibility(View.GONE);
+
+                    femaleNormal.setVisibility(View.GONE);
+                    femaleTipNormal.setVisibility(View.GONE);
+                    femaleSelected.setVisibility(View.VISIBLE);
+                    femaleTipSelected.setVisibility(View.VISIBLE);
+                    break;
+            }
+        }
     }
 
     private void initView() {
@@ -124,7 +162,14 @@ public class BuildUserSexActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         T.s("保存成功");
-                        startMainActivity();
+                        switch (mode) {
+                            case 0:
+                                startMainActivity();
+                                break;
+                            case 1:
+                                finish();
+                                break;
+                        }
                         break;
                     default:
                         T.s(response.getMsg());

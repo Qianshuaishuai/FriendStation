@@ -48,7 +48,7 @@ public class SettingActivity extends BaseActivity {
     private void logout() {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
 
-        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_UPDATE_PASSWORD);
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_LOGINOUT);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         x.http().post(params, new Callback.CommonCallback<String>() {

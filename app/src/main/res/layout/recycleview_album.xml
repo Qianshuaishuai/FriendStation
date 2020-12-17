@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="69dip"
+    android:layout_height="69dip"
+    android:layout_marginTop="14dip">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="60dip"
+        android:layout_height="60dip"
+        android:layout_marginTop="9dip" />
+
+    <ImageView
+        android:id="@+id/delete"
+        android:layout_width="18dip"
+        android:layout_height="18dip"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/moment_send_close" />
+
+    <ImageView
+        android:id="@+id/add"
+        android:layout_width="60dip"
+        android:layout_height="60dip"
+        android:layout_marginTop="9dip"
+        android:src="@mipmap/moment_send_add" />
+</RelativeLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dip"
+        android:layout_marginRight="30dip"
+        android:background="@drawable/shape_tag_shadow_bg"
+        android:gravity="center"
+        android:paddingLeft="10dip"
+        android:paddingTop="3dip"
+        android:paddingRight="10dip"
+        android:paddingBottom="3dip" />
+</LinearLayout>

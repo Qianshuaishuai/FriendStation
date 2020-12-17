@@ -71,6 +71,24 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         if (!TextUtils.isEmpty(mList.get(position).getPicUrl1())) {
             x.image().bind(holder.contentImgIv, mList.get(position).getPicUrl1());
         }
+
+        if (!TextUtils.isEmpty(mList.get(position).getNickname())) {
+            holder.nameTxt.setText(mList.get(position).getNickname());
+        }
+
+        holder.ageTxt.setText(mList.get(position).getAge() + "岁");
+
+        switch (mList.get(position).getSex()) {
+            case 0:
+                holder.sexTxt.setText("未知");
+                break;
+            case 1:
+                holder.sexTxt.setText("男");
+                break;
+            case 2:
+                holder.sexTxt.setText("女");
+                break;
+        }
     }
 
     @Override

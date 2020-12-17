@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -135,10 +136,22 @@ public class PersonFragment extends BaseFragment {
         ImageOptions options = new ImageOptions.Builder().
                 setRadius(DensityUtil.dip2px(8))
                 .setCrop(true).build();
-        x.image().bind(head, userInfoBean.getAvatar(), options);
 
-        name.setText(userInfoBean.getNickname());
-        number.setText("号码 | " + userInfoBean.getMobile());
+        if (!TextUtils.isEmpty(userInfoBean.getAvatar())) {
+            x.image().bind(head, userInfoBean.getAvatar(), options);
+        }
+        if (!TextUtils.isEmpty(userInfoBean.getNickname())) {
+            name.setText(userInfoBean.getNickname());
+        }
+
+        if (!TextUtils.isEmpty(userInfoBean.getNickname())) {
+            name.setText(userInfoBean.getNickname());
+        }
+
+        if (!TextUtils.isEmpty(userInfoBean.getMobile())) {
+            number.setText("号码 | " + userInfoBean.getMobile());
+        }
+
         info.setText("好友 " + userInfoBean.getUserCount().getNumFriends() + " | 关注 " + userInfoBean.getUserCount().getNumFollow() + " | 粉丝 " + userInfoBean.getUserCount().getNumFans());
     }
 }

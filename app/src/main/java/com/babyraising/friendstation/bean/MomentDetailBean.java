@@ -13,6 +13,42 @@ public class MomentDetailBean {
     private String picUrl4;
     private String picUrl5;
     private String picUrl6;
+    private String statusCert;
+    private int sex;
+    private int age;
+    private String nickname;
+
+    public String getStatusCert() {
+        return statusCert;
+    }
+
+    public void setStatusCert(String statusCert) {
+        this.statusCert = statusCert;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     public String getContent() {
         return content;

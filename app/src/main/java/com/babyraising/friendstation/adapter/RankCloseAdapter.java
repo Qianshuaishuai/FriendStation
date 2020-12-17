@@ -1,6 +1,7 @@
 package com.babyraising.friendstation.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.bean.UserRichBean;
+
+import org.xutils.x;
 
 import java.util.List;
 
 public class RankCloseAdapter extends RecyclerView.Adapter<RankCloseAdapter.ViewHolder> {
 
-    private List<String> mList;
+    private List<UserRichBean> mList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         RelativeLayout numberLayout;
@@ -35,7 +39,7 @@ public class RankCloseAdapter extends RecyclerView.Adapter<RankCloseAdapter.View
 
     }
 
-    public RankCloseAdapter(List<String> mList) {
+    public RankCloseAdapter(List<UserRichBean> mList) {
         this.mList = mList;
     }
 
@@ -56,6 +60,22 @@ public class RankCloseAdapter extends RecyclerView.Adapter<RankCloseAdapter.View
             holder.numberLayout.setVisibility(View.GONE);
             holder.rankNomral.setVisibility(View.VISIBLE);
             holder.rankNomral.setText("" + (position + 1));
+        }
+
+        if (!TextUtils.isEmpty(mList.get(position).getLnickname())) {
+            holder.name1.setText(mList.get(position).getLnickname());
+        }
+
+        if (!TextUtils.isEmpty(mList.get(position).getLavatar())) {
+            x.image().bind(holder.ivLeft, mList.get(position).getLavatar());
+        }
+
+        if (!TextUtils.isEmpty(mList.get(position).getRnickname())) {
+            holder.name2.setText(mList.get(position).getRnickname());
+        }
+
+        if (!TextUtils.isEmpty(mList.get(position).getRavatar())) {
+            x.image().bind(holder.ivRight, mList.get(position).getRavatar());
         }
     }
 

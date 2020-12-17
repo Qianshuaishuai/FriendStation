@@ -10,4 +10,6 @@
     <color name="colorShowNormal">#B9B8C1</color>
     <color name="colorRankSelected">#37445A</color>
     <color name="colorRankNormal">#A6A8AD</color>
+    <color name="colorPersonAlbumHave">#ffffff</color>
+    <color name="colorPersonAlbumNone">#cccccc</color>
 </resources>

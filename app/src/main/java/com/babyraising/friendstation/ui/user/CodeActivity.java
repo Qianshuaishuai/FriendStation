@@ -62,6 +62,11 @@ public class CodeActivity extends BaseActivity {
     @ViewInject(R.id.main_input)
     private EditText mainInput;
 
+    @Event(R.id.forget)
+    private void forgetClick(View view) {
+//        startLoginChangePasswordActivity();
+    }
+
     @Event(R.id.login)
     private void login(View view) {
         if (TextUtils.isEmpty(mainInput.getText().toString())) {
@@ -110,6 +115,13 @@ public class CodeActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void startLoginChangePasswordActivity() {
+        Intent intent = new Intent(this, LoginPhoneDetailActivity.class);
+        intent.putExtra("phone", currentPhone);
+        intent.putExtra("status", 2);
+        startActivity(intent);
     }
 
     @Override

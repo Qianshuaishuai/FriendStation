@@ -17,12 +17,14 @@ public class Constant {
 
     public static final String URL_UMS_USER = "ums/user";
     public static final String URL_UMS_USER_ALBUM_PAGE = "ums/user/album/page";
-    public static final String URL_UMS_USER_DELETE_ALBUM = "ums/user/album";
     public static final String URL_UMS_USER_FULL = "ums/user/full";
     public static final String URL_UMS_USER_SAVE_ALBUM = "ums/user/save/album";
+    public static final String URL_UMS_USER_DELETE_ALBUM = "ums/user/delete/album";
     public static final String URL_UMS_UPDATE = "ums/user/update";
     public static final String URL_UMS_USER_UPDATE_PASSWORD = "ums/user/update/password";
     public static final String URL_UMS_USER_UPDATE_VERIFY = "ums/user/update/verify";
+    public static final String URL_USER_GET_USERINTIMACYLIST = "ums/user/get/userIntimacyList";
+    public static final String URL_USER_GET_USERRICHLIST = "ums/user/get/userRichList";
 
     //friend部分
     public static final String URL_FRIENDS_MOMENT = "friends/moments";
@@ -40,4 +42,5 @@ public class Constant {
     public static final String URL_FRIENDS_COIN_ORDER = "friends/coinOrder";
     public static final String URL_FRIENDS_COIN_RECORD = "friends/coinRecord";
     public static final String URL_FRIENDS_UPLOAD = "friends/upload";
+    public static final String URL_FRIENDS_CONFIGAVATAR = "friends/configAvatar";
 }
