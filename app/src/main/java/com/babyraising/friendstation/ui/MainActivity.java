@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -37,6 +38,7 @@ import com.babyraising.friendstation.ui.show.FindFragment;
 import com.babyraising.friendstation.ui.show.MomentFragment;
 import com.babyraising.friendstation.ui.show.NoticeFragment;
 import com.babyraising.friendstation.ui.show.PersonFragment;
+import com.babyraising.friendstation.ui.user.LoginPhoneActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -213,7 +215,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     }
 
 
-
     private void initData() {
         bean = ((FriendStationApplication) getApplication()).getUserInfo();
     }
@@ -306,10 +307,14 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
             public void onSuccess(String result) {
                 Gson gson = new Gson();
                 UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
-                System.out.println(result);
+                System.out.println("userFullInfo" + result);
                 switch (response.getCode()) {
                     case 200:
-                        ((FriendStationApplication)getApplication()).saveUserAllInfo(response.getData());
+                        ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());
+                        break;
+                    case 401:
+                        T.s("登录已失效");
+                        startLoginActivity();
                         break;
                     default:
 
@@ -332,5 +337,11 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
             }
         });
+    }
+
+    private void startLoginActivity() {
+        Intent intent = new Intent(this, LoginPhoneActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

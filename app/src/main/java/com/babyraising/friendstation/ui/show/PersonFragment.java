@@ -133,25 +133,28 @@ public class PersonFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         userInfoBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
-        ImageOptions options = new ImageOptions.Builder().
-                setRadius(DensityUtil.dip2px(8))
-                .setCrop(true).build();
 
-        if (!TextUtils.isEmpty(userInfoBean.getAvatar())) {
-            x.image().bind(head, userInfoBean.getAvatar(), options);
-        }
-        if (!TextUtils.isEmpty(userInfoBean.getNickname())) {
-            name.setText(userInfoBean.getNickname());
-        }
+        if (userInfoBean != null){
+            ImageOptions options = new ImageOptions.Builder().
+                    setRadius(DensityUtil.dip2px(8))
+                    .setCrop(true).build();
 
-        if (!TextUtils.isEmpty(userInfoBean.getNickname())) {
-            name.setText(userInfoBean.getNickname());
-        }
+            if (!TextUtils.isEmpty(userInfoBean.getAvatar())) {
+                x.image().bind(head, userInfoBean.getAvatar(), options);
+            }
+            if (!TextUtils.isEmpty(userInfoBean.getNickname())) {
+                name.setText(userInfoBean.getNickname());
+            }
 
-        if (!TextUtils.isEmpty(userInfoBean.getMobile())) {
-            number.setText("号码 | " + userInfoBean.getMobile());
-        }
+            if (!TextUtils.isEmpty(userInfoBean.getNickname())) {
+                name.setText(userInfoBean.getNickname());
+            }
 
-        info.setText("好友 " + userInfoBean.getUserCount().getNumFriends() + " | 关注 " + userInfoBean.getUserCount().getNumFollow() + " | 粉丝 " + userInfoBean.getUserCount().getNumFans());
+            if (!TextUtils.isEmpty(userInfoBean.getMobile())) {
+                number.setText("号码 | " + userInfoBean.getMobile());
+            }
+
+            info.setText("好友 " + userInfoBean.getUserCount().getNumFriends() + " | 关注 " + userInfoBean.getUserCount().getNumFollow() + " | 粉丝 " + userInfoBean.getUserCount().getNumFans());
+        }
     }
 }

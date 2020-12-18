@@ -30,6 +30,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".FriendStationApplication"
@@ -71,7 +74,9 @@
         <activity android:name=".ui.user.NoticeActivity" />
         <activity android:name=".ui.user.BuildUserNameActivity" />
         <activity android:name=".ui.user.BuildUserSexActivity" />
-        <activity android:name=".ui.user.BuildUserActivity"></activity>
+        <activity android:name=".ui.user.BuildUserActivity">
+
+        </activity>
         <activity android:name=".ui.user.CodeActivity" />
         <activity android:name=".ui.user.LoginPhoneActivity" />
         <activity android:name=".ui.user.WelcomeActivity">
@@ -82,7 +87,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.user.LoginActivity" />
-        <activity android:name=".ui.MainActivity"></activity>
+        <activity android:name=".ui.MainActivity">
+
+        </activity>
     </application>
 
 </manifest>

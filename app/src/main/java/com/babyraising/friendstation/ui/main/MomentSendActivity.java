@@ -112,7 +112,6 @@ public class MomentSendActivity extends BaseActivity {
     private String mTempPhotoPath;
     private String newHeadIconUrl;
     private Uri imageUri;
-//    private RecordManager recordManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,30 +122,7 @@ public class MomentSendActivity extends BaseActivity {
     }
 
     private void initAudioRecorder() {
-//        RecordManager.getInstance().init(getApplication(), false);
-//        recordManager = RecordManager.getInstance();
-//        RecordManager.getInstance().changeRecordConfig(recordManager.getRecordConfig().setSampleRate(16000));
-//        RecordManager.getInstance().changeRecordConfig(recordManager.getRecordConfig().setEncodingConfig(AudioFormat.ENCODING_PCM_8BIT));
-//
-//        RecordManager.getInstance().setRecordStateListener(new RecordStateListener() {
-//            @Override
-//            public void onStateChange(RecordHelper.RecordState state) {
-//
-//            }
-//
-//            @Override
-//            public void onError(String error) {
-//
-//            }
-//
-//        });
-//
-//        RecordManager.getInstance().setRecordResultListener(new RecordResultListener() {
-//            @Override
-//            public void onResult(File result) {
-//
-//            }
-//        });
+
     }
 
     private void initView() {

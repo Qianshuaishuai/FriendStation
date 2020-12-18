@@ -25,6 +25,7 @@ public class Constant {
     public static final String URL_UMS_USER_UPDATE_VERIFY = "ums/user/update/verify";
     public static final String URL_USER_GET_USERINTIMACYLIST = "ums/user/get/userIntimacyList";
     public static final String URL_USER_GET_USERRICHLIST = "ums/user/get/userRichList";
+    public static final String URL_USER_UPDATE_VERIFY = "ums/user/update/verify";
 
     //friend部分
     public static final String URL_FRIENDS_MOMENT = "friends/moments";
@@ -43,4 +44,7 @@ public class Constant {
     public static final String URL_FRIENDS_COIN_RECORD = "friends/coinRecord";
     public static final String URL_FRIENDS_UPLOAD = "friends/upload";
     public static final String URL_FRIENDS_CONFIGAVATAR = "friends/configAvatar";
+    public static final String URL_FRIENDS_USERFOLLOW_DELETE = "friends/userFollow/delete";
+    public static final String URL_FRIENDS_USERFOLLOW_SAVE = "friends/userFollow/save";
+
 }

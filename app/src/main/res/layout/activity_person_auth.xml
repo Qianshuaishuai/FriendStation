@@ -92,7 +92,8 @@
             android:layout_marginLeft="15dip"
             android:layout_marginTop="20dip"
             android:layout_marginRight="15dip"
-            android:background="#b3ffffff">
+            android:background="#b3ffffff"
+            android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -119,7 +120,7 @@
         android:layout_marginRight="52.5dip"
         android:layout_marginBottom="50dip"
         android:background="@drawable/build_user_save_bg"
-        android:text="重新拍摄"
+        android:text="马上认证"
         android:textColor="#ffffff"
         android:textSize="15dip" />
 </RelativeLayout>

@@ -11,17 +11,27 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.adapter.GiftAdapter;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.GiftDetailBean;
+import com.babyraising.friendstation.bean.ScoreRecordBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.decoration.SpaceItemDecoration;
+import com.babyraising.friendstation.response.GiftResponse;
+import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.util.DisplayUtils;
+import com.google.gson.Gson;
 
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +42,8 @@ public class GiftActivity extends BaseActivity {
 
     private UserAllInfoBean userInfoBean;
     private GiftAdapter adapter;
+
+    private List<GiftDetailBean> giftList;
 
     @Event(R.id.back)
     private void back(View view) {
@@ -61,6 +73,8 @@ public class GiftActivity extends BaseActivity {
 
         initView();
         initData();
+
+        getGiftList();
     }
 
     private void initData() {
@@ -69,39 +83,8 @@ public class GiftActivity extends BaseActivity {
     }
 
     private void initView() {
-        List<String> testList = new ArrayList<>();
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        adapter = new GiftAdapter(testList);
+        giftList = new ArrayList<>();
+        adapter = new GiftAdapter(giftList);
         GridLayoutManager manager = new GridLayoutManager(this, 4);
         recycleList.setAdapter(adapter);
         recycleList.setLayoutManager(manager);
@@ -110,5 +93,48 @@ public class GiftActivity extends BaseActivity {
         int width1 = wm1.getDefaultDisplay().getWidth() - DisplayUtils.dp2px(this, 30);
         int itemWidth = DisplayUtils.dp2px(this, 73); //每个item的宽度
         recycleList.addItemDecoration(new SpaceItemDecoration((width1 - itemWidth * 4) / 8));
+    }
+
+    private void getGiftList() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_GIFT);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                GiftResponse response = gson.fromJson(result, GiftResponse.class);
+                System.out.println("GiftList:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        giftList.clear();
+                        List<GiftDetailBean> newList = response.getData().getRecords();
+                        for (int l = 0; l < newList.size(); l++) {
+                            giftList.add(newList.get(l));
+                        }
+                        adapter.notifyDataSetChanged();
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }

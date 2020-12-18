@@ -1,6 +1,7 @@
 package com.babyraising.friendstation.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.bean.GiftDetailBean;
 import com.babyraising.friendstation.bean.TaskDetailBean;
 
 import org.xutils.x;
@@ -16,10 +18,10 @@ import java.util.List;
 
 public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
 
-    private List<String> mList;
+    private List<GiftDetailBean> mList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView  nameTxt, countTxt;
+        TextView nameTxt, countTxt;
         ImageView iconIv;
 
         public ViewHolder(View view) {
@@ -31,7 +33,7 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
 
     }
 
-    public GiftAdapter(List<String> mList) {
+    public GiftAdapter(List<GiftDetailBean> mList) {
         this.mList = mList;
     }
 
@@ -44,7 +46,15 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        if (!TextUtils.isEmpty(mList.get(position).getImage())) {
+            x.image().bind(holder.iconIv, mList.get(position).getImage());
+        }
 
+        if (!TextUtils.isEmpty(mList.get(position).getTitle())) {
+            holder.nameTxt.setText(mList.get(position).getTitle());
+        }
+
+        holder.countTxt.setText("" + mList.get(position).getPrice());
     }
 
     @Override

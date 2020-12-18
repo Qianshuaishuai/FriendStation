@@ -19,9 +19,13 @@ import com.babyraising.friendstation.base.BaseFragment;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.MomentDetailBean;
 import com.babyraising.friendstation.bean.ScoreRecordBean;
+import com.babyraising.friendstation.request.FollowRequest;
+import com.babyraising.friendstation.request.UpdateAlbumRequest;
 import com.babyraising.friendstation.response.MomentResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
+import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.ui.main.MomentSendActivity;
+import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
 import org.xutils.common.Callback;
@@ -165,6 +169,92 @@ public class MomentFragment extends BaseFragment {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recycleList.setAdapter(adapter);
         recycleList.setLayoutManager(manager);
+    }
+
+    public void followUser(int id) {
+        FollowRequest request = new FollowRequest();
+        request.setFollowId(id);
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        Gson gson = new Gson();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_USERFOLLOW_SAVE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("followUser:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        getMomentList();
+
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    public void cancelFollowUser(int id) {
+        FollowRequest request = new FollowRequest();
+        request.setFollowId(id);
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        Gson gson = new Gson();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_USERFOLLOW_DELETE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("cancelFollowUser:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        getMomentList();
+
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void getMomentList() {

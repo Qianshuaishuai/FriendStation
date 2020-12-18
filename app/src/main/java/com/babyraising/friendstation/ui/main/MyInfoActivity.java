@@ -151,6 +151,7 @@ public class MyInfoActivity extends BaseActivity {
             public void onSuccess(String result) {
                 Gson gson = new Gson();
                 UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
+                System.out.println("userFullInfo:"+result);
                 switch (response.getCode()) {
                     case 200:
                         ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());

@@ -88,7 +88,9 @@ public class RechargeActivity extends BaseActivity {
 
     private void initData() {
         userInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
-        count.setText("" + userInfoBean.getUserCount().getNumCoin());
+        if (userInfoBean != null){
+            count.setText("" + userInfoBean.getUserCount().getNumCoin());
+        }
     }
 
     private void getRechargeList() {

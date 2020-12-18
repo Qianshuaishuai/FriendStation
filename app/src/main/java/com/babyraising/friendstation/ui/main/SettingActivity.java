@@ -56,7 +56,7 @@ public class SettingActivity extends BaseActivity {
             public void onSuccess(String result) {
                 Gson gson = new Gson();
                 UmsUpdatePasswordResponse response = gson.fromJson(result, UmsUpdatePasswordResponse.class);
-                System.out.println(result);
+                System.out.println("logout:" + result);
                 switch (response.getCode()) {
                     case 200:
                         T.s("退出成功");
