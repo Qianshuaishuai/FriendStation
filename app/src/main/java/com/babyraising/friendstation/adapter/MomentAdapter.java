@@ -121,6 +121,28 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                 });
                 break;
         }
+
+        switch (mList.get(position).getLikeStatus()) {
+            case 0:
+                holder.likeIv.setImageResource(R.mipmap.main_moment_like_normal);
+                holder.likeIv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        context.followUser(mList.get(position).getUserId());
+                        context.likeUser(mList.get(position).getUserId());
+                    }
+                });
+                break;
+            case 1:
+                holder.likeIv.setImageResource(R.mipmap.main_moment_like_selected);
+                holder.likeIv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        context.cancelLikeUser(mList.get(position).getUserId());
+                    }
+                });
+                break;
+        }
     }
 
     @Override

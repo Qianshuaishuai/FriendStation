@@ -122,10 +122,12 @@ public class ChatActivity extends BaseActivity {
         if (voiceOrTextStatus == 0) {
             inputContentLayout.setVisibility(View.GONE);
             sendVoice.setVisibility(View.VISIBLE);
+            voice.setImageResource(R.mipmap.chat_icon7);
             voiceOrTextStatus = 1;
         } else {
             inputContentLayout.setVisibility(View.VISIBLE);
             sendVoice.setVisibility(View.GONE);
+            voice.setImageResource(R.mipmap.chat_icon3);
             voiceOrTextStatus = 0;
         }
 
@@ -144,19 +146,19 @@ public class ChatActivity extends BaseActivity {
 
     @Event(R.id.chat2)
     private void chat2Click(View view) {
-
-    }
-
-    @Event(R.id.chat3)
-    private void chat3Click(View view) {
         if (takePhotoLayout.getVisibility() == View.GONE) {
             takePhotoLayout.setVisibility(View.VISIBLE);
         }
     }
 
+    @Event(R.id.chat3)
+    private void chat3Click(View view) {
+        choosePhoto();
+    }
+
     @Event(R.id.chat4)
     private void chat4Click(View view) {
-
+        takePhoto();
     }
 
     @Event(R.id.chat5)
@@ -234,13 +236,13 @@ public class ChatActivity extends BaseActivity {
 
     @Event(R.id.layout_camera)
     private void cameraClick(View view) {
-        takePhoto();
+
         photoLayout.setVisibility(View.GONE);
     }
 
     @Event(R.id.layout_photo)
     private void selectPhoto(View view) {
-        choosePhoto();
+
         photoLayout.setVisibility(View.GONE);
     }
 
@@ -485,12 +487,14 @@ public class ChatActivity extends BaseActivity {
 
         switch (requestCode) {
             case RC_CHOOSE_PHOTO:
-                Uri uri = data.getData();
-                String filePath = FileUtil.getFilePathByUri(this, uri);
-                if (!TextUtils.isEmpty(filePath)) {
-                    uploadPic(filePath);
-                } else {
-                    T.s("选择照片出错");
+                if (data != null) {
+                    Uri uri = data.getData();
+                    String filePath = FileUtil.getFilePathByUri(this, uri);
+                    if (!TextUtils.isEmpty(filePath)) {
+                        uploadPic(filePath);
+                    } else {
+                        T.s("选择照片出错");
+                    }
                 }
                 break;
             case RC_TAKE_PHOTO:

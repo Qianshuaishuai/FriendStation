@@ -20,6 +20,7 @@ import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.MomentDetailBean;
 import com.babyraising.friendstation.bean.ScoreRecordBean;
 import com.babyraising.friendstation.request.FollowRequest;
+import com.babyraising.friendstation.request.LikeRequest;
 import com.babyraising.friendstation.request.UpdateAlbumRequest;
 import com.babyraising.friendstation.response.MomentResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
@@ -234,6 +235,94 @@ public class MomentFragment extends BaseFragment {
                 switch (response.getCode()) {
                     case 200:
                         T.s("取消关注成功");
+                        getMomentList();
+
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    public void likeUser(int id) {
+        LikeRequest request = new LikeRequest();
+        request.setId(id);
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        Gson gson = new Gson();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_MOMENTLIKE_SAVE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("likeUser:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("点赞成功");
+                        getMomentList();
+
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    public void cancelLikeUser(int id) {
+        LikeRequest request = new LikeRequest();
+        request.setId(id);
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        Gson gson = new Gson();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_MOMENTLIKE_DELETE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("cancelLikeUser:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("取消点赞成功");
                         getMomentList();
 
                         break;

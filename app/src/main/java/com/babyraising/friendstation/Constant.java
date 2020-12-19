@@ -34,8 +34,10 @@ public class Constant {
     public static final String URL_USER_UPDATE_VERIFY = "ums/user/update/verify";
 
     //friend部分
-    public static final String URL_FRIENDS_MOMENT = "friends/moments";
+    public static final String URL_FRIENDS_MOMENT = "friends/moments/getMomentsInfo";
     public static final String URL_FRIENDS_MOMENT_SAVE = "friends/moments/save";
+    public static final String URL_FRIENDS_MOMENTLIKE_SAVE = "friends/momentLike/save";
+    public static final String URL_FRIENDS_MOMENTLIKE_DELETE = "friends/momentLike/delete";
     public static final String URL_FRIENDS = "friends";
     public static final String URL_FRIENDS_GIFT = "friends/gift";
     public static final String URL_FRIENDS_TASK = "friends/task";

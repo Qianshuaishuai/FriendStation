@@ -367,4 +367,21 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         startActivity(intent);
         finish();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        V2TIMCallback callback = new V2TIMCallback() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onError(int code, String desc) {
+
+            }
+        };
+        V2TIMManager.getInstance().logout(callback);
+    }
 }

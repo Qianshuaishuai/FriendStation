@@ -252,17 +252,16 @@
                 android:background="@drawable/shape_chat_content_bg"
                 android:gravity="center"
                 android:padding="0dip"
-                android:text="点击发送语音"
-                android:textColor="#3C3B41"
-                android:textSize="14dip"
+                android:text="按住说话"
+                android:textColor="#DD20AF"
+                android:textSize="12dip"
                 android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/layout_input_content"
                 android:layout_width="match_parent"
                 android:layout_height="34dip"
-                android:layout_marginRight="20dip"
-                android:visibility="gone">
+                android:layout_marginRight="20dip">
 
                 <EditText
                     android:id="@+id/content"
@@ -345,7 +344,7 @@
                     android:layout_width="25.5dip"
                     android:layout_height="25.5dip"
                     android:layout_centerInParent="true"
-                    android:src="@mipmap/chat_icon1" />
+                    android:src="@mipmap/chat_icon8" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -358,7 +357,7 @@
                     android:layout_width="25.5dip"
                     android:layout_height="25.5dip"
                     android:layout_centerInParent="true"
-                    android:src="@mipmap/chat_icon6" />
+                    android:src="@mipmap/chat_icon1" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
@@ -477,7 +476,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
-                android:text="拍照"
+                android:text="语音通话"
                 android:textColor="#3C3B41"
                 android:textSize="14dip" />
         </LinearLayout>
@@ -505,7 +504,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dip"
-                android:text="从手机相册选择"
+                android:text="视频通话"
                 android:textColor="#3C3B41"
                 android:textSize="14dip" />
         </LinearLayout>
