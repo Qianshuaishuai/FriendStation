@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.ui.main;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.AudioFormat;
@@ -14,9 +15,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
@@ -31,6 +36,8 @@ import com.babyraising.friendstation.response.UmsLoginByMobileResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.T;
+import com.github.lassana.recorder.AudioRecorder;
+import com.github.lassana.recorder.AudioRecorderBuilder;
 import com.google.gson.Gson;
 import com.nanchen.compresshelper.CompressHelper;
 
@@ -71,6 +78,9 @@ public class MomentSendActivity extends BaseActivity {
 
         momentSend();
     }
+
+    @ViewInject(R.id.moment_voice)
+    private ImageView momentVoice;
 
     @ViewInject(R.id.photo_list)
     private RecyclerView recyclerList;
@@ -113,16 +123,98 @@ public class MomentSendActivity extends BaseActivity {
     private String newHeadIconUrl;
     private Uri imageUri;
 
+    private AudioRecorder recorder;
+
+    private AlertDialog voiceLoadingTip;
+
+    private String recordUri;
+
+    private long clickViewTime = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         initView();
+        initVoice();
         initAudioRecorder();
+        initVoiceTip();
+    }
+
+    private void initVoice() {
+        momentVoice.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        voiceLoadingTip.show();
+                        clickViewTime = System.currentTimeMillis();
+                        recorder.start(new AudioRecorder.OnStartListener() {
+                            @Override
+                            public void onStarted() {
+
+                            }
+
+                            @Override
+                            public void onException(Exception e) {
+                                T.s("录音失败");
+                                if (voiceLoadingTip.isShowing()) {
+                                    voiceLoadingTip.cancel();
+                                }
+                            }
+                        });
+
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (voiceLoadingTip.isShowing()) {
+                            voiceLoadingTip.cancel();
+                        }
+
+                        final long newClickViewTime = System.currentTimeMillis();
+                        final long timeOffset = newClickViewTime - clickViewTime;
+                        if (timeOffset > 1000) {
+                            recorder.pause(new AudioRecorder.OnPauseListener() {
+                                @Override
+                                public void onPaused(String activeRecordFileName) {
+                                    uploadRecord(activeRecordFileName);
+                                }
+
+                                @Override
+                                public void onException(Exception e) {
+
+                                }
+                            });
+                        } else {
+                            T.s("语音太短！");
+                        }
+
+                        clickViewTime = 0;
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
     private void initAudioRecorder() {
+        String filename = getFileName();
+        recorder = AudioRecorderBuilder.with(this)
+                .fileName(filename)
+                .config(AudioRecorder.MediaRecorderConfig.DEFAULT)
+                .loggable()
+                .build();
+    }
 
+    private String getFileName() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+                .getAbsolutePath()
+                + File.separator
+                + "MomentRecord_"
+                + System.currentTimeMillis()
+                + ".mp3";
     }
 
     private void initView() {
@@ -231,13 +323,11 @@ public class MomentSendActivity extends BaseActivity {
         });
     }
 
-    private void uploadAudio(final String audioPic) {
-
+    private void uploadRecord(String recordPic) {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
-
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_UPLOAD);
         params.addHeader("Authorization", bean.getAccessToken());
-        File oldFile = new File(audioPic);
+        File oldFile = new File(recordPic);
         params.setAsJsonContent(true);
         List<KeyValue> list = new ArrayList<>();
         list.add(new KeyValue("file", oldFile));
@@ -248,10 +338,10 @@ public class MomentSendActivity extends BaseActivity {
             public void onSuccess(String result) {
                 Gson gson = new Gson();
                 UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("uploadRecord:" + response.getData());
                 switch (response.getCode()) {
                     case 200:
-                        T.s("上传成功");
-                        currentAudioUrl = response.getData();
+                        recordUri = response.getData();
                         break;
                     default:
                         T.s(response.getMsg());
@@ -279,7 +369,9 @@ public class MomentSendActivity extends BaseActivity {
     private void momentSend() {
         MomentAddRequest request = new MomentAddRequest();
         request.setContent(content.getText().toString());
-
+        if (!TextUtils.isEmpty(recordUri)) {
+            request.setRecordUrl(recordUri);
+        }
         for (int p = 0; p < photoList.size(); p++) {
             if (!TextUtils.isEmpty(photoList.get(p))) {
                 switch (p) {
@@ -388,4 +480,18 @@ public class MomentSendActivity extends BaseActivity {
         }
     }
 
+    private void initVoiceTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // 创建一个view，并且将布局加入view中
+        View view = LayoutInflater.from(this).inflate(
+                R.layout.dialog_voice_loading_tip, null, false);
+        // 将view添加到builder中
+        builder.setView(view);
+        // 创建dialog
+        voiceLoadingTip = builder.create();
+        // 初始化控件，注意这里是通过view.findViewById
+        final TextView content = (TextView) view.findViewById(R.id.content);
+        voiceLoadingTip.setCanceledOnTouchOutside(false);
+    }
 }

@@ -86,6 +86,7 @@
             android:textSize="14dip" />
 
         <ImageView
+            android:id="@+id/moment_voice"
             android:layout_width="90dip"
             android:layout_height="90dip"
             android:layout_marginTop="12.5dip"

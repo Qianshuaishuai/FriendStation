@@ -16,10 +16,12 @@ import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.bean.TIMChatBean;
 import com.babyraising.friendstation.bean.TIMChatMessageBaseElementsBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.ui.main.ChatActivity;
 import com.babyraising.friendstation.util.ChatUtil;
 import com.google.gson.Gson;
 import com.tencent.imsdk.message.ImageElement;
 import com.tencent.imsdk.message.MessageBaseElement;
+import com.tencent.imsdk.message.SoundElement;
 import com.tencent.imsdk.message.TextElement;
 import com.tencent.imsdk.v2.V2TIMMessage;
 
@@ -34,24 +36,27 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private List<V2TIMMessage> mList;
     private UserAllInfoBean selfUserInfoBean;
     private UserAllInfoBean currentUserInfoBean;
-    private Context context;
+    private ChatActivity context;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView leftContentTxt;
+        TextView leftContentTxt,leftSoundTip;
         ImageView leftIcon, leftIvContent;
-        LinearLayout leftLayout;
+        LinearLayout leftLayout,leftVoiceLayout;
+
 
         public ViewHolder(View view) {
             super(view);
             leftContentTxt = (TextView) view.findViewById(R.id.left_content);
+            leftSoundTip = (TextView) view.findViewById(R.id.left_sound_tip);
             leftIcon = (ImageView) view.findViewById(R.id.left_icon);
             leftIvContent = (ImageView) view.findViewById(R.id.left_iv_content);
             leftLayout = (LinearLayout) view.findViewById(R.id.left_layout);
+            leftVoiceLayout = (LinearLayout) view.findViewById(R.id.left_layout_voice);
         }
 
     }
 
-    public ChatAdapter(Context context, List<V2TIMMessage> mList, UserAllInfoBean selfUserInfoBean, UserAllInfoBean currentUserInfoBean) {
+    public ChatAdapter(ChatActivity context, List<V2TIMMessage> mList, UserAllInfoBean selfUserInfoBean, UserAllInfoBean currentUserInfoBean) {
         this.selfUserInfoBean = selfUserInfoBean;
         this.currentUserInfoBean = currentUserInfoBean;
         this.mList = mList;
@@ -71,6 +76,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             holder.leftLayout.setVisibility(View.VISIBLE);
             holder.leftContentTxt.setVisibility(View.GONE);
             holder.leftIvContent.setVisibility(View.GONE);
+            holder.leftVoiceLayout.setVisibility(View.GONE);
             List<MessageBaseElement> elements = mList.get(position).getMessage().getMessageBaseElements();
             if (elements.size() > 0) {
                 if (elements.get(0) instanceof TextElement) {
@@ -84,6 +90,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 if (elements.get(0) instanceof ImageElement) {
                     x.image().bind(holder.leftIvContent, ((ImageElement) elements.get(0)).getOriginImageFilePath());
                     holder.leftIvContent.setVisibility(View.VISIBLE);
+                }
+
+                if (elements.get(0) instanceof SoundElement) {
+                    holder.leftVoiceLayout.setVisibility(View.VISIBLE);
+                    final SoundElement element = (SoundElement) elements.get(0);
+                    int showDur = element.getSoundDuration() / 1000;
+                    holder.leftSoundTip.setText(showDur + "s");
+                    holder.leftVoiceLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            context.playSound(element.getSoundFilePath());
+                        }
+                    });
                 }
 
                 if (!TextUtils.isEmpty(currentUserInfoBean.getAvatar())) {

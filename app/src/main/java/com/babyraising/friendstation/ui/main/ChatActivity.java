@@ -1,11 +1,14 @@
 package com.babyraising.friendstation.ui.main;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
@@ -16,8 +19,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -36,6 +42,8 @@ import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.T;
+import com.github.lassana.recorder.AudioRecorder;
+import com.github.lassana.recorder.AudioRecorderBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nanchen.compresshelper.CompressHelper;
@@ -57,12 +65,15 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @ContentView(R.layout.activity_chat)
 public class ChatActivity extends BaseActivity {
@@ -71,6 +82,10 @@ public class ChatActivity extends BaseActivity {
     private UserAllInfoBean selfUserBean;
     private int currentChatId = 0;
     private Gson gson = new Gson();
+
+    private int voiceOrTextStatus = 0;
+
+    private AlertDialog voiceLoadingTip;
 
     @ViewInject(R.id.name)
     private TextView name;
@@ -87,6 +102,15 @@ public class ChatActivity extends BaseActivity {
     @ViewInject(R.id.refresh_layout)
     private SwipeRefreshLayout refreshLayout;
 
+    @ViewInject(R.id.send_voice)
+    private TextView sendVoice;
+
+    @ViewInject(R.id.layout_input_content)
+    private RelativeLayout inputContentLayout;
+
+    @ViewInject(R.id.voice)
+    private ImageView voice;
+
     @Event(R.id.common_word)
     private void commonWordClick(View view) {
         Intent intent = new Intent(this, CommonWordActivity.class);
@@ -95,8 +119,16 @@ public class ChatActivity extends BaseActivity {
 
     @Event(R.id.voice)
     private void voiceClick(View view) {
-        Intent intent = new Intent(this, VoiceSendActivity.class);
-        startActivity(intent);
+        if (voiceOrTextStatus == 0) {
+            inputContentLayout.setVisibility(View.GONE);
+            sendVoice.setVisibility(View.VISIBLE);
+            voiceOrTextStatus = 1;
+        } else {
+            inputContentLayout.setVisibility(View.VISIBLE);
+            sendVoice.setVisibility(View.GONE);
+            voiceOrTextStatus = 0;
+        }
+
     }
 
     @Event(R.id.back)
@@ -178,6 +210,7 @@ public class ChatActivity extends BaseActivity {
 
     private List<V2TIMMessage> chatList = new ArrayList<>();
     private ChatAdapter adapter;
+    private MediaPlayer mediaPlayer;
 
     @Event(R.id.recharge_coin)
     private void rechargeCoin(View view) {
@@ -230,6 +263,10 @@ public class ChatActivity extends BaseActivity {
 
     private int status = 0;
 
+    private long clickViewTime = 0;
+
+    private AudioRecorder recorder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -237,6 +274,42 @@ public class ChatActivity extends BaseActivity {
         initView();
         initData();
         initTim();
+        initVoiceTip();
+        initRecorder();
+        initMediaPlayer();
+    }
+
+    private void initMediaPlayer() {
+        mediaPlayer = new MediaPlayer();
+    }
+
+    private void initRecorder() {
+        String filename = getFileName();
+        recorder = AudioRecorderBuilder.with(this)
+                .fileName(filename)
+                .config(AudioRecorder.MediaRecorderConfig.DEFAULT)
+                .loggable()
+                .build();
+    }
+
+    public void playSound(String url) {
+        try {
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getFileName() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+                .getAbsolutePath()
+                + File.separator
+                + "Record_"
+                + System.currentTimeMillis()
+                + ".mp3";
     }
 
     private void initTim() {
@@ -260,6 +333,11 @@ public class ChatActivity extends BaseActivity {
 
     private void sendTextMessage(String text) {
         V2TIMMessage message = V2TIMManager.getMessageManager().createTextMessage(text);
+        sendMessage(message);
+    }
+
+    private void sendVoiceMessage(String voiceUrl, int dur) {
+        V2TIMMessage message = V2TIMManager.getMessageManager().createSoundMessage(voiceUrl, dur);
         sendMessage(message);
     }
 
@@ -334,6 +412,62 @@ public class ChatActivity extends BaseActivity {
                         refreshLayout.setRefreshing(false);
                     }
                 }
+            }
+        });
+
+        sendVoice.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        voiceLoadingTip.show();
+                        clickViewTime = System.currentTimeMillis();
+                        recorder.start(new AudioRecorder.OnStartListener() {
+                            @Override
+                            public void onStarted() {
+                                System.out.println("sdsdsdss");
+                            }
+
+                            @Override
+                            public void onException(Exception e) {
+                                T.s("录音失败");
+                                if (voiceLoadingTip.isShowing()) {
+                                    voiceLoadingTip.cancel();
+                                }
+                            }
+                        });
+
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (voiceLoadingTip.isShowing()) {
+                            voiceLoadingTip.cancel();
+                        }
+
+                        final long newClickViewTime = System.currentTimeMillis();
+                        final long timeOffset = newClickViewTime - clickViewTime;
+                        if (timeOffset > 1000) {
+                            recorder.pause(new AudioRecorder.OnPauseListener() {
+                                @Override
+                                public void onPaused(String activeRecordFileName) {
+                                    uploadRecord(activeRecordFileName, (int) timeOffset);
+                                }
+
+                                @Override
+                                public void onException(Exception e) {
+
+                                }
+                            });
+                        } else {
+                            T.s("语音太短！");
+                        }
+
+                        clickViewTime = 0;
+                        break;
+                }
+                return true;
             }
         });
     }
@@ -550,6 +684,49 @@ public class ChatActivity extends BaseActivity {
         });
     }
 
+    private void uploadRecord(String recordPic, final int timeOffset) {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_UPLOAD);
+        params.addHeader("Authorization", bean.getAccessToken());
+        File oldFile = new File(recordPic);
+        params.setAsJsonContent(true);
+        List<KeyValue> list = new ArrayList<>();
+        list.add(new KeyValue("file", oldFile));
+        MultipartBody body = new MultipartBody(list, "UTF-8");
+        params.setRequestBody(body);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("uploadRecord:" + response.getData());
+                switch (response.getCode()) {
+                    case 200:
+                        sendVoiceMessage(response.getData(), timeOffset);
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
     private void takePhoto() {
         Intent intentToTakePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File fileDir = new File(Environment.getExternalStorageDirectory() + File.separator + "photoTest" + File.separator);
@@ -577,4 +754,18 @@ public class ChatActivity extends BaseActivity {
         startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
     }
 
+    private void initVoiceTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // 创建一个view，并且将布局加入view中
+        View view = LayoutInflater.from(this).inflate(
+                R.layout.dialog_voice_loading_tip, null, false);
+        // 将view添加到builder中
+        builder.setView(view);
+        // 创建dialog
+        voiceLoadingTip = builder.create();
+        // 初始化控件，注意这里是通过view.findViewById
+        final TextView content = (TextView) view.findViewById(R.id.content);
+        voiceLoadingTip.setCanceledOnTouchOutside(false);
+    }
 }

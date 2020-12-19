@@ -29,7 +29,7 @@
             android:paddingRight="15dip"
             android:paddingBottom="10dip"
             android:textColor="#ff3c3b41"
-            android:textSize="14sp"
+            android:textSize="14dip"
             android:visibility="gone" />
 
         <ImageView
@@ -38,5 +38,30 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="68dip"
             android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/left_layout_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_chat_content"
+            android:orientation="horizontal"
+            android:paddingLeft="15dip"
+            android:paddingTop="10dip"
+            android:paddingRight="15dip"
+            android:paddingBottom="10dip">
+
+            <ImageView
+                android:layout_width="24dip"
+                android:layout_height="24dip"
+                android:src="@mipmap/chat_icon3" />
+
+            <TextView
+                android:id="@+id/left_sound_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dip"
+                android:textColor="#ff3c3b41"
+                android:textSize="14dip" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

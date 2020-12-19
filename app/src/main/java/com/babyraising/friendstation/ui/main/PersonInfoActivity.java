@@ -1,15 +1,19 @@
 package com.babyraising.friendstation.ui.main;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,16 +28,23 @@ import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.response.AlbumResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
+import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.ui.user.PhotoActivity;
+import com.babyraising.friendstation.util.T;
+import com.github.lassana.recorder.AudioRecorder;
+import com.github.lassana.recorder.AudioRecorderBuilder;
 import com.google.gson.Gson;
 
 import org.xutils.common.Callback;
+import org.xutils.common.util.KeyValue;
 import org.xutils.http.RequestParams;
+import org.xutils.http.body.MultipartBody;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,6 +105,12 @@ public class PersonInfoActivity extends BaseActivity {
     @ViewInject(R.id.layout_photo)
     private RelativeLayout layoutPhoto;
 
+    @ViewInject(R.id.layout_voice)
+    private LinearLayout voiceLayout;
+
+    @ViewInject(R.id.voice)
+    private ImageView voice;
+
     @Event(R.id.layout_auth)
     private void authLayoutClick(View view) {
         Intent intent = new Intent(this, PersonAuthActivity.class);
@@ -124,11 +141,157 @@ public class PersonInfoActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    private AudioRecorder recorder;
+
+    private AlertDialog voiceLoadingTip;
+
+    private String recordUri;
+
+    private long clickViewTime = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         initView();
+
+        initVoice();
+        initAudioRecorder();
+        initVoiceTip();
+    }
+
+    private void initVoice() {
+        voiceLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        voiceLoadingTip.show();
+                        clickViewTime = System.currentTimeMillis();
+                        recorder.start(new AudioRecorder.OnStartListener() {
+                            @Override
+                            public void onStarted() {
+
+                            }
+
+                            @Override
+                            public void onException(Exception e) {
+                                T.s("录音失败");
+                                if (voiceLoadingTip.isShowing()) {
+                                    voiceLoadingTip.cancel();
+                                }
+                            }
+                        });
+
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (voiceLoadingTip.isShowing()) {
+                            voiceLoadingTip.cancel();
+                        }
+
+                        final long newClickViewTime = System.currentTimeMillis();
+                        final long timeOffset = newClickViewTime - clickViewTime;
+                        if (timeOffset > 1000) {
+                            recorder.pause(new AudioRecorder.OnPauseListener() {
+                                @Override
+                                public void onPaused(String activeRecordFileName) {
+                                    uploadRecord(activeRecordFileName);
+                                }
+
+                                @Override
+                                public void onException(Exception e) {
+
+                                }
+                            });
+                        } else {
+                            T.s("语音太短！");
+                        }
+
+                        clickViewTime = 0;
+                        break;
+                }
+                return true;
+            }
+        });
+    }
+
+    private void initAudioRecorder() {
+        String filename = getFileName();
+        recorder = AudioRecorderBuilder.with(this)
+                .fileName(filename)
+                .config(AudioRecorder.MediaRecorderConfig.DEFAULT)
+                .loggable()
+                .build();
+    }
+
+    private String getFileName() {
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+                .getAbsolutePath()
+                + File.separator
+                + "PersonRecord_"
+                + System.currentTimeMillis()
+                + ".mp3";
+    }
+
+    private void uploadRecord(String recordPic) {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_UPLOAD);
+        params.addHeader("Authorization", bean.getAccessToken());
+        File oldFile = new File(recordPic);
+        params.setAsJsonContent(true);
+        List<KeyValue> list = new ArrayList<>();
+        list.add(new KeyValue("file", oldFile));
+        MultipartBody body = new MultipartBody(list, "UTF-8");
+        params.setRequestBody(body);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("uploadRecord:" + response.getData());
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("上传成功");
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void initVoiceTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // 创建一个view，并且将布局加入view中
+        View view = LayoutInflater.from(this).inflate(
+                R.layout.dialog_voice_loading_tip, null, false);
+        // 将view添加到builder中
+        builder.setView(view);
+        // 创建dialog
+        voiceLoadingTip = builder.create();
+        // 初始化控件，注意这里是通过view.findViewById
+        final TextView content = (TextView) view.findViewById(R.id.content);
+        voiceLoadingTip.setCanceledOnTouchOutside(false);
     }
 
     private void initView() {
