@@ -18,6 +18,7 @@ import com.babyraising.friendstation.bean.TIMChatMessageBaseElementsBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.util.ChatUtil;
 import com.google.gson.Gson;
+import com.tencent.imsdk.message.ImageElement;
 import com.tencent.imsdk.message.MessageBaseElement;
 import com.tencent.imsdk.message.TextElement;
 import com.tencent.imsdk.v2.V2TIMMessage;
@@ -37,13 +38,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView leftContentTxt;
-        ImageView leftIcon;
+        ImageView leftIcon, leftIvContent;
         LinearLayout leftLayout;
 
         public ViewHolder(View view) {
             super(view);
             leftContentTxt = (TextView) view.findViewById(R.id.left_content);
             leftIcon = (ImageView) view.findViewById(R.id.left_icon);
+            leftIvContent = (ImageView) view.findViewById(R.id.left_iv_content);
             leftLayout = (LinearLayout) view.findViewById(R.id.left_layout);
         }
 
@@ -67,6 +69,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         if (mList.get(position).getMessage().getReceiverUserID().equals(String.valueOf(currentUserInfoBean.getId()))) {
             holder.leftLayout.setVisibility(View.VISIBLE);
+            holder.leftContentTxt.setVisibility(View.GONE);
+            holder.leftIvContent.setVisibility(View.GONE);
             List<MessageBaseElement> elements = mList.get(position).getMessage().getMessageBaseElements();
             if (elements.size() > 0) {
                 if (elements.get(0) instanceof TextElement) {
@@ -74,19 +78,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         holder.leftContentTxt.setText(((TextElement) elements.get(0)).getTextContent());
                     }
 
-                    if (!TextUtils.isEmpty(currentUserInfoBean.getAvatar())) {
-                        ImageOptions options = new ImageOptions.Builder().
-                                setRadius(DensityUtil.dip2px(38)).setCrop(true).build();
-                        x.image().bind(holder.leftIcon, selfUserInfoBean.getAvatar(), options);
-                    } else {
-
-                        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.test2);
-                        //设置bitmap.getWidth()可以获得圆形
-                        Bitmap bitmap1 = ChatUtil.ClipSquareBitmap(bitmap, 200, bitmap.getWidth());
-                        holder.leftIcon.setImageBitmap(bitmap1);
-                    }
+                    holder.leftContentTxt.setVisibility(View.VISIBLE);
                 }
 
+                if (elements.get(0) instanceof ImageElement) {
+                    x.image().bind(holder.leftIvContent, ((ImageElement) elements.get(0)).getOriginImageFilePath());
+                    holder.leftIvContent.setVisibility(View.VISIBLE);
+                }
+
+                if (!TextUtils.isEmpty(currentUserInfoBean.getAvatar())) {
+                    ImageOptions options = new ImageOptions.Builder().
+                            setRadius(DensityUtil.dip2px(38)).setCrop(true).build();
+                    x.image().bind(holder.leftIcon, selfUserInfoBean.getAvatar(), options);
+                } else {
+
+                    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.test4);
+                    //设置bitmap.getWidth()可以获得圆形
+                    Bitmap bitmap1 = ChatUtil.ClipSquareBitmap(bitmap, 200, bitmap.getWidth());
+                    holder.leftIcon.setImageBitmap(bitmap1);
+                }
             }
 
         } else {
