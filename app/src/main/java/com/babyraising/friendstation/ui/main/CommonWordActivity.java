@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.ui.main;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.adapter.CommonWordAdapter;
@@ -23,7 +25,7 @@ public class CommonWordActivity extends BaseActivity {
 
     @Event(R.id.back)
     private void backClick(View view) {
-        finish();
+        backChat(-1);
     }
 
     @ViewInject(R.id.list)
@@ -41,9 +43,34 @@ public class CommonWordActivity extends BaseActivity {
 
     private void initView() {
         list = ((FriendStationApplication) getApplication()).getCommonWordData();
-        adapter = new CommonWordAdapter(list);
+        adapter = new CommonWordAdapter(this, list);
+
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recycleList.setLayoutManager(manager);
         recycleList.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new CommonWordAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+                backChat(position);
+            }
+        });
+    }
+
+
+
+    public void backChat(int position) {
+        if (position != -1) {
+            Intent intent = new Intent();
+            intent.putExtra("common-word", list.get(position));
+            setResult(Constant.ACTIVITY_COMMON_REQUEST, intent);
+            finish();
+        } else {
+            Intent intent = new Intent();
+            intent.putExtra("common-word", "");
+            setResult(Constant.ACTIVITY_COMMON_REQUEST, intent);
+            finish();
+        }
+
     }
 }

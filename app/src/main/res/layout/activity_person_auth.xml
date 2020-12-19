@@ -34,6 +34,25 @@
             android:background="#D4D4D4"></View>
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/iv_main"
+        android:layout_width="225dip"
+        android:layout_height="225dip"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dip" />
+
+    <TextView
+        android:id="@+id/tip_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_main"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dip"
+        android:text="-认证成功-"
+        android:textColor="#3C3B41"
+        android:textSize="15dip"
+        android:visibility="gone" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -84,31 +103,32 @@
             android:layout_marginTop="10dip"
             android:layout_marginRight="15dip"
             android:background="#d4d4d4"></View>
-
-        <RelativeLayout
-            android:id="@+id/layout_error"
-            android:layout_width="match_parent"
-            android:layout_height="258.5dip"
-            android:layout_marginLeft="15dip"
-            android:layout_marginTop="20dip"
-            android:layout_marginRight="15dip"
-            android:background="#b3ffffff"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:background="@drawable/shape_person_auth_error_bg"
-                android:paddingLeft="15dip"
-                android:paddingTop="8dip"
-                android:paddingRight="15dip"
-                android:paddingBottom="8dip"
-                android:text="- 当前照片不合格，请重新认证 -"
-                android:textColor="#FF0000"
-                android:textSize="13dip" />
-        </RelativeLayout>
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_error"
+        android:layout_width="match_parent"
+        android:layout_height="258.5dip"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="15dip"
+        android:layout_marginTop="20dip"
+        android:layout_marginRight="15dip"
+        android:background="#b3ffffff"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/shape_person_auth_error_bg"
+            android:paddingLeft="15dip"
+            android:paddingTop="8dip"
+            android:paddingRight="15dip"
+            android:paddingBottom="8dip"
+            android:text="- 当前照片不合格，请重新认证 -"
+            android:textColor="#FF0000"
+            android:textSize="13dip" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/retake"

@@ -260,8 +260,9 @@ public class MomentFragment extends BaseFragment {
         });
     }
 
-    public void goToChat() {
+    public void goToChat(int position) {
         Intent intent = new Intent(getActivity(), ChatActivity.class);
+        intent.putExtra("chat-user-id", list.get(position).getUserId());
         startActivity(intent);
     }
 

@@ -6,6 +6,11 @@ public class Constant {
     public static final int OFFICIAL_INTO_CHAT_CODE = 999;
     public static final int REQUEST_PERMISSION_CODE = 101;
 
+    public static final int TIM_SDK_APPID = 1400457648;
+    public static final String TIM_SDK_PREFIX = "FriendStation";
+
+    public static final int ACTIVITY_COMMON_REQUEST = 10001;
+
     public static final String BASE_URL = "http://8.129.108.2/api/";
 
     //user部分
@@ -18,6 +23,7 @@ public class Constant {
     public static final String URL_UMS_USER = "ums/user";
     public static final String URL_UMS_USER_ALBUM_PAGE = "ums/user/album/page";
     public static final String URL_UMS_USER_FULL = "ums/user/full";
+    public static final String URL_UMS_GET_FULL_BYID = "ums/user/getFullById";
     public static final String URL_UMS_USER_SAVE_ALBUM = "ums/user/save/album";
     public static final String URL_UMS_USER_DELETE_ALBUM = "ums/user/delete/album";
     public static final String URL_UMS_UPDATE = "ums/user/update";

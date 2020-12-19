@@ -107,7 +107,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                     @Override
                     public void onClick(View view) {
 //                        context.followUser(mList.get(position).getUserId());
-                        context.goToChat();
+                        context.goToChat(mList.get(position).getId());
                     }
                 });
                 break;

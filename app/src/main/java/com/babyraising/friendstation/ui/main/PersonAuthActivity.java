@@ -16,13 +16,16 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.request.VerifyDetailRequest;
 import com.babyraising.friendstation.request.VerifyRequest;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.response.VerifyResponse;
@@ -63,6 +66,12 @@ public class PersonAuthActivity extends BaseActivity {
             takePhoto();
         }
     }
+
+    @ViewInject(R.id.iv_main)
+    private ImageView ivMain;
+
+    @ViewInject(R.id.tip_main)
+    private TextView tipMain;
 
     @ViewInject(R.id.layout_error)
     private RelativeLayout errorLayout;
@@ -140,19 +149,20 @@ public class PersonAuthActivity extends BaseActivity {
 
     }
 
-    private void uploadAuth(String mTempPhotoPath) {
+    private void uploadAuth(final String mTempPhotoPath) {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
 
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_UPDATE_VERIFY);
         params.addHeader("Authorization", bean.getAccessToken());
-        VerifyRequest request = new VerifyRequest();
-        request.setImg(mTempPhotoPath);
+        final VerifyDetailRequest request = new VerifyDetailRequest();
+        VerifyRequest request1 = new VerifyRequest();
+        request1.setImg(mTempPhotoPath);
+        request.setVerifyUpdateVO(request1);
 
         Gson gson = new Gson();
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         params.setBodyContent(gson.toJson(request));
-
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -161,8 +171,27 @@ public class PersonAuthActivity extends BaseActivity {
                 System.out.println("uploadAuth:" + result);
                 switch (response.getCode()) {
                     case 200:
-                        T.s("认证成功");
-                        finish();
+                        switch (response.getData().getStatusCert()) {
+                            case "NOT_PASS":
+                                T.s("认证失败，请重新上传");
+                                x.image().bind(ivMain, mTempPhotoPath);
+                                retake.setText("重新拍摄");
+                                errorLayout.setVisibility(View.VISIBLE);
+                                break;
+                            default:
+                                T.s("认证成功");
+                                x.image().bind(ivMain, mTempPhotoPath);
+                                retake.setText("马上搭讪");
+                                retake.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        finish();
+                                    }
+                                });
+                                tipMain.setVisibility(View.VISIBLE);
+                                errorLayout.setVisibility(View.GONE);
+                                break;
+                        }
                         break;
                     default:
                         T.s(response.getMsg());

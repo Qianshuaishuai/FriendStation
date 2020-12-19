@@ -39,8 +39,11 @@ import com.babyraising.friendstation.ui.show.MomentFragment;
 import com.babyraising.friendstation.ui.show.NoticeFragment;
 import com.babyraising.friendstation.ui.show.PersonFragment;
 import com.babyraising.friendstation.ui.user.LoginPhoneActivity;
+import com.babyraising.friendstation.util.GenerateTestUserSig;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
+import com.tencent.imsdk.v2.V2TIMCallback;
+import com.tencent.imsdk.v2.V2TIMManager;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -311,6 +314,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                 switch (response.getCode()) {
                     case 200:
                         ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());
+                        initTimLogin();
                         break;
                     case 401:
                         T.s("登录已失效");
@@ -337,6 +341,25 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
             }
         });
+    }
+
+    private void initTimLogin() {
+        UserAllInfoBean bean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+        if (bean != null) {
+            String userId = String.valueOf(bean.getId());
+            V2TIMCallback callback = new V2TIMCallback() {
+                @Override
+                public void onSuccess() {
+                    System.out.println("IMSDK Login Success");
+                }
+
+                @Override
+                public void onError(int code, String desc) {
+                    System.out.println("IMSDK Login err desc:" + desc + ",code :" + code);
+                }
+            };
+            V2TIMManager.getInstance().login(userId, GenerateTestUserSig.genTestUserSig(userId), callback);
+        }
     }
 
     private void startLoginActivity() {

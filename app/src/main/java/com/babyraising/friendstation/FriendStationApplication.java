@@ -10,6 +10,10 @@ import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.tencent.imsdk.v2.V2TIMManager;
+import com.tencent.imsdk.v2.V2TIMSDKConfig;
+import com.tencent.imsdk.v2.V2TIMSDKListener;
+import com.tencent.imsdk.v2.V2TIMUserFullInfo;
 
 import org.xutils.x;
 
@@ -37,6 +41,46 @@ public class FriendStationApplication extends Application {
         initSp();
 
         initCommonWord();
+        initTimSDK();
+    }
+
+    private void initTimSDK() {
+        V2TIMSDKConfig config = new V2TIMSDKConfig();
+        config.setLogLevel(3);//开启日志
+        V2TIMSDKListener listener = new V2TIMSDKListener() {
+            @Override
+            public void onConnecting() {
+                super.onConnecting();
+            }
+
+            @Override
+            public void onConnectSuccess() {
+                super.onConnectSuccess();
+                System.out.println("init IMSDK success");
+            }
+
+            @Override
+            public void onConnectFailed(int code, String error) {
+                super.onConnectFailed(code, error);
+                System.out.println("init IMSDK failed");
+            }
+
+            @Override
+            public void onKickedOffline() {
+                super.onKickedOffline();
+            }
+
+            @Override
+            public void onUserSigExpired() {
+                super.onUserSigExpired();
+            }
+
+            @Override
+            public void onSelfInfoUpdated(V2TIMUserFullInfo info) {
+                super.onSelfInfoUpdated(info);
+            }
+        };
+        V2TIMManager.getInstance().initSDK(this, Constant.TIM_SDK_APPID, config, listener);
     }
 
     private void initCommonWord() {
