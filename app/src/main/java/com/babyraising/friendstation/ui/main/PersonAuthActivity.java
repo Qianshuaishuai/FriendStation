@@ -114,7 +114,7 @@ public class PersonAuthActivity extends BaseActivity {
         switch (requestCode) {
             case RC_TAKE_PHOTO:
                 if (!TextUtils.isEmpty(mTempPhotoPath)) {
-                    uploadAuth(mTempPhotoPath);
+                    uploadPic(mTempPhotoPath);
                 } else {
                     T.s("选择照片出错");
                 }
@@ -145,18 +145,8 @@ public class PersonAuthActivity extends BaseActivity {
 
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_UPDATE_VERIFY);
         params.addHeader("Authorization", bean.getAccessToken());
-        File oldFile = new File(mTempPhotoPath);
-        File newFile = new CompressHelper.Builder(this)
-                .setMaxWidth(360)  // 默认最大宽度为720
-                .setMaxHeight(480) // 默认最大高度为960
-                .setQuality(80)    // 默认压缩质量为80
-                .setCompressFormat(Bitmap.CompressFormat.PNG) // 设置默认压缩为jpg格式
-                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
-                .build()
-                .compressToFile(oldFile);
         VerifyRequest request = new VerifyRequest();
-        request.setImg("data:image/jpg;base64," + encodeImage(newFile));
+        request.setImg(mTempPhotoPath);
 
         Gson gson = new Gson();
         params.setAsJsonContent(true);
@@ -173,6 +163,63 @@ public class PersonAuthActivity extends BaseActivity {
                     case 200:
                         T.s("认证成功");
                         finish();
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void uploadPic(String localPic) {
+
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_UPLOAD);
+        params.addHeader("Authorization", bean.getAccessToken());
+        File oldFile = new File(localPic);
+        File newFile = new CompressHelper.Builder(this)
+                .setMaxWidth(360)  // 默认最大宽度为720
+                .setMaxHeight(480) // 默认最大高度为960
+                .setQuality(80)    // 默认压缩质量为80
+                .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
+                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                .build()
+                .compressToFile(oldFile);
+        params.setAsJsonContent(true);
+        List<KeyValue> list = new ArrayList<>();
+        list.add(new KeyValue("file", newFile));
+        MultipartBody body = new MultipartBody(list, "UTF-8");
+        params.setRequestBody(body);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                switch (response.getCode()) {
+                    case 200:
+//                        AlbumDetailBean bean = new AlbumDetailBean();
+//                        bean.setUrl(response.getData());
+//                        photoList.add(photoList.size() - 1, bean);
+//                        adapter.notifyDataSetChanged();
+                        uploadAuth(response.getData());
                         break;
                     default:
                         T.s(response.getMsg());

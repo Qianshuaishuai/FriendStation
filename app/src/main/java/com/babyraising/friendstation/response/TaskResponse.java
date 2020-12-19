@@ -2,11 +2,14 @@ package com.babyraising.friendstation.response;
 
 import com.babyraising.friendstation.bean.CoinPayBean;
 import com.babyraising.friendstation.bean.TaskBean;
+import com.babyraising.friendstation.bean.TaskNewBean;
+
+import java.util.List;
 
 public class TaskResponse {
     private int code;
     private String msg;
-    private TaskBean data;
+    private List<TaskNewBean> data;
 
     public int getCode() {
         return code;
@@ -24,11 +27,11 @@ public class TaskResponse {
         this.msg = msg;
     }
 
-    public TaskBean getData() {
+    public List<TaskNewBean> getData() {
         return data;
     }
 
-    public void setData(TaskBean data) {
+    public void setData(List<TaskNewBean> data) {
         this.data = data;
     }
 }

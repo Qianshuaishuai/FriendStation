@@ -17,6 +17,7 @@ import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.ScoreRecordBean;
 import com.babyraising.friendstation.bean.TaskBean;
 import com.babyraising.friendstation.bean.TaskDetailBean;
+import com.babyraising.friendstation.bean.TaskNewBean;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.response.TaskResponse;
 import com.google.gson.Gson;
@@ -43,12 +44,11 @@ public class TaskActivity extends BaseActivity {
     private RecyclerView recycleList;
 
     private TaskAdapter adapter;
-    private List<TaskDetailBean> list;
+    private List<TaskNewBean> list;
 
     @Event(R.id.layout_invite)
-    private void inviteLayoutClick(View view){
-        Intent intent = new Intent(this,SignActivity.class);
-        startActivity(intent);
+    private void inviteLayoutClick(View view) {
+
     }
 
     @Override
@@ -60,16 +60,23 @@ public class TaskActivity extends BaseActivity {
 
     private void initView() {
         list = new ArrayList<>();
-        adapter = new TaskAdapter(list);
+        adapter = new TaskAdapter(this, list);
         adapter.setOnItemClickListener(new TaskAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
-
+//                doTask(position);
             }
         });
         LinearLayoutManager manager = new LinearLayoutManager(this);
         recycleList.setLayoutManager(manager);
         recycleList.setAdapter(adapter);
+    }
+
+    public void doTask(int position) {
+        if (list.get(position).isSign() || list.get(position).getTitle().equals("签到")) {
+            Intent intent = new Intent(this, SignActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void getTaskList() {
@@ -86,7 +93,7 @@ public class TaskActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         list.clear();
-                        List<TaskDetailBean> newList = response.getData().getRecords();
+                        List<TaskNewBean> newList = response.getData();
                         for (int l = 0; l < newList.size(); l++) {
                             list.add(newList.get(l));
                         }

@@ -24,6 +24,7 @@ import com.babyraising.friendstation.request.UpdateAlbumRequest;
 import com.babyraising.friendstation.response.MomentResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
+import com.babyraising.friendstation.ui.main.ChatActivity;
 import com.babyraising.friendstation.ui.main.MomentSendActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
@@ -165,7 +166,7 @@ public class MomentFragment extends BaseFragment {
         typeV3.setVisibility(View.GONE);
 
         list = new ArrayList<>();
-        adapter = new MomentAdapter(getActivity(), list);
+        adapter = new MomentAdapter(this, list);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recycleList.setAdapter(adapter);
         recycleList.setLayoutManager(manager);
@@ -188,6 +189,7 @@ public class MomentFragment extends BaseFragment {
                 System.out.println("followUser:" + result);
                 switch (response.getCode()) {
                     case 200:
+                        T.s("关注成功");
                         getMomentList();
 
                         break;
@@ -231,6 +233,7 @@ public class MomentFragment extends BaseFragment {
                 System.out.println("cancelFollowUser:" + result);
                 switch (response.getCode()) {
                     case 200:
+                        T.s("取消关注成功");
                         getMomentList();
 
                         break;
@@ -255,6 +258,11 @@ public class MomentFragment extends BaseFragment {
 
             }
         });
+    }
+
+    public void goToChat() {
+        Intent intent = new Intent(getActivity(), ChatActivity.class);
+        startActivity(intent);
     }
 
     private void getMomentList() {

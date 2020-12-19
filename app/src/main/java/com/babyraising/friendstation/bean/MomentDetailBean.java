@@ -17,6 +17,8 @@ public class MomentDetailBean {
     private int sex;
     private int age;
     private String nickname;
+    private int likeStatus;
+    private int speakStatus;
 
     public String getStatusCert() {
         return statusCert;
@@ -144,5 +146,21 @@ public class MomentDetailBean {
 
     public void setPicUrl6(String picUrl6) {
         this.picUrl6 = picUrl6;
+    }
+
+    public int getLikeStatus() {
+        return likeStatus;
+    }
+
+    public void setLikeStatus(int likeStatus) {
+        this.likeStatus = likeStatus;
+    }
+
+    public int getSpeakStatus() {
+        return speakStatus;
+    }
+
+    public void setSpeakStatus(int speakStatus) {
+        this.speakStatus = speakStatus;
     }
 }

@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.bean.TaskDetailBean;
+import com.babyraising.friendstation.bean.TaskNewBean;
+import com.babyraising.friendstation.ui.main.TaskActivity;
 
 import org.xutils.x;
 
@@ -16,11 +19,13 @@ import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
 
-    private List<TaskDetailBean> mList;
+    private List<TaskNewBean> mList;
+    private TaskActivity activity;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView contentTxt, tipTxt, countTxt;
         ImageView iconIv;
+        LinearLayout mainLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -28,11 +33,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
             tipTxt = (TextView) view.findViewById(R.id.tip);
             countTxt = (TextView) view.findViewById(R.id.count);
             iconIv = (ImageView) view.findViewById(R.id.icon);
+            mainLayout = (LinearLayout) view.findViewById(R.id.layout_main);
         }
 
     }
 
-    public TaskAdapter(List<TaskDetailBean> mList) {
+    public TaskAdapter(TaskActivity activity, List<TaskNewBean> mList) {
+        this.activity = activity;
         this.mList = mList;
     }
 
@@ -49,6 +56,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.contentTxt.setText(mList.get(position).getTitle());
         holder.tipTxt.setText(mList.get(position).getSubTitle());
         holder.countTxt.setText("+" + mList.get(position).getReword() + "金币");
+        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.doTask(position);
+            }
+        });
     }
 
     @Override
