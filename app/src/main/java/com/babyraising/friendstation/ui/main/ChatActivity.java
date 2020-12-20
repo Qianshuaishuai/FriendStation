@@ -37,16 +37,23 @@ import com.babyraising.friendstation.adapter.ChatAdapter;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.TIMChatBean;
+import com.babyraising.friendstation.bean.TimCustomBean;
+import com.babyraising.friendstation.bean.TimRTCInviteBean;
+import com.babyraising.friendstation.bean.TimRTCResultBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.event.DeleteEvent;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.util.FileUtil;
+import com.babyraising.friendstation.util.GenerateTestUserSigForRTC;
 import com.babyraising.friendstation.util.T;
 import com.github.lassana.recorder.AudioRecorder;
 import com.github.lassana.recorder.AudioRecorderBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nanchen.compresshelper.CompressHelper;
+import com.tencent.imsdk.message.CustomElement;
+import com.tencent.imsdk.message.MessageBaseElement;
 import com.tencent.imsdk.v2.V2TIMAdvancedMsgListener;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMMessage;
@@ -54,7 +61,13 @@ import com.tencent.imsdk.v2.V2TIMMessageManager;
 import com.tencent.imsdk.v2.V2TIMMessageReceipt;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
 import com.tencent.imsdk.v2.V2TIMValueCallback;
+import com.tencent.trtc.TRTCCloud;
+import com.tencent.trtc.TRTCCloudDef;
+import com.tencent.trtc.TRTCCloudListener;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.xutils.common.Callback;
 import org.xutils.common.util.KeyValue;
 import org.xutils.http.RequestParams;
@@ -75,12 +88,16 @@ import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.tencent.trtc.TRTCCloudDef.TRTC_APP_SCENE_AUDIOCALL;
+import static com.tencent.trtc.TRTCCloudDef.TRTC_APP_SCENE_VIDEOCALL;
+
 @ContentView(R.layout.activity_chat)
 public class ChatActivity extends BaseActivity {
 
     private UserAllInfoBean currentUserBean;
     private UserAllInfoBean selfUserBean;
     private int currentChatId = 0;
+    private int currentRoomId = 0;
     private Gson gson = new Gson();
 
     private int voiceOrTextStatus = 0;
@@ -236,13 +253,13 @@ public class ChatActivity extends BaseActivity {
 
     @Event(R.id.layout_camera)
     private void cameraClick(View view) {
-
+        sendRTCInvite(Constant.TIM_RTC_CLOUD_ROOM_PREFIX + selfUserBean.getId(), 1);
         photoLayout.setVisibility(View.GONE);
     }
 
     @Event(R.id.layout_photo)
     private void selectPhoto(View view) {
-
+        sendRTCInvite(Constant.TIM_RTC_CLOUD_ROOM_PREFIX + selfUserBean.getId(), 2);
         photoLayout.setVisibility(View.GONE);
     }
 
@@ -279,6 +296,40 @@ public class ChatActivity extends BaseActivity {
         initVoiceTip();
         initRecorder();
         initMediaPlayer();
+        initRTCListener();
+
+        initDeleteEvent();
+    }
+
+    private void initDeleteEvent() {
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    private void initRTCListener() {
+        TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
+        mTRTCCloud.setListener(new TRTCCloudListener() {
+            @Override
+            public void onError(int i, String s, Bundle bundle) {
+                super.onError(i, s, bundle);
+                System.out.println("trtcCloud init :" + s);
+            }
+
+            @Override
+            public void onEnterRoom(long l) {
+                super.onEnterRoom(l);
+                if (l > 0) {
+                    System.out.println("进房成功，总计耗时:" + l);
+                } else {
+                    System.out.println("进房失败，错误码:" + l);
+                }
+            }
+        });
     }
 
     private void initMediaPlayer() {
@@ -319,6 +370,8 @@ public class ChatActivity extends BaseActivity {
             @Override
             public void onRecvNewMessage(V2TIMMessage msg) {
                 super.onRecvNewMessage(msg);
+                System.out.println("get new message :" + gson.toJson(msg));
+                getMessageList();
             }
 
             @Override
@@ -346,6 +399,14 @@ public class ChatActivity extends BaseActivity {
     private void sendImageMessage(String picUrl) {
         V2TIMMessage message = V2TIMManager.getMessageManager().createImageMessage(picUrl);
         sendMessage(message);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (currentUserBean != null){
+            getMessageList();
+        }
     }
 
     private void sendMessage(V2TIMMessage message) {
@@ -474,6 +535,12 @@ public class ChatActivity extends BaseActivity {
         });
     }
 
+    private void startVoiceSelfActivity(TimRTCInviteBean bean) {
+        Intent intent = new Intent(this, VoiceSelfActivity.class);
+        intent.putExtra("voice-send-bean", gson.toJson(bean));
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -483,6 +550,11 @@ public class ChatActivity extends BaseActivity {
             if (!TextUtils.isEmpty(word)) {
                 sendTextMessage(word);
             }
+        }
+
+        if (requestCode == Constant.CODE_VOICE_TIP_REQUEST) {
+            int receiptStatus = data.getIntExtra("receiptStatus", 0);
+            sendReceiptMessage(receiptStatus);
         }
 
         switch (requestCode) {
@@ -499,7 +571,6 @@ public class ChatActivity extends BaseActivity {
                 break;
             case RC_TAKE_PHOTO:
                 if (!TextUtils.isEmpty(mTempPhotoPath)) {
-//
                     uploadPic(mTempPhotoPath);
                 } else {
                     T.s("选择照片出错");
@@ -526,7 +597,22 @@ public class ChatActivity extends BaseActivity {
                 System.out.println(gson.toJson(v2TIMMessages));
                 chatList.clear();
                 for (int n = 0; n < v2TIMMessages.size(); n++) {
-                    chatList.add(v2TIMMessages.get(n));
+                    List<MessageBaseElement> elements = v2TIMMessages.get(n).getMessage().getMessageBaseElements();
+                    boolean isNoneMessage = false;
+                    if (elements.size() > 0) {
+                        if (elements.get(0) instanceof CustomElement) {
+                            TimCustomBean bean = gson.fromJson(new String(((CustomElement) elements.get(0)).getData()), TimCustomBean.class);
+                            if (bean.getMsgType() == Constant.INVITE_CHAT_ROOM_CODE) {
+                                isNoneMessage = true;
+                            }else if (bean.getMsgType() == Constant.RESULT_CHAT_ROOM_CODE && bean.getResultBean().getReceipt() == 1){
+                                isNoneMessage = true;
+                            }
+                        }
+                    }
+                    if (!isNoneMessage) {
+                        chatList.add(v2TIMMessages.get(n));
+                    }
+
                 }
                 Collections.sort(chatList, new Comparator<V2TIMMessage>() {
                     @Override
@@ -552,7 +638,21 @@ public class ChatActivity extends BaseActivity {
             public void onSuccess(List<V2TIMMessage> v2TIMMessages) {
                 System.out.println("getMessageListMore success");
                 for (int n = 0; n < v2TIMMessages.size(); n++) {
-                    chatList.add(v2TIMMessages.get(n));
+                    List<MessageBaseElement> elements = v2TIMMessages.get(n).getMessage().getMessageBaseElements();
+                    boolean isNoneMessage = false;
+                    if (elements.size() > 0) {
+                        if (elements.get(0) instanceof CustomElement) {
+                            TimCustomBean bean = gson.fromJson(new String(((CustomElement) elements.get(0)).getData()), TimCustomBean.class);
+                            if (bean.getMsgType() == Constant.INVITE_CHAT_ROOM_CODE) {
+                                isNoneMessage = true;
+                            }else if (bean.getMsgType() == Constant.RESULT_CHAT_ROOM_CODE && bean.getResultBean().getReceipt() == 1){
+                                isNoneMessage = true;
+                            }
+                        }
+                    }
+                    if (!isNoneMessage) {
+                        chatList.add(v2TIMMessages.get(n));
+                    }
                 }
                 Collections.sort(chatList, new Comparator<V2TIMMessage>() {
                     @Override
@@ -624,6 +724,7 @@ public class ChatActivity extends BaseActivity {
 
     private void goToListBottom() {
         LinearLayoutManager linearLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
+//        linearLayoutManager.setStackFromEnd(true);
         linearLayoutManager.scrollToPositionWithOffset(adapter.getItemCount() - 1, Integer.MIN_VALUE);
     }
 
@@ -632,113 +733,52 @@ public class ChatActivity extends BaseActivity {
         chatList = new ArrayList<>();
         adapter = new ChatAdapter(this, chatList, selfUserBean, currentUserBean);
         LinearLayoutManager manager = new LinearLayoutManager(this);
-        manager.setStackFromEnd(true);
         chatListRecycleView.setLayoutManager(manager);
         chatListRecycleView.setAdapter(adapter);
     }
 
-    private void uploadPic(String localPic) {
-        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
-        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_UPLOAD);
-        params.addHeader("Authorization", bean.getAccessToken());
-        File oldFile = new File(localPic);
-        File newFile = new CompressHelper.Builder(this)
-                .setMaxWidth(720)  // 默认最大宽度为720
-                .setMaxHeight(960) // 默认最大高度为960
-                .setQuality(80)    // 默认压缩质量为80
-                .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
-                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
-                .build()
-                .compressToFile(oldFile);
-        params.setAsJsonContent(true);
-        List<KeyValue> list = new ArrayList<>();
-        list.add(new KeyValue("file", newFile));
-        MultipartBody body = new MultipartBody(list, "UTF-8");
-        params.setRequestBody(body);
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Gson gson = new Gson();
-                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
-                switch (response.getCode()) {
-                    case 200:
-                        sendImageMessage(response.getData());
-                        break;
-                    default:
-                        T.s(response.getMsg());
-                        break;
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("错误处理:" + ex);
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
+    private void uploadPic(final String localPic) {
+        sendImageMessage(localPic);
     }
 
-    private void uploadRecord(String recordPic, final int timeOffset) {
-        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
-        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_UPLOAD);
-        params.addHeader("Authorization", bean.getAccessToken());
-        File oldFile = new File(recordPic);
-        params.setAsJsonContent(true);
-        List<KeyValue> list = new ArrayList<>();
-        list.add(new KeyValue("file", oldFile));
-        MultipartBody body = new MultipartBody(list, "UTF-8");
-        params.setRequestBody(body);
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                Gson gson = new Gson();
-                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
-                System.out.println("uploadRecord:" + response.getData());
-                switch (response.getCode()) {
-                    case 200:
-                        sendVoiceMessage(response.getData(), timeOffset);
-                        break;
-                    default:
-                        T.s(response.getMsg());
-                        break;
-                }
-            }
+    private void uploadRecord(final String recordPic, final int timeOffset) {
+        sendVoiceMessage(recordPic, timeOffset);
+    }
 
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("错误处理:" + ex);
-            }
+    private void sendReceiptMessage(int status) {
+        TimCustomBean customBean = new TimCustomBean();
+        TimRTCResultBean resultBean = new TimRTCResultBean();
+        resultBean.setReceipt(status);
+        customBean.setMsgType(Constant.RESULT_CHAT_ROOM_CODE);
+        customBean.setResultBean(resultBean);
+        V2TIMMessage message = V2TIMManager.getMessageManager().createCustomMessage(gson.toJson(customBean).getBytes());
+        sendMessage(message);
+    }
 
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
+    private void sendRTCInvite(int roomId, int mode) {
+        TimCustomBean customBean = new TimCustomBean();
+        TimRTCInviteBean bean = new TimRTCInviteBean();
+        bean.setInviteId(selfUserBean.getId());
+        bean.setReceiveId(currentUserBean.getId());
+        bean.setRoomId(roomId);
+        bean.setType(mode);
+        bean.setInviteName(selfUserBean.getNickname());
+        bean.setReceiveName(currentUserBean.getNickname());
+        customBean.setMsgType(Constant.INVITE_CHAT_ROOM_CODE);
+        customBean.setInviteBean(bean);
+        V2TIMMessage message = V2TIMManager.getMessageManager().createCustomMessage(gson.toJson(customBean).getBytes());
+        sendMessage(message);
+        startVoiceSelfActivity(bean);
     }
 
     private void takePhoto() {
         Intent intentToTakePhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File fileDir = new File(Environment.getExternalStorageDirectory() + File.separator + "photoTest" + File.separator);
+        File fileDir = new File(Environment.getExternalStorageDirectory() + File.separator + "chatTest" + File.separator);
         if (!fileDir.exists()) {
             fileDir.mkdirs();
         }
 
-        File photoFile = new File(fileDir, "photo.jpeg");
+        File photoFile = new File(fileDir, System.currentTimeMillis() + "chat.jpeg");
         mTempPhotoPath = photoFile.getAbsolutePath();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -771,5 +811,11 @@ public class ChatActivity extends BaseActivity {
         // 初始化控件，注意这里是通过view.findViewById
         final TextView content = (TextView) view.findViewById(R.id.content);
         voiceLoadingTip.setCanceledOnTouchOutside(false);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onDeleteEvent(DeleteEvent event) {
+        System.out.println("delete notify");
+        getMessageList();
     }
 }

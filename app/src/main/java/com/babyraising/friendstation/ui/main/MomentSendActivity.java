@@ -294,6 +294,7 @@ public class MomentSendActivity extends BaseActivity {
             public void onSuccess(String result) {
                 Gson gson = new Gson();
                 UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("uploadPic:" + response.getData());
                 switch (response.getCode()) {
                     case 200:
                         T.s("上传成功");
@@ -451,13 +452,16 @@ public class MomentSendActivity extends BaseActivity {
 
         switch (requestCode) {
             case RC_CHOOSE_PHOTO:
-                Uri uri = data.getData();
-                String filePath = FileUtil.getFilePathByUri(this, uri);
-                if (!TextUtils.isEmpty(filePath)) {
-                    uploadPic(filePath);
-                } else {
-                    T.s("选择照片出错");
+                if (data != null) {
+                    Uri uri = data.getData();
+                    String filePath = FileUtil.getFilePathByUri(this, uri);
+                    if (!TextUtils.isEmpty(filePath)) {
+                        uploadPic(filePath);
+                    } else {
+                        T.s("选择照片出错");
+                    }
                 }
+
                 break;
             case RC_TAKE_PHOTO:
                 if (!TextUtils.isEmpty(mTempPhotoPath)) {

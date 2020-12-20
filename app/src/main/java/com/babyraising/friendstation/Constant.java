@@ -3,10 +3,17 @@ package com.babyraising.friendstation;
 public class Constant {
     public static final Boolean DEBUG = true;
 
+    public static final int RESULT_CHAT_ROOM_CODE = 9998;
+    public static final int INVITE_CHAT_ROOM_CODE = 9999;
+
+    public static final int CODE_VOICE_TIP_REQUEST = 11111;
+
     public static final int OFFICIAL_INTO_CHAT_CODE = 999;
     public static final int REQUEST_PERMISSION_CODE = 101;
 
     public static final int TIM_SDK_APPID = 1400457648;
+    public static final int RTC_SDK_APPID = 1400462920;
+    public static final int TIM_RTC_CLOUD_ROOM_PREFIX = 20200000;
     public static final String TIM_SDK_PREFIX = "FriendStation";
 
     public static final int ACTIVITY_COMMON_REQUEST = 10001;

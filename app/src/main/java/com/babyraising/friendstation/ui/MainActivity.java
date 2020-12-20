@@ -34,6 +34,7 @@ import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.response.UmsGetCodeResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
+import com.babyraising.friendstation.service.RTCService;
 import com.babyraising.friendstation.ui.show.FindFragment;
 import com.babyraising.friendstation.ui.show.MomentFragment;
 import com.babyraising.friendstation.ui.show.NoticeFragment;
@@ -351,6 +352,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                 @Override
                 public void onSuccess() {
                     System.out.println("IMSDK Login Success");
+                    startRTCService();
                 }
 
                 @Override
@@ -360,6 +362,12 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
             };
             V2TIMManager.getInstance().login(userId, GenerateTestUserSig.genTestUserSig(userId), callback);
         }
+    }
+
+
+    private void startRTCService() {
+        Intent service = new Intent(this, RTCService.class);
+        startService(service);
     }
 
     private void startLoginActivity() {
@@ -374,14 +382,16 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         V2TIMCallback callback = new V2TIMCallback() {
             @Override
             public void onSuccess() {
-
+                System.out.println("logout success");
             }
 
             @Override
             public void onError(int code, String desc) {
-
+                System.out.println("logout error:" + desc + ",code:" + code);
             }
         };
         V2TIMManager.getInstance().logout(callback);
+        Intent intent = new Intent(this, RTCService.class);
+        stopService(intent);
     }
 }

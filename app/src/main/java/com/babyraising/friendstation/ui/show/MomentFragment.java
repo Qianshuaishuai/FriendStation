@@ -20,6 +20,7 @@ import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.MomentDetailBean;
 import com.babyraising.friendstation.bean.ScoreRecordBean;
 import com.babyraising.friendstation.request.FollowRequest;
+import com.babyraising.friendstation.request.LikeDetailRequest;
 import com.babyraising.friendstation.request.LikeRequest;
 import com.babyraising.friendstation.request.UpdateAlbumRequest;
 import com.babyraising.friendstation.response.MomentResponse;
@@ -261,15 +262,19 @@ public class MomentFragment extends BaseFragment {
         });
     }
 
-    public void likeUser(int id) {
+    public void likeUser(int momentId,int userId) {
         LikeRequest request = new LikeRequest();
-        request.setId(id);
+        LikeDetailRequest request1 = new LikeDetailRequest();
+        request1.setMomentId(momentId);
+        request.setSaveVO(request1);
         CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
         Gson gson = new Gson();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_MOMENTLIKE_SAVE);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         params.setBodyContent(gson.toJson(request));
+        System.out.println(gson.toJson(request));
+        System.out.println(bean.getAccessToken());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -305,9 +310,11 @@ public class MomentFragment extends BaseFragment {
         });
     }
 
-    public void cancelLikeUser(int id) {
+    public void cancelLikeUser(int momentId,int userId) {
         LikeRequest request = new LikeRequest();
-        request.setId(id);
+        LikeDetailRequest request1 = new LikeDetailRequest();
+        request1.setMomentId(momentId);
+        request.setSaveVO(request1);
         CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
         Gson gson = new Gson();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_MOMENTLIKE_DELETE);

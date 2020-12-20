@@ -3,6 +3,7 @@ package com.babyraising.friendstation.ui.main;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,6 +25,12 @@ public class VoiceSendActivity extends BaseActivity {
 
     @ViewInject(R.id.name)
     private TextView name;
+
+    @ViewInject(R.id.head)
+    private ImageView head;
+
+    @ViewInject(R.id.tip)
+    private TextView tip;
 
     @Event(R.id.close)
     private void closeClick(View view) {

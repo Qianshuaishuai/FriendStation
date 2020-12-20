@@ -1,9 +1,8 @@
 package com.babyraising.friendstation.ui.main;
 
 import android.content.Intent;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,25 +43,20 @@ import java.util.List;
 import static com.tencent.trtc.TRTCCloudDef.TRTC_APP_SCENE_AUDIOCALL;
 import static com.tencent.trtc.TRTCCloudDef.TRTC_APP_SCENE_VIDEOCALL;
 
-@ContentView(R.layout.activity_voice_tip)
-public class VoiceTipActivity extends BaseActivity {
+@ContentView(R.layout.activity_voice_self)
+public class VoiceSelfActivity extends BaseActivity {
 
     private TimRTCInviteBean bean;
     private UserAllInfoBean userAllInfoBean;
     private Gson gson = new Gson();
 
-    @Event(R.id.layout_close)
-    private void closeLayoutClick(View view) {
-        refuseTIMRTC();
-    }
-
-    @Event(R.id.layout_receipt)
-    private void receiptLayoutClick(View view) {
-        receiptTMRTC();
-    }
-
     @Event(R.id.layout_time_cancel)
     private void cancelLayoutClick(View view) {
+//        if (chat_time == 0){
+//            refuseTIMRTC();
+//        }else{
+//            cancelTIMRTC();
+//        }
         cancelTIMRTC();
     }
 
@@ -72,8 +66,8 @@ public class VoiceTipActivity extends BaseActivity {
     @ViewInject(R.id.layout_time)
     private RelativeLayout timeLayout;
 
-    @ViewInject(R.id.layout_button)
-    private RelativeLayout buttonLayout;
+    @ViewInject(R.id.layout_time_tip)
+    private RelativeLayout timeTipLayout;
 
     @ViewInject(R.id.time_tip)
     private TextView timeTip;
@@ -90,30 +84,29 @@ public class VoiceTipActivity extends BaseActivity {
     }
 
     private void initData() {
-        Gson gson = new Gson();
         Intent intent = getIntent();
-        bean = gson.fromJson(intent.getStringExtra("voice-invite-bean"), TimRTCInviteBean.class);
+        bean = gson.fromJson(intent.getStringExtra("voice-send-bean"), TimRTCInviteBean.class);
+        System.out.println(intent.getStringExtra("voice-send-bean"));
         if (bean != null) {
-            content.setText(bean.getInviteName() + " 向你发来语音请求");
+            content.setText(bean.getInviteName() + "你正在向 " + bean.getReceiveName() + " 发送语音邀请");
         } else {
-            T.s("未找到邀请人信息");
+            T.s("未找到接收人信息");
             finish();
         }
 
         userAllInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
     }
 
-    private void refuseTIMRTC() {
-        sendReceiptMessage(-1);
-        finish();
-    }
-
-
     private void cancelTIMRTC() {
         timeHander.removeCallbacks(mCounter);
         TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
         mTRTCCloud.exitRoom();
-        sendReceiptMessage(0);
+        sendResultMessage(0);
+        finish();
+    }
+
+    private void refuseTIMRTC() {
+        sendResultMessage(-1);
         finish();
     }
 
@@ -122,11 +115,6 @@ public class VoiceTipActivity extends BaseActivity {
         TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
         mTRTCCloud.exitRoom();
         finish();
-    }
-
-    private void receiptTMRTC() {
-        sendReceiptMessage(1);
-        enterRoomTIMRTC();
     }
 
     private void enterRoomTIMRTC() {
@@ -170,10 +158,8 @@ public class VoiceTipActivity extends BaseActivity {
             }
         });
         mTRTCCloud.enterRoom(trtcParams, APP_SCENE);
-        T.s("连接中");
 
-        buttonLayout.setVisibility(View.GONE);
-        timeLayout.setVisibility(View.VISIBLE);
+        timeTipLayout.setVisibility(View.VISIBLE);
 
         chat_time = 0;
         timeHander.post(mCounter);
@@ -188,7 +174,7 @@ public class VoiceTipActivity extends BaseActivity {
         }
     };
 
-    private void sendReceiptMessage(int status) {
+    private void sendResultMessage(int status) {
         TimCustomBean customBean = new TimCustomBean();
         TimRTCResultBean resultBean = new TimRTCResultBean();
         resultBean.setReceipt(status);
@@ -202,7 +188,7 @@ public class VoiceTipActivity extends BaseActivity {
     }
 
     private void sendMessage(V2TIMMessage message) {
-        String currentUserId = String.valueOf(bean.getInviteId());
+        String currentUserId = String.valueOf(bean.getReceiveId());
         V2TIMSendCallback callback = new V2TIMSendCallback<V2TIMMessage>() {
             @Override
             public void onSuccess(V2TIMMessage message) {
@@ -227,14 +213,14 @@ public class VoiceTipActivity extends BaseActivity {
             @Override
             public void onRecvNewMessage(V2TIMMessage msg) {
                 super.onRecvNewMessage(msg);
-                System.out.println("voiceTip new message :" + gson.toJson(msg));
+                System.out.println("voiceSelf new message :" + gson.toJson(msg));
                 //判断是否是音视频聊天邀请
                 List<MessageBaseElement> elements = msg.getMessage().getMessageBaseElements();
                 if (elements.size() > 0) {
                     if (elements.get(0) instanceof CustomElement) {
                         String objectStr = new String(((CustomElement) elements.get(0)).getData());
                         TimCustomBean bean = gson.fromJson(objectStr, TimCustomBean.class);
-                        System.out.println("接收方收到发送方反馈 result：" + gson.toJson(bean));
+                        System.out.println("发送方收到接收方反馈 result：" + gson.toJson(bean));
                         switch (bean.getMsgType()) {
                             case Constant.RESULT_CHAT_ROOM_CODE:
                                 switch (bean.getResultBean().getReceipt()) {
@@ -242,7 +228,7 @@ public class VoiceTipActivity extends BaseActivity {
                                         cancelTIMRTC2();
                                         break;
                                     case -1:
-                                        T.s("对方挂断语音邀请");
+                                        T.s("对方拒绝语音邀请");
                                         finish();
                                         break;
                                     case 1:

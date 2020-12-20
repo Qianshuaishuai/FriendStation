@@ -38,8 +38,7 @@
             android:id="@+id/head"
             android:layout_width="93dip"
             android:layout_height="93dip"
-            android:layout_marginTop="48dip"
-            android:background="#ffffff" />
+            android:layout_marginTop="48dip" />
 
         <TextView
             android:id="@+id/name"
@@ -64,6 +63,7 @@
                 android:background="@drawable/shape_voice_send_top_two_bg">
 
                 <TextView
+                    android:id="@+id/tip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"

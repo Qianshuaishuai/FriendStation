@@ -107,7 +107,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                     @Override
                     public void onClick(View view) {
 //                        context.followUser(mList.get(position).getUserId());
-                        context.goToChat(mList.get(position).getId());
+                        context.goToChat(position);
                     }
                 });
                 break;
@@ -129,7 +129,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                     @Override
                     public void onClick(View view) {
 //                        context.followUser(mList.get(position).getUserId());
-                        context.likeUser(mList.get(position).getUserId());
+                        context.likeUser(mList.get(position).getMomentId(),mList.get(position).getUserId());
                     }
                 });
                 break;
@@ -138,7 +138,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                 holder.likeIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        context.cancelLikeUser(mList.get(position).getUserId());
+                        context.cancelLikeUser(mList.get(position).getMomentId(),mList.get(position).getUserId());
                     }
                 });
                 break;

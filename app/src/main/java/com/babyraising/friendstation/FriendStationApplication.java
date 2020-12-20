@@ -2,11 +2,14 @@ package com.babyraising.friendstation;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.service.RTCService;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -14,6 +17,8 @@ import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMSDKConfig;
 import com.tencent.imsdk.v2.V2TIMSDKListener;
 import com.tencent.imsdk.v2.V2TIMUserFullInfo;
+import com.tencent.trtc.TRTCCloud;
+import com.tencent.trtc.TRTCCloudListener;
 
 import org.xutils.x;
 
@@ -25,6 +30,7 @@ public class FriendStationApplication extends Application {
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private Gson gson;
+    private TRTCCloud mTRTCCloud;
 
     @Override
     public void onCreate() {
@@ -42,6 +48,16 @@ public class FriendStationApplication extends Application {
 
         initCommonWord();
         initTimSDK();
+        initTRTCClound();
+    }
+
+    private void initTRTCClound() {
+        // 创建 trtcCloud 实例
+        mTRTCCloud = TRTCCloud.sharedInstance(getApplicationContext());
+    }
+
+    public TRTCCloud getmTRTCCloud() {
+        return mTRTCCloud;
     }
 
     private void initTimSDK() {
