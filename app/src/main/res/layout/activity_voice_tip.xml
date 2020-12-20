@@ -49,6 +49,21 @@
         </RelativeLayout>
     </RelativeLayout>
 
+
+    <com.tencent.rtmp.ui.TXCloudVideoView
+        android:id="@+id/match_video"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"></com.tencent.rtmp.ui.TXCloudVideoView>
+
+    <com.tencent.rtmp.ui.TXCloudVideoView
+        android:id="@+id/small_video"
+        android:layout_width="150dip"
+        android:layout_height="200dip"
+        android:layout_alignParentRight="true"
+        android:visibility="gone"></com.tencent.rtmp.ui.TXCloudVideoView>
+
     <RelativeLayout
         android:id="@+id/layout_time"
         android:layout_width="match_parent"

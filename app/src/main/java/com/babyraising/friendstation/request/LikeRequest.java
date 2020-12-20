@@ -1,13 +1,13 @@
 package com.babyraising.friendstation.request;
 
 public class LikeRequest {
-    private LikeDetailRequest saveVO;
+    private LikeDetailRequest momentLikeSaveV0;
 
-    public LikeDetailRequest getSaveVO() {
-        return saveVO;
+    public LikeDetailRequest getMomentLikeSaveV0() {
+        return momentLikeSaveV0;
     }
 
-    public void setSaveVO(LikeDetailRequest saveVO) {
-        this.saveVO = saveVO;
+    public void setMomentLikeSaveV0(LikeDetailRequest momentLikeSaveV0) {
+        this.momentLikeSaveV0 = momentLikeSaveV0;
     }
 }

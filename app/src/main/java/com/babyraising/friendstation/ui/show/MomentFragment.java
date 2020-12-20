@@ -262,19 +262,17 @@ public class MomentFragment extends BaseFragment {
         });
     }
 
-    public void likeUser(int momentId,int userId) {
+    public void likeUser(int momentId) {
         LikeRequest request = new LikeRequest();
         LikeDetailRequest request1 = new LikeDetailRequest();
         request1.setMomentId(momentId);
-        request.setSaveVO(request1);
+        request.setMomentLikeSaveV0(request1);
         CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
         Gson gson = new Gson();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_MOMENTLIKE_SAVE);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
-        params.setBodyContent(gson.toJson(request));
-        System.out.println(gson.toJson(request));
-        System.out.println(bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request1));
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -310,17 +308,17 @@ public class MomentFragment extends BaseFragment {
         });
     }
 
-    public void cancelLikeUser(int momentId,int userId) {
+    public void cancelLikeUser(int momentId) {
         LikeRequest request = new LikeRequest();
         LikeDetailRequest request1 = new LikeDetailRequest();
         request1.setMomentId(momentId);
-        request.setSaveVO(request1);
+        request.setMomentLikeSaveV0(request1);
         CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
         Gson gson = new Gson();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_MOMENTLIKE_DELETE);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
-        params.setBodyContent(gson.toJson(request));
+        params.setBodyContent(gson.toJson(request1));
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

@@ -28,6 +28,7 @@ import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMMessage;
 import com.tencent.imsdk.v2.V2TIMMessageReceipt;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
+import com.tencent.rtmp.ui.TXCloudVideoView;
 import com.tencent.trtc.TRTCCloud;
 import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCCloudListener;
@@ -42,6 +43,7 @@ import java.util.List;
 
 import static com.tencent.trtc.TRTCCloudDef.TRTC_APP_SCENE_AUDIOCALL;
 import static com.tencent.trtc.TRTCCloudDef.TRTC_APP_SCENE_VIDEOCALL;
+import static com.tencent.trtc.TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SMALL;
 
 @ContentView(R.layout.activity_voice_self)
 public class VoiceSelfActivity extends BaseActivity {
@@ -62,6 +64,12 @@ public class VoiceSelfActivity extends BaseActivity {
 
     @ViewInject(R.id.content)
     private TextView content;
+
+    @ViewInject(R.id.small_video)
+    private TXCloudVideoView smallVideo;
+
+    @ViewInject(R.id.match_video)
+    private TXCloudVideoView matchVideo;
 
     @ViewInject(R.id.layout_time)
     private RelativeLayout timeLayout;
@@ -100,6 +108,10 @@ public class VoiceSelfActivity extends BaseActivity {
     private void cancelTIMRTC() {
         timeHander.removeCallbacks(mCounter);
         TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
+        mTRTCCloud.stopLocalPreview();
+        mTRTCCloud.stopAllRemoteView();
+        mTRTCCloud.stopLocalAudio();
+        mTRTCCloud.stopRemoteView(String.valueOf(bean.getReceiveId()), TRTC_VIDEO_STREAM_TYPE_SMALL);
         mTRTCCloud.exitRoom();
         sendResultMessage(0);
         finish();
@@ -113,6 +125,10 @@ public class VoiceSelfActivity extends BaseActivity {
     private void cancelTIMRTC2() {
         timeHander.removeCallbacks(mCounter);
         TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
+        mTRTCCloud.stopLocalPreview();
+        mTRTCCloud.stopAllRemoteView();
+        mTRTCCloud.stopLocalAudio();
+        mTRTCCloud.stopRemoteView(String.valueOf(bean.getReceiveId()), TRTC_VIDEO_STREAM_TYPE_SMALL);
         mTRTCCloud.exitRoom();
         finish();
     }
@@ -124,19 +140,33 @@ public class VoiceSelfActivity extends BaseActivity {
         } else {
             APP_SCENE = TRTC_APP_SCENE_VIDEOCALL;
         }
-        TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
+        final TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
         TRTCCloudDef.TRTCParams trtcParams = new TRTCCloudDef.TRTCParams();
         trtcParams.sdkAppId = Constant.RTC_SDK_APPID;
         trtcParams.userId = String.valueOf(userAllInfoBean.getId());
         trtcParams.roomId = bean.getRoomId();
         trtcParams.userSig = GenerateTestUserSigForRTC.genTestUserSig(String.valueOf(userAllInfoBean.getId()));
         mTRTCCloud.setDefaultStreamRecvMode(true, true);
-        mTRTCCloud.startLocalAudio();
+        if (APP_SCENE == TRTC_APP_SCENE_AUDIOCALL) {
+            mTRTCCloud.startLocalAudio();
+        } else {
+            smallVideo.setVisibility(View.VISIBLE);
+            matchVideo.setVisibility(View.VISIBLE);
+            mTRTCCloud.startLocalPreview(true, smallVideo);
+            mTRTCCloud.startLocalAudio();
+            mTRTCCloud.startRemoteView(String.valueOf(bean.getReceiveId()), TRTC_VIDEO_STREAM_TYPE_SMALL, matchVideo);
+        }
         mTRTCCloud.setListener(new TRTCCloudListener() {
             @Override
             public void onUserAudioAvailable(String s, boolean b) {
                 super.onUserAudioAvailable(s, b);
                 System.out.println("onUserAudioAvailable:" + s + ", b:" + b);
+            }
+
+            @Override
+            public void onError(int i, String s, Bundle bundle) {
+                super.onError(i, s, bundle);
+                System.out.println("mTRTCCloud:" + s + ",code:" + i);
             }
 
             @Override
@@ -155,6 +185,11 @@ public class VoiceSelfActivity extends BaseActivity {
             public void onMicDidReady() {
                 super.onMicDidReady();
                 System.out.println("onMicDidReady");
+            }
+
+            @Override
+            public void onUserVideoAvailable(String s, boolean b) {
+                super.onUserVideoAvailable(s, b);
             }
         });
         mTRTCCloud.enterRoom(trtcParams, APP_SCENE);

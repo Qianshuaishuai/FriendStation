@@ -18,6 +18,7 @@ import com.tencent.imsdk.v2.V2TIMSDKConfig;
 import com.tencent.imsdk.v2.V2TIMSDKListener;
 import com.tencent.imsdk.v2.V2TIMUserFullInfo;
 import com.tencent.trtc.TRTCCloud;
+import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCCloudListener;
 
 import org.xutils.x;
@@ -54,6 +55,8 @@ public class FriendStationApplication extends Application {
     private void initTRTCClound() {
         // 创建 trtcCloud 实例
         mTRTCCloud = TRTCCloud.sharedInstance(getApplicationContext());
+        mTRTCCloud.setLogLevel(TRTCCloudDef.TRTC_LOG_LEVEL_DEBUG);
+        mTRTCCloud.setConsoleEnabled(true);
     }
 
     public TRTCCloud getmTRTCCloud() {
