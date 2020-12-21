@@ -3,8 +3,16 @@ package com.babyraising.friendstation.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +22,7 @@ import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.bean.EmojiBean;
 import com.babyraising.friendstation.bean.TIMChatBean;
 import com.babyraising.friendstation.bean.TIMChatMessageBaseElementsBean;
 import com.babyraising.friendstation.bean.TimCustomBean;
@@ -29,11 +38,22 @@ import com.tencent.imsdk.message.SoundElement;
 import com.tencent.imsdk.message.TextElement;
 import com.tencent.imsdk.v2.V2TIMMessage;
 
+import net.nightwhistler.htmlspanner.HtmlSpanner;
+
+import org.sufficientlysecure.htmltextview.HtmlResImageGetter;
+import org.sufficientlysecure.htmltextview.HtmlTextView;
+import org.xutils.common.Callback;
 import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
@@ -41,41 +61,52 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private UserAllInfoBean selfUserInfoBean;
     private UserAllInfoBean currentUserInfoBean;
     private ChatActivity context;
+    private List<EmojiBean> emojiList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView leftContentTxt, leftSoundTip, rightContentTxt, rightSoundTip, leftRtcTip, rightRtcTip;
-        ImageView leftIcon, leftIvContent, rightIcon, rightIvContent;
-        LinearLayout leftLayout, leftVoiceLayout, rightLayout, rightVoiceLayout, rightRtcLayout, leftRtcLayout;
+        TextView leftSoundTip, rightSoundTip, leftRtcTip, rightRtcTip, leftGiftTip, rightGiftTip;
+        TextView leftContentTxt, rightContentTxt;
+        ImageView leftIcon, leftIvContent, rightIcon, rightIvContent, leftGiftIcon, rightGiftIcon;
+        LinearLayout leftLayout, leftVoiceLayout, rightLayout, rightVoiceLayout, rightRtcLayout, leftRtcLayout, leftGiftLayout, rightGiftLayout, leftContentLayout, rightContentLayout;
 
 
         public ViewHolder(View view) {
             super(view);
             leftContentTxt = (TextView) view.findViewById(R.id.left_content);
             leftSoundTip = (TextView) view.findViewById(R.id.left_sound_tip);
+            leftGiftTip = (TextView) view.findViewById(R.id.left_gift_name);
             leftRtcTip = (TextView) view.findViewById(R.id.left_rtc_tip);
             leftIcon = (ImageView) view.findViewById(R.id.left_icon);
+            leftGiftIcon = (ImageView) view.findViewById(R.id.left_iv_gift);
             leftIvContent = (ImageView) view.findViewById(R.id.left_iv_content);
             leftLayout = (LinearLayout) view.findViewById(R.id.left_layout);
             leftVoiceLayout = (LinearLayout) view.findViewById(R.id.left_layout_voice);
             leftRtcLayout = (LinearLayout) view.findViewById(R.id.left_layout_rtc);
+            leftGiftLayout = (LinearLayout) view.findViewById(R.id.layout_gift_left);
+            leftContentLayout = (LinearLayout) view.findViewById(R.id.layout_left_content);
 
             rightContentTxt = (TextView) view.findViewById(R.id.right_content);
             rightSoundTip = (TextView) view.findViewById(R.id.right_sound_tip);
             rightRtcTip = (TextView) view.findViewById(R.id.right_rtc_tip);
+            rightGiftTip = (TextView) view.findViewById(R.id.right_gift_name);
             rightIcon = (ImageView) view.findViewById(R.id.right_icon);
+            rightGiftIcon = (ImageView) view.findViewById(R.id.right_iv_gift);
             rightIvContent = (ImageView) view.findViewById(R.id.right_iv_content);
             rightLayout = (LinearLayout) view.findViewById(R.id.right_layout);
             rightVoiceLayout = (LinearLayout) view.findViewById(R.id.right_layout_voice);
             rightRtcLayout = (LinearLayout) view.findViewById(R.id.right_layout_rtc);
+            rightGiftLayout = (LinearLayout) view.findViewById(R.id.layout_gift_right);
+            rightContentLayout = (LinearLayout) view.findViewById(R.id.layout_right_content);
         }
 
     }
 
-    public ChatAdapter(ChatActivity context, List<V2TIMMessage> mList, UserAllInfoBean selfUserInfoBean, UserAllInfoBean currentUserInfoBean) {
+    public ChatAdapter(ChatActivity context, List<V2TIMMessage> mList, List<EmojiBean> emojiList, UserAllInfoBean selfUserInfoBean, UserAllInfoBean currentUserInfoBean) {
         this.selfUserInfoBean = selfUserInfoBean;
         this.currentUserInfoBean = currentUserInfoBean;
         this.mList = mList;
         this.context = context;
+        this.emojiList = emojiList;
     }
 
     @Override
@@ -95,6 +126,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         holder.rightVoiceLayout.setVisibility(View.GONE);
         holder.rightRtcLayout.setVisibility(View.GONE);
         holder.leftRtcLayout.setVisibility(View.GONE);
+        holder.rightGiftLayout.setVisibility(View.GONE);
+        holder.leftGiftLayout.setVisibility(View.GONE);
+        holder.leftContentLayout.setVisibility(View.GONE);
+        holder.rightContentLayout.setVisibility(View.GONE);
 
         if (mList.get(position).getMessage().getReceiverUserID().equals(String.valueOf(selfUserInfoBean.getId()))) {
             holder.leftLayout.setVisibility(View.VISIBLE);
@@ -103,10 +138,57 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             if (elements.size() > 0) {
                 if (elements.get(0) instanceof TextElement) {
                     if (!TextUtils.isEmpty(((TextElement) elements.get(0)).getTextContent())) {
-                        holder.leftContentTxt.setText(((TextElement) elements.get(0)).getTextContent());
-                    }
+                        holder.leftContentLayout.setVisibility(View.VISIBLE);
+                        holder.leftContentLayout.removeAllViews();
+                        String showContent = ((TextElement) elements.get(0)).getTextContent();
+                        boolean isHaveEmoji = false;
+                        for (int e = 0; e < emojiList.size(); e++) {
+                            int brokenInt = 0;
+                            while (showContent.indexOf(emojiList.get(e).getName()) != -1 && brokenInt <= 100) {
+                                isHaveEmoji = true;
+                                int emojiStartIndex = showContent.indexOf(emojiList.get(e).getName());
+                                if (emojiStartIndex == 0) {
+                                    String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+                                    ImageView imageView = new ImageView(context);
+                                    LinearLayout.LayoutParams params = new
+                                            LinearLayout.LayoutParams(25, 25);
+                                    imageView.setLayoutParams(params);
+                                    x.image().bind(imageView, emojiList.get(e).getUrl());
+                                    holder.leftContentLayout.addView(imageView);
+                                    showContent = showContent.replaceFirst(regexp, "");
+                                } else {
+                                    String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+                                    String text = showContent.substring(0, emojiStartIndex);
+                                    TextView textView = new TextView(context);
+                                    textView.setText(text);
+                                    textView.setTextSize(14);
+                                    textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
+                                    holder.leftContentLayout.addView(textView);
+                                    showContent = showContent.replace(text, "");
 
-                    holder.leftContentTxt.setVisibility(View.VISIBLE);
+                                    ImageView imageView = new ImageView(context);
+                                    LinearLayout.LayoutParams params = new
+                                            LinearLayout.LayoutParams(25, 25);
+                                    imageView.setLayoutParams(params);
+                                    x.image().bind(imageView, emojiList.get(e).getUrl());
+                                    holder.leftContentLayout.addView(imageView);
+                                    showContent = showContent.replaceFirst(regexp, "");
+                                }
+
+                                brokenInt++;
+                            }
+//
+//
+                        }
+
+                        if (!isHaveEmoji || !TextUtils.isEmpty(showContent)) {
+                            TextView textView = new TextView(context);
+                            textView.setText(showContent);
+                            textView.setTextSize(14);
+                            textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
+                            holder.leftContentLayout.addView(textView);
+                        }
+                    }
                 }
 
                 if (elements.get(0) instanceof ImageElement) {
@@ -131,7 +213,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     Gson gson = new Gson();
                     CustomElement element = (CustomElement) elements.get(0);
                     TimCustomBean bean = gson.fromJson(new String(element.getData()), TimCustomBean.class);
-
                     switch (bean.getMsgType()) {
                         case Constant.RESULT_CHAT_ROOM_CODE:
                             holder.leftRtcLayout.setVisibility(View.VISIBLE);
@@ -140,7 +221,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             } else {
                                 holder.leftRtcTip.setText(" 时长: " + TimeUtils.getShowTime(bean.getResultBean().getDuration()));
                             }
-
+                            break;
+                        case Constant.GIFT_CHAT_CODE:
+                            if (bean.getGiftBean() != null) {
+                                holder.leftGiftLayout.setVisibility(View.VISIBLE);
+                                x.image().bind(holder.leftGiftIcon, bean.getGiftBean().getImage());
+                                if (!TextUtils.isEmpty(bean.getGiftBean().getTitle())) {
+                                    holder.leftGiftTip.setText(bean.getGiftBean().getTitle());
+                                }
+                            }
                             break;
                     }
                 }
@@ -166,10 +255,55 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             if (elements.size() > 0) {
                 if (elements.get(0) instanceof TextElement) {
                     if (!TextUtils.isEmpty(((TextElement) elements.get(0)).getTextContent())) {
-                        holder.rightContentTxt.setText(((TextElement) elements.get(0)).getTextContent());
-                    }
+                        holder.rightContentLayout.setVisibility(View.VISIBLE);
+                        holder.rightContentLayout.removeAllViews();
+                        String showContent = ((TextElement) elements.get(0)).getTextContent();
+                        String oldContent =showContent;
+                        boolean isHaveEmoji = false;
+                        for (int e = 0; e < emojiList.size(); e++) {
+                            while (showContent.indexOf(emojiList.get(e).getName()) != -1) {
+                                isHaveEmoji = true;
+                                int emojiStartIndex = showContent.indexOf(emojiList.get(e).getName());
+                                if (emojiStartIndex == 0) {
+                                    String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+                                    ImageView imageView = new ImageView(context);
+                                    LinearLayout.LayoutParams params = new
+                                            LinearLayout.LayoutParams(25, 25);
+                                    imageView.setLayoutParams(params);
+                                    x.image().bind(imageView, emojiList.get(e).getUrl());
+                                    holder.rightContentLayout.addView(imageView);
+                                    showContent = showContent.replaceFirst(regexp, "");
+                                } else {
+                                    String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+                                    String text = showContent.substring(0, emojiStartIndex);
+                                    TextView textView = new TextView(context);
+                                    textView.setText(text);
+                                    textView.setTextSize(14);
+                                    textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
+                                    holder.rightContentLayout.addView(textView);
+                                    showContent = showContent.replace(text, "");
 
-                    holder.rightContentTxt.setVisibility(View.VISIBLE);
+                                    ImageView imageView = new ImageView(context);
+                                    LinearLayout.LayoutParams params = new
+                                            LinearLayout.LayoutParams(25, 25);
+                                    imageView.setLayoutParams(params);
+                                    x.image().bind(imageView, emojiList.get(e).getUrl());
+                                    holder.rightContentLayout.addView(imageView);
+                                    showContent = showContent.replaceFirst(regexp, "");
+                                }
+                            }
+//
+//
+                        }
+
+                        if (!isHaveEmoji || !TextUtils.isEmpty(showContent)) {
+                            TextView textView = new TextView(context);
+                            textView.setText(showContent);
+                            textView.setTextSize(14);
+                            textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
+                            holder.rightContentLayout.addView(textView);
+                        }
+                    }
                 }
 
                 if (elements.get(0) instanceof ImageElement) {
@@ -194,7 +328,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     Gson gson = new Gson();
                     CustomElement element = (CustomElement) elements.get(0);
                     TimCustomBean bean = gson.fromJson(new String(element.getData()), TimCustomBean.class);
-
                     switch (bean.getMsgType()) {
                         case Constant.RESULT_CHAT_ROOM_CODE:
                             holder.rightRtcLayout.setVisibility(View.VISIBLE);
@@ -203,7 +336,15 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             } else {
                                 holder.rightRtcTip.setText(" 时长: " + TimeUtils.getShowTime(bean.getResultBean().getDuration()));
                             }
-
+                            break;
+                        case Constant.GIFT_CHAT_CODE:
+                            holder.rightGiftLayout.setVisibility(View.VISIBLE);
+                            if (bean.getGiftBean() != null) {
+                                x.image().bind(holder.rightGiftIcon, bean.getGiftBean().getImage());
+                                if (!TextUtils.isEmpty(bean.getGiftBean().getTitle())) {
+                                    holder.rightGiftTip.setText(bean.getGiftBean().getTitle());
+                                }
+                            }
                             break;
                     }
                 }
@@ -222,6 +363,27 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
     }
 
+    private String translateView(String content) {
+        String regexstr = "<img[^>]*>";
+        Pattern pImg = Pattern.compile(regexstr, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pImg.matcher(content);
+        while (matcher.find()) {
+            System.out.println(matcher.group());
+        }
+        return matcher.toString();
+    }
+
+    private String translateTxt(String content) {
+        String newContent = content;
+        for (int e = 0; e < emojiList.size(); e++) {
+            if (content.indexOf(emojiList.get(e).getName()) != -1) {
+                String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+                newContent = newContent.replaceAll(regexp, "<img src=\"" + emojiList.get(e).getUrl() + "\" style=\"width:50rpx;height:50rpx\"/>");
+            }
+        }
+        return newContent;
+    }
+
     @Override
     public int getItemCount() {
         return mList.size();
@@ -229,6 +391,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     public interface OnItemClickListener {
         void onClick(int position);
+
     }
 
     private OnItemClickListener listener;

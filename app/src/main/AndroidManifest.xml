@@ -56,7 +56,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".ui.user.PhotoActivity"></activity>
-        <activity android:name=".ui.main.ChatActivity" />
+        <activity
+            android:name=".ui.main.ChatActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ui.main.MomentSendActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"></activity>

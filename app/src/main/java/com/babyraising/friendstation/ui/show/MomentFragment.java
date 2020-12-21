@@ -19,6 +19,7 @@ import com.babyraising.friendstation.base.BaseFragment;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.MomentDetailBean;
 import com.babyraising.friendstation.bean.ScoreRecordBean;
+import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.request.FollowRequest;
 import com.babyraising.friendstation.request.LikeDetailRequest;
 import com.babyraising.friendstation.request.LikeRequest;
@@ -355,6 +356,11 @@ public class MomentFragment extends BaseFragment {
     }
 
     public void goToChat(int position) {
+        UserAllInfoBean userBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
+        if (userBean == null || userBean.getId() == 0) {
+            T.s("你当前的用户信息获取有误，请重新登录");
+            return;
+        }
         Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra("chat-user-id", list.get(position).getUserId());
         startActivity(intent);

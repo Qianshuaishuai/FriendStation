@@ -15,6 +15,7 @@ import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -22,6 +23,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,13 +37,17 @@ import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.adapter.ChatAdapter;
+import com.babyraising.friendstation.adapter.EmojiAdapter;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.EmojiBean;
+import com.babyraising.friendstation.bean.GiftDetailBean;
 import com.babyraising.friendstation.bean.TIMChatBean;
 import com.babyraising.friendstation.bean.TimCustomBean;
 import com.babyraising.friendstation.bean.TimRTCInviteBean;
 import com.babyraising.friendstation.bean.TimRTCResultBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.detector.KeyboardStatusDetector;
 import com.babyraising.friendstation.event.DeleteEvent;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
@@ -128,6 +135,9 @@ public class ChatActivity extends BaseActivity {
     @ViewInject(R.id.voice)
     private ImageView voice;
 
+    @ViewInject(R.id.emoji_list)
+    private RecyclerView emojiRecycleView;
+
     @Event(R.id.common_word)
     private void commonWordClick(View view) {
         Intent intent = new Intent(this, CommonWordActivity.class);
@@ -158,7 +168,7 @@ public class ChatActivity extends BaseActivity {
     @Event(R.id.chat1)
     private void chat1Click(View view) {
         Intent intent = new Intent(this, GiftActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, Constant.REQUEST_GIFT_CODE);
     }
 
     @Event(R.id.chat2)
@@ -180,7 +190,13 @@ public class ChatActivity extends BaseActivity {
 
     @Event(R.id.chat5)
     private void chat5Click(View view) {
+        if (emojiRecycleView.getVisibility() == View.VISIBLE) {
+            emojiRecycleView.setVisibility(View.GONE);
+        } else {
+            emojiRecycleView.setVisibility(View.VISIBLE);
+        }
 
+        content.clearFocus();
     }
 
     @Event(R.id.tip1)
@@ -278,7 +294,8 @@ public class ChatActivity extends BaseActivity {
     private String mTempPhotoPath;
     private String newHeadIconUrl;
     private Uri imageUri;
-
+    private List<EmojiBean> emojiList;
+    private EmojiAdapter emojiAdapter;
 
     private int status = 0;
 
@@ -299,6 +316,16 @@ public class ChatActivity extends BaseActivity {
         initRTCListener();
 
         initDeleteEvent();
+
+        initEmoji();
+    }
+
+    private void initEmoji() {
+        emojiList = ((FriendStationApplication) getApplication()).getEmojiList();
+        emojiAdapter = new EmojiAdapter(emojiList, this);
+        GridLayoutManager manager = new GridLayoutManager(this, 6);
+        emojiRecycleView.setLayoutManager(manager);
+        emojiRecycleView.setAdapter(emojiAdapter);
     }
 
     private void initDeleteEvent() {
@@ -404,7 +431,7 @@ public class ChatActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (currentUserBean != null){
+        if (currentUserBean != null) {
             getMessageList();
         }
     }
@@ -533,6 +560,17 @@ public class ChatActivity extends BaseActivity {
                 return true;
             }
         });
+
+        content.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (b) {
+                    emojiRecycleView.setVisibility(View.GONE);
+                }
+            }
+        });
+        content.clearFocus();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     private void startVoiceSelfActivity(TimRTCInviteBean bean) {
@@ -555,6 +593,13 @@ public class ChatActivity extends BaseActivity {
         if (requestCode == Constant.CODE_VOICE_TIP_REQUEST) {
             int receiptStatus = data.getIntExtra("receiptStatus", 0);
             sendReceiptMessage(receiptStatus);
+        }
+
+        if (requestCode == Constant.REQUEST_GIFT_CODE) {
+            if (data != null) {
+                GiftDetailBean giftDetailBean = gson.fromJson(data.getStringExtra("gift-bean"), GiftDetailBean.class);
+                sendGiftMessage(giftDetailBean);
+            }
         }
 
         switch (requestCode) {
@@ -604,7 +649,7 @@ public class ChatActivity extends BaseActivity {
                             TimCustomBean bean = gson.fromJson(new String(((CustomElement) elements.get(0)).getData()), TimCustomBean.class);
                             if (bean.getMsgType() == Constant.INVITE_CHAT_ROOM_CODE) {
                                 isNoneMessage = true;
-                            }else if (bean.getMsgType() == Constant.RESULT_CHAT_ROOM_CODE && bean.getResultBean().getReceipt() == 1){
+                            } else if (bean.getMsgType() == Constant.RESULT_CHAT_ROOM_CODE && bean.getResultBean().getReceipt() == 1) {
                                 isNoneMessage = true;
                             }
                         }
@@ -645,7 +690,7 @@ public class ChatActivity extends BaseActivity {
                             TimCustomBean bean = gson.fromJson(new String(((CustomElement) elements.get(0)).getData()), TimCustomBean.class);
                             if (bean.getMsgType() == Constant.INVITE_CHAT_ROOM_CODE) {
                                 isNoneMessage = true;
-                            }else if (bean.getMsgType() == Constant.RESULT_CHAT_ROOM_CODE && bean.getResultBean().getReceipt() == 1){
+                            } else if (bean.getMsgType() == Constant.RESULT_CHAT_ROOM_CODE && bean.getResultBean().getReceipt() == 1) {
                                 isNoneMessage = true;
                             }
                         }
@@ -731,7 +776,7 @@ public class ChatActivity extends BaseActivity {
     private void updateCurrentInfo() {
         name.setText(currentUserBean.getNickname());
         chatList = new ArrayList<>();
-        adapter = new ChatAdapter(this, chatList, selfUserBean, currentUserBean);
+        adapter = new ChatAdapter(this, chatList, emojiList, selfUserBean, currentUserBean);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         chatListRecycleView.setLayoutManager(manager);
         chatListRecycleView.setAdapter(adapter);
@@ -769,6 +814,21 @@ public class ChatActivity extends BaseActivity {
         V2TIMMessage message = V2TIMManager.getMessageManager().createCustomMessage(gson.toJson(customBean).getBytes());
         sendMessage(message);
         startVoiceSelfActivity(bean);
+    }
+
+    public void selectEmoji(int position) {
+        String currentContent = content.getText().toString();
+        EmojiBean emojiBean = emojiList.get(position);
+        content.setText(currentContent + emojiBean.getName());
+        content.setSelection(content.length());//将光标移至文字末尾
+    }
+
+    private void sendGiftMessage(GiftDetailBean bean) {
+        TimCustomBean customBean = new TimCustomBean();
+        customBean.setGiftBean(bean);
+        customBean.setMsgType(Constant.GIFT_CHAT_CODE);
+        V2TIMMessage message = V2TIMManager.getMessageManager().createCustomMessage(gson.toJson(customBean).getBytes());
+        sendMessage(message);
     }
 
     private void takePhoto() {

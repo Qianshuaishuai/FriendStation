@@ -1,5 +1,9 @@
 package com.babyraising.friendstation.util;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class TimeUtils {
     public static String getShowTime(long second){
         String nowChatTime = "";
@@ -79,4 +83,15 @@ public class TimeUtils {
         return s;
     }
 
+    public static String timeStamp2Date(long time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");//要转换的时间格式
+        Date date;
+        try {
+            date = sdf.parse(sdf.format(time));
+            return sdf.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

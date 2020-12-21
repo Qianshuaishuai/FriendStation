@@ -3,6 +3,7 @@ package com.babyraising.friendstation;
 public class Constant {
     public static final Boolean DEBUG = true;
 
+    public static final int GIFT_CHAT_CODE = 9997;
     public static final int RESULT_CHAT_ROOM_CODE = 9998;
     public static final int INVITE_CHAT_ROOM_CODE = 9999;
 
@@ -10,6 +11,7 @@ public class Constant {
 
     public static final int OFFICIAL_INTO_CHAT_CODE = 999;
     public static final int REQUEST_PERMISSION_CODE = 101;
+    public static final int REQUEST_GIFT_CODE = 666;
 
     public static final int TIM_SDK_APPID = 1400457648;
     public static final int RTC_SDK_APPID = 1400462920;
@@ -39,6 +41,7 @@ public class Constant {
     public static final String URL_USER_GET_USERINTIMACYLIST = "ums/user/get/userIntimacyList";
     public static final String URL_USER_GET_USERRICHLIST = "ums/user/get/userRichList";
     public static final String URL_USER_UPDATE_VERIFY = "ums/user/update/verify";
+    public static final String URL_UMS_USER_GET_USERMAINPAGELIST = "ums/user/get/userMainPageList";
 
     //friend部分
     public static final String URL_FRIENDS_MOMENT = "friends/moments/getMomentsInfo";

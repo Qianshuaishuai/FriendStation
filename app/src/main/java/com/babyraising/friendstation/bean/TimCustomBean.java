@@ -5,6 +5,7 @@ public class TimCustomBean {
     private int msgType;
     private TimRTCInviteBean inviteBean;
     private TimRTCResultBean resultBean;
+    private GiftDetailBean giftBean;
 
     public int getMsgType() {
         return msgType;
@@ -28,5 +29,13 @@ public class TimCustomBean {
 
     public void setResultBean(TimRTCResultBean resultBean) {
         this.resultBean = resultBean;
+    }
+
+    public GiftDetailBean getGiftBean() {
+        return giftBean;
+    }
+
+    public void setGiftBean(GiftDetailBean giftBean) {
+        this.giftBean = giftBean;
     }
 }

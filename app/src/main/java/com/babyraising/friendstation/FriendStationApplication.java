@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.EmojiBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.service.RTCService;
 import com.babyraising.friendstation.util.T;
@@ -21,8 +22,15 @@ import com.tencent.trtc.TRTCCloud;
 import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCCloudListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.x;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +40,7 @@ public class FriendStationApplication extends Application {
     private SharedPreferences.Editor editor;
     private Gson gson;
     private TRTCCloud mTRTCCloud;
+    private List<EmojiBean> emojiList;
 
     @Override
     public void onCreate() {
@@ -50,6 +59,37 @@ public class FriendStationApplication extends Application {
         initCommonWord();
         initTimSDK();
         initTRTCClound();
+        initEmojiData();
+    }
+
+    private void initEmojiData() {
+        emojiList = new ArrayList<>();
+        Gson gson = new Gson();
+
+//        emojiList = gson.fromJson(emojiStr, new TypeToken<List<EmojiBean>>() {}.getType());
+//        System.out.println(emojiList.size());
+
+        try {
+            InputStreamReader inputStreamReader = new InputStreamReader(getAssets().open("emoji.json"), "UTF-8");
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String line;
+            StringBuilder stringBuilder = new StringBuilder();
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+            bufferedReader.close();
+            inputStreamReader.close();
+            emojiList = gson.fromJson(stringBuilder.toString(), new TypeToken<List<EmojiBean>>() {
+            }.getType());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<EmojiBean> getEmojiList() {
+        return emojiList;
     }
 
     private void initTRTCClound() {

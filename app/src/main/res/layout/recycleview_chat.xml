@@ -18,6 +18,20 @@
             android:layout_marginLeft="15dip"
             android:layout_marginRight="15dip" />
 
+        <LinearLayout
+            android:id="@+id/layout_left_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="68dip"
+            android:background="@drawable/shape_chat_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="15dip"
+            android:paddingTop="10dip"
+            android:paddingRight="15dip"
+            android:paddingBottom="10dip"
+            android:visibility="gone"></LinearLayout>
+
         <TextView
             android:id="@+id/left_content"
             android:layout_width="wrap_content"
@@ -66,6 +80,28 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/layout_gift_left"
+            android:layout_width="73dip"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/left_iv_gift"
+                android:layout_width="73dip"
+                android:layout_height="73dip" />
+
+            <TextView
+                android:id="@+id/left_gift_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip"
+                android:textColor="#ff3c3b41"
+                android:textSize="14dip" />
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/left_layout_rtc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -100,6 +136,20 @@
         android:gravity="right"
         android:orientation="horizontal">
 
+        <LinearLayout
+            android:id="@+id/layout_right_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="135dip"
+            android:background="@drawable/shape_chat_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="15dip"
+            android:paddingTop="10dip"
+            android:paddingRight="15dip"
+            android:paddingBottom="10dip"
+            android:visibility="gone"></LinearLayout>
+
         <TextView
             android:id="@+id/right_content"
             android:layout_width="wrap_content"
@@ -120,6 +170,28 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="135dip"
             android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/layout_gift_right"
+            android:layout_width="73dip"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/right_iv_gift"
+                android:layout_width="73dip"
+                android:layout_height="73dip" />
+
+            <TextView
+                android:id="@+id/right_gift_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dip"
+                android:textColor="#ff3c3b41"
+                android:textSize="14dip" />
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/right_layout_voice"

@@ -17,19 +17,25 @@ import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.adapter.DialogFirstShowAdapter;
+import com.babyraising.friendstation.adapter.FindShowAdapter;
 import com.babyraising.friendstation.adapter.LookMeRecordAdapter;
 import com.babyraising.friendstation.base.BaseFragment;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.FirstShowBean;
 import com.babyraising.friendstation.bean.FriendDetailBean;
 import com.babyraising.friendstation.bean.ScoreRecordBean;
+import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.decoration.FirstShowSpaceItemDecoration;
 import com.babyraising.friendstation.decoration.SpaceItemDecoration;
 import com.babyraising.friendstation.response.FriendResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
+import com.babyraising.friendstation.response.UserMainPageResponse;
+import com.babyraising.friendstation.ui.main.ChatActivity;
 import com.babyraising.friendstation.ui.main.RankActivity;
 import com.babyraising.friendstation.ui.main.VoiceSendActivity;
 import com.babyraising.friendstation.util.DisplayUtils;
+import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
 import org.xutils.common.Callback;
@@ -46,7 +52,7 @@ import java.util.List;
 public class FindFragment extends BaseFragment {
 
     private int selectType = 1;
-    private LookMeRecordAdapter adapter;
+    private FindShowAdapter adapter;
     private DialogFirstShowAdapter showAdapter;
     private List<FriendDetailBean> mlist;
 
@@ -95,6 +101,8 @@ public class FindFragment extends BaseFragment {
 
     @ViewInject(R.id.select_no_show)
     private ImageView selectNoShow;
+
+    private List<UserMainPageBean> userList = new ArrayList<>();
 
     @Event(R.id.select_no_show)
     private void noShowClick(View view) {
@@ -194,12 +202,8 @@ public class FindFragment extends BaseFragment {
 
         mlist = new ArrayList<>();
 
-        List<String> testList = new ArrayList<>();
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        testList.add("1");
-        adapter = new LookMeRecordAdapter(testList);
+        userList = new ArrayList<>();
+        adapter = new FindShowAdapter(this, userList);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recycleList.setLayoutManager(manager);
         recycleList.setAdapter(adapter);
@@ -224,6 +228,24 @@ public class FindFragment extends BaseFragment {
         tipList.setLayoutManager(manager2);
         tipList.setAdapter(showAdapter);
         tipList.addItemDecoration(new FirstShowSpaceItemDecoration((width1 - itemWidth * 4) / 8));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getUserList();
+    }
+
+    public void goToChat(int userId) {
+        UserAllInfoBean userBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
+        if (userBean == null || userBean.getId() == 0) {
+            T.s("你当前的用户信息获取有误，请重新登录");
+            return;
+        }
+
+        Intent intent = new Intent(getActivity(), ChatActivity.class);
+        intent.putExtra("chat-user-id", userId);
+        startActivity(intent);
     }
 
     private void getFriendList() {
@@ -283,5 +305,51 @@ public class FindFragment extends BaseFragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void getUserList() {
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_GET_USERMAINPAGELIST);
+        for (int i = 1; i < 20; i++) {
+            params.addParameter("userIdList", i);
+        }
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UserMainPageResponse response = gson.fromJson(result, UserMainPageResponse.class);
+                System.out.println("getUserList:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        userList.clear();
+                        for (int u = 0; u < response.getData().size(); u++) {
+                            userList.add(response.getData().get(u));
+                        }
+
+                        adapter.notifyDataSetChanged();
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }
