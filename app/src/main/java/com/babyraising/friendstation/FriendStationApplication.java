@@ -66,7 +66,7 @@ public class FriendStationApplication extends Application {
         }
 
         initSp();
-
+        initDefaultLocation();
         initCommonWord();
         initTimSDK();
         initTRTCClound();
@@ -74,6 +74,13 @@ public class FriendStationApplication extends Application {
         initLocationOption();
         startLocation();
 //        initAMapTrack();
+    }
+
+    private void initDefaultLocation() {
+        LocationBean locationBean = new LocationBean();
+        locationBean.setLongitude(113.93029);
+        locationBean.setLatitude(22.53291);
+        saveCurrentLocation(locationBean);
     }
 
     private void startLocation() {
@@ -91,6 +98,10 @@ public class FriendStationApplication extends Application {
                 double latitude = aMapLocation.getLatitude();//获取纬度
                 double longitude = aMapLocation.getLongitude();//获取经度
                 System.out.println("location: latitude:" + latitude + ",longitude:" + longitude);
+                if (longitude == 0.0 && latitude == 0.0) {
+                    return;
+                }
+
                 LocationBean bean = new LocationBean();
                 bean.setLatitude(latitude);
                 bean.setLongitude(longitude);

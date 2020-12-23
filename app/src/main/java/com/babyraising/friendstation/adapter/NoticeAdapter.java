@@ -19,6 +19,7 @@ import com.babyraising.friendstation.bean.TaskDetailBean;
 import com.babyraising.friendstation.bean.TimCustomBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.bean.UserMainPageBean;
+import com.babyraising.friendstation.bean.UserMessageBean;
 import com.babyraising.friendstation.ui.main.ChatActivity;
 import com.babyraising.friendstation.ui.main.CloseActivity;
 import com.babyraising.friendstation.util.T;
@@ -38,7 +39,7 @@ import java.util.List;
 public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder> {
 
     private List<V2TIMConversation> mList;
-    private List<UserMainPageBean> userList;
+    private List<UserMessageBean> userList;
     private Context context;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -62,7 +63,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
 
     }
 
-    public NoticeAdapter(Context context, List<V2TIMConversation> mList, List<UserMainPageBean> userList) {
+    public NoticeAdapter(Context context, List<V2TIMConversation> mList, List<UserMessageBean> userList) {
         this.context = context;
         this.mList = mList;
         this.userList = userList;
@@ -110,10 +111,10 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
             });
         } else {
             final int currentId = Integer.parseInt(mList.get(position).getUserID());
-            UserMainPageBean userBean = getUserData(currentId);
+            UserMessageBean userBean = getUserData(currentId);
             if (userBean != null) {
-                if (!TextUtils.isEmpty(userBean.getNickName())) {
-                    holder.nameTxt.setText(userBean.getNickName());
+                if (!TextUtils.isEmpty(userBean.getNickname())) {
+                    holder.nameTxt.setText(userBean.getNickname());
                 }
 
                 if (!TextUtils.isEmpty(userBean.getAvatar())) {
@@ -163,7 +164,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
         }
     }
 
-    private UserMainPageBean getUserData(int id) {
+    private UserMessageBean getUserData(int id) {
         for (int u = 0; u < userList.size(); u++) {
             if (userList.get(u).getId() == id) {
                 return userList.get(u);

@@ -3,6 +3,7 @@ package com.babyraising.friendstation.ui.main;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -57,11 +58,14 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @ContentView(R.layout.activity_person_info)
 public class PersonInfoActivity extends BaseActivity {
+
+    private Gson gson = new Gson();
 
     private UserAllInfoBean userAllInfoBean;
     private List<String> tagList;
@@ -78,6 +82,9 @@ public class PersonInfoActivity extends BaseActivity {
 
     @Event(R.id.layout_background)
     private void backgroundClick(View view) {
+        if (mode == 1) {
+            return;
+        }
         photoLayout.setVisibility(View.VISIBLE);
     }
 
@@ -100,6 +107,9 @@ public class PersonInfoActivity extends BaseActivity {
 
     @Event(R.id.layout_photo_show)
     private void photoLayoutClick(View view) {
+        if (mode == 1) {
+            return;
+        }
         Intent intent = new Intent(this, PhotoActivity.class);
         startActivity(intent);
     }
@@ -130,6 +140,9 @@ public class PersonInfoActivity extends BaseActivity {
 
     @Event(R.id.layout_auth)
     private void authLayoutClick(View view) {
+        if (mode == 1) {
+            return;
+        }
         if (auth.equals("已认证")) {
             T.s("你已认证！");
             return;
@@ -145,24 +158,36 @@ public class PersonInfoActivity extends BaseActivity {
 
     @Event(R.id.layout_basic)
     private void basicLayoutClick(View view) {
+        if (mode == 1) {
+            return;
+        }
         Intent intent = new Intent(this, MyInfoActivity.class);
         startActivity(intent);
     }
 
     @Event(R.id.layout_value)
     private void valueLayoutClick(View view) {
+        if (mode == 1) {
+            return;
+        }
         Intent intent = new Intent(this, MyInfoActivity.class);
         startActivity(intent);
     }
 
     @Event(R.id.layout_number)
     private void numberLayoutClick(View view) {
+        if (mode == 1) {
+            return;
+        }
         Intent intent = new Intent(this, MyInfoActivity.class);
         startActivity(intent);
     }
 
     @Event(R.id.layout_monologue)
     private void monologueLayoutClick(View view) {
+        if (mode == 1) {
+            return;
+        }
         Intent intent = new Intent(this, MyInfoActivity.class);
         startActivity(intent);
     }
@@ -208,74 +233,107 @@ public class PersonInfoActivity extends BaseActivity {
     private String mTempPhotoPath;
     private String newHeadIconUrl;
     private Uri imageUri;
+    private MediaPlayer mediaPlayer;
+
+    private int mode = 0;
+    private int currentUserId = 0;
+
+    private int currentRecordDur = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         initView();
+        initData();
 
         initVoice();
         initAudioRecorder();
         initVoiceTip();
+        initMediaPlayer();
+
+    }
+
+    private void initData() {
+        Intent intent = getIntent();
+        mode = intent.getIntExtra("mode", 0);
+        currentUserId = intent.getIntExtra("user-id", 0);
+    }
+
+    private void initMediaPlayer() {
+        mediaPlayer = new MediaPlayer();
+    }
+
+    public void playSound(String url) {
+        try {
+            mediaPlayer.reset();
+            mediaPlayer.setDataSource(url);
+            mediaPlayer.setLooping(true);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            currentRecordDur = mediaPlayer.getDuration();
+            audio.setText(currentRecordDur + "S");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initVoice() {
-        voiceLayout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                switch (motionEvent.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        voiceLoadingTip.show();
-                        clickViewTime = System.currentTimeMillis();
-                        recorder.start(new AudioRecorder.OnStartListener() {
-                            @Override
-                            public void onStarted() {
-
-                            }
-
-                            @Override
-                            public void onException(Exception e) {
-                                T.s("录音失败");
-                                if (voiceLoadingTip.isShowing()) {
-                                    voiceLoadingTip.cancel();
-                                }
-                            }
-                        });
-
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        if (voiceLoadingTip.isShowing()) {
-                            voiceLoadingTip.cancel();
-                        }
-
-                        final long newClickViewTime = System.currentTimeMillis();
-                        final long timeOffset = newClickViewTime - clickViewTime;
-                        if (timeOffset > 1000) {
-                            recorder.pause(new AudioRecorder.OnPauseListener() {
-                                @Override
-                                public void onPaused(String activeRecordFileName) {
-                                    uploadRecord(activeRecordFileName);
-                                }
-
-                                @Override
-                                public void onException(Exception e) {
-
-                                }
-                            });
-                        } else {
-                            T.s("语音太短！");
-                        }
-
-                        clickViewTime = 0;
-                        break;
-                }
-                return true;
-            }
-        });
+//        voiceLayout.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View view, MotionEvent motionEvent) {
+//                switch (motionEvent.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        voiceLoadingTip.show();
+//                        clickViewTime = System.currentTimeMillis();
+//                        recorder.start(new AudioRecorder.OnStartListener() {
+//                            @Override
+//                            public void onStarted() {
+//
+//                            }
+//
+//                            @Override
+//                            public void onException(Exception e) {
+//                                T.s("录音失败");
+//                                if (voiceLoadingTip.isShowing()) {
+//                                    voiceLoadingTip.cancel();
+//                                }
+//                            }
+//                        });
+//
+//                        break;
+//                    case MotionEvent.ACTION_MOVE:
+//
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        if (voiceLoadingTip.isShowing()) {
+//                            voiceLoadingTip.cancel();
+//                        }
+//
+//                        final long newClickViewTime = System.currentTimeMillis();
+//                        final long timeOffset = newClickViewTime - clickViewTime;
+//                        if (timeOffset > 1000) {
+//                            recorder.pause(new AudioRecorder.OnPauseListener() {
+//                                @Override
+//                                public void onPaused(String activeRecordFileName) {
+//                                    uploadRecord(activeRecordFileName);
+//                                }
+//
+//                                @Override
+//                                public void onException(Exception e) {
+//
+//                                }
+//                            });
+//                        } else {
+//                            T.s("语音太短！");
+//                        }
+//
+//                        clickViewTime = 0;
+//                        break;
+//                }
+//                return true;
+//            }
+//        });
     }
 
     private void initAudioRecorder() {
@@ -389,8 +447,12 @@ public class PersonInfoActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        getUserFullInfo();
-        getPhotoList();
+        if (mode == 0) {
+            getUserFullInfo();
+            getPhotoList();
+        } else {
+            getUserInfoForOther();
+        }
     }
 
     private void getPhotoList() {
@@ -488,6 +550,45 @@ public class PersonInfoActivity extends BaseActivity {
         });
     }
 
+    private void getUserInfoForOther() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_GET_FULL_BYID);
+        params.addParameter("userId", currentUserId);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
+                System.out.println("CurrentUserInfo" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        userAllInfoBean = response.getData();
+                        uploadData();
+                        break;
+                    default:
+                        T.s("获取用户资料失败!");
+                        finish();
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
     private void getUserFullInfo() {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_FULL);
@@ -500,6 +601,7 @@ public class PersonInfoActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());
+                        userAllInfoBean = response.getData();
                         uploadData();
                         break;
                     default:
@@ -526,19 +628,10 @@ public class PersonInfoActivity extends BaseActivity {
     }
 
     private void uploadData() {
-        userAllInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
 
         if (userAllInfoBean != null) {
             luxury.setText("0");
             number.setText(userAllInfoBean.getMobile());
-
-            if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getIntroduce())) {
-                monologue.setText(userAllInfoBean.getUserExtra().getIntroduce());
-            }
-
-            if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getIntroduce())) {
-                monologue.setText(userAllInfoBean.getUserExtra().getIntroduce());
-            }
 
             if (!TextUtils.isEmpty(userAllInfoBean.getNickname())) {
                 name.setText(userAllInfoBean.getNickname());
@@ -569,39 +662,50 @@ public class PersonInfoActivity extends BaseActivity {
             }
 
             tagList.add("性别:" + sexStr);
-            if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getBirthday())) {
-                tagList.add("生日:" + userAllInfoBean.getUserExtra().getBirthday());
+
+            if (userAllInfoBean.getUserExtra() != null) {
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getIntroduce())) {
+                    monologue.setText(userAllInfoBean.getUserExtra().getIntroduce());
+                }
+
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getBirthday())) {
+                    tagList.add("生日:" + userAllInfoBean.getUserExtra().getBirthday());
+                }
+
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getConstellation())) {
+                    tagList.add("星座:" + userAllInfoBean.getUserExtra().getConstellation());
+                }
+
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getLocation())) {
+                    tagList.add("所在地:" + userAllInfoBean.getUserExtra().getLocation());
+                }
+
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getWork())) {
+                    tagList.add("职业:" + userAllInfoBean.getUserExtra().getWork());
+                }
+
+                tagList.add("身高:" + userAllInfoBean.getUserExtra().getHeight() + "cm");
+                tagList.add("体重:" + userAllInfoBean.getUserExtra().getWeight() + "kg");
+
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getEducation())) {
+                    tagList.add("学历:" + userAllInfoBean.getUserExtra().getEducation());
+                }
+
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getIncome())) {
+                    tagList.add("收入:" + userAllInfoBean.getUserExtra().getIncome());
+                }
+
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getEmotionState())) {
+                    tagList.add("情感状态:" + userAllInfoBean.getUserExtra().getEmotionState());
+                }
+
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getSexPart())) {
+                    tagList.add("魅力部位:" + userAllInfoBean.getUserExtra().getSexPart());
+                }
             }
 
-            if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getConstellation())) {
-                tagList.add("星座:" + userAllInfoBean.getUserExtra().getConstellation());
-            }
-
-            if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getLocation())) {
-                tagList.add("所在地:" + userAllInfoBean.getUserExtra().getLocation());
-            }
-
-            if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getWork())) {
-                tagList.add("职业:" + userAllInfoBean.getUserExtra().getWork());
-            }
-
-            tagList.add("身高:" + userAllInfoBean.getUserExtra().getHeight() + "cm");
-            tagList.add("体重:" + userAllInfoBean.getUserExtra().getWeight() + "kg");
-
-            if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getEducation())) {
-                tagList.add("学历:" + userAllInfoBean.getUserExtra().getEducation());
-            }
-
-            if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getIncome())) {
-                tagList.add("收入:" + userAllInfoBean.getUserExtra().getIncome());
-            }
-
-            if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getEmotionState())) {
-                tagList.add("情感状态:" + userAllInfoBean.getUserExtra().getEmotionState());
-            }
-
-            if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getSexPart())) {
-                tagList.add("魅力部位:" + userAllInfoBean.getUserExtra().getSexPart());
+            if (!TextUtils.isEmpty(userAllInfoBean.getRecordSign())) {
+                playSound(userAllInfoBean.getRecordSign());
             }
 
             tagAdapter = new TagAdapter(tagList);

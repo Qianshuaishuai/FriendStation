@@ -73,6 +73,13 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             x.image().bind(holder.contentImgIv, mList.get(position).getPicUrl1());
         }
 
+        holder.headIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.goToPersonInfo(mList.get(position).getUserId());
+            }
+        });
+
         if (!TextUtils.isEmpty(mList.get(position).getNickname())) {
             holder.nameTxt.setText(mList.get(position).getNickname());
         }

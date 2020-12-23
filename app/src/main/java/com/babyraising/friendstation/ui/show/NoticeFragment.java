@@ -20,9 +20,11 @@ import com.babyraising.friendstation.base.BaseFragment;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.TimCustomBean;
 import com.babyraising.friendstation.bean.UserMainPageBean;
+import com.babyraising.friendstation.bean.UserMessageBean;
 import com.babyraising.friendstation.request.CodeBodyRequest;
 import com.babyraising.friendstation.response.UmsLoginByMobileResponse;
 import com.babyraising.friendstation.response.UserMainPageResponse;
+import com.babyraising.friendstation.response.UserMessageResponse;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 import com.tencent.imsdk.message.CustomElement;
@@ -79,7 +81,7 @@ public class NoticeFragment extends BaseFragment {
     private NoticeAdapter adapter;
     private List<V2TIMConversation> list = new ArrayList<>();
     private List<Integer> idList = new ArrayList<>();
-    private List<UserMainPageBean> userList = new ArrayList<>();
+    private List<UserMessageBean> userList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -150,7 +152,7 @@ public class NoticeFragment extends BaseFragment {
                     idList.add(Integer.valueOf(newList.get(n).getUserID()));
                 }
 
-                getUserList();
+                getUserListForMessage();
             }
 
             @Override
@@ -161,9 +163,9 @@ public class NoticeFragment extends BaseFragment {
         V2TIMManager.getConversationManager().getConversationList(0, 100, callback);
     }
 
-    private void getUserList() {
+    private void getUserListForMessage() {
         CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
-        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_GET_USERMAINPAGELIST);
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERMESSAGELIST);
         for (int i = 0; i < idList.size(); i++) {
             params.addParameter("userIdList", idList.get(i));
         }
@@ -173,8 +175,8 @@ public class NoticeFragment extends BaseFragment {
             @Override
             public void onSuccess(String result) {
                 Gson gson = new Gson();
-                UserMainPageResponse response = gson.fromJson(result, UserMainPageResponse.class);
-                System.out.println("getUserList:" + result);
+                UserMessageResponse response = gson.fromJson(result, UserMessageResponse.class);
+                System.out.println("getUserListForMessage:" + result);
                 switch (response.getCode()) {
                     case 200:
                         userList.clear();

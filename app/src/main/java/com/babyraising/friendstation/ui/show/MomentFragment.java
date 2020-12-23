@@ -29,6 +29,7 @@ import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.ui.main.ChatActivity;
 import com.babyraising.friendstation.ui.main.MomentSendActivity;
+import com.babyraising.friendstation.ui.main.PersonInfoActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -173,6 +174,13 @@ public class MomentFragment extends BaseFragment {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recycleList.setAdapter(adapter);
         recycleList.setLayoutManager(manager);
+    }
+
+    public void goToPersonInfo(int userId) {
+        Intent intent = new Intent(getActivity(), PersonInfoActivity.class);
+        intent.putExtra("mode", 1);
+        intent.putExtra("user-id", userId);
+        startActivity(intent);
     }
 
     public void followUser(int id) {

@@ -79,10 +79,17 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
             x.image().bind(holder.ivHead, mList.get(position).getAvatar());
         }
 
-        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
+        holder.ivNormal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 context.goToChat(mList.get(position).getId());
+            }
+        });
+
+        holder.ivHead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.goToPersonInfo(mList.get(position).getId());
             }
         });
 

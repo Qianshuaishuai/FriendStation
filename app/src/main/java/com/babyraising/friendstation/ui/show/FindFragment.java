@@ -32,6 +32,7 @@ import com.babyraising.friendstation.response.FriendResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.response.UserMainPageResponse;
 import com.babyraising.friendstation.ui.main.ChatActivity;
+import com.babyraising.friendstation.ui.main.PersonInfoActivity;
 import com.babyraising.friendstation.ui.main.RankActivity;
 import com.babyraising.friendstation.ui.main.VoiceSendActivity;
 import com.babyraising.friendstation.util.DisplayUtils;
@@ -179,6 +180,13 @@ public class FindFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
 
 
+    }
+
+    public void goToPersonInfo(int userId) {
+        Intent intent = new Intent(getActivity(), PersonInfoActivity.class);
+        intent.putExtra("mode", 1);
+        intent.putExtra("user-id", userId);
+        startActivity(intent);
     }
 
     @Override

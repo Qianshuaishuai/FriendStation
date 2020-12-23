@@ -258,7 +258,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         holder.rightContentLayout.setVisibility(View.VISIBLE);
                         holder.rightContentLayout.removeAllViews();
                         String showContent = ((TextElement) elements.get(0)).getTextContent();
-                        String oldContent =showContent;
+                        String oldContent = showContent;
                         boolean isHaveEmoji = false;
                         for (int e = 0; e < emojiList.size(); e++) {
                             while (showContent.indexOf(emojiList.get(e).getName()) != -1) {
@@ -362,6 +362,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 }
             }
         }
+
+        holder.leftIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.goToPersonInfo();
+            }
+        });
     }
 
     private String translateView(String content) {

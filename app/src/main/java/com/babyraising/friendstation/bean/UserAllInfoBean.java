@@ -21,6 +21,7 @@ public class UserAllInfoBean {
     private UserExtraInfoBean userExtra;
     private UserAllCountBean userCount;
     private String userNo;
+    private String recordSign;
 
     public String getAvatar() {
         return avatar;
@@ -180,5 +181,13 @@ public class UserAllInfoBean {
 
     public void setUserNo(String userNo) {
         this.userNo = userNo;
+    }
+
+    public String getRecordSign() {
+        return recordSign;
+    }
+
+    public void setRecordSign(String recordSign) {
+        this.recordSign = recordSign;
     }
 }

@@ -724,6 +724,13 @@ public class ChatActivity extends BaseActivity {
         V2TIMManager.getMessageManager().getC2CHistoryMessageList(String.valueOf(currentChatId), 10, lastMessage, callback);
     }
 
+    public void goToPersonInfo() {
+        Intent intent = new Intent(this, PersonInfoActivity.class);
+        intent.putExtra("mode", 1);
+        intent.putExtra("user-id", currentChatId);
+        startActivity(intent);
+    }
+
 
     private void getCurrentUserInfo(int currentChatId) {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
