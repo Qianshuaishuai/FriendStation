@@ -199,21 +199,60 @@ public class FriendStationApplication extends Application {
     }
 
     private void initCommonWord() {
+        saveCommonWordData(null);
         List<String> commonWordList = getCommonWordData();
         if (commonWordList == null || commonWordList.size() == 0) {
             commonWordList = new ArrayList<>();
-            commonWordList.add("请保持网络畅通，及时接收我的思念。");
-            commonWordList.add("第一次遇到你这样的人让人心动不已");
-            commonWordList.add("拦都拦不住，手机非要给你打个招呼");
-            commonWordList.add("请保持网络畅通，及时接收我的思念。");
-            commonWordList.add("第一次遇到你这样的人让人心动不已");
-            commonWordList.add("拦都拦不住，手机非要给你打个招呼");
-            commonWordList.add("请保持网络畅通，及时接收我的思念。");
-            commonWordList.add("第一次遇到你这样的人让人心动不已");
-            commonWordList.add("拦都拦不住，手机非要给你打个招呼");
-            commonWordList.add("请保持网络畅通，及时接收我的思念。");
-            commonWordList.add("第一次遇到你这样的人让人心动不已");
-            commonWordList.add("拦都拦不住，手机非要给你打个招呼");
+            commonWordList.add("很高兴认识你");
+            commonWordList.add("你好！");
+            commonWordList.add("真巧，又碰见你了：）");
+            commonWordList.add("你有权选择要不要和我聊？虽然我知道这可能是你爱情生涯的转折点。");
+            commonWordList.add("幸会幸会！");
+            commonWordList.add("唉~~长夜漫漫，无心睡眠，而此时夜空中恰恰是星光闪烁，月色撩人，朋友，在这美丽的夜晚，你就不想找一个人倾述心声吗？");
+            commonWordList.add("小姐姐，你好！");
+            commonWordList.add("你是风儿我是沙，你是哈蜜我是瓜，你是牙膏我是刷，不和我聊我自杀。");
+            commonWordList.add("有缘网上来相会，千里网缘一线牵，朋友，你好。");
+            commonWordList.add("就你了，我在茫茫人海中把异样的'目光投向了你，聊吗？");
+            commonWordList.add("美女，文学、音乐、体育、社会，爱情……你想聊哪种啊？");
+            commonWordList.add("明人不做暗事，有胆就找我聊！");
+            commonWordList.add("小姐姐，可以聊聊吗？");
+            commonWordList.add("唉，你可能不信，但是我还是要事先声明，和我聊天的唯一的缺点就是使你不得不放弃其它聊友！？");
+            commonWordList.add("hi！你在想我吗？");
+            commonWordList.add("看你照片蛮有气质的");
+            commonWordList.add("看你照片好呆萌吖");
+            commonWordList.add("我觉得我蛮帅的，所以要来认识一下你。");
+            commonWordList.add("你在忙吗？想和你聊聊天谈谈心。");
+            commonWordList.add("你头像的照片好可爱。");
+            commonWordList.add("哈哈哈，我猜我是今天第一个给你打招呼的帅比，是不是呀！");
+            commonWordList.add("我觉得你很独特，想认识你");
+            commonWordList.add("你是做什么的？");
+            commonWordList.add("你哪里人？");
+            commonWordList.add("你平时喜欢什么？");
+            commonWordList.add("Hello,很高兴认识你，我叫XX");
+            commonWordList.add("你需要人陪吗？");
+            commonWordList.add("我可以逗你开心逗你笑，你看我有机会吗?");
+            commonWordList.add("你是属糖的吗？为什么看到你就这么甜？");
+            commonWordList.add("你那么美！说什么都对！");
+            commonWordList.add("我们的默契就是我不说话、你也沉默~");
+            commonWordList.add("你没必要那么压抑自己，你完全有资格享受你的人生。");
+            commonWordList.add("还记得我吗？");
+            commonWordList.add("很久以前我就认识你了，可是你不认识我。");
+            commonWordList.add("人生苦短，不能亏待自己。");
+            commonWordList.add("你猜我是谁？");
+            commonWordList.add("你一直在偷偷看我，你应该来跟我说话，我不会拒绝你的。");
+            commonWordList.add("我在那里见过你，我想知道你是一个什么样的女孩。");
+            commonWordList.add("你是我最想约会的女孩，我想和你了解你，我们可以聊会吗?");
+            commonWordList.add("我刚发现，你看起来很像我的下一个女朋友(笑声)。");
+            commonWordList.add("帅的人先说话了，接下来该美的人发言了");
+            commonWordList.add("你长得不错，应该和我聊聊天。");
+            commonWordList.add("如果你打算继续这样看着我，至少跟我聊几句吧。");
+            commonWordList.add("你是单身，我说的对吗？");
+            commonWordList.add("最近你都不联系我？");
+            commonWordList.add("你有女朋友吗？");
+            commonWordList.add("看到你有一种很奇特的感觉");
+            commonWordList.add("忙了一天很累吧，辛苦了");
+            commonWordList.add("我想你了，你有想我吗");
+            commonWordList.add("hello，你看起来怎么那么帅");
             saveCommonWordData(commonWordList);
         }
     }

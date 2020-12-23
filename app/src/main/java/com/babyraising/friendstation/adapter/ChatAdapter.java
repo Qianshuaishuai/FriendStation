@@ -237,13 +237,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 if (!TextUtils.isEmpty(currentUserInfoBean.getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
                             setRadius(DensityUtil.dip2px(38)).setCrop(true).build();
-                    x.image().bind(holder.leftIcon, currentUserInfoBean.getAvatar(), options);
+                    x.image().bind(holder.leftIcon, currentUserInfoBean.getAvatar());
                 } else {
 
-                    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.test4);
-                    //设置bitmap.getWidth()可以获得圆形
-                    Bitmap bitmap1 = ChatUtil.ClipSquareBitmap(bitmap, 200, bitmap.getWidth());
-                    holder.leftIcon.setImageBitmap(bitmap1);
+//                    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.test4);
+//                    //设置bitmap.getWidth()可以获得圆形
+//                    Bitmap bitmap1 = ChatUtil.ClipSquareBitmap(bitmap, 200, bitmap.getWidth());
+                    holder.leftIcon.setImageResource(R.mipmap.test4);
                 }
             }
 
@@ -352,12 +352,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 if (!TextUtils.isEmpty(selfUserInfoBean.getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
                             setRadius(DensityUtil.dip2px(38)).setCrop(true).build();
-                    x.image().bind(holder.rightIcon, selfUserInfoBean.getAvatar(), options);
+                    x.image().bind(holder.rightIcon, selfUserInfoBean.getAvatar());
                 } else {
-                    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.test4);
-                    //设置bitmap.getWidth()可以获得圆形
-                    Bitmap bitmap1 = ChatUtil.ClipSquareBitmap(bitmap, 200, bitmap.getWidth());
-                    holder.rightIcon.setImageBitmap(bitmap1);
+//                    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.test4);
+//                    //设置bitmap.getWidth()可以获得圆形
+//                    Bitmap bitmap1 = ChatUtil.ClipSquareBitmap(bitmap, 200, bitmap.getWidth());
+//                    holder.rightIcon.setImageBitmap(bitmap1);
+                    holder.rightIcon.setImageResource(R.mipmap.test4);
                 }
             }
         }
