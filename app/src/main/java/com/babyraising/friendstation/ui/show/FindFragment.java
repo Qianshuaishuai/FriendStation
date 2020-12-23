@@ -128,7 +128,7 @@ public class FindFragment extends BaseFragment {
             typeV1.setVisibility(View.VISIBLE);
             typeV2.setVisibility(View.GONE);
             typeV3.setVisibility(View.GONE);
-            getFriendList();
+            getUserList();
         }
     }
 
@@ -145,7 +145,7 @@ public class FindFragment extends BaseFragment {
             typeV1.setVisibility(View.GONE);
             typeV2.setVisibility(View.VISIBLE);
             typeV3.setVisibility(View.GONE);
-            getFriendList();
+            getUserList();
         }
     }
 
@@ -170,7 +170,7 @@ public class FindFragment extends BaseFragment {
             typeV1.setVisibility(View.GONE);
             typeV2.setVisibility(View.GONE);
             typeV3.setVisibility(View.VISIBLE);
-            getFriendList();
+            getUserList();
         }
     }
 
@@ -309,10 +309,21 @@ public class FindFragment extends BaseFragment {
 
     private void getUserList() {
         CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
-        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_GET_USERMAINPAGELIST);
-        for (int i = 1; i < 20; i++) {
-            params.addParameter("userIdList", i);
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERMAINPAGELIST);
+        int type = 0;
+        switch (selectType) {
+            case 1:
+                type = 1;
+                break;
+            case 2:
+                type = 0;
+                break;
+            case 3:
+                type = 2;
+                break;
         }
+        params.addQueryStringParameter("pageNum", 20);
+        params.addQueryStringParameter("type", type);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         x.http().get(params, new Callback.CommonCallback<String>() {

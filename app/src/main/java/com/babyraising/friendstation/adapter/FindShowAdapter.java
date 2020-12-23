@@ -13,6 +13,8 @@ import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.ui.show.FindFragment;
 
+import org.xutils.x;
+
 import java.util.List;
 
 public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHolder> {
@@ -22,7 +24,7 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt, cityTxt, ageTxt, heightTxt, jobTxt, incomeTxt, signTxt;
-        ImageView ivSelected, ivNormal;
+        ImageView ivSelected, ivNormal, ivHead;
         LinearLayout mainLayout;
 
         public ViewHolder(View view) {
@@ -36,6 +38,7 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
             incomeTxt = (TextView) view.findViewById(R.id.income);
             ivSelected = (ImageView) view.findViewById(R.id.iv_selected);
             ivNormal = (ImageView) view.findViewById(R.id.iv_normal);
+            ivHead = (ImageView) view.findViewById(R.id.head);
             mainLayout = (LinearLayout) view.findViewById(R.id.layout_main);
         }
 
@@ -70,6 +73,10 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
 
         if (!TextUtils.isEmpty(mList.get(position).getNickName())) {
             holder.nameTxt.setText(mList.get(position).getNickName());
+        }
+
+        if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
+            x.image().bind(holder.ivHead, mList.get(position).getAvatar());
         }
 
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {

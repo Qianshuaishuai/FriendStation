@@ -31,9 +31,13 @@ import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.LocationBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.request.LikeDetailRequest;
+import com.babyraising.friendstation.request.LikeRequest;
 import com.babyraising.friendstation.response.UmsGetCodeResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
+import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.service.RTCService;
 import com.babyraising.friendstation.ui.show.FindFragment;
 import com.babyraising.friendstation.ui.show.MomentFragment;
@@ -317,9 +321,12 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                     case 200:
                         ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());
                         initTimLogin();
+                        uploadLocation();
                         break;
                     case 401:
                         T.s("登录已失效");
+                        ((FriendStationApplication) getApplication()).saveUserAllInfo(null);
+                        ((FriendStationApplication) getApplication()).saveUserInfo(null);
                         startLoginActivity();
                         break;
                     default:
@@ -343,6 +350,54 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
             }
         });
+    }
+
+    private void uploadLocation() {
+        LocationBean locationBean = ((FriendStationApplication) getApplication()).getCurrentLocation();
+        if (locationBean.getLatitude() == 0.0 && locationBean.getLongitude() == 0.0) {
+            System.out.println("当前用户坐标信息有误");
+            return;
+        }
+        Gson gson = new Gson();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_USER_UPDATE_COORDINATE);
+        params.addQueryStringParameter("curLatitude", String.valueOf(locationBean.getLatitude()));
+        params.addQueryStringParameter("curLongitude", String.valueOf(locationBean.getLongitude()));
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("uploadLocation:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        System.out.println("更新位置成功");
+                        break;
+                    default:
+//                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void startQueryTrack(UserAllInfoBean data) {
+
     }
 
     private void initTimLogin() {

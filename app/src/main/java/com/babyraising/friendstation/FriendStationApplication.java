@@ -1,14 +1,21 @@
 package com.babyraising.friendstation;
 
 import android.app.Application;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.EmojiBean;
+import com.babyraising.friendstation.bean.LocationBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.service.RTCService;
 import com.babyraising.friendstation.util.T;
@@ -41,6 +48,10 @@ public class FriendStationApplication extends Application {
     private Gson gson;
     private TRTCCloud mTRTCCloud;
     private List<EmojiBean> emojiList;
+    public AMapLocationClient mLocationClient = null;
+    //声明定位回调监听器
+    public AMapLocationListener mLocationListener;
+    private AMapLocationClientOption mLocationOption;
 
     @Override
     public void onCreate() {
@@ -60,7 +71,52 @@ public class FriendStationApplication extends Application {
         initTimSDK();
         initTRTCClound();
         initEmojiData();
+        initLocationOption();
+        startLocation();
+//        initAMapTrack();
     }
+
+    private void startLocation() {
+        //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
+        if (null != mLocationClient) {
+            mLocationClient.stopLocation();
+            mLocationClient.startLocation();
+        }
+    }
+
+    private void initLocationOption() {
+        mLocationListener = new AMapLocationListener() {
+            @Override
+            public void onLocationChanged(AMapLocation aMapLocation) {
+                double latitude = aMapLocation.getLatitude();//获取纬度
+                double longitude = aMapLocation.getLongitude();//获取经度
+                System.out.println("location: latitude:" + latitude + ",longitude:" + longitude);
+                LocationBean bean = new LocationBean();
+                bean.setLatitude(latitude);
+                bean.setLongitude(longitude);
+                saveCurrentLocation(bean);
+            }
+        };
+        //初始化定位
+        mLocationClient = new AMapLocationClient(getApplicationContext());
+        //设置定位回调监听
+        mLocationClient.setLocationListener(mLocationListener);
+        //初始化AMapLocationClientOption对象
+        mLocationOption = new AMapLocationClientOption();
+        mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
+        mLocationOption.setNeedAddress(true);
+        mLocationOption.setHttpTimeOut(20000);
+        mLocationOption.setLocationCacheEnable(false);
+        mLocationOption.setOnceLocation(false);
+        /**
+         * 设置定位场景，目前支持三种场景（签到、出行、运动，默认无场景）
+         */
+        mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Sport);
+        if (null != mLocationClient) {
+            mLocationClient.setLocationOption(mLocationOption);
+        }
+    }
+
 
     private void initEmojiData() {
         emojiList = new ArrayList<>();
@@ -176,6 +232,16 @@ public class FriendStationApplication extends Application {
 
     public CommonLoginBean getUserInfo() {
         return gson.fromJson(sp.getString("info", ""), CommonLoginBean.class);
+    }
+
+    public void saveCurrentLocation(LocationBean bean) {
+        String beanString = gson.toJson(bean);
+        editor.putString("location", beanString);
+        editor.commit();
+    }
+
+    public LocationBean getCurrentLocation() {
+        return gson.fromJson(sp.getString("location", ""), LocationBean.class);
     }
 
     public void saveIsFirstLogin(int status) {

@@ -42,6 +42,8 @@ public class Constant {
     public static final String URL_USER_GET_USERRICHLIST = "ums/user/get/userRichList";
     public static final String URL_USER_UPDATE_VERIFY = "ums/user/update/verify";
     public static final String URL_UMS_USER_GET_USERMAINPAGELIST = "ums/user/get/userMainPageList";
+    public static final String URL_UMS_USER_USER_USERMAINPAGELIST = "ums/user/user/userMainPageList";
+    public static final String URL_USER_UPDATE_COORDINATE = "ums/user/update/coordinate";
 
     //friend部分
     public static final String URL_FRIENDS_MOMENT = "friends/moments/getMomentsInfo";

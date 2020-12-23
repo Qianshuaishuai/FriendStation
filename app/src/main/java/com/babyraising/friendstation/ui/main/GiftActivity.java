@@ -28,6 +28,7 @@ import com.babyraising.friendstation.request.GiftOrderSaveRequest;
 import com.babyraising.friendstation.response.GiftResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
+import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.util.DisplayUtils;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
@@ -101,9 +102,54 @@ public class GiftActivity extends BaseActivity {
         getGiftList();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getUserFullInfo();
+    }
+
+    private void getUserFullInfo() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_FULL);
+        params.addHeader("Authorization", bean.getAccessToken());
+        System.out.println(bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
+                System.out.println("gift-userFullInfo" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());
+                        userInfoBean = response.getData();
+                        count.setText("" + userInfoBean.getUserCount().getNumCoin());
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
     private void initData() {
-        userInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
-        count.setText("" + userInfoBean.getUserCount().getNumCoin());
+
     }
 
     private void initView() {
