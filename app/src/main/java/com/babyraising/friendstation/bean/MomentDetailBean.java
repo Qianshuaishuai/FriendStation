@@ -20,6 +20,15 @@ public class MomentDetailBean {
     private String nickname;
     private int likeStatus;
     private int speakStatus;
+    private String avatar;
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public String getStatusCert() {
         return statusCert;

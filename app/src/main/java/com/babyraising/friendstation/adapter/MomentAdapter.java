@@ -80,6 +80,10 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             }
         });
 
+        if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
+            x.image().bind(holder.headIv, mList.get(position).getAvatar());
+        }
+
         if (!TextUtils.isEmpty(mList.get(position).getNickname())) {
             holder.nameTxt.setText(mList.get(position).getNickname());
         }

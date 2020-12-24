@@ -303,6 +303,8 @@ public class ChatActivity extends BaseActivity {
 
     private AudioRecorder recorder;
 
+    private List<String> checkWordList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -745,6 +747,8 @@ public class ChatActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         currentUserBean = response.getData();
+                        checkWordList = ((FriendStationApplication) getApplication()).getCheckWordList();
+                        System.out.println(checkWordList.size());
                         updateCurrentInfo();
                         getMessageList();
                         break;
@@ -783,7 +787,7 @@ public class ChatActivity extends BaseActivity {
     private void updateCurrentInfo() {
         name.setText(currentUserBean.getNickname());
         chatList = new ArrayList<>();
-        adapter = new ChatAdapter(this, chatList, emojiList, selfUserBean, currentUserBean);
+        adapter = new ChatAdapter(this, chatList, emojiList, checkWordList, selfUserBean, currentUserBean);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         chatListRecycleView.setLayoutManager(manager);
         chatListRecycleView.setAdapter(adapter);

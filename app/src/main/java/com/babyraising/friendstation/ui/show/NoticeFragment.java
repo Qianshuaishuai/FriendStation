@@ -157,7 +157,7 @@ public class NoticeFragment extends BaseFragment {
 
             @Override
             public void onError(int code, String desc) {
-
+                System.out.println("getConversationList onError:" + code + ",desc:" + desc);
             }
         };
         V2TIMManager.getConversationManager().getConversationList(0, 100, callback);

@@ -62,6 +62,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private UserAllInfoBean currentUserInfoBean;
     private ChatActivity context;
     private List<EmojiBean> emojiList;
+    private List<String> checkWordList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView leftSoundTip, rightSoundTip, leftRtcTip, rightRtcTip, leftGiftTip, rightGiftTip;
@@ -101,12 +102,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     }
 
-    public ChatAdapter(ChatActivity context, List<V2TIMMessage> mList, List<EmojiBean> emojiList, UserAllInfoBean selfUserInfoBean, UserAllInfoBean currentUserInfoBean) {
+    public ChatAdapter(ChatActivity context, List<V2TIMMessage> mList, List<EmojiBean> emojiList, List<String> checkWordList, UserAllInfoBean selfUserInfoBean, UserAllInfoBean currentUserInfoBean) {
         this.selfUserInfoBean = selfUserInfoBean;
         this.currentUserInfoBean = currentUserInfoBean;
         this.mList = mList;
         this.context = context;
         this.emojiList = emojiList;
+        this.checkWordList = checkWordList;
     }
 
     @Override
@@ -140,7 +142,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     if (!TextUtils.isEmpty(((TextElement) elements.get(0)).getTextContent())) {
                         holder.leftContentLayout.setVisibility(View.VISIBLE);
                         holder.leftContentLayout.removeAllViews();
-                        String showContent = ((TextElement) elements.get(0)).getTextContent();
+                        String showContent = checkContent(((TextElement) elements.get(0)).getTextContent());
                         boolean isHaveEmoji = false;
                         for (int e = 0; e < emojiList.size(); e++) {
                             int brokenInt = 0;
@@ -257,8 +259,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     if (!TextUtils.isEmpty(((TextElement) elements.get(0)).getTextContent())) {
                         holder.rightContentLayout.setVisibility(View.VISIBLE);
                         holder.rightContentLayout.removeAllViews();
-                        String showContent = ((TextElement) elements.get(0)).getTextContent();
-                        String oldContent = showContent;
+                        String showContent = checkContent(((TextElement) elements.get(0)).getTextContent());
                         boolean isHaveEmoji = false;
                         for (int e = 0; e < emojiList.size(); e++) {
                             while (showContent.indexOf(emojiList.get(e).getName()) != -1) {
@@ -369,6 +370,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 context.goToPersonInfo();
             }
         });
+    }
+
+    private String checkContent(String oldContent) {
+        String newContent = oldContent;
+        for (int c = 0; c < checkWordList.size(); c++) {
+            if (newContent.indexOf(checkWordList.get(c)) != -1) {
+                System.out.println("sss:" + checkWordList.get(c));
+                newContent = newContent.replaceAll(checkWordList.get(c), "***");
+            }
+        }
+        return newContent;
     }
 
     private String translateView(String content) {
