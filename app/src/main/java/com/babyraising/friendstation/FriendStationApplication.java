@@ -175,7 +175,7 @@ public class FriendStationApplication extends Application {
             public void onLocationChanged(AMapLocation aMapLocation) {
                 double latitude = aMapLocation.getLatitude();//获取纬度
                 double longitude = aMapLocation.getLongitude();//获取经度
-                System.out.println("location: latitude:" + latitude + ",longitude:" + longitude);
+//                System.out.println("location: latitude:" + latitude + ",longitude:" + longitude);
                 if (longitude == 0.0 && latitude == 0.0) {
                     return;
                 }

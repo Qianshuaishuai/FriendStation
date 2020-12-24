@@ -22,7 +22,9 @@
             android:layout_marginLeft="15dip"
             android:layout_marginRight="15dip"
             android:background="@drawable/shape_main_notice_search_bg"
-            android:gravity="center"></EditText>
+            android:editable="false"
+            android:gravity="center"
+            android:text="聊天"></EditText>
     </RelativeLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout

@@ -376,7 +376,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         String newContent = oldContent;
         for (int c = 0; c < checkWordList.size(); c++) {
             if (newContent.indexOf(checkWordList.get(c)) != -1) {
-                System.out.println("sss:" + checkWordList.get(c));
                 newContent = newContent.replaceAll(checkWordList.get(c), "***");
             }
         }

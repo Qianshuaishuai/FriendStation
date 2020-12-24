@@ -15,6 +15,7 @@ import com.babyraising.friendstation.ui.show.FindFragment;
 
 import org.xutils.x;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHolder> {
@@ -77,6 +78,11 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
 
         if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
             x.image().bind(holder.ivHead, mList.get(position).getAvatar());
+        }
+
+        if (context.getCurrentSelectType() == 2) {
+            DecimalFormat df = new DecimalFormat("#.00");
+            holder.cityTxt.setText(df.format(mList.get(position).getDistance() / 1000) + "km");
         }
 
         holder.ivNormal.setOnClickListener(new View.OnClickListener() {

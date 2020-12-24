@@ -11,7 +11,15 @@ public class UserMainPageBean {
     private String emotionState;
     private String curLatitude;
     private String curLongitude;
-    private String distance;
+    private double distance;
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
+    }
 
     public int getId() {
         return id;
@@ -93,11 +101,4 @@ public class UserMainPageBean {
         this.curLongitude = curLongitude;
     }
 
-    public String getDistance() {
-        return distance;
-    }
-
-    public void setDistance(String distance) {
-        this.distance = distance;
-    }
 }

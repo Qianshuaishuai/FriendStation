@@ -64,6 +64,7 @@ public class Constant {
     public static final String URL_FRIENDS_COIN = "friends/coin";
     public static final String URL_FRIENDS_COIN_ORDER = "friends/coinOrder";
     public static final String URL_FRIENDS_COIN_RECORD = "friends/coinRecord";
+    public static final String URL_FRIENDS_COIN_RECORD_SAVE = "friends/coinRecord/save";
     public static final String URL_FRIENDS_UPLOAD = "friends/upload";
     public static final String URL_FRIENDS_CONFIGAVATAR = "friends/configAvatar";
     public static final String URL_FRIENDS_USERFOLLOW_DELETE = "friends/userFollow/delete";

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -103,6 +104,14 @@ public class FindFragment extends BaseFragment {
     @ViewInject(R.id.select_no_show)
     private ImageView selectNoShow;
 
+    @ViewInject(R.id.refresh_layout)
+    private SwipeRefreshLayout refreshLayout;
+
+    @Event(R.id.dialog_close)
+    private void dialogCloseClick(View view) {
+        tipFirstLayout.setVisibility(View.GONE);
+    }
+
     private List<UserMainPageBean> userList = new ArrayList<>();
 
     @Event(R.id.select_no_show)
@@ -179,7 +188,6 @@ public class FindFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
     }
 
     public void goToPersonInfo(int userId) {
@@ -195,6 +203,10 @@ public class FindFragment extends BaseFragment {
         initView();
 
         getFriendList();
+    }
+
+    public int getCurrentSelectType() {
+        return selectType;
     }
 
     private void initView() {
@@ -236,6 +248,13 @@ public class FindFragment extends BaseFragment {
         tipList.setLayoutManager(manager2);
         tipList.setAdapter(showAdapter);
         tipList.addItemDecoration(new FirstShowSpaceItemDecoration((width1 - itemWidth * 4) / 8));
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getUserList();
+            }
+        });
     }
 
     @Override
@@ -352,6 +371,10 @@ public class FindFragment extends BaseFragment {
                     default:
                         T.s(response.getMsg());
                         break;
+                }
+
+                if (refreshLayout.isRefreshing()) {
+                    refreshLayout.setRefreshing(false);
                 }
             }
 

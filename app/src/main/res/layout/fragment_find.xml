@@ -231,12 +231,19 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/layout_select"
-        android:layout_marginBottom="60dip"></android.support.v7.widget.RecyclerView>
+        android:layout_below="@+id/layout_select">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layout_select"
+            android:layout_marginBottom="60dip"></android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <RelativeLayout
         android:id="@+id/layout_first_tip"
@@ -246,6 +253,7 @@
         android:visibility="gone">
 
         <RelativeLayout
+            android:id="@+id/layout_first_tip_main"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true">
@@ -331,5 +339,14 @@
                 </RelativeLayout>
             </LinearLayout>
         </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/dialog_close"
+            android:layout_width="28dip"
+            android:layout_height="28dip"
+            android:layout_below="@+id/layout_first_tip_main"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dip"
+            android:src="@mipmap/common_dialog_close" />
     </RelativeLayout>
 </RelativeLayout>

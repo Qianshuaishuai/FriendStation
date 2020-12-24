@@ -49,6 +49,9 @@ import com.babyraising.friendstation.bean.TimRTCResultBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.detector.KeyboardStatusDetector;
 import com.babyraising.friendstation.event.DeleteEvent;
+import com.babyraising.friendstation.request.GiftOrderSaveRequest;
+import com.babyraising.friendstation.request.UseCoinRequest;
+import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.util.FileUtil;
@@ -468,7 +471,7 @@ public class ChatActivity extends BaseActivity {
         getCurrentUserInfo(currentChatId);
         if (status == Constant.OFFICIAL_INTO_CHAT_CODE) {
             officialLayout.setVisibility(View.VISIBLE);
-            mainTipLayout.setVisibility(View.VISIBLE);
+//            mainTipLayout.setVisibility(View.VISIBLE);
         } else {
             officialLayout.setVisibility(View.GONE);
             mainTipLayout.setVisibility(View.GONE);
@@ -487,8 +490,7 @@ public class ChatActivity extends BaseActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    sendTextMessage(content.getText().toString());
-                    content.setText("");
+                    useCoin(1, "", "", "", 0);
                 }
                 return false;
             }
@@ -588,7 +590,7 @@ public class ChatActivity extends BaseActivity {
         if (requestCode == Constant.ACTIVITY_COMMON_REQUEST) {
             String word = data.getStringExtra("common-word");
             if (!TextUtils.isEmpty(word)) {
-                sendTextMessage(word);
+                useCoin(4, "", "", word, 0);
             }
         }
 
@@ -733,6 +735,70 @@ public class ChatActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    private void useCoin(final int msgType, final String localPic, final String recordPic, final String commonWord, final int timeOffset) {
+        if (selfUserBean.getUserCount().getNumCoin() <= 0) {
+            mainTipLayout.setVisibility(View.VISIBLE);
+            T.s("你当前金币余额不足，请充值");
+            return;
+        }
+        Gson gson = new Gson();
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        UseCoinRequest request = new UseCoinRequest();
+        request.setGivenId(String.valueOf(currentChatId));
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_COIN_RECORD_SAVE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUpdatePasswordResponse response = gson.fromJson(result, UmsUpdatePasswordResponse.class);
+                System.out.println("useCoin:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        switch (msgType) {
+                            case 1:
+                                sendTextMessage(content.getText().toString());
+                                content.setText("");
+                                break;
+                            case 2:
+                                sendImageMessage(localPic);
+                                break;
+
+                            case 3:
+                                sendVoiceMessage(recordPic, timeOffset);
+                                break;
+                            case 4:
+                                sendTextMessage(commonWord);
+                                break;
+                        }
+
+                        getUserFullInfo();
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
 
     private void getCurrentUserInfo(int currentChatId) {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
@@ -794,11 +860,11 @@ public class ChatActivity extends BaseActivity {
     }
 
     private void uploadPic(final String localPic) {
-        sendImageMessage(localPic);
+        useCoin(2, localPic, "", "", 0);
     }
 
     private void uploadRecord(final String recordPic, final int timeOffset) {
-        sendVoiceMessage(recordPic, timeOffset);
+        useCoin(3, "", recordPic, "", timeOffset);
     }
 
     private void sendReceiptMessage(int status) {
@@ -888,5 +954,46 @@ public class ChatActivity extends BaseActivity {
     public void onDeleteEvent(DeleteEvent event) {
         System.out.println("delete notify");
         getMessageList();
+    }
+
+
+    private void getUserFullInfo() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_FULL);
+        params.addHeader("Authorization", bean.getAccessToken());
+        System.out.println(bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
+                System.out.println("getUserFullInfo" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());
+                        selfUserBean = response.getData();
+                        System.out.println("coin_num:" + response.getData().getUserCount().getNumCoin());
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }
