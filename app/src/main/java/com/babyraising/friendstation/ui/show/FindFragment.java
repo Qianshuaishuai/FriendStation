@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -30,6 +31,7 @@ import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.decoration.FirstShowSpaceItemDecoration;
 import com.babyraising.friendstation.decoration.SpaceItemDecoration;
 import com.babyraising.friendstation.response.FriendResponse;
+import com.babyraising.friendstation.response.NoticeResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.response.UserMainPageResponse;
 import com.babyraising.friendstation.ui.main.ChatActivity;
@@ -39,6 +41,8 @@ import com.babyraising.friendstation.ui.main.VoiceSendActivity;
 import com.babyraising.friendstation.util.DisplayUtils;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
+
+import net.nightwhistler.htmlspanner.TextUtil;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -62,6 +66,9 @@ public class FindFragment extends BaseFragment {
 
     @ViewInject(R.id.list)
     private RecyclerView recycleList;
+
+    @ViewInject(R.id.tip_content)
+    private TextView tipContent;
 
     @ViewInject(R.id.type_tv1)
     private TextView typeTv1;
@@ -202,7 +209,7 @@ public class FindFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initView();
 
-        getFriendList();
+//        getFriendList();
     }
 
     public int getCurrentSelectType() {
@@ -261,6 +268,7 @@ public class FindFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         getUserList();
+        getNotice();
     }
 
     public void goToChat(int userId) {
@@ -295,6 +303,47 @@ public class FindFragment extends BaseFragment {
                             mlist.add(newList.get(l));
                         }
                         adapter.notifyDataSetChanged();
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void getNotice() {
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_NOTICE);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                NoticeResponse response = gson.fromJson(result, NoticeResponse.class);
+                System.out.println("getNotice:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        if (response.getData().size() > 0) {
+                            if (!TextUtils.isEmpty(response.getData().get(0))){
+                                tipContent.setText(response.getData().get(0));
+                            }
+                        }
                         break;
                     default:
 
