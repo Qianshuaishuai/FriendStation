@@ -463,6 +463,7 @@ public class PersonInfoActivity extends BaseActivity {
             getPhotoList();
         } else {
             getUserInfoForOther();
+            getPhotoListForUser();
         }
     }
 
@@ -491,6 +492,48 @@ public class PersonInfoActivity extends BaseActivity {
 //                            background.setVisibility(View.VISIBLE);
 //                            x.image().bind(background, photoList.get(0).getUrl());
 //                        }
+                        showAlbumAdapter.notifyDataSetChanged();
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void getPhotoListForUser() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_ALBUM_PAGEBYID);
+        params.addQueryStringParameter("userId", currentUserId);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                AlbumResponse response = gson.fromJson(result, AlbumResponse.class);
+                System.out.println("albumListUserId:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        photoList.clear();
+                        for (int i = 0; i < response.getData().getRecords().size(); i++) {
+                            photoList.add(response.getData().getRecords().get(i));
+                        }
                         showAlbumAdapter.notifyDataSetChanged();
                         break;
                     default:

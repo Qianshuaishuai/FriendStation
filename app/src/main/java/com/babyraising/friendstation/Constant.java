@@ -31,6 +31,7 @@ public class Constant {
 
     public static final String URL_UMS_USER = "ums/user";
     public static final String URL_UMS_USER_ALBUM_PAGE = "ums/user/album/page";
+    public static final String URL_UMS_USER_ALBUM_PAGEBYID = "ums/user/album/pageById";
     public static final String URL_UMS_USER_FULL = "ums/user/full";
     public static final String URL_UMS_GET_FULL_BYID = "ums/user/getFullById";
     public static final String URL_UMS_USER_SAVE_ALBUM = "ums/user/save/album";
