@@ -12,6 +12,8 @@ public class UserMainPageBean {
     private String curLatitude;
     private String curLongitude;
     private double distance;
+    private String birthday;
+    private int sex;
 
     public double getDistance() {
         return distance;
@@ -101,4 +103,19 @@ public class UserMainPageBean {
         this.curLongitude = curLongitude;
     }
 
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
+    }
 }

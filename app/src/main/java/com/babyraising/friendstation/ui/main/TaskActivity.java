@@ -77,6 +77,11 @@ public class TaskActivity extends BaseActivity {
             Intent intent = new Intent(this, SignActivity.class);
             startActivity(intent);
         }
+
+        if (list.get(position).getTitle().equals("头像上传")) {
+            Intent intent = new Intent(this, PersonInfoActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void getTaskList() {

@@ -106,20 +106,20 @@
                 android:textColor="#B9B8C1"
                 android:textSize="12dip" />
 
-            <View
-                android:layout_width="0.5dip"
-                android:layout_height="10dip"
-                android:layout_marginLeft="6dip"
-                android:layout_marginRight="6dip"
-                android:background="#B9B8C1"></View>
+            <!--<View-->
+                <!--android:layout_width="0.5dip"-->
+                <!--android:layout_height="10dip"-->
+                <!--android:layout_marginLeft="6dip"-->
+                <!--android:layout_marginRight="6dip"-->
+                <!--android:background="#B9B8C1"></View>-->
 
-            <TextView
-                android:id="@+id/income"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="未知"
-                android:textColor="#B9B8C1"
-                android:textSize="12dip" />
+            <!--<TextView-->
+                <!--android:id="@+id/income"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="未知"-->
+                <!--android:textColor="#B9B8C1"-->
+                <!--android:textSize="12dip" />-->
 
         </LinearLayout>
 

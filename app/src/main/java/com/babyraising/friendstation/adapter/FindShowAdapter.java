@@ -16,6 +16,8 @@ import com.babyraising.friendstation.ui.show.FindFragment;
 import org.xutils.x;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHolder> {
@@ -24,7 +26,7 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
     private FindFragment context;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTxt, cityTxt, ageTxt, heightTxt, jobTxt, incomeTxt, signTxt;
+        TextView nameTxt, cityTxt, ageTxt, heightTxt, jobTxt, signTxt;
         ImageView ivSelected, ivNormal, ivHead;
         LinearLayout mainLayout;
 
@@ -36,7 +38,7 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
             heightTxt = (TextView) view.findViewById(R.id.height);
             jobTxt = (TextView) view.findViewById(R.id.job);
             signTxt = (TextView) view.findViewById(R.id.sign);
-            incomeTxt = (TextView) view.findViewById(R.id.income);
+//            incomeTxt = (TextView) view.findViewById(R.id.income);
             ivSelected = (ImageView) view.findViewById(R.id.iv_selected);
             ivNormal = (ImageView) view.findViewById(R.id.iv_normal);
             ivHead = (ImageView) view.findViewById(R.id.head);
@@ -59,25 +61,70 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        switch (mList.get(position).getSex()) {
+            case 0:
+                if (!TextUtils.isEmpty(mList.get(position).getWork())) {
+                    holder.jobTxt.setText(mList.get(position).getWork());
+                }
 
-        if (!TextUtils.isEmpty(mList.get(position).getWork())) {
-            holder.jobTxt.setText(mList.get(position).getWork());
-        }
+                if (mList.get(position).getHeight() != 0) {
+                    holder.ageTxt.setText(mList.get(position).getHeight() + "cm");
+                }
 
-        if (!TextUtils.isEmpty(mList.get(position).getIncome())) {
-            holder.incomeTxt.setText(mList.get(position).getIncome());
-        }
+                if (!TextUtils.isEmpty(mList.get(position).getIncome())) {
+                    holder.heightTxt.setText(mList.get(position).getIncome());
+                }
 
-        if (mList.get(position).getHeight() != 0) {
-            holder.heightTxt.setText(mList.get(position).getHeight() + "cm");
-        }
+                if (!TextUtils.isEmpty(mList.get(position).getNickName())) {
+                    holder.nameTxt.setText(mList.get(position).getNickName());
+                }
 
-        if (!TextUtils.isEmpty(mList.get(position).getNickName())) {
-            holder.nameTxt.setText(mList.get(position).getNickName());
-        }
+                if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
+                    x.image().bind(holder.ivHead, mList.get(position).getAvatar());
+                }
+                break;
+            case 1:
+                if (!TextUtils.isEmpty(mList.get(position).getWork())) {
+                    holder.jobTxt.setText(mList.get(position).getWork());
+                }
 
-        if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
-            x.image().bind(holder.ivHead, mList.get(position).getAvatar());
+                if (mList.get(position).getHeight() != 0) {
+                    holder.ageTxt.setText(mList.get(position).getHeight() + "cm");
+                }
+
+                if (!TextUtils.isEmpty(mList.get(position).getIncome())) {
+                    holder.heightTxt.setText(mList.get(position).getIncome());
+                }
+
+                if (!TextUtils.isEmpty(mList.get(position).getNickName())) {
+                    holder.nameTxt.setText(mList.get(position).getNickName());
+                }
+
+                if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
+                    x.image().bind(holder.ivHead, mList.get(position).getAvatar());
+                }
+                break;
+            case 2:
+                if (!TextUtils.isEmpty(mList.get(position).getWork())) {
+                    holder.jobTxt.setText(mList.get(position).getWork());
+                }
+
+                if (mList.get(position).getHeight() != 0) {
+                    holder.heightTxt.setText(mList.get(position).getHeight() + "cm");
+                }
+
+                if (getAge(mList.get(position).getAvatar()) > 0) {
+                    holder.ageTxt.setText(mList.get(position).getIncome());
+                }
+
+                if (!TextUtils.isEmpty(mList.get(position).getNickName())) {
+                    holder.nameTxt.setText(mList.get(position).getNickName());
+                }
+
+                if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
+                    x.image().bind(holder.ivHead, mList.get(position).getAvatar());
+                }
+                break;
         }
 
         if (context.getCurrentSelectType() == 2) {
@@ -100,6 +147,22 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
         });
 
         holder.signTxt.setText("用户暂未设置签名");
+    }
+
+    private int getAge(String birthday) {
+        if (!TextUtils.isEmpty(birthday)) {
+            String yearStr = birthday.substring(0, 4);
+            int year = Integer.parseInt(yearStr);
+            return Integer.parseInt(getCurrentYear()) - year;
+        }
+
+        return 0;
+    }
+
+    public static String getCurrentYear() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        Date date = new Date();
+        return sdf.format(date);
     }
 
     @Override

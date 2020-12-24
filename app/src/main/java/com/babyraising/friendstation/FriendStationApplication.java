@@ -369,7 +369,37 @@ public class FriendStationApplication extends Application {
 
     private void initVoiceSignList() {
         List<String> voiceSignList = new ArrayList<>();
-        voiceSignList = new ArrayList<>();
+        voiceSignList.add("我想你一定很忙\n所以只看前三个字就好啦");
+        voiceSignList.add("土豆可以变成土豆泥\n玉米可以变成玉米泥\n我可以变成我爱泥");
+        voiceSignList.add("你摸摸我衣服的布料\n是不是做你女朋友的料");
+        voiceSignList.add("我最近手头有点紧\n能借你的手牵牵吗");
+        voiceSignList.add("你知道你和星星有什么区别吗\n星星在天上\n你在我心里");
+        voiceSignList.add("吃西瓜吗\n买一送一\n买一个西瓜\n送我这样一个小傻瓜");
+        voiceSignList.add("这是西瓜\n那是哈密瓜\n而你是我的小傻瓜");
+        voiceSignList.add("想带你去吃烤紫薯\n然后在你耳边悄悄告诉你\n我紫薯与你");
+        voiceSignList.add("我们的爱坚不可摧\n但你是我的软肋。");
+        voiceSignList.add("我有点病了你来看看我吧\n心病还需心药医。");
+        voiceSignList.add("好想你\n想的我今天换了三条小内内。");
+        voiceSignList.add("可以教我煮汤圆吗\n我有点笨\n做什么都容易露馅\n喜欢你也是。");
+        voiceSignList.add("你累不累啊\n不累啊\n可是你都在我脑子里跑了一整天了。");
+        voiceSignList.add("我不看星星\n也不看你\n这样你和星星都蒙在鼓里");
+        voiceSignList.add("你可真阴啊\n居然在背地里喜欢我");
+        voiceSignList.add("我超喜欢吃这个小零食的\n学校小卖部就有\n就叫紫薯于你");
+        voiceSignList.add("我姓张\n你姓何\n我们是对儿小天鹅");
+        voiceSignList.add("这是牛肉\n这是猪肉\n你是我的心头肉");
+        voiceSignList.add("你会弹吉他吗\n为什么拨动了我的心弦");
+        voiceSignList.add("你身上什么重要\n你重要\n我又不在你身上\n你在我心上");
+        voiceSignList.add("我要在你身上做\n春天对樱桃树做的事情");
+        voiceSignList.add("我的心里\n没有森林\n你愿做我那片沙滩上唯一的沙雕吗");
+        voiceSignList.add("以后我们结婚一定要生个男孩\n因为我只喜欢你这一个女孩子");
+        voiceSignList.add("我的身体很好\n可以抗米袋\n可以抗煤气\n可就是抗不住像你");
+        voiceSignList.add("我为人特别小气\n除了你也就草莓巧克力冰淇淋蛋糕牛奶酸奶汽水等能得我心");
+        voiceSignList.add("你闻到什么味道了吗\n没有啊\n怎么你一出来空气就甜炸了啊");
+        voiceSignList.add("我对世界怀有恶意\n我对你心存爱意");
+        voiceSignList.add("我不想撞南墙了\n只想撞你的胸膛");
+        voiceSignList.add("喜欢你是一件很麻烦的事\n但是我就是喜欢惹麻烦");
+        voiceSignList.add("抽烟有害健康\n爱我延年益寿");
+        voiceSignList.add("我发现昨天很喜欢你\n今天也很喜欢你\n而且有预感明天也会喜欢你");
         saveVoiceSignList(voiceSignList);
     }
 
