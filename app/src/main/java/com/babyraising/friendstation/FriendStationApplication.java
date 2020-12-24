@@ -17,6 +17,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.EmojiBean;
+import com.babyraising.friendstation.bean.HelpBean;
 import com.babyraising.friendstation.bean.LocationBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.service.RTCService;
@@ -79,7 +80,28 @@ public class FriendStationApplication extends Application {
         initCheckWord();
         startLocation();
         initVoiceSignList();
+        initHelpData();
 //        initAMapTrack();
+    }
+
+    private void initHelpData() {
+        HelpBean bean = new HelpBean();
+        bean.setQuestion("我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题我是问题");
+        bean.setAnswer("我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案我是答案");
+        List<HelpBean> helpList = new ArrayList<>();
+        helpList.add(bean);
+        helpList.add(bean);
+        helpList.add(bean);
+        helpList.add(bean);
+        helpList.add(bean);
+        helpList.add(bean);
+        helpList.add(bean);
+        helpList.add(bean);
+        helpList.add(bean);
+        helpList.add(bean);
+        helpList.add(bean);
+        helpList.add(bean);
+        saveHelpList(helpList);
     }
 
     private void initCheckWord() {
@@ -102,7 +124,7 @@ public class FriendStationApplication extends Application {
                     for (int s = 0; s < swords.length; s++) {
                         if (!TextUtils.isEmpty(swords[s])) {
                             String content = swords[s].replaceAll(" ", "");
-                            if (!TextUtils.isEmpty(content)){
+                            if (!TextUtils.isEmpty(content)) {
                                 checkWordList.add(content);
                             }
                         }
@@ -426,6 +448,17 @@ public class FriendStationApplication extends Application {
 
     public ArrayList<String> getVoiceSignList() {
         return gson.fromJson(sp.getString("voice-sign", ""), new TypeToken<List<String>>() {
+        }.getType());
+    }
+
+    public void saveHelpList(List<HelpBean> list) {
+        String beanString = gson.toJson(list);
+        editor.putString("help", beanString);
+        editor.commit();
+    }
+
+    public ArrayList<HelpBean> getHelpList() {
+        return gson.fromJson(sp.getString("help", ""), new TypeToken<List<HelpBean>>() {
         }.getType());
     }
 }
