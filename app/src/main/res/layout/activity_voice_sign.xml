@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAF9FE"
+    tools:context=".ui.main.VoiceSignActivity">
+
+    <RelativeLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="48dip">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:src="@mipmap/common_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="语音签名"
+            android:textColor="#ff3c3b41"
+            android:textSize="17dip" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_alignParentBottom="true"
+            android:background="#D4D4D4"></View>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_top"
+        android:layout_marginLeft="15dip"
+        android:layout_marginTop="15dip"
+        android:layout_marginRight="10dip"
+        android:background="@mipmap/voice_sign_bg"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dip"
+            android:layout_marginBottom="15dip"
+            android:text="- 读一段话 -"
+            android:textColor="#37445A"
+            android:textSize="14dip" />
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dip"
+            android:gravity="center_horizontal"
+            android:text="你的笑\n加速了我的心跳\n让我每夜都在回味着那份美妙\n缘分让你我拥抱\n于是我不敢迟到，每天都给你爱的报告"
+            android:textColor="#9692B1"
+            android:textSize="13dip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_content"
+        android:layout_marginTop="22dip"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="21dip"
+            android:layout_height="21dip"
+            android:src="@mipmap/voice_sign_fresh" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dip"
+            android:text="换一个"
+            android:textColor="#F75184"
+            android:textSize="12dip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="28dip"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="点击按键开始朗诵或自由发挥"
+            android:textColor="#B9B8C1"
+            android:textSize="14dip" />
+
+        <ImageView
+            android:id="@+id/voice_sign_iv"
+            android:layout_width="90dip"
+            android:layout_height="90dip"
+            android:layout_marginTop="12dip"
+            android:src="@mipmap/voice_sign_button" />
+    </LinearLayout>
+</RelativeLayout>

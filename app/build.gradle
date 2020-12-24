@@ -54,7 +54,6 @@ dependencies {
     implementation 'com.amap.api:location:latest.integration'
 //    implementation 'com.tencent.imsdk:tuikit:5.0.10'
 
-
 //    implementation 'com.tencent.imsdk:imsdk:4.9.1'
 //    implementation 'com.tencent.imsdk:tuikit:xxx版本'
 

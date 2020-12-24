@@ -45,29 +45,18 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-
-    <!--用于进行网络定位-->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-    <!--用于访问GPS定位-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    <!--获取运营商信息，用于支持提供运营商信息相关的接口-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-    <!--用于访问wifi网络信息，wifi信息会用于进行网络定位-->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
-    <!--这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
-    <!--用于访问网络-->
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-    <!--用于读取手机当前的状态-->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
-    <!--写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-    <!--用于申请调用A-GPS模块-->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"></uses-permission>
-    <!--用于申请获取蓝牙信息进行室内定位-->
-    <uses-permission android:name="android.permission.BLUETOOTH"></uses-permission>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"></uses-permission>
+    <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- 用于访问网络 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 用于读取手机当前的状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 用于申请调用A-GPS模块 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /> <!-- 用于申请获取蓝牙信息进行室内定位 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:name=".FriendStationApplication"
@@ -77,20 +66,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ui.user.PhotoActivity"></activity>
+        <activity android:name=".ui.main.VoiceSignActivity"></activity>
+        <activity android:name=".ui.user.PhotoActivity" />
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="dc4596d9f78ee20f2d2435a73b40cf5f">
-
-        </meta-data>
+            android:value="dc4596d9f78ee20f2d2435a73b40cf5f"></meta-data>
 
         <activity
             android:name=".ui.main.ChatActivity"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ui.main.MomentSendActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".ui.main.VoiceSendActivity" />
         <activity android:name=".ui.main.VoiceTipActivity" />
         <activity android:name=".ui.main.CloseActivity" />
@@ -118,12 +106,8 @@
         <activity android:name=".ui.user.NoticeActivity" />
         <activity android:name=".ui.user.BuildUserNameActivity" />
         <activity android:name=".ui.user.BuildUserSexActivity" />
-        <activity android:name=".ui.user.BuildUserActivity">
-
-        </activity>
-        <activity android:name=".ui.main.VoiceSelfActivity">
-
-        </activity>
+        <activity android:name=".ui.user.BuildUserActivity"></activity>
+        <activity android:name=".ui.main.VoiceSelfActivity"></activity>
         <activity android:name=".ui.user.CodeActivity" />
         <activity android:name=".ui.user.LoginPhoneActivity" />
         <activity android:name=".ui.user.WelcomeActivity">
@@ -134,13 +118,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.user.LoginActivity" />
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.MainActivity"></activity>
 
-        </activity>
-
-        <service android:name=".service.RTCService"></service>
-        <service android:name=".service.LocationService"></service>
-        <service android:name="com.amap.api.location.APSService"></service>
+        <service android:name=".service.RTCService" />
+        <service android:name=".service.LocationService" />
+        <service android:name="com.amap.api.location.APSService" />
     </application>
 
 </manifest>

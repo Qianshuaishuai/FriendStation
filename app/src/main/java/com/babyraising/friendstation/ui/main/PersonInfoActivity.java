@@ -47,6 +47,7 @@ import com.github.lassana.recorder.AudioRecorder;
 import com.github.lassana.recorder.AudioRecorderBuilder;
 import com.google.gson.Gson;
 import com.nanchen.compresshelper.CompressHelper;
+import com.tencent.imsdk.message.SoundElement;
 
 import org.xutils.common.Callback;
 import org.xutils.common.util.KeyValue;
@@ -134,6 +135,16 @@ public class PersonInfoActivity extends BaseActivity {
 
     @ViewInject(R.id.layout_voice)
     private LinearLayout voiceLayout;
+
+    @Event(R.id.layout_voice)
+    private void voiceLayoutClick(View view) {
+        if (mode == 1) {
+            return;
+        }
+
+        Intent intent = new Intent(this, VoiceSignActivity.class);
+        startActivity(intent);
+    }
 
     @ViewInject(R.id.voice)
     private ImageView voice;
@@ -272,7 +283,7 @@ public class PersonInfoActivity extends BaseActivity {
             mediaPlayer.prepare();
             mediaPlayer.start();
             currentRecordDur = mediaPlayer.getDuration();
-            audio.setText(currentRecordDur + "S");
+            audio.setText(currentRecordDur / 1000 + "S");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -706,6 +717,8 @@ public class PersonInfoActivity extends BaseActivity {
 
             if (!TextUtils.isEmpty(userAllInfoBean.getRecordSign())) {
                 playSound(userAllInfoBean.getRecordSign());
+            } else {
+                audio.setText("你暂未设置语言签名");
             }
 
             tagAdapter = new TagAdapter(tagList);

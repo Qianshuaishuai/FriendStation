@@ -78,6 +78,7 @@ public class FriendStationApplication extends Application {
         initLocationOption();
         initCheckWord();
         startLocation();
+        initVoiceSignList();
 //        initAMapTrack();
     }
 
@@ -344,6 +345,12 @@ public class FriendStationApplication extends Application {
 
     }
 
+    private void initVoiceSignList() {
+        List<String> voiceSignList = new ArrayList<>();
+        voiceSignList = new ArrayList<>();
+        saveVoiceSignList(voiceSignList);
+    }
+
     private void initSp() {
         sp = getSharedPreferences("prod", Context.MODE_PRIVATE);
         editor = sp.edit();
@@ -408,6 +415,17 @@ public class FriendStationApplication extends Application {
 
     public ArrayList<String> getCheckWordList() {
         return gson.fromJson(sp.getString("check-word", ""), new TypeToken<List<String>>() {
+        }.getType());
+    }
+
+    public void saveVoiceSignList(List<String> list) {
+        String beanString = gson.toJson(list);
+        editor.putString("voice-sign", beanString);
+        editor.commit();
+    }
+
+    public ArrayList<String> getVoiceSignList() {
+        return gson.fromJson(sp.getString("voice-sign", ""), new TypeToken<List<String>>() {
         }.getType());
     }
 }

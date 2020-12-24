@@ -412,6 +412,7 @@
                             android:textSize="14dip" />
 
                         <LinearLayout
+                            android:id="@+id/layout_voice"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="10dip"
@@ -419,7 +420,6 @@
                             android:orientation="vertical">
 
                             <LinearLayout
-                                android:id="@+id/layout_voice"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:gravity="center_vertical"
