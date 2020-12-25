@@ -67,7 +67,7 @@ public class RTCService extends Service {
                         switch (bean.getMsgType()) {
                             case Constant.INVITE_CHAT_ROOM_CODE:
                                 startVoiceActivity(bean.getInviteBean());
-//                                deleteMessage(msg);
+                                setMessageRead(msg.getUserID());
                                 break;
                         }
                     } else {
@@ -86,6 +86,23 @@ public class RTCService extends Service {
                 super.onRecvMessageRevoked(msgID);
             }
         });
+    }
+
+    private void setMessageRead(String userId) {
+        V2TIMCallback callback = new V2TIMCallback() {
+            @Override
+            public void onSuccess() {
+                System.out.println("setMessageRead success");
+                EventBus.getDefault().post(new DeleteEvent());
+            }
+
+            @Override
+            public void onError(int code, String desc) {
+                System.out.println("setMessageRead error:" + code + ",desc :" + desc);
+            }
+        };
+
+        V2TIMManager.getMessageManager().markC2CMessageAsRead(userId, callback);
     }
 
     private void deleteMessage(V2TIMMessage message) {

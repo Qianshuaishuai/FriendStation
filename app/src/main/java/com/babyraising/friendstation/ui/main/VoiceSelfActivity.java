@@ -256,6 +256,7 @@ public class VoiceSelfActivity extends BaseActivity {
                         String objectStr = new String(((CustomElement) elements.get(0)).getData());
                         TimCustomBean bean = gson.fromJson(objectStr, TimCustomBean.class);
                         System.out.println("发送方收到接收方反馈 result：" + gson.toJson(bean));
+                        setMessageRead(msg.getUserID());
                         switch (bean.getMsgType()) {
                             case Constant.RESULT_CHAT_ROOM_CODE:
                                 switch (bean.getResultBean().getReceipt()) {
@@ -288,6 +289,23 @@ public class VoiceSelfActivity extends BaseActivity {
                 super.onRecvMessageRevoked(msgID);
             }
         });
+    }
+
+    private void setMessageRead(String userId) {
+        V2TIMCallback callback = new V2TIMCallback() {
+            @Override
+            public void onSuccess() {
+                System.out.println("setMessageRead success");
+                EventBus.getDefault().post(new DeleteEvent());
+            }
+
+            @Override
+            public void onError(int code, String desc) {
+                System.out.println("setMessageRead error:" + code + ",desc :" + desc);
+            }
+        };
+
+        V2TIMManager.getMessageManager().markC2CMessageAsRead(userId, callback);
     }
 
     private void deleteMessage(V2TIMMessage message) {

@@ -65,6 +65,7 @@ import com.nanchen.compresshelper.CompressHelper;
 import com.tencent.imsdk.message.CustomElement;
 import com.tencent.imsdk.message.MessageBaseElement;
 import com.tencent.imsdk.v2.V2TIMAdvancedMsgListener;
+import com.tencent.imsdk.v2.V2TIMCallback;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMMessage;
 import com.tencent.imsdk.v2.V2TIMMessageManager;
@@ -404,6 +405,7 @@ public class ChatActivity extends BaseActivity {
                 super.onRecvNewMessage(msg);
                 System.out.println("get new message :" + gson.toJson(msg));
                 getMessageList();
+                setMessageRead(msg.getUserID());
             }
 
             @Override
@@ -637,6 +639,24 @@ public class ChatActivity extends BaseActivity {
                 break;
         }
     }
+
+    private void setMessageRead(String userId) {
+        V2TIMCallback callback = new V2TIMCallback() {
+            @Override
+            public void onSuccess() {
+                System.out.println("setMessageRead success");
+                EventBus.getDefault().post(new DeleteEvent());
+            }
+
+            @Override
+            public void onError(int code, String desc) {
+                System.out.println("setMessageRead error:" + code + ",desc :" + desc);
+            }
+        };
+
+        V2TIMManager.getMessageManager().markC2CMessageAsRead(userId, callback);
+    }
+
 
     private void getMessageList() {
         V2TIMValueCallback<List<V2TIMMessage>> callback = new V2TIMValueCallback<List<V2TIMMessage>>() {
