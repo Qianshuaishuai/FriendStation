@@ -115,4 +115,65 @@
         android:layout_marginRight="15dip"
         android:layout_marginBottom="58dip"
         android:src="@mipmap/moment_add" />
+
+    <RelativeLayout
+        android:id="@+id/layout_share_all"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#4e000000"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="60dip"
+            android:background="@drawable/shape_select_photo_bg"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/layout_share_1"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="48dip"
+                    android:layout_height="48dip"
+                    android:src="@mipmap/btn_weixin" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dip"
+                    android:text="微信好友"
+                    android:textColor="#1e1e1e"
+                    android:textSize="16dip" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_share_2"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="48dip"
+                    android:layout_height="48dip"
+                    android:src="@mipmap/btn_pengyouquan" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dip"
+                    android:text="微信朋友圈"
+                    android:textColor="#1e1e1e"
+                    android:textSize="16dip" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>

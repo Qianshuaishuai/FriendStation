@@ -3,6 +3,7 @@ package com.babyraising.friendstation.ui.show;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +32,7 @@ import com.babyraising.friendstation.ui.main.ChatActivity;
 import com.babyraising.friendstation.ui.main.MomentSendActivity;
 import com.babyraising.friendstation.ui.main.PersonInfoActivity;
 import com.babyraising.friendstation.util.T;
+import com.babyraising.friendstation.util.WxShareUtils;
 import com.google.gson.Gson;
 
 import org.xutils.common.Callback;
@@ -45,6 +47,9 @@ import java.util.List;
 
 @ContentView(R.layout.fragment_moment)
 public class MomentFragment extends BaseFragment {
+
+    private String showContent = "";
+    private String showImgfilePath = "";
 
     private int selectType = 1;
     private MomentAdapter adapter;
@@ -70,6 +75,33 @@ public class MomentFragment extends BaseFragment {
 
     @ViewInject(R.id.type_view3)
     private View typeV3;
+
+    @ViewInject(R.id.layout_share_all)
+    private RelativeLayout shareAllLayout;
+
+    @Event(R.id.layout_share_1)
+    private void share1Click(View view) {
+        try {
+            WxShareUtils.imageShare(getActivity(), showImgfilePath, showContent, 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.toString());
+            T.s("获取分享信息失败");
+        }
+        shareAllLayout.setVisibility(View.GONE);
+    }
+
+    @Event(R.id.layout_share_2)
+    private void share2Click(View view) {
+        try {
+            WxShareUtils.imageShare(getActivity(), showImgfilePath, showContent, 2);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.toString());
+            T.s("获取分享信息失败");
+        }
+        shareAllLayout.setVisibility(View.GONE);
+    }
 
     @Event(R.id.add)
     private void addClick(View view) {
@@ -181,6 +213,12 @@ public class MomentFragment extends BaseFragment {
         intent.putExtra("mode", 1);
         intent.putExtra("user-id", userId);
         startActivity(intent);
+    }
+
+    public void shareContent(int position) {
+        showContent = list.get(position).getContent();
+        showImgfilePath = list.get(position).getPicUrl1();
+        shareAllLayout.setVisibility(View.VISIBLE);
     }
 
     public void followUser(int id) {

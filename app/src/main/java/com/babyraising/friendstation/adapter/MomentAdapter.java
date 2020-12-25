@@ -154,6 +154,13 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                 });
                 break;
         }
+
+        holder.shareIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.shareContent(position);
+            }
+        });
     }
 
     @Override
