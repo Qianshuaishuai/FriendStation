@@ -71,5 +71,7 @@ public class Constant {
     public static final String URL_FRIENDS_USERFOLLOW_DELETE = "friends/userFollow/delete";
     public static final String URL_FRIENDS_USERFOLLOW_SAVE = "friends/userFollow/save";
     public static final String URL_FRIENDS_NOTICE = "friends/notice";
+    public static final String URL_FRIENDS_USERVIEW_SAVE = "friends/userView/save";
+    public static final String URL_FRIENDS_USERVIEW = "friends/userView";
 
 }

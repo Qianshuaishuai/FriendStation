@@ -35,6 +35,7 @@ import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.AlbumDetailBean;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.request.FollowRequest;
 import com.babyraising.friendstation.request.SetusernameAndIconRequest;
 import com.babyraising.friendstation.response.AlbumResponse;
 import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
@@ -269,6 +270,47 @@ public class PersonInfoActivity extends BaseActivity {
         Intent intent = getIntent();
         mode = intent.getIntExtra("mode", 0);
         currentUserId = intent.getIntExtra("user-id", 0);
+
+        if (mode == 1) {
+            updateLookMe(currentUserId);
+        }
+    }
+
+    private void updateLookMe(int currentUserId) {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_USERVIEW_SAVE);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.addQueryStringParameter("viewId", currentUserId);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("updateLookMe:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void initMediaPlayer() {
