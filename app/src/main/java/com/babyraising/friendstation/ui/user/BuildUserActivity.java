@@ -71,6 +71,7 @@ public class BuildUserActivity extends BaseActivity {
 
         if (randomList.size() > 0) {
             int math = (int) (Math.random() * randomList.size());
+            System.out.println(math);
             x.image().bind(head, randomList.get(math).getAvatarUrl());
             newHeadIconUrl = randomList.get(math).getAvatarUrl();
         }

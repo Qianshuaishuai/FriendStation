@@ -151,9 +151,14 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
 
     private int getAge(String birthday) {
         if (!TextUtils.isEmpty(birthday)) {
-            String yearStr = birthday.substring(0, 4);
-            int year = Integer.parseInt(yearStr);
-            return Integer.parseInt(getCurrentYear()) - year;
+            try {
+                String yearStr = birthday.substring(0, 4);
+                int year = Integer.parseInt(yearStr);
+                return Integer.parseInt(getCurrentYear()) - year;
+            } catch (Exception e) {
+                return 0;
+            }
+
         }
 
         return 0;

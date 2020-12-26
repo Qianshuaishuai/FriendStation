@@ -727,7 +727,9 @@ public class PersonInfoActivity extends BaseActivity {
 
         if (userAllInfoBean != null) {
             luxury.setText("0");
-            number.setText(userAllInfoBean.getMobile());
+            if (!TextUtils.isEmpty(userAllInfoBean.getUserNo())) {
+                number.setText(userAllInfoBean.getUserNo());
+            }
 
             if (!TextUtils.isEmpty(userAllInfoBean.getNickname())) {
                 name.setText(userAllInfoBean.getNickname());

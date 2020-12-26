@@ -47,6 +47,7 @@ public class Constant {
     public static final String URL_UMS_USER_GET_USERMAINPAGELIST = "ums/user/get/userMainPageList";
     public static final String URL_UMS_USER_USER_USERMAINPAGELIST = "ums/user/user/userMainPageList";
     public static final String URL_UMS_USER_USER_USERMESSAGELIST = "ums/user/user/userMessageList";
+    public static final String URL_UMS_USER_USER_USERRECOMMENDLIST = "ums/user/user/userRecommendList";
     public static final String URL_UMS_USER_UPDATE_RECORDSIGN = "ums/user/update/recordSign";
     public static final String URL_USER_UPDATE_COORDINATE = "ums/user/update/coordinate";
 
@@ -75,5 +76,11 @@ public class Constant {
     public static final String URL_FRIENDS_NOTICE = "friends/notice";
     public static final String URL_FRIENDS_USERVIEW_SAVE = "friends/userView/save";
     public static final String URL_FRIENDS_USERVIEW = "friends/userView";
+
+
+    //腾讯云im相关
+    public static final String URL_GET_IIM_OFFINE = "https://console.tim.qq.com/v4/openim/querystate";
+    public static final String TIM_ADMIN_ACCOUNT = "administrator";
+
 
 }

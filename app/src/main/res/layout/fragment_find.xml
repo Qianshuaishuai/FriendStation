@@ -214,7 +214,8 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dip"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <ImageView
                 android:layout_width="12dip"
@@ -235,14 +236,14 @@
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/layout_select">
+        android:layout_below="@+id/layout_select"
+        android:layout_marginBottom="60dip">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/layout_select"
-            android:layout_marginBottom="60dip"></android.support.v7.widget.RecyclerView>
+            android:layout_below="@+id/layout_select"></android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <RelativeLayout

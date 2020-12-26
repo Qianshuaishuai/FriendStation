@@ -26,12 +26,14 @@ import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.FirstShowBean;
 import com.babyraising.friendstation.bean.FriendDetailBean;
 import com.babyraising.friendstation.bean.ScoreRecordBean;
+import com.babyraising.friendstation.bean.TimOnlineBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.decoration.FirstShowSpaceItemDecoration;
 import com.babyraising.friendstation.decoration.SpaceItemDecoration;
 import com.babyraising.friendstation.response.FriendResponse;
 import com.babyraising.friendstation.response.NoticeResponse;
+import com.babyraising.friendstation.response.OnlineTimUserResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.response.UserMainPageResponse;
 import com.babyraising.friendstation.ui.main.ChatActivity;
@@ -39,6 +41,8 @@ import com.babyraising.friendstation.ui.main.PersonInfoActivity;
 import com.babyraising.friendstation.ui.main.RankActivity;
 import com.babyraising.friendstation.ui.main.VoiceSendActivity;
 import com.babyraising.friendstation.util.DisplayUtils;
+import com.babyraising.friendstation.util.GenerateTestUserSig;
+import com.babyraising.friendstation.util.RandomUtil;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -53,6 +57,7 @@ import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @ContentView(R.layout.fragment_find)
 public class FindFragment extends BaseFragment {
@@ -96,7 +101,8 @@ public class FindFragment extends BaseFragment {
 
     @Event(R.id.layout_find)
     private void findLayoutClick(View view) {
-        tipFirstLayout.setVisibility(View.VISIBLE);
+//        tipFirstLayout.setVisibility(View.VISIBLE);
+        getOnlineUser();
     }
 
     @ViewInject(R.id.tip_list)
@@ -208,8 +214,117 @@ public class FindFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView();
-
 //        getFriendList();
+    }
+
+    private void translateOneUser(List<Integer> onlineuserId) {
+        int userId = 0;
+        if (onlineuserId.size() > 0) {
+            Random random = new Random();
+            int n = random.nextInt(onlineuserId.size());
+            int index = n - 1;
+            if (index >= 0) {
+                userId = onlineuserId.get(index);
+            } else {
+                userId = onlineuserId.get(0);
+            }
+        }
+
+        if (userId == 0) {
+            T.s("没有在线用户");
+            return;
+        }
+
+        System.out.println("translateOnline:" + userId);
+
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERRECOMMENDLIST);
+        params.addQueryStringParameter("userIdList", userId);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UserMainPageResponse response = gson.fromJson(result, UserMainPageResponse.class);
+                System.out.println("translateOneUser:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        if (response.getData().size() > 0) {
+                            System.out.println(response.getData().get(0).getId());
+                        }
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+
+                if (refreshLayout.isRefreshing()) {
+                    refreshLayout.setRefreshing(false);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void getOnlineUser() {
+        Gson gson = new Gson();
+        TimOnlineBean bean = new TimOnlineBean();
+        List<String> idList = new ArrayList<>();
+        for (int i = 1; i < 30; i++) {
+            idList.add(String.valueOf(i));
+        }
+        bean.setTo_Account(idList);
+        String userSig = GenerateTestUserSig.genTestUserSig(Constant.TIM_ADMIN_ACCOUNT);
+        String url = Constant.URL_GET_IIM_OFFINE + "?sdkappid=" + Constant.TIM_SDK_APPID + "&identifier=" + Constant.TIM_ADMIN_ACCOUNT + "&usersig=" + userSig + "&random=" + RandomUtil.getRandom() + "&contenttype=json";
+        RequestParams params = new RequestParams(url);
+        params.setAsJsonContent(true);
+        params.setBodyContent(gson.toJson(bean));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                OnlineTimUserResponse response = gson.fromJson(result, OnlineTimUserResponse.class);
+                System.out.println("OnlineUser:" + result);
+                List<Integer> onlineuserId = new ArrayList<>();
+                for (int o = 0; o < response.getQueryResult().size(); o++) {
+                    if (response.getQueryResult().get(o).getState().equals("PushOnline") || response.getQueryResult().get(o).getState().equals("Online")) {
+                        onlineuserId.add(Integer.valueOf(response.getQueryResult().get(o).getTo_Account()));
+                    }
+                }
+
+                translateOneUser(onlineuserId);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     public int getCurrentSelectType() {
@@ -340,7 +455,7 @@ public class FindFragment extends BaseFragment {
                 switch (response.getCode()) {
                     case 200:
                         if (response.getData().size() > 0) {
-                            if (!TextUtils.isEmpty(response.getData().get(0))){
+                            if (!TextUtils.isEmpty(response.getData().get(0))) {
                                 tipContent.setText(response.getData().get(0));
                             }
                         }
