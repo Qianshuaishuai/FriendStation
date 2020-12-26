@@ -115,6 +115,8 @@ public class ChatActivity extends BaseActivity {
 
     private AlertDialog voiceLoadingTip;
 
+    private int videoTip = 0;
+
     @ViewInject(R.id.name)
     private TextView name;
 
@@ -470,6 +472,7 @@ public class ChatActivity extends BaseActivity {
         Intent intent = getIntent();
         status = intent.getIntExtra("status", 0);
         currentChatId = intent.getIntExtra("chat-user-id", 0);
+        videoTip = intent.getIntExtra("video", 0);
         getCurrentUserInfo(currentChatId);
         if (status == Constant.OFFICIAL_INTO_CHAT_CODE) {
             officialLayout.setVisibility(View.VISIBLE);
@@ -480,6 +483,7 @@ public class ChatActivity extends BaseActivity {
         }
 
         selfUserBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+
     }
 
     private void initView() {
@@ -837,6 +841,9 @@ public class ChatActivity extends BaseActivity {
                         System.out.println(checkWordList.size());
                         updateCurrentInfo();
                         getMessageList();
+                        if (videoTip == 1) {
+                            sendRTCInvite(Constant.TIM_RTC_CLOUD_ROOM_PREFIX + selfUserBean.getId(), 1);
+                        }
                         break;
                     case 401:
 

@@ -46,6 +46,7 @@ public class Constant {
     public static final String URL_USER_UPDATE_VERIFY = "ums/user/update/verify";
     public static final String URL_UMS_USER_GET_USERMAINPAGELIST = "ums/user/get/userMainPageList";
     public static final String URL_UMS_USER_USER_USERMAINPAGELIST = "ums/user/user/userMainPageList";
+    public static final String URL_UMS_USER_USER_USERINFOV0LIST = "ums/user/user/userInfoV0List";
     public static final String URL_UMS_USER_USER_USERMESSAGELIST = "ums/user/user/userMessageList";
     public static final String URL_UMS_USER_USER_USERRECOMMENDLIST = "ums/user/user/userRecommendList";
     public static final String URL_UMS_USER_UPDATE_RECORDSIGN = "ums/user/update/recordSign";

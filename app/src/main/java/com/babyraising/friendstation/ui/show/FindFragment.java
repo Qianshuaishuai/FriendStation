@@ -102,7 +102,9 @@ public class FindFragment extends BaseFragment {
     @Event(R.id.layout_find)
     private void findLayoutClick(View view) {
 //        tipFirstLayout.setVisibility(View.VISIBLE);
-        getOnlineUser();
+//        getOnlineUser();
+
+        translateOneUser2();
     }
 
     @ViewInject(R.id.tip_list)
@@ -215,6 +217,50 @@ public class FindFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initView();
 //        getFriendList();
+    }
+
+    private void translateOneUser2(){
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERRECOMMENDLIST);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UserMainPageResponse response = gson.fromJson(result, UserMainPageResponse.class);
+                System.out.println("translateOneUser2:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        if (response.getData().size() > 0) {
+                            System.out.println(response.getData().get(0).getId());
+                        }
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+
+                if (refreshLayout.isRefreshing()) {
+                    refreshLayout.setRefreshing(false);
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void translateOneUser(List<Integer> onlineuserId) {
@@ -514,7 +560,8 @@ public class FindFragment extends BaseFragment {
                 break;
         }
         params.addQueryStringParameter("pageNum", 20);
-        params.addQueryStringParameter("type", type);
+        params.addQueryStringParameter("pageSize", 1);
+//        params.addQueryStringParameter("type", type);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         x.http().get(params, new Callback.CommonCallback<String>() {

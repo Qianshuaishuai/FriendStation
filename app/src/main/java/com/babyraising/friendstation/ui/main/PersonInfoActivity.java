@@ -233,6 +233,29 @@ public class PersonInfoActivity extends BaseActivity {
     @ViewInject(R.id.photo_list)
     private RecyclerView photoRecyleViewList;
 
+    @Event(R.id.layout_find)
+    private void findLayoutClick(View view) {
+        goToChat(userAllInfoBean.getId());
+    }
+
+    @Event(R.id.layout_message)
+    private void messageLayoutClick(View view) {
+        goToChat(userAllInfoBean.getId());
+    }
+
+    @Event(R.id.layout_video)
+    private void videoLayoutClick(View view) {
+        goToChatForVideo(userAllInfoBean.getId());
+    }
+
+    @Event(R.id.layout_follow)
+    private void followLayoutClick(View view) {
+        followUser(userAllInfoBean.getId());
+    }
+
+    @ViewInject(R.id.layout_bottom)
+    private LinearLayout bottomLayout;
+
     @Event(R.id.layout_cancel)
     private void layoutAllPhoto(View view) {
         photoLayout.setVisibility(View.GONE);
@@ -273,7 +296,33 @@ public class PersonInfoActivity extends BaseActivity {
 
         if (mode == 1) {
             updateLookMe(currentUserId);
+            bottomLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void goToChat(int userId) {
+        UserAllInfoBean userBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+        if (userBean == null || userBean.getId() == 0) {
+            T.s("你当前的用户信息获取有误，请重新登录");
+            return;
+        }
+
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("chat-user-id", userId);
+        startActivity(intent);
+    }
+
+    public void goToChatForVideo(int userId) {
+        UserAllInfoBean userBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+        if (userBean == null || userBean.getId() == 0) {
+            T.s("你当前的用户信息获取有误，请重新登录");
+            return;
+        }
+
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("chat-user-id", userId);
+        intent.putExtra("video", 1);
+        startActivity(intent);
     }
 
     private void updateLookMe(int currentUserId) {
@@ -329,6 +378,90 @@ public class PersonInfoActivity extends BaseActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void followUser(int id) {
+        FollowRequest request = new FollowRequest();
+        request.setFollowId(id);
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        Gson gson = new Gson();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_USERFOLLOW_SAVE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("followUser:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("关注成功");
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    public void cancelFollowUser(int id) {
+        FollowRequest request = new FollowRequest();
+        request.setFollowId(id);
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        Gson gson = new Gson();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_USERFOLLOW_DELETE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("cancelFollowUser:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("取消关注成功");
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void initVoice() {
