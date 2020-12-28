@@ -125,7 +125,8 @@
         android:id="@+id/layout_select"
         android:layout_width="match_parent"
         android:layout_height="58dip"
-        android:layout_below="@id/layout_tip">
+        android:layout_below="@id/layout_tip"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="wrap_content"

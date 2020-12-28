@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.ui.show;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,8 +10,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -37,9 +40,11 @@ import com.babyraising.friendstation.response.OnlineTimUserResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.response.UserMainPageResponse;
 import com.babyraising.friendstation.ui.main.ChatActivity;
+import com.babyraising.friendstation.ui.main.PersonAuthActivity;
 import com.babyraising.friendstation.ui.main.PersonInfoActivity;
 import com.babyraising.friendstation.ui.main.RankActivity;
 import com.babyraising.friendstation.ui.main.VoiceSendActivity;
+import com.babyraising.friendstation.ui.main.VoiceSignActivity;
 import com.babyraising.friendstation.util.DisplayUtils;
 import com.babyraising.friendstation.util.GenerateTestUserSig;
 import com.babyraising.friendstation.util.RandomUtil;
@@ -68,6 +73,7 @@ public class FindFragment extends BaseFragment {
     private List<FriendDetailBean> mlist;
 
     private int isSelect = 0;
+    private AlertDialog authDialog;
 
     @ViewInject(R.id.list)
     private RecyclerView recycleList;
@@ -95,6 +101,15 @@ public class FindFragment extends BaseFragment {
 
     @Event(R.id.layout_match)
     private void matchLayoutClick(View view) {
+        UserAllInfoBean userBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
+        if (userBean == null || userBean.getId() == 0) {
+            T.s("你当前的用户信息获取有误，请重新登录");
+            return;
+        }
+        if (TextUtils.isEmpty(userBean.getRecordSign()) && !userBean.getStatusCert().equals("PASS")) {
+            authDialog.show();
+            return;
+        }
         Intent intent = new Intent(getActivity(), VoiceSendActivity.class);
         startActivity(intent);
     }
@@ -103,7 +118,15 @@ public class FindFragment extends BaseFragment {
     private void findLayoutClick(View view) {
 //        tipFirstLayout.setVisibility(View.VISIBLE);
 //        getOnlineUser();
-
+        UserAllInfoBean userBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
+        if (userBean == null || userBean.getId() == 0) {
+            T.s("你当前的用户信息获取有误，请重新登录");
+            return;
+        }
+        if (TextUtils.isEmpty(userBean.getRecordSign()) && !userBean.getStatusCert().equals("PASS")) {
+            authDialog.show();
+            return;
+        }
         translateOneUser2();
     }
 
@@ -217,11 +240,13 @@ public class FindFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initView();
 //        getFriendList();
+        initAuthTip();
     }
 
-    private void translateOneUser2(){
+    private void translateOneUser2() {
         CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERRECOMMENDLIST);
+        params.addQueryStringParameter("userIdList", "");
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         x.http().get(params, new Callback.CommonCallback<String>() {
@@ -232,8 +257,18 @@ public class FindFragment extends BaseFragment {
                 System.out.println("translateOneUser2:" + result);
                 switch (response.getCode()) {
                     case 200:
-                        if (response.getData().size() > 0) {
-                            System.out.println(response.getData().get(0).getId());
+                        List<UserMainPageBean> list = response.getData();
+                        if (list != null) {
+                            Random random = new Random();
+                            int n = random.nextInt(list.size());
+                            int userId = 0;
+                            int index = n - 1;
+                            if (index >= 0) {
+                                userId = list.get(index).getId();
+                            } else {
+                                userId = list.get(0).getId();
+                            }
+                            goToChat2(userId);
                         }
                         break;
                     default:
@@ -439,8 +474,31 @@ public class FindFragment extends BaseFragment {
             return;
         }
 
+        if (TextUtils.isEmpty(userBean.getRecordSign()) && !userBean.getStatusCert().equals("PASS")) {
+            authDialog.show();
+            return;
+        }
+
         Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra("chat-user-id", userId);
+        startActivity(intent);
+    }
+
+    public void goToChat2(int userId) {
+        UserAllInfoBean userBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
+        if (userBean == null || userBean.getId() == 0) {
+            T.s("你当前的用户信息获取有误，请重新登录");
+            return;
+        }
+
+        if (TextUtils.isEmpty(userBean.getRecordSign()) && !userBean.getStatusCert().equals("PASS")) {
+            authDialog.show();
+            return;
+        }
+
+        Intent intent = new Intent(getActivity(), ChatActivity.class);
+        intent.putExtra("chat-user-id", userId);
+        intent.putExtra("chat-up", 1);
         startActivity(intent);
     }
 
@@ -546,7 +604,7 @@ public class FindFragment extends BaseFragment {
 
     private void getUserList() {
         CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
-        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERMAINPAGELIST);
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERINFOV0LIST);
         int type = 0;
         switch (selectType) {
             case 1:
@@ -604,5 +662,52 @@ public class FindFragment extends BaseFragment {
 
             }
         });
+    }
+
+    private void initAuthTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // 创建一个view，并且将布局加入view中
+        View view = LayoutInflater.from(getActivity()).inflate(
+                R.layout.dialog_person_auth, null, false);
+        // 将view添加到builder中
+        builder.setView(view);
+        // 创建dialog
+        authDialog = builder.create();
+        // 初始化控件，注意这里是通过view.findViewById
+        final Button left = (Button) view.findViewById(R.id.cancel);
+        final Button right = (Button) view.findViewById(R.id.sure);
+
+        left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToPersonInfo();
+            }
+        });
+
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToPersonAuth();
+            }
+        });
+
+    }
+
+    private void goToPersonInfo() {
+        Intent intent = new Intent(getActivity(), VoiceSignActivity.class);
+        startActivity(intent);
+        if (authDialog.isShowing()) {
+            authDialog.cancel();
+        }
+    }
+
+    private void goToPersonAuth() {
+        Intent intent = new Intent(getActivity(), PersonAuthActivity.class);
+        startActivity(intent);
+
+        if (authDialog.isShowing()) {
+            authDialog.cancel();
+        }
     }
 }

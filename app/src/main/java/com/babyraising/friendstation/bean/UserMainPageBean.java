@@ -2,7 +2,7 @@ package com.babyraising.friendstation.bean;
 
 public class UserMainPageBean {
     private int id;
-    private String nickName;
+    private String nickname;
     private String avatar;
     private String statusCert;
     private int height;
@@ -33,11 +33,11 @@ public class UserMainPageBean {
     }
 
     public String getNickName() {
-        return nickName;
+        return nickname;
     }
 
     public void setNickName(String nickName) {
-        this.nickName = nickName;
+        this.nickname = nickname;
     }
 
     public String getAvatar() {

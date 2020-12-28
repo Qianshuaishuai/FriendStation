@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_dialog_bg"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="149dip">
+
+        <TextView
+            android:layout_marginLeft="15dip"
+            android:layout_marginRight="15dip"
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="109dip"
+            android:gravity="center"
+            android:text="如要前往搭讪，请先完成语音签名或真人认证"
+            android:textColor="#1e1e1e"
+            android:textSize="18dip" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dip"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/cancel"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#e4e4e4"
+                android:gravity="center"
+                android:text="语音签名"
+                android:textColor="#999999"
+                android:textSize="16dip" />
+
+            <Button
+                android:id="@+id/sure"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#F97EB7"
+                android:gravity="center"
+                android:text="真人认证"
+                android:textColor="#ffffff"
+                android:textSize="16dip" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

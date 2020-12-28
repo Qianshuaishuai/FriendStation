@@ -19,6 +19,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -69,6 +70,7 @@ public class PersonInfoActivity extends BaseActivity {
 
     private Gson gson = new Gson();
 
+    private AlertDialog authDialog;
     private UserAllInfoBean userAllInfoBean;
     private List<String> tagList;
     private TagAdapter tagAdapter;
@@ -235,7 +237,7 @@ public class PersonInfoActivity extends BaseActivity {
 
     @Event(R.id.layout_find)
     private void findLayoutClick(View view) {
-        goToChat(userAllInfoBean.getId());
+        goToChat2(userAllInfoBean.getId());
     }
 
     @Event(R.id.layout_message)
@@ -286,7 +288,7 @@ public class PersonInfoActivity extends BaseActivity {
         initAudioRecorder();
         initVoiceTip();
         initMediaPlayer();
-
+        initAuthTip();
     }
 
     private void initData() {
@@ -300,10 +302,33 @@ public class PersonInfoActivity extends BaseActivity {
         }
     }
 
+    public void goToChat2(int userId) {
+        UserAllInfoBean userBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+        if (userBean == null || userBean.getId() == 0) {
+            T.s("你当前的用户信息获取有误，请重新登录");
+            return;
+        }
+
+        if (TextUtils.isEmpty(userBean.getRecordSign()) && !userBean.getStatusCert().equals("PASS")) {
+            authDialog.show();
+            return;
+        }
+
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("chat-user-id", userId);
+        intent.putExtra("chat-up", 1);
+        startActivity(intent);
+    }
+
     public void goToChat(int userId) {
         UserAllInfoBean userBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
         if (userBean == null || userBean.getId() == 0) {
             T.s("你当前的用户信息获取有误，请重新登录");
+            return;
+        }
+
+        if (TextUtils.isEmpty(userBean.getRecordSign()) && !userBean.getStatusCert().equals("PASS")) {
+            authDialog.show();
             return;
         }
 
@@ -316,6 +341,11 @@ public class PersonInfoActivity extends BaseActivity {
         UserAllInfoBean userBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
         if (userBean == null || userBean.getId() == 0) {
             T.s("你当前的用户信息获取有误，请重新登录");
+            return;
+        }
+
+        if (TextUtils.isEmpty(userBean.getRecordSign()) && !userBean.getStatusCert().equals("PASS")) {
+            T.s("你还未完成语音签名或真人认证");
             return;
         }
 
@@ -983,6 +1013,15 @@ public class PersonInfoActivity extends BaseActivity {
         startActivityForResult(intentToTakePhoto, RC_TAKE_PHOTO);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+        }
+    }
+
     private void uploadPic(String localPic) {
 
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
@@ -1073,6 +1112,53 @@ public class PersonInfoActivity extends BaseActivity {
                     }
                 }
                 break;
+        }
+    }
+
+    private void initAuthTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // 创建一个view，并且将布局加入view中
+        View view = LayoutInflater.from(this).inflate(
+                R.layout.dialog_person_auth, null, false);
+        // 将view添加到builder中
+        builder.setView(view);
+        // 创建dialog
+        authDialog = builder.create();
+        // 初始化控件，注意这里是通过view.findViewById
+        final Button left = (Button) view.findViewById(R.id.cancel);
+        final Button right = (Button) view.findViewById(R.id.sure);
+
+        left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToPersonInfo();
+            }
+        });
+
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToPersonAuth();
+            }
+        });
+
+    }
+
+    private void goToPersonInfo() {
+        Intent intent = new Intent(this, VoiceSignActivity.class);
+        startActivity(intent);
+        if (authDialog.isShowing()) {
+            authDialog.cancel();
+        }
+    }
+
+    private void goToPersonAuth() {
+        Intent intent = new Intent(this, PersonAuthActivity.class);
+        startActivity(intent);
+
+        if (authDialog.isShowing()) {
+            authDialog.cancel();
         }
     }
 }

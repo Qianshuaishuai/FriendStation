@@ -67,7 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="配对成功"
+                    android:text="正在配对中"
                     android:textColor="#485CC1"
                     android:textSize="15dip" />
             </RelativeLayout>

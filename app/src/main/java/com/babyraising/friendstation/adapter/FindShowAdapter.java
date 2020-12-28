@@ -61,6 +61,7 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        System.out.println(mList.get(position).getNickName());
         switch (mList.get(position).getSex()) {
             case 0:
                 if (!TextUtils.isEmpty(mList.get(position).getWork())) {

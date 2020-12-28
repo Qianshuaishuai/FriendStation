@@ -96,6 +96,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -311,6 +312,8 @@ public class ChatActivity extends BaseActivity {
 
     private List<String> checkWordList;
 
+    private int isChatUp = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -473,6 +476,7 @@ public class ChatActivity extends BaseActivity {
         status = intent.getIntExtra("status", 0);
         currentChatId = intent.getIntExtra("chat-user-id", 0);
         videoTip = intent.getIntExtra("video", 0);
+        isChatUp = intent.getIntExtra("chat-up", 0);
         getCurrentUserInfo(currentChatId);
         if (status == Constant.OFFICIAL_INTO_CHAT_CODE) {
             officialLayout.setVisibility(View.VISIBLE);
@@ -483,6 +487,7 @@ public class ChatActivity extends BaseActivity {
         }
 
         selfUserBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+
 
     }
 
@@ -838,11 +843,23 @@ public class ChatActivity extends BaseActivity {
                     case 200:
                         currentUserBean = response.getData();
                         checkWordList = ((FriendStationApplication) getApplication()).getCheckWordList();
-                        System.out.println(checkWordList.size());
                         updateCurrentInfo();
                         getMessageList();
                         if (videoTip == 1) {
                             sendRTCInvite(Constant.TIM_RTC_CLOUD_ROOM_PREFIX + selfUserBean.getId(), 1);
+                        }
+                        if (isChatUp == 1) {
+                            List<String> wordList = ((FriendStationApplication) getApplication()).getCommonWordData();
+                            Random random = new Random();
+                            int n = random.nextInt(wordList.size());
+                            String word = "";
+                            int index = n - 1;
+                            if (index >= 0) {
+                                word = wordList.get(index);
+                            } else {
+                                word = wordList.get(0);
+                            }
+                            useCoin(4, "", "", word, 0);
                         }
                         break;
                     case 401:

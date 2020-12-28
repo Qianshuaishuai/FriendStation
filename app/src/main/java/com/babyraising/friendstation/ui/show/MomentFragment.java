@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.ui.show;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,7 +8,10 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,7 +34,9 @@ import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.ui.main.ChatActivity;
 import com.babyraising.friendstation.ui.main.MomentSendActivity;
+import com.babyraising.friendstation.ui.main.PersonAuthActivity;
 import com.babyraising.friendstation.ui.main.PersonInfoActivity;
+import com.babyraising.friendstation.ui.main.VoiceSignActivity;
 import com.babyraising.friendstation.util.T;
 import com.babyraising.friendstation.util.WxShareUtils;
 import com.google.gson.Gson;
@@ -50,6 +56,7 @@ public class MomentFragment extends BaseFragment {
 
     private String showContent = "";
     private String showImgfilePath = "";
+    private AlertDialog authDialog;
 
     private int selectType = 1;
     private MomentAdapter adapter;
@@ -167,6 +174,7 @@ public class MomentFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         initView();
+        initAuthTip();
     }
 
     @Override
@@ -407,6 +415,12 @@ public class MomentFragment extends BaseFragment {
             T.s("你当前的用户信息获取有误，请重新登录");
             return;
         }
+
+        if (TextUtils.isEmpty(userBean.getRecordSign()) && !userBean.getStatusCert().equals("PASS")) {
+            authDialog.show();
+            return;
+        }
+
         Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra("chat-user-id", list.get(position).getUserId());
         startActivity(intent);
@@ -453,5 +467,52 @@ public class MomentFragment extends BaseFragment {
 
             }
         });
+    }
+
+    private void initAuthTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // 创建一个view，并且将布局加入view中
+        View view = LayoutInflater.from(getActivity()).inflate(
+                R.layout.dialog_person_auth, null, false);
+        // 将view添加到builder中
+        builder.setView(view);
+        // 创建dialog
+        authDialog = builder.create();
+        // 初始化控件，注意这里是通过view.findViewById
+        final Button left = (Button) view.findViewById(R.id.cancel);
+        final Button right = (Button) view.findViewById(R.id.sure);
+
+        left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToPersonInfo();
+            }
+        });
+
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToPersonAuth();
+            }
+        });
+
+    }
+
+    private void goToPersonInfo() {
+        Intent intent = new Intent(getActivity(), VoiceSignActivity.class);
+        startActivity(intent);
+        if (authDialog.isShowing()) {
+            authDialog.cancel();
+        }
+    }
+
+    private void goToPersonAuth() {
+        Intent intent = new Intent(getActivity(), PersonAuthActivity.class);
+        startActivity(intent);
+
+        if (authDialog.isShowing()) {
+            authDialog.cancel();
+        }
     }
 }
