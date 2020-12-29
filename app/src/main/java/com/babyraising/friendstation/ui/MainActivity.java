@@ -353,6 +353,12 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                         ((FriendStationApplication) getApplication()).saveUserInfo(null);
                         startLoginActivity();
                         break;
+                    case 500:
+                        T.s("你的账户信息存在异常，请联系管理员");
+                        ((FriendStationApplication) getApplication()).saveUserAllInfo(null);
+                        ((FriendStationApplication) getApplication()).saveUserInfo(null);
+                        startLoginActivity();
+                        break;
                     default:
 
                         break;
