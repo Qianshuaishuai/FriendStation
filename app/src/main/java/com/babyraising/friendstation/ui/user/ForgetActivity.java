@@ -15,12 +15,10 @@ import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.request.CodeBodyRequest;
-import com.babyraising.friendstation.request.LoginPasswordRequest;
-import com.babyraising.friendstation.request.SetUserExtraDateRequest;
 import com.babyraising.friendstation.response.UmsGetCodeResponse;
 import com.babyraising.friendstation.response.UmsLoginByMobileResponse;
-import com.babyraising.friendstation.ui.MainActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -31,8 +29,8 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-@ContentView(R.layout.activity_code)
-public class CodeActivity extends BaseActivity {
+@ContentView(R.layout.activity_forget)
+public class ForgetActivity extends BaseActivity {
 
     private String currentPhone = "";
     private int currentStatus = 0;
@@ -56,36 +54,16 @@ public class CodeActivity extends BaseActivity {
     @ViewInject(R.id.layout_code)
     private LinearLayout codeLayout;
 
-    @ViewInject(R.id.layout_password)
-    private LinearLayout passwordLayout;
-
-    @ViewInject(R.id.main_input)
-    private EditText mainInput;
-
-    @Event(R.id.forget)
-    private void forgetClick(View view) {
-//        startLoginChangePasswordActivity();
-        startForgetActivity();
-    }
-
-    private void startForgetActivity() {
-        Intent intent = new Intent(this, ForgetActivity.class);
-        intent.putExtra("phone", currentPhone);
-        startActivity(intent);
-    }
-
-    @Event(R.id.login)
-    private void login(View view) {
-        if (TextUtils.isEmpty(mainInput.getText().toString())) {
-            T.s("请先输入密码");
-            return;
-        }
-        passwordLogin();
-    }
-
     @Event(R.id.back)
     private void backClick(View view) {
         finish();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initView();
+        initData();
     }
 
     @Event(R.id.resend)
@@ -124,75 +102,43 @@ public class CodeActivity extends BaseActivity {
         });
     }
 
-    private void startLoginChangePasswordActivity() {
-        Intent intent = new Intent(this, LoginPhoneDetailActivity.class);
-        intent.putExtra("phone", currentPhone);
-        intent.putExtra("status", 2);
-        startActivity(intent);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        initView();
-        initData();
-    }
-
     private void initData() {
         Intent intent = getIntent();
         currentPhone = intent.getStringExtra("phone");
         tip.setText("已发送至+86 " + currentPhone);
 
-        currentStatus = intent.getIntExtra("status", 1);
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_GET_CODE);
+        params.addQueryStringParameter("mobile", currentPhone);
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsGetCodeResponse response = gson.fromJson(result, UmsGetCodeResponse.class);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("发送验证码成功");
+                        break;
+                    default:
+                        T.s("请求验证码失败，请稍候重试");
+                        break;
+                }
+            }
 
-        switch (currentStatus) {
-            case 1:
-                codeLayout.setVisibility(View.VISIBLE);
-                passwordLayout.setVisibility(View.GONE);
-                RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_GET_CODE);
-                params.addQueryStringParameter("mobile", currentPhone);
-                x.http().get(params, new Callback.CommonCallback<String>() {
-                    @Override
-                    public void onSuccess(String result) {
-                        Gson gson = new Gson();
-                        UmsGetCodeResponse response = gson.fromJson(result, UmsGetCodeResponse.class);
-                        switch (response.getCode()) {
-                            case 200:
-                                T.s("发送验证码成功");
-                                break;
-                            default:
-                                T.s("请求验证码失败，请稍候重试");
-                                break;
-                        }
-                    }
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
 
-                    @Override
-                    public void onError(Throwable ex, boolean isOnCallback) {
-                        System.out.println("错误处理:" + ex);
-                    }
+            @Override
+            public void onCancelled(CancelledException cex) {
 
-                    @Override
-                    public void onCancelled(CancelledException cex) {
+            }
 
-                    }
+            @Override
+            public void onFinished() {
 
-                    @Override
-                    public void onFinished() {
-
-                    }
-                });
-                break;
-            case 2:
-                codeLayout.setVisibility(View.GONE);
-                passwordLayout.setVisibility(View.VISIBLE);
-                break;
-            default:
-                codeLayout.setVisibility(View.VISIBLE);
-                passwordLayout.setVisibility(View.GONE);
-                break;
-        }
-
+            }
+        });
 
     }
 
@@ -274,7 +220,7 @@ public class CodeActivity extends BaseActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (!TextUtils.isEmpty(charSequence.toString())) {
                     currentCode[3] = charSequence.toString();
-                    codeLogin();
+                    codeCheck();
                 }
             }
 
@@ -285,71 +231,16 @@ public class CodeActivity extends BaseActivity {
         });
     }
 
-    private void passwordLogin() {
-        LoginPasswordRequest request = new LoginPasswordRequest();
-        request.setMobile(currentPhone);
-        request.setPassword(mainInput.getText().toString());
-
-        Gson gson = new Gson();
-        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_LOGINBYPASSWORD);
-        params.setAsJsonContent(true);
-        params.setBodyContent(gson.toJson(request));
-        x.http().post(params, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                System.out.println(result);
-                Gson gson = new Gson();
-                UmsLoginByMobileResponse response = gson.fromJson(result, UmsLoginByMobileResponse.class);
-                switch (response.getCode()) {
-                    case 200:
-                        T.s("登录成功");
-                        ((FriendStationApplication) getApplication()).saveUserInfo(response.getData());
-                        startMainActivity();
-                        break;
-                    default:
-                        T.s(response.getMsg());
-                        break;
-                }
-            }
-
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-                System.out.println("错误处理:" + ex);
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-
-            }
-
-            @Override
-            public void onFinished() {
-
-            }
-        });
-    }
-
-    private void startMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    private void codeLogin() {
+    private void codeCheck() {
         String codeStr = "";
         for (int i = 0; i < currentCode.length; i++) {
             codeStr = codeStr + currentCode[i];
         }
-
-        CodeBodyRequest request = new CodeBodyRequest();
-        request.setMobile(currentPhone);
-        request.setVerifyCode(codeStr);
-
-        Gson gson = new Gson();
-
-        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_LOGINBYMOBILE);
+        CommonLoginBean bean = new CommonLoginBean();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_AUTH_CHECKCODE);
+        params.addQueryStringParameter("code", codeStr);
+        params.addHeader("Authorization", bean.getAccessToken());
         params.setAsJsonContent(true);
-        params.setBodyContent(gson.toJson(request));
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -357,9 +248,8 @@ public class CodeActivity extends BaseActivity {
                 UmsLoginByMobileResponse response = gson.fromJson(result, UmsLoginByMobileResponse.class);
                 switch (response.getCode()) {
                     case 200:
-                        T.s("登录成功");
-                        ((FriendStationApplication) getApplication()).saveUserInfo(response.getData());
-                        startLoginDetailActivity();
+                        T.s("验证成功");
+                        startLoginPhoneDetail();
                         break;
                     default:
                         T.s(response.getMsg());
@@ -384,9 +274,9 @@ public class CodeActivity extends BaseActivity {
         });
     }
 
-    private void startLoginDetailActivity() {
+    private void startLoginPhoneDetail() {
         Intent intent = new Intent(this, LoginPhoneDetailActivity.class);
-        intent.putExtra("phone", currentPhone);
+        intent.putExtra("mode", 999);
         startActivity(intent);
         finish();
     }

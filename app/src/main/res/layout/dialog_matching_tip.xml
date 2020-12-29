@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="100dip"
+    android:layout_marginLeft="48dip"
+    android:layout_marginRight="48dip"
+    android:background="@drawable/shape_copy_notice_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="100dip"
+        android:gravity="center"
+        android:text="寻找有缘人中......"
+        android:textColor="#3C3B41"
+        android:textSize="18dip" />
+
+</LinearLayout>

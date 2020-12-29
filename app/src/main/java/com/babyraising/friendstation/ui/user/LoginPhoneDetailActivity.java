@@ -31,6 +31,7 @@ import org.xutils.x;
 public class LoginPhoneDetailActivity extends BaseActivity {
 
     private int status = 0;
+    private int mode = 0;
     private String currentPhone = "";
 
     private String firstPassword = "";
@@ -45,7 +46,7 @@ public class LoginPhoneDetailActivity extends BaseActivity {
             title.setText("输入新密码：");
             next.setText("下一步");
 
-        }else{
+        } else {
             finish();
         }
     }
@@ -76,7 +77,13 @@ public class LoginPhoneDetailActivity extends BaseActivity {
                     T.s("两次输入密码不一致");
                     return;
                 }
-                setPassword(againPassword);
+
+                if (mode == 0) {
+                    setPassword(againPassword);
+                } else {
+                    setPasswordForget(againPassword);
+                }
+
                 break;
         }
     }
@@ -101,6 +108,7 @@ public class LoginPhoneDetailActivity extends BaseActivity {
     private void initData() {
         Intent intent = getIntent();
         currentPhone = intent.getStringExtra("phone");
+        mode = intent.getIntExtra("mode", 0);
     }
 
     private void setPassword(String pwd) {
@@ -127,6 +135,54 @@ public class LoginPhoneDetailActivity extends BaseActivity {
                     case 200:
                         T.s("设置成功");
                         startInfoActivity();
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void setPasswordForget(String pwd) {
+
+        SetPasswordRequest request = new SetPasswordRequest();
+        request.setNewPassword(pwd);
+        request.setOldPassword("");
+
+        Gson gson = new Gson();
+
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_UPDATE_NEWPASSWORD);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUpdatePasswordResponse response = gson.fromJson(result, UmsUpdatePasswordResponse.class);
+                System.out.println(result);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("设置成功");
+                        finish();
                         break;
                     default:
                         T.s(response.getMsg());

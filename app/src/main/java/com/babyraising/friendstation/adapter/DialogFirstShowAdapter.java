@@ -1,6 +1,7 @@
 package com.babyraising.friendstation.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +11,17 @@ import android.widget.TextView;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.bean.FirstShowBean;
 import com.babyraising.friendstation.bean.TaskDetailBean;
+import com.babyraising.friendstation.bean.UserMainPageBean;
 
 import org.xutils.x;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DialogFirstShowAdapter extends RecyclerView.Adapter<DialogFirstShowAdapter.ViewHolder> {
 
     private List<FirstShowBean> mList;
+    private List<UserMainPageBean> mainList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt;
@@ -32,8 +36,15 @@ public class DialogFirstShowAdapter extends RecyclerView.Adapter<DialogFirstShow
 
     }
 
-    public DialogFirstShowAdapter(List<FirstShowBean> mList) {
-        this.mList = mList;
+    public DialogFirstShowAdapter(List<UserMainPageBean> mainList) {
+        this.mainList = mainList;
+        mList = new ArrayList<>();
+        int size = mainList.size();
+        for (int i = 0; i < size; i++) {
+            FirstShowBean bean = new FirstShowBean();
+            bean.setUserId(mainList.get(i).getId());
+            mList.add(bean);
+        }
     }
 
     @Override
@@ -45,6 +56,14 @@ public class DialogFirstShowAdapter extends RecyclerView.Adapter<DialogFirstShow
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+
+        if (!TextUtils.isEmpty(mainList.get(position).getAvatar())) {
+            x.image().bind(holder.iconIv, mainList.get(position).getAvatar());
+        }
+
+        if (!TextUtils.isEmpty(mainList.get(position).getNickName())) {
+            holder.nameTxt.setText(mainList.get(position).getNickName());
+        }
 
         switch (mList.get(position).getIsSelect()) {
             case 0:
@@ -67,6 +86,19 @@ public class DialogFirstShowAdapter extends RecyclerView.Adapter<DialogFirstShow
                 notifyDataSetChanged();
             }
         });
+    }
+
+    public List<FirstShowBean> getSelectList() {
+        return mList;
+    }
+
+    public void updateSelectCount() {
+        mList.clear();
+        int size = mainList.size();
+        for (int i = 0; i < size; i++) {
+            FirstShowBean bean = new FirstShowBean();
+            mList.add(bean);
+        }
     }
 
     @Override

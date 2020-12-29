@@ -30,6 +30,9 @@ import com.babyraising.friendstation.bean.FirstShowBean;
 import com.babyraising.friendstation.bean.FriendDetailBean;
 import com.babyraising.friendstation.bean.ScoreRecordBean;
 import com.babyraising.friendstation.bean.TimOnlineBean;
+import com.babyraising.friendstation.bean.TimSendBean;
+import com.babyraising.friendstation.bean.TimSendBodyBean;
+import com.babyraising.friendstation.bean.TimSendMsgContentBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.decoration.FirstShowSpaceItemDecoration;
@@ -61,6 +64,7 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -71,6 +75,10 @@ public class FindFragment extends BaseFragment {
     private FindShowAdapter adapter;
     private DialogFirstShowAdapter showAdapter;
     private List<FriendDetailBean> mlist;
+
+    private List<String> commonWordList;
+
+    private AlertDialog findDialog;
 
     private int isSelect = 0;
     private AlertDialog authDialog;
@@ -127,6 +135,10 @@ public class FindFragment extends BaseFragment {
             authDialog.show();
             return;
         }
+//        if (userBean.getUserCount().getNumCoin() <= 0) {
+//            T.s("你的金币也不足，请先充值");
+//            return;
+//        }
         translateOneUser2();
     }
 
@@ -202,6 +214,28 @@ public class FindFragment extends BaseFragment {
 
     @Event(R.id.dialog_layout_bottom)
     private void dialogLayoutBottom(View view) {
+        List<Integer> selectInt = new ArrayList<>();
+        List<FirstShowBean> showBeans = showAdapter.getSelectList();
+
+        for (int s = 0; s < showBeans.size(); s++) {
+            if (showBeans.get(s).getIsSelect() == 1) {
+                selectInt.add(showBeans.get(s).getUserId());
+            }
+        }
+
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(selectInt));
+
+        if (selectInt.size() == 0) {
+            T.s("请先选择你要搭讪的对象");
+            return;
+        }
+
+        UserAllInfoBean userAllInfoBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
+        for (int a = 0; a < selectInt.size(); a++) {
+            adminSendMessage(userAllInfoBean.getId(), selectInt.get(a));
+        }
+        T.s("搭讪成功");
         tipFirstLayout.setVisibility(View.GONE);
     }
 
@@ -240,10 +274,17 @@ public class FindFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         initView();
 //        getFriendList();
+        initData();
         initAuthTip();
+        initVoiceTip();
+    }
+
+    private void initData() {
+        commonWordList = ((FriendStationApplication) getActivity().getApplication()).getCommonWordData();
     }
 
     private void translateOneUser2() {
+        findDialog.show();
         CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERRECOMMENDLIST);
         params.addQueryStringParameter("userIdList", "");
@@ -257,19 +298,29 @@ public class FindFragment extends BaseFragment {
                 System.out.println("translateOneUser2:" + result);
                 switch (response.getCode()) {
                     case 200:
-                        List<UserMainPageBean> list = response.getData();
-                        if (list != null) {
-                            Random random = new Random();
-                            int n = random.nextInt(list.size());
-                            int userId = 0;
-                            int index = n - 1;
-                            if (index >= 0) {
-                                userId = list.get(index).getId();
-                            } else {
-                                userId = list.get(0).getId();
-                            }
-                            goToChat2(userId);
-                        }
+//                        List<UserMainPageBean> list = response.getData();
+//                        if (list != null) {
+//                            Random random = new Random();
+//                            int n = random.nextInt(list.size());
+//                            int userId = 0;
+//                            int index = n - 1;
+//                            if (index >= 0) {
+//                                userId = list.get(index).getId();
+//                            } else {
+//                                userId = list.get(0).getId();
+//                            }
+//                            goToChat2(userId);
+//                        }
+                        showAdapter = new DialogFirstShowAdapter(response.getData());
+                        GridLayoutManager manager2 = new GridLayoutManager(getActivity(), 4);
+
+                        int width1 = DisplayUtils.dp2px(getActivity(), 229);
+                        int itemWidth = DisplayUtils.dp2px(getActivity(), 55); //每个item的宽度
+
+                        tipList.setLayoutManager(manager2);
+                        tipList.setAdapter(showAdapter);
+                        tipList.addItemDecoration(new FirstShowSpaceItemDecoration((width1 - itemWidth * 4) / 8));
+                        tipFirstLayout.setVisibility(View.VISIBLE);
                         break;
                     default:
                         T.s(response.getMsg());
@@ -293,7 +344,9 @@ public class FindFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
-
+                if (findDialog.isShowing()){
+                    findDialog.cancel();
+                }
             }
         });
     }
@@ -430,27 +483,6 @@ public class FindFragment extends BaseFragment {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recycleList.setLayoutManager(manager);
         recycleList.setAdapter(adapter);
-
-        List<FirstShowBean> testList123 = new ArrayList<>();
-        testList123.add(new FirstShowBean());
-        testList123.add(new FirstShowBean());
-        testList123.add(new FirstShowBean());
-        testList123.add(new FirstShowBean());
-        testList123.add(new FirstShowBean());
-        testList123.add(new FirstShowBean());
-        testList123.add(new FirstShowBean());
-        testList123.add(new FirstShowBean());
-
-        showAdapter = new DialogFirstShowAdapter(testList123);
-        GridLayoutManager manager2 = new GridLayoutManager(getActivity(), 4);
-
-        WindowManager wm1 = this.getActivity().getWindowManager();
-        int width1 = DisplayUtils.dp2px(getActivity(), 229);
-        int itemWidth = DisplayUtils.dp2px(getActivity(), 55); //每个item的宽度
-
-        tipList.setLayoutManager(manager2);
-        tipList.setAdapter(showAdapter);
-        tipList.addItemDecoration(new FirstShowSpaceItemDecoration((width1 - itemWidth * 4) / 8));
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -709,5 +741,88 @@ public class FindFragment extends BaseFragment {
         if (authDialog.isShowing()) {
             authDialog.cancel();
         }
+    }
+
+    private void adminSendMessage(int sendId, int receiveId) {
+        if (sendId == 0 || receiveId == 0) {
+            System.out.println("接收方或发送方id为0");
+            return;
+        }
+
+        if (sendId == receiveId) {
+            System.out.println("接收方和发送方相同");
+            return;
+        }
+
+        System.out.println("sendId:" + sendId + ", receiveId:" + receiveId);
+        Gson gson = new Gson();
+        Random random = new Random();
+        int n = random.nextInt(commonWordList.size());
+        String word = "";
+        int index = n - 1;
+        if (index >= 0) {
+            word = commonWordList.get(index);
+        } else {
+            word = commonWordList.get(0);
+        }
+        TimSendMsgContentBean contentBean = new TimSendMsgContentBean();
+        contentBean.setText(word);
+        TimSendBodyBean bodyBean = new TimSendBodyBean();
+        bodyBean.setMsgContent(contentBean);
+        bodyBean.setMsgType("TIMTextElem");
+        List<TimSendBodyBean> bodyList = new ArrayList<>();
+        bodyList.add(bodyBean);
+        TimSendBean bean = new TimSendBean();
+        bean.setFrom_Account(String.valueOf(sendId));
+        bean.setTo_Account(String.valueOf(receiveId));
+        bean.setMsgBody(bodyList);
+        bean.setSyncOtherMachine(1);
+        bean.setMsgRandom(RandomUtil.getRandomInt());
+        int nowTime = (int) new Date().getTime();
+        if (nowTime < 0) {
+            nowTime = Math.abs(nowTime);
+        }
+        bean.setMsgTimeStamp(nowTime);
+        String userSig = GenerateTestUserSig.genTestUserSig(Constant.TIM_ADMIN_ACCOUNT);
+        String url = Constant.URL_TIM_SENDMSG + "?sdkappid=" + Constant.TIM_SDK_APPID + "&identifier=" + Constant.TIM_ADMIN_ACCOUNT + "&usersig=" + userSig + "&random=" + RandomUtil.getRandom() + "&contenttype=json";
+        RequestParams params = new RequestParams(url);
+        params.setAsJsonContent(true);
+        params.setBodyContent(gson.toJson(bean));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("adminSendMessage:" + result);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void initVoiceTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // 创建一个view，并且将布局加入view中
+        View view = LayoutInflater.from(getActivity()).inflate(
+                R.layout.dialog_matching_tip, null, false);
+        // 将view添加到builder中
+        builder.setView(view);
+        // 创建dialog
+        findDialog = builder.create();
+        // 初始化控件，注意这里是通过view.findViewById
+        final TextView content = (TextView) view.findViewById(R.id.content);
+        findDialog.setCanceledOnTouchOutside(false);
     }
 }

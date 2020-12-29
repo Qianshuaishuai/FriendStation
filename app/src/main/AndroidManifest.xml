@@ -62,14 +62,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".ui.user.ForgetActivity"></activity>
         <activity
             android:name=".ui.main.VoiceSignActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity android:name=".ui.user.PhotoActivity" />
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="dc4596d9f78ee20f2d2435a73b40cf5f"></meta-data>
+            android:value="dc4596d9f78ee20f2d2435a73b40cf5f" />
 
         <activity
             android:name=".ui.main.ChatActivity"
@@ -162,12 +163,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.BuildUserActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.main.VoiceSelfActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.CodeActivity"
             android:screenOrientation="portrait" />
@@ -188,7 +187,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <service android:name=".service.RTCService" />
         <service android:name=".service.LocationService" />

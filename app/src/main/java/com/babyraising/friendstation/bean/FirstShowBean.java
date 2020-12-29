@@ -2,6 +2,7 @@ package com.babyraising.friendstation.bean;
 
 public class FirstShowBean {
     private int isSelect = 0;
+    private int userId = 0;
 
     public int getIsSelect() {
         return isSelect;
@@ -9,5 +10,13 @@ public class FirstShowBean {
 
     public void setIsSelect(int isSelect) {
         this.isSelect = isSelect;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

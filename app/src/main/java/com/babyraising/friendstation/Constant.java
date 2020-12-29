@@ -30,6 +30,7 @@ public class Constant {
     public static final String URL_LOGINOUT = "ums/auth/loginOut";
     public static final String URL_LOGINBYPASSWORD = "ums/auth/loginByPassword";
     public static final String URL_LOGINBYMOBILE = "ums/auth/loginByMobile";
+    public static final String URL_AUTH_CHECKCODE = "ums/auth/checkCode";
 
     public static final String URL_UMS_USER = "ums/user";
     public static final String URL_UMS_USER_ALBUM_PAGE = "ums/user/album/page";
@@ -40,6 +41,7 @@ public class Constant {
     public static final String URL_UMS_USER_DELETE_ALBUM = "ums/user/delete/album";
     public static final String URL_UMS_UPDATE = "ums/user/update";
     public static final String URL_UMS_USER_UPDATE_PASSWORD = "ums/user/update/password";
+    public static final String URL_UMS_USER_UPDATE_NEWPASSWORD = "ums/user/update/newPassword";
     public static final String URL_UMS_USER_UPDATE_VERIFY = "ums/user/update/verify";
     public static final String URL_USER_GET_USERINTIMACYLIST = "ums/user/get/userIntimacyList";
     public static final String URL_USER_GET_USERRICHLIST = "ums/user/get/userRichList";
