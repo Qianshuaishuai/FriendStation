@@ -32,12 +32,18 @@ import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.LocationBean;
+import com.babyraising.friendstation.bean.TimSendBean;
+import com.babyraising.friendstation.bean.TimSendBodyBean;
+import com.babyraising.friendstation.bean.TimSendMsgContentBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.request.LikeDetailRequest;
 import com.babyraising.friendstation.request.LikeRequest;
+import com.babyraising.friendstation.response.OnlineTimUserResponse;
 import com.babyraising.friendstation.response.UmsGetCodeResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
+import com.babyraising.friendstation.response.UserMainPageResponse;
 import com.babyraising.friendstation.service.RTCService;
 import com.babyraising.friendstation.ui.show.FindFragment;
 import com.babyraising.friendstation.ui.show.MomentFragment;
@@ -45,8 +51,10 @@ import com.babyraising.friendstation.ui.show.NoticeFragment;
 import com.babyraising.friendstation.ui.show.PersonFragment;
 import com.babyraising.friendstation.ui.user.LoginPhoneActivity;
 import com.babyraising.friendstation.util.GenerateTestUserSig;
+import com.babyraising.friendstation.util.RandomUtil;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
+import com.tencent.imsdk.common.SystemUtil;
 import com.tencent.imsdk.v2.V2TIMCallback;
 import com.tencent.imsdk.v2.V2TIMManager;
 
@@ -57,13 +65,17 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks, FindFragment.OnFragmentInteractionListener, MomentFragment.OnFragmentInteractionListener, NoticeFragment.OnFragmentInteractionListener, PersonFragment.OnFragmentInteractionListener {
 
+    private UserAllInfoBean allInfoBean;
 
     @ViewInject(R.id.navigation_bar)
     private BottomNavigationView navigation;
@@ -78,6 +90,9 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     private Fragment[] fragments;
     private int lastfragment = 0;
     private CommonLoginBean bean;
+    private List<String> commonWordList;
+
+    private boolean isFirstAutoSendMesage = false;
 
 
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
@@ -225,6 +240,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
     private void initData() {
         bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        commonWordList = ((FriendStationApplication) getApplication()).getCommonWordData();
     }
 
     private void initNavigationBar() {
@@ -320,8 +336,14 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                 switch (response.getCode()) {
                     case 200:
                         ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());
+                        allInfoBean = response.getData();
                         initTimLogin();
                         uploadLocation();
+                        if (!isFirstAutoSendMesage) {
+                            randomUserSendMessage();
+                            isFirstAutoSendMesage = true;
+                        }
+
                         break;
                     case 401:
                         T.s("登录已失效");
@@ -331,6 +353,92 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                         break;
                     default:
 
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void randomUserSendMessage() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERRECOMMENDLIST);
+        params.addQueryStringParameter("userIdList", "");
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UserMainPageResponse response = gson.fromJson(result, UserMainPageResponse.class);
+                System.out.println("randomUserSendMessage:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        List<UserMainPageBean> list = response.getData();
+                        if (list != null) {
+                            if (list.size() == 1) {
+                                adminSendMessage(list.get(0).getId(), allInfoBean.getId());
+                            }
+                            if (list.size() == 2) {
+                                adminSendMessage(list.get(0).getId(), allInfoBean.getId());
+                                adminSendMessage(list.get(1).getId(), allInfoBean.getId());
+                            }
+
+                            if (list.size() > 2) {
+                                Random random = new Random();
+                                int n = random.nextInt(list.size());
+                                int firstId = 0;
+                                int index = n - 1;
+                                if (index >= 0) {
+                                    firstId = list.get(index).getId();
+                                } else {
+                                    firstId = list.get(0).getId();
+                                }
+
+                                adminSendMessage(firstId, allInfoBean.getId());
+
+                                n = random.nextInt(list.size());
+                                int secondId = 0;
+                                index = n - 1;
+                                if (index >= 0) {
+                                    secondId = list.get(index).getId();
+                                } else {
+                                    secondId = list.get(0).getId();
+                                }
+                                int crashIndex = 0;
+                                while ((firstId == secondId) || crashIndex <= 20) {
+                                    n = random.nextInt(list.size());
+                                    secondId = 0;
+                                    index = n - 1;
+                                    if (index >= 0) {
+                                        secondId = list.get(index).getId();
+                                    } else {
+                                        secondId = list.get(0).getId();
+                                    }
+
+                                    crashIndex++;
+                                }
+
+                                adminSendMessage(secondId, allInfoBean.getId());
+                            }
+                        }
+                        break;
+                    default:
+                        T.s(response.getMsg());
                         break;
                 }
             }
@@ -396,8 +504,74 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         });
     }
 
-    private void startQueryTrack(UserAllInfoBean data) {
+    private void adminSendMessage(int sendId, int receiveId) {
+        if (sendId == 0 || receiveId == 0) {
+            System.out.println("接收方或发送方id为0");
+            return;
+        }
 
+        if (sendId == receiveId) {
+            System.out.println("接收方和发送方相同");
+            return;
+        }
+
+        System.out.println("sendId:" + sendId + ", receiveId:" + receiveId);
+        Gson gson = new Gson();
+        Random random = new Random();
+        int n = random.nextInt(commonWordList.size());
+        String word = "";
+        int index = n - 1;
+        if (index >= 0) {
+            word = commonWordList.get(index);
+        } else {
+            word = commonWordList.get(0);
+        }
+        TimSendMsgContentBean contentBean = new TimSendMsgContentBean();
+        contentBean.setText(word);
+        TimSendBodyBean bodyBean = new TimSendBodyBean();
+        bodyBean.setMsgContent(contentBean);
+        bodyBean.setMsgType("TIMTextElem");
+        List<TimSendBodyBean> bodyList = new ArrayList<>();
+        bodyList.add(bodyBean);
+        TimSendBean bean = new TimSendBean();
+        bean.setFrom_Account(String.valueOf(sendId));
+        bean.setTo_Account(String.valueOf(receiveId));
+        bean.setMsgBody(bodyList);
+        bean.setSyncOtherMachine(2);
+        bean.setMsgRandom(RandomUtil.getRandomInt());
+        int nowTime = (int) new Date().getTime();
+        if (nowTime < 0) {
+            nowTime = Math.abs(nowTime);
+        }
+        bean.setMsgTimeStamp(nowTime);
+        String userSig = GenerateTestUserSig.genTestUserSig(Constant.TIM_ADMIN_ACCOUNT);
+        String url = Constant.URL_TIM_SENDMSG + "?sdkappid=" + Constant.TIM_SDK_APPID + "&identifier=" + Constant.TIM_ADMIN_ACCOUNT + "&usersig=" + userSig + "&random=" + RandomUtil.getRandom() + "&contenttype=json";
+        RequestParams params = new RequestParams(url);
+        params.setAsJsonContent(true);
+        params.setBodyContent(gson.toJson(bean));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                OnlineTimUserResponse response = gson.fromJson(result, OnlineTimUserResponse.class);
+                System.out.println("adminSendMessage:" + result);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void initTimLogin() {

@@ -81,6 +81,7 @@ public class Constant {
 
     //腾讯云im相关
     public static final String URL_GET_IIM_OFFINE = "https://console.tim.qq.com/v4/openim/querystate";
+    public static final String URL_TIM_SENDMSG = "https://console.tim.qq.com/v4/openim/sendmsg";
     public static final String TIM_ADMIN_ACCOUNT = "administrator";
 
 

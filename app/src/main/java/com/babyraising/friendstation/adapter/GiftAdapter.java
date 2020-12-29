@@ -60,7 +60,7 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.ViewHolder> {
             holder.nameTxt.setText(mList.get(position).getTitle());
         }
 
-        holder.countTxt.setText("" + mList.get(position).getPrice());
+        holder.countTxt.setText("" + mList.get(position).getCoinNum());
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

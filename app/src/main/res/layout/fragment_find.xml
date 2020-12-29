@@ -115,7 +115,7 @@
                 android:id="@+id/tip_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="AA 和 BB 亲密度一天之内暴增100以上，让我们为他们祝福。"
+                android:text=""
                 android:textColor="#FF5300"
                 android:textSize="12dip" />
         </LinearLayout>

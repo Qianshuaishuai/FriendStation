@@ -15,4 +15,17 @@ public class RandomUtil {
 
         return random;
     }
+
+    public static int getRandomInt() {
+        Random rand = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 1; i <= 8; i++) {
+            int randNum = rand.nextInt(9) + 1;
+            String num = randNum + "";
+            sb = sb.append(num);
+        }
+        String random = String.valueOf(sb);
+
+        return Integer.parseInt(random);
+    }
 }

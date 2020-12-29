@@ -159,6 +159,7 @@ public class BuildUserSexActivity extends BaseActivity {
             public void onSuccess(String result) {
                 Gson gson = new Gson();
                 UmsUpdateUsernameAndIconResponse response = gson.fromJson(result, UmsUpdateUsernameAndIconResponse.class);
+                System.out.println(result);
                 switch (response.getCode()) {
                     case 200:
                         T.s("保存成功");

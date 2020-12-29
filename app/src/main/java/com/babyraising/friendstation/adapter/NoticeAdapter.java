@@ -41,9 +41,10 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
     private List<V2TIMConversation> mList;
     private List<UserMessageBean> userList;
     private Context context;
+    private List<String> checkWordList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView contentTxt, tipTxt, nameTxt, signTipTxt, timeTxt;
+        TextView contentTxt, tipTxt, nameTxt, signTipTxt, timeTxt, countTxt;
         ImageView iconIv, rightIv;
         RelativeLayout layoutSign;
         LinearLayout layoutMain;
@@ -51,6 +52,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
         public ViewHolder(View view) {
             super(view);
             contentTxt = (TextView) view.findViewById(R.id.content);
+            countTxt = (TextView) view.findViewById(R.id.count);
             nameTxt = (TextView) view.findViewById(R.id.name);
             signTipTxt = (TextView) view.findViewById(R.id.sign_tip);
             tipTxt = (TextView) view.findViewById(R.id.tip);
@@ -63,10 +65,11 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
 
     }
 
-    public NoticeAdapter(Context context, List<V2TIMConversation> mList, List<UserMessageBean> userList) {
+    public NoticeAdapter(Context context, List<V2TIMConversation> mList, List<String> checkWordList, List<UserMessageBean> userList) {
         this.context = context;
         this.mList = mList;
         this.userList = userList;
+        this.checkWordList = checkWordList;
     }
 
     @Override
@@ -92,6 +95,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
                 }
             });
             holder.iconIv.setImageResource(R.mipmap.test2);
+            holder.countTxt.setVisibility(View.GONE);
         } else if (position == 1) {
             holder.nameTxt.setText("官方助手");
             holder.tipTxt.setText("已经2345人在这里聊天");
@@ -109,10 +113,19 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
                     context.startActivity(intent);
                 }
             });
+            holder.countTxt.setVisibility(View.GONE);
         } else {
             final int currentId = Integer.parseInt(mList.get(position).getUserID());
             UserMessageBean userBean = getUserData(currentId);
             if (userBean != null) {
+                System.out.println("unread:" + mList.get(position).getUnreadCount());
+                if (mList.get(position).getUnreadCount() == 0) {
+                    holder.countTxt.setVisibility(View.GONE);
+                } else {
+                    holder.countTxt.setVisibility(View.VISIBLE);
+                    holder.countTxt.setText("" + mList.get(position).getUnreadCount());
+                }
+
                 if (!TextUtils.isEmpty(userBean.getNickname())) {
                     holder.nameTxt.setText(userBean.getNickname());
                 }
@@ -146,7 +159,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
                     holder.layoutMain.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            UserAllInfoBean userBean = ((FriendStationApplication)context.getApplicationContext()).getUserAllInfo();
+                            UserAllInfoBean userBean = ((FriendStationApplication) context.getApplicationContext()).getUserAllInfo();
                             if (userBean == null || userBean.getId() == 0) {
                                 T.s("你当前的用户信息获取有误，请重新登录");
                                 return;
@@ -162,6 +175,16 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
 
 
         }
+    }
+
+    private String checkContent(String oldContent) {
+        String newContent = oldContent;
+        for (int c = 0; c < checkWordList.size(); c++) {
+            if (newContent.indexOf(checkWordList.get(c)) != -1) {
+                newContent = newContent.replaceAll(checkWordList.get(c), "***");
+            }
+        }
+        return newContent;
     }
 
     private UserMessageBean getUserData(int id) {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
@@ -28,9 +29,12 @@ public class SignActivity extends BaseActivity {
     private Button signUnClick;
 
     @Event(R.id.sign_click)
-    private void signClick(View view){
+    private void signClick(View view) {
 
     }
+
+    @ViewInject(R.id.day)
+    private TextView day;
 
     @ViewInject(R.id.layout1)
     private LinearLayout layout1;

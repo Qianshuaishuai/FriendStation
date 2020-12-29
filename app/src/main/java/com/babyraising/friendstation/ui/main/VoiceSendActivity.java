@@ -81,6 +81,7 @@ public class VoiceSendActivity extends BaseActivity {
         intent.putExtra("chat-user-id", userId);
         intent.putExtra("video", 1);
         startActivity(intent);
+        finish();
     }
 
     private void translateOneUser() {

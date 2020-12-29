@@ -53,6 +53,8 @@ public class NoticeFragment extends BaseFragment {
 
     private Gson gson = new Gson();
 
+    private List<String> checkWordList;
+
     @ViewInject(R.id.search)
     private EditText search;
 
@@ -114,7 +116,8 @@ public class NoticeFragment extends BaseFragment {
         list = new ArrayList<>();
         list.add(new V2TIMConversation());
         list.add(new V2TIMConversation());
-        adapter = new NoticeAdapter(getActivity(), list, userList);
+        checkWordList = ((FriendStationApplication) getActivity().getApplication()).getCheckWordList();
+        adapter = new NoticeAdapter(getActivity(), list, checkWordList, userList);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recycleList.setAdapter(adapter);
         recycleList.setLayoutManager(manager);

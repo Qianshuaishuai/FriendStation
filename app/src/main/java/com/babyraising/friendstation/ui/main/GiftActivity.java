@@ -186,6 +186,8 @@ public class GiftActivity extends BaseActivity {
     private void getGiftList() {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_GIFT);
+        params.addQueryStringParameter("pageNum",50);
+        params.addQueryStringParameter("pageSize",1);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         x.http().get(params, new Callback.CommonCallback<String>() {

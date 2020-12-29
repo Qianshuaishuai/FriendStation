@@ -14,6 +14,7 @@ import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.bean.MomentDetailBean;
 import com.babyraising.friendstation.ui.main.ScrollImageActivity;
 import com.babyraising.friendstation.ui.show.MomentFragment;
+import com.google.gson.Gson;
 
 import org.xutils.x;
 
@@ -62,15 +63,21 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         holder.contentImgIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Gson gson = new Gson();
                 Intent intent = new Intent(context.getActivity(), ScrollImageActivity.class);
+                intent.putExtra("moment-bean", gson.toJson(mList.get(position)));
                 context.startActivity(intent);
             }
         });
 
         holder.contentTxt.setText(mList.get(position).getContent());
-
-        if (!TextUtils.isEmpty(mList.get(position).getPicUrl1())) {
+        if (!TextUtils.isEmpty(mList.get(position).getPicUrl1()) && (mList.get(position).getPicUrl1().indexOf("http") != -1)) {
             x.image().bind(holder.contentImgIv, mList.get(position).getPicUrl1());
+            holder.contentImgIv.setVisibility(View.VISIBLE);
+        } else if (!TextUtils.isEmpty(mList.get(position).getPicUrl1()) && (mList.get(position).getPicUrl1().indexOf("http") == -1)) {
+            holder.contentImgIv.setVisibility(View.GONE);
+        } else {
+            holder.contentImgIv.setVisibility(View.GONE);
         }
 
         holder.headIv.setOnClickListener(new View.OnClickListener() {

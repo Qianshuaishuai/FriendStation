@@ -49,16 +49,16 @@ public class MyInfoActivity extends BaseActivity {
 
     @Event(R.id.layout_sex)
     private void sexLayoutClick(View view) {
-        Intent intent = new Intent(this, BuildUserSexActivity.class);
-        intent.putExtra("mode", 1);
-        startActivity(intent);
+//        Intent intent = new Intent(this, BuildUserSexActivity.class);
+//        intent.putExtra("mode", 1);
+//        startActivity(intent);
     }
 
     @Event(R.id.sex)
     private void sexClick(View view) {
-        Intent intent = new Intent(this, BuildUserSexActivity.class);
-        intent.putExtra("mode", 1);
-        startActivity(intent);
+//        Intent intent = new Intent(this, BuildUserSexActivity.class);
+//        intent.putExtra("mode", 1);
+//        startActivity(intent);
     }
 
     @Event(R.id.date)
@@ -151,7 +151,7 @@ public class MyInfoActivity extends BaseActivity {
             public void onSuccess(String result) {
                 Gson gson = new Gson();
                 UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
-                System.out.println("userFullInfo:"+result);
+                System.out.println("userFullInfo:" + result);
                 switch (response.getCode()) {
                     case 200:
                         ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());
@@ -183,23 +183,63 @@ public class MyInfoActivity extends BaseActivity {
     private void saveUserInfo() {
         SetUserFullRequest request = new SetUserFullRequest();
         SetUserFullExtraRequest extraRequest = new SetUserFullExtraRequest();
-        extraRequest.setBirthday(date.getText().toString());
-        extraRequest.setConstellation(constellation.getText().toString());
-        extraRequest.setEducation(education.getText().toString());
-        extraRequest.setEmotionState(emotion.getText().toString());
-        extraRequest.setHeight(Integer.parseInt(height.getText().toString()));
-        extraRequest.setWeight(Integer.parseInt(weight.getText().toString()));
-        extraRequest.setIncome(income.getText().toString());
-        extraRequest.setIntroduce(inword.getText().toString());
-        extraRequest.setSexPart(charm.getText().toString());
-        extraRequest.setWork(job.getText().toString());
-        extraRequest.setLocation(address.getText().toString());
+        if (!TextUtils.isEmpty(date.getText().toString())) {
+            extraRequest.setBirthday(date.getText().toString());
+        }
+        if (!TextUtils.isEmpty(constellation.getText().toString())) {
+            extraRequest.setConstellation(constellation.getText().toString());
+        }
+        if (!TextUtils.isEmpty(education.getText().toString())) {
+            extraRequest.setEducation(education.getText().toString());
+        }
+        if (!TextUtils.isEmpty(emotion.getText().toString())) {
+            extraRequest.setEmotionState(emotion.getText().toString());
+        }
 
-        request.setAvatar(userAllInfoBean.getAvatar());
-        request.setInviteCode(userAllInfoBean.getInviteCode());
-        request.setNickname(userAllInfoBean.getNickname());
+        if (!TextUtils.isEmpty(height.getText().toString())) {
+            extraRequest.setHeight(Integer.parseInt(height.getText().toString()));
+        }
+
+        if (!TextUtils.isEmpty(weight.getText().toString())) {
+            extraRequest.setWeight(Integer.parseInt(weight.getText().toString()));
+        }
+
+
+        if (!TextUtils.isEmpty(income.getText().toString())) {
+            extraRequest.setIncome(income.getText().toString());
+        }
+        if (!TextUtils.isEmpty(inword.getText().toString())) {
+            extraRequest.setIntroduce(inword.getText().toString());
+        }
+
+        if (!TextUtils.isEmpty(charm.getText().toString())) {
+            extraRequest.setSexPart(charm.getText().toString());
+        }
+        if (!TextUtils.isEmpty(job.getText().toString())) {
+            extraRequest.setWork(job.getText().toString());
+        }
+
+        if (!TextUtils.isEmpty(address.getText().toString())) {
+            extraRequest.setLocation(address.getText().toString());
+        }
+
+        if (!TextUtils.isEmpty(userAllInfoBean.getAvatar())) {
+            request.setAvatar(userAllInfoBean.getAvatar());
+        }
+
+        if (!TextUtils.isEmpty(userAllInfoBean.getInviteCode())) {
+            request.setInviteCode(userAllInfoBean.getInviteCode());
+        }
+
+        if (!TextUtils.isEmpty(userAllInfoBean.getNickname())) {
+            request.setNickname(userAllInfoBean.getNickname());
+        }
+
+        if (!TextUtils.isEmpty(userAllInfoBean.getSign())) {
+            request.setSign(userAllInfoBean.getSign());
+        }
+
         request.setSex(userAllInfoBean.getSex());
-        request.setSign(userAllInfoBean.getSign());
         request.setUserExtra(extraRequest);
 
         Gson gson = new Gson();
