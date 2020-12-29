@@ -76,6 +76,7 @@ public class PersonInfoActivity extends BaseActivity {
     private List<String> tagList;
     private TagAdapter tagAdapter;
     private ShowAlbumAdapter showAlbumAdapter;
+    private int followed = 0;
 
     @ViewInject(R.id.background)
     private ImageView background;
@@ -95,6 +96,9 @@ public class PersonInfoActivity extends BaseActivity {
 
     @ViewInject(R.id.name)
     private TextView name;
+
+    @ViewInject(R.id.iv_follow)
+    private ImageView ivFollow;
 
     @ViewInject(R.id.layout_background)
     private RelativeLayout backgroundLayout;
@@ -253,7 +257,15 @@ public class PersonInfoActivity extends BaseActivity {
 
     @Event(R.id.layout_follow)
     private void followLayoutClick(View view) {
-        followUser(userAllInfoBean.getId());
+        if (followed == 0) {
+            ivFollow.setImageResource(R.mipmap.person_info_follow_selected);
+            followUser(userAllInfoBean.getId());
+            followed = 1;
+        } else {
+            ivFollow.setImageResource(R.mipmap.person_info_follow_normal);
+            cancelFollowUser(userAllInfoBean.getId());
+            followed = 0;
+        }
     }
 
     @ViewInject(R.id.layout_bottom)
@@ -983,6 +995,18 @@ public class PersonInfoActivity extends BaseActivity {
 
             if (!TextUtils.isEmpty(userAllInfoBean.getStatusCert()) && userAllInfoBean.getStatusCert().equals("ING")) {
                 auth.setText("审核中");
+            }
+
+            if (!TextUtils.isEmpty(userAllInfoBean.getIsFollowed())) {
+                followed = Integer.parseInt(userAllInfoBean.getIsFollowed());
+                switch (followed) {
+                    case 0:
+                        ivFollow.setImageResource(R.mipmap.person_info_follow_normal);
+                        break;
+                    case 1:
+                        ivFollow.setImageResource(R.mipmap.person_info_follow_selected);
+                        break;
+                }
             }
         }
     }

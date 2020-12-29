@@ -22,6 +22,7 @@ public class UserAllInfoBean {
     private UserAllCountBean userCount;
     private String userNo;
     private String recordSign;
+    private String isFollowed;
 
     public String getAvatar() {
         return avatar;
@@ -189,5 +190,13 @@ public class UserAllInfoBean {
 
     public void setRecordSign(String recordSign) {
         this.recordSign = recordSign;
+    }
+
+    public String getIsFollowed() {
+        return isFollowed;
+    }
+
+    public void setIsFollowed(String isFollowed) {
+        this.isFollowed = isFollowed;
     }
 }
