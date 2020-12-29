@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.babyraising.friendstation">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" /> -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -61,7 +62,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ui.main.VoiceSignActivity"></activity>
+        <activity
+            android:name=".ui.main.VoiceSignActivity"
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".ui.user.PhotoActivity" />
 
         <meta-data
@@ -70,52 +73,122 @@
 
         <activity
             android:name=".ui.main.ChatActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ui.main.MomentSendActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".ui.main.VoiceSendActivity" />
-        <activity android:name=".ui.main.VoiceTipActivity" />
-        <activity android:name=".ui.main.CloseActivity" />
-        <activity android:name=".ui.main.ScrollImageActivity" />
-        <activity android:name=".ui.main.PersonInfoActivity" />
-        <activity android:name=".ui.main.IncomeRecordActivity" />
-        <activity android:name=".ui.main.RechargeActivity" />
-        <activity android:name=".ui.main.IntegralMallActivity" />
-        <activity android:name=".ui.main.SignActivity" />
-        <activity android:name=".ui.main.MyEarningActivity" />
-        <activity android:name=".ui.main.PersonAuthActivity" />
-        <activity android:name=".ui.main.MyInfoActivity" />
-        <activity android:name=".ui.main.SettingActivity" />
-        <activity android:name=".ui.main.InviteFriendDetailActivity" />
-        <activity android:name=".ui.main.RankActivity" />
-        <activity android:name=".ui.main.TaskActivity" />
-        <activity android:name=".ui.other.HelpActivity" />
-        <activity android:name=".ui.main.LookMeRecordActivity" />
-        <activity android:name=".ui.main.GiftActivity" />
-        <activity android:name=".ui.user.LoginPhoneDetailActivity" />
-        <activity android:name=".ui.main.CommonWordActivity" />
-        <activity android:name=".ui.main.ExchangeRecordActivity" />
-        <activity android:name=".ui.main.InviteFriendActivity" />
-        <activity android:name=".ui.pay.PayActivity" />
-        <activity android:name=".ui.user.NoticeActivity" />
-        <activity android:name=".ui.user.BuildUserNameActivity" />
-        <activity android:name=".ui.user.BuildUserSexActivity" />
-        <activity android:name=".ui.user.BuildUserActivity">
+        <activity
+            android:name=".ui.main.VoiceSendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.VoiceTipActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.CloseActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.ScrollImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.PersonInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.IncomeRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.RechargeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.IntegralMallActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.SignActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.MyEarningActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.PersonAuthActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.MyInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.InviteFriendDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.RankActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.TaskActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.other.HelpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.LookMeRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.GiftActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.LoginPhoneDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.CommonWordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.ExchangeRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.InviteFriendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.pay.PayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.NoticeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.BuildUserNameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.BuildUserSexActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.BuildUserActivity"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".ui.main.VoiceSelfActivity"></activity>
-        <activity android:name=".ui.user.CodeActivity" />
-        <activity android:name=".ui.user.LoginPhoneActivity" />
-        <activity android:name=".ui.user.WelcomeActivity">
+        <activity
+            android:name=".ui.main.VoiceSelfActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.user.CodeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.LoginPhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.WelcomeActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.user.LoginActivity" />
-        <activity android:name=".ui.MainActivity"></activity>
+        <activity
+            android:name=".ui.user.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:screenOrientation="portrait"></activity>
 
         <service android:name=".service.RTCService" />
         <service android:name=".service.LocationService" />
