@@ -1,6 +1,7 @@
 package com.babyraising.friendstation.ui.main;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -109,15 +110,24 @@ public class PersonAuthActivity extends BaseActivity {
         File photoFile = new File(fileDir, "photo.jpeg");
         mTempPhotoPath = photoFile.getAbsolutePath();
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            /*7.0以上要通过FileProvider将File转化为Uri*/
-            imageUri = FileProvider.getUriForFile(this, "", photoFile);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//            /*7.0以上要通过FileProvider将File转化为Uri*/
+//            imageUri = FileProvider.getUriForFile(this, "", photoFile);
+//        } else {
+//            /*7.0以下则直接使用Uri的fromFile方法将File转化为Uri*/
+//            imageUri = Uri.fromFile(photoFile);
+//        }
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        if (currentapiVersion < 24) {
+            intentToTakePhoto.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+            startActivityForResult(intentToTakePhoto, RC_TAKE_PHOTO);
         } else {
-            /*7.0以下则直接使用Uri的fromFile方法将File转化为Uri*/
-            imageUri = Uri.fromFile(photoFile);
+            ContentValues contentValues = new ContentValues(1);
+            contentValues.put(MediaStore.Images.Media.DATA, photoFile.getAbsolutePath());
+            Uri uri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+            intentToTakePhoto.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            startActivityForResult(intentToTakePhoto, RC_TAKE_PHOTO);
         }
-        intentToTakePhoto.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(intentToTakePhoto, RC_TAKE_PHOTO);
     }
 
     @Override
