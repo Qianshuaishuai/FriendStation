@@ -19,6 +19,8 @@ import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.request.SetUserDateRequest;
 import com.babyraising.friendstation.request.SetUserExtraDateRequest;
+import com.babyraising.friendstation.request.SetUserFullExtraRequest;
+import com.babyraising.friendstation.request.SetUserFullRequest;
 import com.babyraising.friendstation.request.SetUserSexRequest;
 import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
@@ -87,9 +89,9 @@ public class BuildUserNameActivity extends BaseActivity {
     }
 
     private void saveUserDate() {
-        SetUserDateRequest request = new SetUserDateRequest();
-        SetUserExtraDateRequest extraRequest = new SetUserExtraDateRequest();
-        extraRequest.setDate(date.getText().toString());
+        SetUserFullRequest request = new SetUserFullRequest();
+        SetUserFullExtraRequest extraRequest = new SetUserFullExtraRequest();
+        extraRequest.setBirthday(date.getText().toString());
         request.setUserExtra(extraRequest);
         request.setInviteCode(invite.getText().toString());
 
