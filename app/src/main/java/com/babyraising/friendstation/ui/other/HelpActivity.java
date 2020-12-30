@@ -12,6 +12,7 @@ import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.adapter.HelpAdapter;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.HelpAllBean;
 import com.babyraising.friendstation.bean.HelpBean;
 
 import org.xutils.view.annotation.ContentView;
@@ -24,16 +25,30 @@ import java.util.List;
 @ContentView(R.layout.activity_help)
 public class HelpActivity extends BaseActivity {
 
+    private HelpAllBean helpAllBean;
     private List<HelpBean> helpList = new ArrayList<>();
     private HelpAdapter adapter;
 
+    private int status = 0;
+
     @Event(R.id.back)
     private void backClick(View view) {
-        finish();
+        if (status == 0) {
+            finish();
+        } else if (status == 1) {
+            title.setText("帮助与反馈");
+            status = 0;
+            questionLayout.setVisibility(View.VISIBLE);
+            listLayout.setVisibility(View.GONE);
+            detailLayout.setVisibility(View.GONE);
+        }
     }
 
     @ViewInject(R.id.list)
     private RecyclerView list;
+
+    @ViewInject(R.id.title)
+    private TextView title;
 
     @ViewInject(R.id.layout_list)
     private LinearLayout listLayout;
@@ -46,6 +61,48 @@ public class HelpActivity extends BaseActivity {
 
     @ViewInject(R.id.question_answer)
     private TextView questionAnswer;
+
+    @ViewInject(R.id.layout_question)
+    private LinearLayout questionLayout;
+
+    @Event(R.id.layout_coin)
+    private void coinLayoutClick(View view) {
+        helpList.clear();
+        for (int i = 0; i < helpAllBean.getCoinList().size(); i++) {
+            helpList.add(helpAllBean.getCoinList().get(i));
+        }
+        adapter.notifyDataSetChanged();
+        questionLayout.setVisibility(View.GONE);
+        listLayout.setVisibility(View.VISIBLE);
+        status = 1;
+        title.setText("金币问题");
+    }
+
+    @Event(R.id.layout_common)
+    private void commonLayoutClick(View view) {
+        helpList.clear();
+        for (int i = 0; i < helpAllBean.getCommonList().size(); i++) {
+            helpList.add(helpAllBean.getCommonList().get(i));
+        }
+        adapter.notifyDataSetChanged();
+        questionLayout.setVisibility(View.GONE);
+        listLayout.setVisibility(View.VISIBLE);
+        status = 1;
+        title.setText("常见问题");
+    }
+
+    @Event(R.id.layout_score)
+    private void scoreLayoutClick(View view) {
+        helpList.clear();
+        for (int i = 0; i < helpAllBean.getScoreList().size(); i++) {
+            helpList.add(helpAllBean.getScoreList().get(i));
+        }
+        adapter.notifyDataSetChanged();
+        questionLayout.setVisibility(View.GONE);
+        listLayout.setVisibility(View.VISIBLE);
+        status = 1;
+        title.setText("积分问题");
+    }
 
     @Event(R.id.question_content)
     private void questionContentClick(View view) {
@@ -61,7 +118,9 @@ public class HelpActivity extends BaseActivity {
     }
 
     private void initData() {
-        helpList = ((FriendStationApplication) getApplication()).getHelpList();
+//        helpList = ((FriendStationApplication) getApplication()).getHelpList();
+        helpList = new ArrayList<>();
+        helpAllBean = ((FriendStationApplication) getApplication()).getHelpData();
         adapter = new HelpAdapter(this, helpList);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         list.setLayoutManager(manager);

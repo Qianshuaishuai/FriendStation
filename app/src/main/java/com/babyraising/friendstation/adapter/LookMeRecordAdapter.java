@@ -25,8 +25,8 @@ public class LookMeRecordAdapter extends RecyclerView.Adapter<LookMeRecordAdapte
     private LookMeRecordActivity context;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTxt, cityTxt, ageTxt, heightTxt, jobTxt, incomeTxt,signTxt;
-        ImageView ivSelected, ivNormal,ivHead;
+        TextView nameTxt, cityTxt, ageTxt, heightTxt, jobTxt, incomeTxt, signTxt;
+        ImageView ivSelected, ivNormal, ivHead;
 
         public ViewHolder(View view) {
             super(view);
@@ -147,10 +147,14 @@ public class LookMeRecordAdapter extends RecyclerView.Adapter<LookMeRecordAdapte
     }
 
     private int getAge(String birthday) {
-        if (!TextUtils.isEmpty(birthday)) {
-            String yearStr = birthday.substring(0, 4);
-            int year = Integer.parseInt(yearStr);
-            return Integer.parseInt(getCurrentYear()) - year;
+        try {
+            if (!TextUtils.isEmpty(birthday)) {
+                String yearStr = birthday.substring(0, 4);
+                int year = Integer.parseInt(yearStr);
+                return Integer.parseInt(getCurrentYear()) - year;
+            }
+        } catch (Exception e) {
+            return 0;
         }
 
         return 0;

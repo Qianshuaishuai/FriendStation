@@ -173,7 +173,7 @@ public class BuildUserSexActivity extends BaseActivity {
                         }
                         break;
                     default:
-                        T.s(response.getMsg());
+                        startMainActivity();
                         break;
                 }
             }

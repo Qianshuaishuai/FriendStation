@@ -473,6 +473,8 @@ public class PersonInfoActivity extends BaseActivity {
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_USERFOLLOW_DELETE);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
+        System.out.println("cancelFollowUser:" + id);
+        System.out.println("cancelFollowUser:" + userAllInfoBean.getId());
         params.setBodyContent(gson.toJson(request));
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override

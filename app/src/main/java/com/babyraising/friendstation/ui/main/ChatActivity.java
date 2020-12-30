@@ -131,6 +131,9 @@ public class ChatActivity extends BaseActivity {
     @ViewInject(R.id.chat_list)
     private RecyclerView chatListRecycleView;
 
+    @ViewInject(R.id.background)
+    private ImageView background;
+
     @ViewInject(R.id.refresh_layout)
     private SwipeRefreshLayout refreshLayout;
 
@@ -902,6 +905,10 @@ public class ChatActivity extends BaseActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         chatListRecycleView.setLayoutManager(manager);
         chatListRecycleView.setAdapter(adapter);
+
+        if (!TextUtils.isEmpty(currentUserBean.getAvatar())) {
+            x.image().bind(background, currentUserBean.getAvatar());
+        }
     }
 
     private void uploadPic(final String localPic) {

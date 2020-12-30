@@ -241,7 +241,7 @@ public class ForgetActivity extends BaseActivity {
         params.addQueryStringParameter("code", codeStr);
         params.addHeader("Authorization", bean.getAccessToken());
         params.setAsJsonContent(true);
-        x.http().post(params, new Callback.CommonCallback<String>() {
+        x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Gson gson = new Gson();

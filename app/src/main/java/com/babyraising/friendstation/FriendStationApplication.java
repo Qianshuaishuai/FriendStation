@@ -19,6 +19,7 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.EmojiBean;
+import com.babyraising.friendstation.bean.HelpAllBean;
 import com.babyraising.friendstation.bean.HelpBean;
 import com.babyraising.friendstation.bean.LocationBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
@@ -82,7 +83,8 @@ public class FriendStationApplication extends Application {
         initCheckWord();
         startLocation();
         initVoiceSignList();
-        initHelpData();
+//        initHelpData();
+        initHelpList();
         initCamera();
 //        initAMapTrack();
     }
@@ -115,6 +117,172 @@ public class FriendStationApplication extends Application {
         helpList.add(bean);
         helpList.add(bean);
         saveHelpList(helpList);
+    }
+
+    private void initHelpList() {
+        List<HelpBean> commonList = new ArrayList<>();
+
+        HelpBean bean = new HelpBean();
+        HelpBean bean1 = new HelpBean();
+        HelpBean bean2 = new HelpBean();
+        HelpBean bean3 = new HelpBean();
+        HelpBean bean4 = new HelpBean();
+        HelpBean bean5 = new HelpBean();
+        HelpBean bean6 = new HelpBean();
+        HelpBean bean7 = new HelpBean();
+        HelpBean bean8 = new HelpBean();
+        HelpBean bean9 = new HelpBean();
+        HelpBean bean10 = new HelpBean();
+        bean.setQuestion("金币怎么用，怎么获得");
+        bean.setAnswer("金币可以用来文字、语音聊天，还可以赠送礼物给心仪的对象\n点击 我的充值 充值到账可获得金币");
+        commonList.add(bean);
+
+        bean1.setQuestion("未认证回复不了消息吗？");
+        bean1.setAnswer("加友站致力于打造最真实的单生男女交友社区，加友站交友大数据显示完成 真人认证 、 语音签名 认证，消息回复率提升600%");
+        commonList.add(bean1);
+        bean2.setQuestion("真人认证怎么操作？");
+        bean2.setAnswer("点击真人认证 即可进入认证页面，请按照提示进行操作，提交后请耐心等待审核，审核时间一般在2小时内");
+        commonList.add(bean2);
+        bean3.setQuestion("真人认证为什么不通过?");
+        bean3.setAnswer("真人认证 需提交高清且无遮挡的人脸照片进行认证的。提交的头像过于模糊，无法判断属于同一人是无法通过审核的");
+        commonList.add(bean3);
+
+        bean4.setQuestion("我之前已经真人认证过的，怎么没有了？");
+        bean4.setAnswer("真人认证系统会定期检查审核，有不符合的会被取消，建议您可以操作重新提交真人认证 。");
+        commonList.add(bean4);
+
+        bean5.setQuestion("为什么我不能语音速配？");
+        bean5.setAnswer("语音速配功能是需要您通过了真人认证 后才能开启权限");
+        commonList.add(bean5);
+
+        bean6.setQuestion("语音认证怎么操作？");
+        bean6.setAnswer("点击 编辑语音签名 即可录制语音签名，提交后请耐心等待审核，审核时间一般在2小时内");
+        commonList.add(bean6);
+
+        bean7.setQuestion("账号禁用了怎么办？");
+        bean7.setAnswer("账号禁用有以下几种情形：\n" +
+                "1）打广告\n" +
+                "2）留其他联系方式\n" +
+                "3）聊天涉黄\n" +
+                "4）敏感词违规\n" +
+                "5）被多人举报\n" +
+                "还有其他疑问请添加在线客服QQ");
+        commonList.add(bean7);
+
+        bean8.setQuestion("账号禁用提现的钱还能到账吗？");
+        bean8.setAnswer("如果账号兑换期间违规禁用，所兑换的积分是被系统自动清零，无法兑换的。后续账号解封正常使用是可以正常兑换提现的");
+        commonList.add(bean8);
+
+        bean9.setQuestion("广场禁言多久能恢复？");
+        bean9.setAnswer("广场禁言24小时后系统自动解禁，如不规范使用，屡次被禁言，禁言时间将被延长，甚至面临永久封号，无法使用。");
+        commonList.add(bean9);
+
+        bean10.setQuestion("怎么没有人搭讪/搭讪少/收不到搭讪是怎么回事？");
+        bean10.setAnswer("搭讪是随机匹配的，建议可以主动一对一聊天提高聊天质量的，或者也可以在首页或者广场多互动。加友站是真实的交友平台，提倡真诚交友，为保障交友的真实性，年龄不真实搭讪也会减少哦~也可在后期聊天过程中提高诚意度，完善个人信息的真实性，被搭讪数量肯定就会提升的。");
+        commonList.add(bean10);
+
+
+        List<HelpBean> coinList = new ArrayList<>();
+
+        HelpBean cbean = new HelpBean();
+        HelpBean cbean1 = new HelpBean();
+        HelpBean cbean2 = new HelpBean();
+        HelpBean cbean3 = new HelpBean();
+        HelpBean cbean4 = new HelpBean();
+        HelpBean cbean5 = new HelpBean();
+        HelpBean cbean6 = new HelpBean();
+        HelpBean cbean7 = new HelpBean();
+        HelpBean cbean8 = new HelpBean();
+        cbean.setQuestion("怎么查看我的账号有多少金币？");
+        cbean.setAnswer("点击金币余额即可查看您当前所有金币，在充值过程中遇到问题，请添加客服QQ，快速解决问题。");
+        coinList.add(cbean);
+
+        cbean1.setQuestion("为什么刚开始玩就要提示充值？");
+        cbean1.setAnswer("加友站秉持平台公正公平原则，聊天收费或免费的功能权限完全交由用户自主设置，当用户设置聊天需付费时，主动发消息一方需付金币，对方12小时内不回复则金币退还。加为好友（互相关注）聊天免费，男女平等；\n" +
+                "付费聊天，可以主动追求你喜欢的人，并得到及时回应，可靠且高效；\n" +
+                "同时，加友站为每一位新用户都赠送了一份鼓励金，鼓励新用户主动搭讪自己心仪的异性对象，快速聊天交友，金币用完后会提醒您充值\n" +
+                "每日签到可免费获得金币，你还可以通过 邀请好友赚钱 做任务 等方法免费获取金币。");
+        coinList.add(cbean1);
+        cbean2.setQuestion("为什么聊天需要金币？");
+        cbean2.setAnswer("加友站作为平台方为有交友需求的用户双方搭建聊天互动的桥梁，秉持平台中立性的原则，聊天免费或收费的功能权限完全交由用户自主设置；\n" +
+                "当用户设置聊天需付费时，主动发消息一方需付金币，对方12小时内不回复则金币退还。加为好友（互相关注）聊天免费，男女平等；\n" +
+                "付费聊天，可以主动追求你喜欢的人，并得到及时回应，可靠且高效；\n" +
+                "每日签到可免费获得金币，你还可以通过等 邀请好友赚钱、做任务 方法免费获取金币。");
+        coinList.add(cbean2);
+        cbean3.setQuestion("怎样才能获得更多金币？");
+        cbean3.setAnswer("每日签到可免费获得金币，你还可以通过邀请好友赚钱 、做任务等方法免费获取金币。\n" +
+                "如果他人搭讪您和您聊天、赠送您礼物，都会给您增加积分，您的积分积累到一定程度可以兑换相对应的金币。");
+        coinList.add(cbean3);
+
+        cbean4.setQuestion("互相关注为好友了为什么发信息还要收取金币");
+        cbean4.setAnswer("如果双方互为关注，则自动成为好友，聊天是免费的，请在好友列表查看并确认对方在您的好友列表。\n" +
+                "加友站秉持平台公正公平原则，聊天收费或免费的功能权限完全交由用户自主设置，当用户设置聊天需付费时，主动发消息一方需付金币，对方12小时内不回复则金币退还。加为好友（互相关注）聊天免费，男女平等；\n" +
+                "付费聊天，可以主动追求你喜欢的人，并得到及时回应，可靠且高效。");
+        coinList.add(cbean4);
+
+        cbean5.setQuestion("金币消费记录怎么查看/赚的金币在哪里查看？");
+        cbean5.setAnswer("点击 收支记录 可查看具体的金币消费记录。\n" +
+                "在充值过程中遇到问题，可以反馈给在线客服QQ");
+        coinList.add(cbean5);
+
+        cbean6.setQuestion("金币可以兑换积分吗？");
+        cbean6.setAnswer("积分可以兑换成金币和提现，金币则无法兑换积分，金币可用来和用户文字、语音和视频聊天，还可以赠送礼物表达心意。");
+        coinList.add(cbean6);
+
+        cbean7.setQuestion("私聊回复了消息，怎么金币还被退回去？");
+        cbean7.setAnswer("12小时内没有回复消息，金币是系统自动退回到对方的账号");
+        coinList.add(cbean7);
+
+        cbean8.setQuestion("怎么签到");
+        cbean8.setAnswer("当天首次登录系统就会自动弹出提示签到的，同一台设备只有一个账号能每日签到。");
+        coinList.add(cbean8);
+
+        List<HelpBean> scoreList = new ArrayList<>();
+        HelpBean sbean = new HelpBean();
+        HelpBean sbean1 = new HelpBean();
+        HelpBean sbean2 = new HelpBean();
+        HelpBean sbean3 = new HelpBean();
+        HelpBean sbean4 = new HelpBean();
+        HelpBean sbean5 = new HelpBean();
+        HelpBean sbean6 = new HelpBean();
+
+        sbean.setQuestion("如何兑换积分？");
+        sbean.setAnswer("点击积分兑换 即可在积分商城选择兑换金币、人民币。\n" +
+                "温馨提示：兑换金币是实时到账的；兑换人民币需要三个工作日（不包括周末和节假日）完成，请耐心等待");
+        scoreList.add(sbean);
+
+        sbean1.setQuestion("私聊回复信息为什么没有得到积分？");
+        sbean1.setAnswer("主动发消息一方需付金币，12小时内回复即可获得相应积分；\n" +
+                "可以在积分清单核对一下是否收到积分，聊天界面积分系统显示有可能延迟，如果有问题可以提供对方加友站号给在线客服处");
+        scoreList.add(sbean1);
+
+        sbean2.setQuestion("积分提现钱为什么还不到账？在哪里查看？");
+        sbean2.setAnswer("您好，系统显示兑换成功之后您可以检查您的提现账户信息，进行核实：微信查看账单明细即可");
+        scoreList.add(sbean2);
+
+        sbean3.setQuestion("私聊对方主动发消息，为什么回复后没积分？");
+        sbean3.setAnswer("可以在积分清单核对一下是否收到积分，聊天界面积分系统显示有可能延迟，如果有问题可以提供对方加友站号给在线客服QQ处理。");
+        scoreList.add(sbean3);
+
+        sbean4.setQuestion("提现记录在哪里能查看到？");
+        sbean4.setAnswer("可以在 积分清单 查看积分兑换及提现记录。\n" +
+                "在积分兑换过程中遇到问题，请添加客服QQ，快速解决问题。");
+        scoreList.add(sbean4);
+
+        sbean5.setQuestion("申请提现的时候账号信息填错了怎么办？");
+        sbean5.setAnswer("账号填写错误是无法进行打款的，提现对应积分是直接退回到提现账号的，收到退回消息后，可以在 积分清单 查看退回积分记录，您可以重新填写正确的提现账号信息后再申请提现");
+        scoreList.add(sbean5);
+
+        sbean6.setQuestion("积分兑换的金币在哪里查看呢？");
+        sbean6.setAnswer("积分兑换成金币是实时到账的，你可以点击 收支记录 查看具体的金币消费记录。\n" +
+                "之类的东西，骗取钱财。");
+        scoreList.add(sbean6);
+
+        HelpAllBean helpAllBean = new HelpAllBean();
+        helpAllBean.setCoinList(coinList);
+        helpAllBean.setScoreList(scoreList);
+        helpAllBean.setCommonList(commonList);
+        saveHelpData(helpAllBean);
     }
 
     private void initCheckWord() {
@@ -503,5 +671,15 @@ public class FriendStationApplication extends Application {
     public ArrayList<HelpBean> getHelpList() {
         return gson.fromJson(sp.getString("help", ""), new TypeToken<List<HelpBean>>() {
         }.getType());
+    }
+
+    public void saveHelpData(HelpAllBean bean) {
+        String beanString = gson.toJson(bean);
+        editor.putString("help-all", beanString);
+        editor.commit();
+    }
+
+    public HelpAllBean getHelpData() {
+        return gson.fromJson(sp.getString("help-all", ""),HelpAllBean.class);
     }
 }

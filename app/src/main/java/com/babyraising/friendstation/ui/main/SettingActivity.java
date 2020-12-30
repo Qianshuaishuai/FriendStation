@@ -36,7 +36,8 @@ public class SettingActivity extends BaseActivity {
 
     @Event(R.id.layout_version)
     private void versionClick(View view) {
-
+        Intent intent = new Intent(this, VersionActivity.class);
+        startActivity(intent);
     }
 
     @Override
