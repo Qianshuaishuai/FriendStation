@@ -61,6 +61,8 @@ import java.util.List;
 public class PersonAuthActivity extends BaseActivity {
     private int status = 1;
 
+    private AlertDialog authDialog;
+
     @Event(R.id.back)
     private void backClick(View view) {
         finish();
@@ -97,7 +99,7 @@ public class PersonAuthActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
+        initAuthTip();
     }
 
     private void takePhoto() {
@@ -225,14 +227,16 @@ public class PersonAuthActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-
+                if (authDialog.isShowing()){
+                    authDialog.cancel();
+                }
             }
         });
     }
 
 
     private void uploadPic(String localPic) {
-
+        authDialog.show();
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
 
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_UPLOAD);
@@ -309,5 +313,18 @@ public class PersonAuthActivity extends BaseActivity {
         return size;
     }
 
+    private void initAuthTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
+        // 创建一个view，并且将布局加入view中
+        View view = LayoutInflater.from(this).inflate(
+                R.layout.dialog_auth_tip, null, false);
+        // 将view添加到builder中
+        builder.setView(view);
+        // 创建dialog
+        authDialog = builder.create();
+        // 初始化控件，注意这里是通过view.findViewById
+        final TextView content = (TextView) view.findViewById(R.id.content);
+        authDialog.setCanceledOnTouchOutside(false);
+    }
 }

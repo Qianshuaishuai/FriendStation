@@ -35,6 +35,7 @@
     </RelativeLayout>
 
     <ImageView
+        android:src="@mipmap/common_auth_test"
         android:id="@+id/iv_main"
         android:layout_width="225dip"
         android:layout_height="225dip"
