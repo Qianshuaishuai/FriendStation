@@ -552,4 +552,77 @@
                 android:textSize="14dip" />
         </LinearLayout>
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_gift_tip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#48000000"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:id="@+id/layout_gift_tip_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <LinearLayout
+                android:layout_width="246dip"
+                android:layout_height="62.5dip"
+                android:layout_centerHorizontal="true"
+                android:background="@mipmap/dialog_top_bg"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="15dip"
+                    android:layout_height="1.5dip"
+                    android:background="#ffffff"></View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dip"
+                    android:text="收到礼物"
+                    android:textColor="#ffffff"
+                    android:textSize="16dip"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="267dip"
+                android:layout_height="205dip"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="48dip"
+                android:background="@mipmap/dialog_bottom_bg"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/iv_gift_receive"
+                    android:layout_width="90dip"
+                    android:layout_height="90dip"
+                    android:layout_marginTop="30dip"
+                    android:layout_marginBottom="20dip" />
+
+                <Button
+                    android:id="@+id/gift_sure"
+                    android:layout_width="100dip"
+                    android:layout_height="40dip"
+                    android:background="@drawable/build_user_save_bg"
+                    android:text="确定"
+                    android:textColor="#ffffff"
+                    android:textSize="15dip" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/dialog_close"
+            android:layout_width="28dip"
+            android:layout_height="28dip"
+            android:layout_below="@+id/layout_gift_tip_main"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dip"
+            android:src="@mipmap/common_dialog_close" />
+    </RelativeLayout>
 </RelativeLayout>

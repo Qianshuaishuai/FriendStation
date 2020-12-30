@@ -58,6 +58,7 @@ import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.GenerateTestUserSigForRTC;
 import com.babyraising.friendstation.util.T;
+import com.babyraising.friendstation.util.TimeUtils;
 import com.github.lassana.recorder.AudioRecorder;
 import com.github.lassana.recorder.AudioRecorderBuilder;
 import com.google.gson.Gson;
@@ -133,6 +134,22 @@ public class ChatActivity extends BaseActivity {
 
     @ViewInject(R.id.background)
     private ImageView background;
+
+    @ViewInject(R.id.layout_gift_tip)
+    private RelativeLayout giftTipLayout;
+
+    @ViewInject(R.id.iv_gift_receive)
+    private ImageView ivGiftReceive;
+
+    @Event(R.id.gift_sure)
+    private void giftSureClick(View view) {
+        giftTipLayout.setVisibility(View.GONE);
+    }
+
+    @Event(R.id.dialog_close)
+    private void dialogCloseClick(View view) {
+        giftTipLayout.setVisibility(View.GONE);
+    }
 
     @ViewInject(R.id.refresh_layout)
     private SwipeRefreshLayout refreshLayout;
@@ -415,6 +432,21 @@ public class ChatActivity extends BaseActivity {
                 System.out.println("get new message :" + gson.toJson(msg));
                 getMessageList();
                 setMessageRead(msg.getUserID());
+                List<MessageBaseElement> elements = msg.getMessage().getMessageBaseElements();
+                if (elements.get(0) instanceof CustomElement) {
+                    Gson gson = new Gson();
+                    CustomElement element = (CustomElement) elements.get(0);
+                    TimCustomBean bean = gson.fromJson(new String(element.getData()), TimCustomBean.class);
+                    switch (bean.getMsgType()) {
+                        case Constant.GIFT_CHAT_CODE:
+                            if (bean.getGiftBean() != null) {
+                                giftTipLayout.setVisibility(View.VISIBLE);
+                                x.image().bind(ivGiftReceive, bean.getGiftBean().getImage());
+                            }
+                            break;
+                    }
+                }
+
             }
 
             @Override

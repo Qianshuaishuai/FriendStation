@@ -264,7 +264,7 @@ public class VoiceSelfActivity extends BaseActivity {
                                         cancelTIMRTC2();
                                         break;
                                     case -1:
-                                        T.s("对方拒绝语音邀请");
+//                                        T.s("对方拒绝语音邀请");
                                         finish();
                                         break;
                                     case 1:

@@ -11,6 +11,7 @@
     <ImageView
         android:layout_width="48dip"
         android:layout_height="48dip"
+        android:layout_marginLeft="24dip"
         android:layout_marginRight="8dip"
         android:src="@mipmap/common_audio" />
 

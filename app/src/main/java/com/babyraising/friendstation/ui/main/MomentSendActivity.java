@@ -353,6 +353,7 @@ public class MomentSendActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         recordUri = response.getData();
+                        T.s("上传音频成功");
                         break;
                     default:
                         T.s(response.getMsg());

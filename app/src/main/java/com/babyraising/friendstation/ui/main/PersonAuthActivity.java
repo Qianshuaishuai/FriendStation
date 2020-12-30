@@ -165,7 +165,7 @@ public class PersonAuthActivity extends BaseActivity {
 
     }
 
-    private void uploadAuth(final String mTempPhotoPath) {
+    private void uploadAuth(final String newPath) {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
 
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_UPDATE_VERIFY);
@@ -190,13 +190,13 @@ public class PersonAuthActivity extends BaseActivity {
                         switch (response.getData().getStatusCert()) {
                             case "NOT_PASS":
                                 T.s("认证失败，请重新上传");
-                                x.image().bind(ivMain, mTempPhotoPath);
+                                x.image().bind(ivMain, newPath);
                                 retake.setText("重新拍摄");
                                 errorLayout.setVisibility(View.VISIBLE);
                                 break;
                             default:
                                 T.s("认证成功");
-                                x.image().bind(ivMain, mTempPhotoPath);
+                                x.image().bind(ivMain, newPath);
                                 retake.setText("马上搭讪");
                                 retake.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -227,7 +227,7 @@ public class PersonAuthActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-                if (authDialog.isShowing()){
+                if (authDialog.isShowing()) {
                     authDialog.cancel();
                 }
             }
@@ -240,11 +240,12 @@ public class PersonAuthActivity extends BaseActivity {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
 
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_UPLOAD);
+        params.setConnectTimeout(30000);
         params.addHeader("Authorization", bean.getAccessToken());
         File oldFile = new File(localPic);
         File newFile = new CompressHelper.Builder(this)
-                .setMaxWidth(360)  // 默认最大宽度为720
-                .setMaxHeight(480) // 默认最大高度为960
+                .setMaxWidth(180)  // 默认最大宽度为720
+                .setMaxHeight(240) // 默认最大高度为960
                 .setQuality(80)    // 默认压缩质量为80
                 .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
                 .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
