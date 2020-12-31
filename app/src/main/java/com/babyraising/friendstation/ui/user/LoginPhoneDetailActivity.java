@@ -160,19 +160,9 @@ public class LoginPhoneDetailActivity extends BaseActivity {
     }
 
     private void setPasswordForget(String pwd) {
-
-        SetPasswordRequest request = new SetPasswordRequest();
-        request.setNewPassword(pwd);
-        request.setOldPassword("");
-
-        Gson gson = new Gson();
-
-        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
-
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_UPDATE_NEWPASSWORD);
-        params.setAsJsonContent(true);
-        params.addHeader("Authorization", bean.getAccessToken());
-        params.setBodyContent(gson.toJson(request));
+        params.addQueryStringParameter("mobile", currentPhone);
+        params.addQueryStringParameter("newPassword", pwd);
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

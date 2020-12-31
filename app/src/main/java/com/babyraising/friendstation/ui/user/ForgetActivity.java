@@ -239,7 +239,8 @@ public class ForgetActivity extends BaseActivity {
         CommonLoginBean bean = new CommonLoginBean();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_AUTH_CHECKCODE);
         params.addQueryStringParameter("code", codeStr);
-        params.addHeader("Authorization", bean.getAccessToken());
+        params.addQueryStringParameter("mobile", currentPhone);
+//        params.addHeader("Authorization", bean.getAccessToken());
         params.setAsJsonContent(true);
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
@@ -277,6 +278,7 @@ public class ForgetActivity extends BaseActivity {
     private void startLoginPhoneDetail() {
         Intent intent = new Intent(this, LoginPhoneDetailActivity.class);
         intent.putExtra("mode", 999);
+        intent.putExtra("phone", currentPhone);
         startActivity(intent);
         finish();
     }
