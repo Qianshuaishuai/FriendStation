@@ -62,7 +62,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ui.main.VersionActivity"></activity>
+        <activity android:name=".ui.main.PrivacyActivity"></activity>
+        <activity android:name=".ui.main.VersionActivity" />
         <activity android:name=".ui.user.ForgetActivity" />
         <activity
             android:name=".ui.main.VoiceSignActivity"

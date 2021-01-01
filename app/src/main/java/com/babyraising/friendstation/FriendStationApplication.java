@@ -1,5 +1,6 @@
 package com.babyraising.friendstation;
 
+import android.app.AlertDialog;
 import android.app.Application;
 import android.app.Service;
 import android.content.Context;
@@ -11,12 +12,17 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
+import com.babyraising.friendstation.adapter.NoticeAdapter;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.EmojiBean;
 import com.babyraising.friendstation.bean.HelpAllBean;
@@ -24,6 +30,8 @@ import com.babyraising.friendstation.bean.HelpBean;
 import com.babyraising.friendstation.bean.LocationBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.service.RTCService;
+import com.babyraising.friendstation.ui.main.PrivacyActivity;
+import com.babyraising.friendstation.ui.user.NoticeActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -61,6 +69,8 @@ public class FriendStationApplication extends Application {
     public AMapLocationListener mLocationListener;
     private AMapLocationClientOption mLocationOption;
 
+    private AlertDialog noticeDialog;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -87,6 +97,11 @@ public class FriendStationApplication extends Application {
         initHelpList();
         initCamera();
 //        initAMapTrack();
+//        initShowTip();
+    }
+
+    private void initShowTip() {
+        Constant.SHOW_TIP = false;
     }
 
     private void initCamera() {
@@ -680,6 +695,6 @@ public class FriendStationApplication extends Application {
     }
 
     public HelpAllBean getHelpData() {
-        return gson.fromJson(sp.getString("help-all", ""),HelpAllBean.class);
+        return gson.fromJson(sp.getString("help-all", ""), HelpAllBean.class);
     }
 }

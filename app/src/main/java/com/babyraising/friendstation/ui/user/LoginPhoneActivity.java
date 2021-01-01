@@ -1,11 +1,14 @@
 package com.babyraising.friendstation.ui.user;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +21,7 @@ import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.response.UmsGetCodeResponse;
 import com.babyraising.friendstation.response.UmsIsFirstLoginResponse;
 import com.babyraising.friendstation.ui.MainActivity;
+import com.babyraising.friendstation.ui.main.PrivacyActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -30,6 +34,8 @@ import org.xutils.x;
 
 @ContentView(R.layout.activity_login_phone)
 public class LoginPhoneActivity extends BaseActivity {
+
+    private AlertDialog noticeDialog;
 
     @ViewInject(R.id.phone)
     private EditText phoneInput;
@@ -128,6 +134,10 @@ public class LoginPhoneActivity extends BaseActivity {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
         if (bean != null && !TextUtils.isEmpty(bean.getAccessToken())) {
             startMainActivity();
+        } else {
+            if (!Constant.SHOW_TIP) {
+                initNoticeTip();
+            }
         }
     }
 
@@ -140,5 +150,65 @@ public class LoginPhoneActivity extends BaseActivity {
     private void initView() {
         know.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
+    }
+
+    private void initNoticeTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // 创建一个view，并且将布局加入view中
+        View view = LayoutInflater.from(this).inflate(
+                R.layout.dialog_notice, null, false);
+        // 将view添加到builder中
+        builder.setView(view);
+        // 创建dialog
+        noticeDialog = builder.create();
+        // 初始化控件，注意这里是通过view.findViewById
+        final TextView left = (TextView) view.findViewById(R.id.tip1);
+        final TextView right = (TextView) view.findViewById(R.id.tip2);
+
+        final Button cancel = (Button) view.findViewById(R.id.cancel);
+        final Button sure = (Button) view.findViewById(R.id.sure);
+
+        left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startNoticeActivity();
+            }
+        });
+
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startPrivacyActivity();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noticeDialog.cancel();
+                finish();
+            }
+        });
+
+        sure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noticeDialog.cancel();
+            }
+        });
+        noticeDialog.show();
+        noticeDialog.setCanceledOnTouchOutside(false);
+        Constant.SHOW_TIP = true;
+    }
+
+    private void startPrivacyActivity() {
+        Intent intent = new Intent(this, PrivacyActivity.class);
+        startActivity(intent);
+    }
+
+    private void startNoticeActivity() {
+        Intent intent = new Intent(this, NoticeActivity.class);
+        startActivity(intent);
     }
 }

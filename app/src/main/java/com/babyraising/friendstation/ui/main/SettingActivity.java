@@ -40,6 +40,12 @@ public class SettingActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    @Event(R.id.layout_privacy)
+    private void privacyLayoutClick(View view) {
+        Intent intent = new Intent(this, PrivacyActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

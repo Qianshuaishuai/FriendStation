@@ -1,6 +1,7 @@
 package com.babyraising.friendstation;
 
 public class Constant {
+    public static Boolean SHOW_TIP = false;
     public static final Boolean DEBUG = true;
 
     public static final String WX_APPID = "wxfeda27e75bee03f3";

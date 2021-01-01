@@ -21,10 +21,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
@@ -45,11 +48,13 @@ import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.response.UserMainPageResponse;
 import com.babyraising.friendstation.service.RTCService;
+import com.babyraising.friendstation.ui.main.PrivacyActivity;
 import com.babyraising.friendstation.ui.show.FindFragment;
 import com.babyraising.friendstation.ui.show.MomentFragment;
 import com.babyraising.friendstation.ui.show.NoticeFragment;
 import com.babyraising.friendstation.ui.show.PersonFragment;
 import com.babyraising.friendstation.ui.user.LoginPhoneActivity;
+import com.babyraising.friendstation.ui.user.NoticeActivity;
 import com.babyraising.friendstation.util.GenerateTestUserSig;
 import com.babyraising.friendstation.util.RandomUtil;
 import com.babyraising.friendstation.util.T;
@@ -91,6 +96,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     private int lastfragment = 0;
     private CommonLoginBean bean;
     private List<String> commonWordList;
+    private AlertDialog noticeDialog;
 
     private boolean isFirstAutoSendMesage = false;
 
@@ -165,6 +171,10 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         initNavigationBar();
         initData();
         initPermission();
+        if (!Constant.SHOW_TIP) {
+            initNoticeTip();
+        }
+
     }
 
     private void initPermission() {
@@ -626,5 +636,65 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         V2TIMManager.getInstance().logout(callback);
         Intent intent = new Intent(this, RTCService.class);
         stopService(intent);
+    }
+
+    private void initNoticeTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // 创建一个view，并且将布局加入view中
+        View view = LayoutInflater.from(this).inflate(
+                R.layout.dialog_notice, null, false);
+        // 将view添加到builder中
+        builder.setView(view);
+        // 创建dialog
+        noticeDialog = builder.create();
+        // 初始化控件，注意这里是通过view.findViewById
+        final TextView left = (TextView) view.findViewById(R.id.tip1);
+        final TextView right = (TextView) view.findViewById(R.id.tip2);
+
+        final Button cancel = (Button) view.findViewById(R.id.cancel);
+        final Button sure = (Button) view.findViewById(R.id.sure);
+
+        left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startNoticeActivity();
+            }
+        });
+
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startPrivacyActivity();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noticeDialog.cancel();
+                finish();
+            }
+        });
+
+        sure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                noticeDialog.cancel();
+            }
+        });
+        noticeDialog.show();
+        noticeDialog.setCanceledOnTouchOutside(false);
+        Constant.SHOW_TIP = true;
+    }
+
+    private void startPrivacyActivity() {
+        Intent intent = new Intent(this, PrivacyActivity.class);
+        startActivity(intent);
+    }
+
+    private void startNoticeActivity() {
+        Intent intent = new Intent(this, NoticeActivity.class);
+        startActivity(intent);
     }
 }
