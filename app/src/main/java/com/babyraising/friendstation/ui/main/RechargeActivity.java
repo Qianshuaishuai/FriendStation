@@ -21,6 +21,7 @@ import com.babyraising.friendstation.bean.ScoreExchangeDetailBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.response.CoinPayResponse;
 import com.babyraising.friendstation.response.ScoreExchangeResponse;
+import com.babyraising.friendstation.ui.other.HelpActivity;
 import com.google.gson.Gson;
 
 import org.xutils.common.Callback;
@@ -58,6 +59,13 @@ public class RechargeActivity extends BaseActivity {
     private RechargeAdapter adapter;
     private List<CoinPayDetailBean> list;
 
+    @Event(R.id.question)
+    private void scoreGoClick(View view) {
+        Intent intent = new Intent(this, HelpActivity.class);
+        intent.putExtra("mode",2);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +96,7 @@ public class RechargeActivity extends BaseActivity {
 
     private void initData() {
         userInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
-        if (userInfoBean != null){
+        if (userInfoBean != null) {
             count.setText("" + userInfoBean.getUserCount().getNumCoin());
         }
     }

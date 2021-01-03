@@ -13,6 +13,8 @@ import com.babyraising.friendstation.bean.FirstShowBean;
 import com.babyraising.friendstation.bean.TaskDetailBean;
 import com.babyraising.friendstation.bean.UserMainPageBean;
 
+import org.xutils.common.util.DensityUtil;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.ArrayList;
@@ -58,7 +60,9 @@ public class DialogFirstShowAdapter extends RecyclerView.Adapter<DialogFirstShow
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
         if (!TextUtils.isEmpty(mainList.get(position).getAvatar())) {
-            x.image().bind(holder.iconIv, mainList.get(position).getAvatar());
+            ImageOptions options = new ImageOptions.Builder().
+                    setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
+            x.image().bind(holder.iconIv, mainList.get(position).getAvatar(), options);
         }
 
         if (!TextUtils.isEmpty(mainList.get(position).getNickName())) {

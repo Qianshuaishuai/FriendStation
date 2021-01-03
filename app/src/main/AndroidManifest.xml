@@ -72,7 +72,7 @@
 
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="dc4596d9f78ee20f2d2435a73b40cf5f" />
+            android:value="ece27e15ec1f4059a8fe0c2653760fb4" />
 
         <activity
             android:name=".ui.main.ChatActivity"

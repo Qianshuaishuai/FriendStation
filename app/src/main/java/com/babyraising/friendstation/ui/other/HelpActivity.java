@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.ui.other;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -125,6 +126,32 @@ public class HelpActivity extends BaseActivity {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         list.setLayoutManager(manager);
         list.setAdapter(adapter);
+
+        Intent intent = getIntent();
+        int mode = intent.getIntExtra("mode",0);
+        if (mode == 1){
+            helpList.clear();
+            for (int i = 0; i < helpAllBean.getScoreList().size(); i++) {
+                helpList.add(helpAllBean.getScoreList().get(i));
+            }
+            adapter.notifyDataSetChanged();
+            questionLayout.setVisibility(View.GONE);
+            listLayout.setVisibility(View.VISIBLE);
+            status = 1;
+            title.setText("积分问题");
+        }
+
+        if (mode == 2){
+            helpList.clear();
+            for (int i = 0; i < helpAllBean.getCoinList().size(); i++) {
+                helpList.add(helpAllBean.getCoinList().get(i));
+            }
+            adapter.notifyDataSetChanged();
+            questionLayout.setVisibility(View.GONE);
+            listLayout.setVisibility(View.VISIBLE);
+            status = 1;
+            title.setText("金币问题");
+        }
     }
 
     public void clickQuestion(int position) {

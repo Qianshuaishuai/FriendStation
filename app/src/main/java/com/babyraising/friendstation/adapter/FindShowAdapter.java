@@ -13,6 +13,8 @@ import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.ui.show.FindFragment;
 
+import org.xutils.common.util.DensityUtil;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.text.DecimalFormat;
@@ -80,7 +82,9 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
                 }
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
-                    x.image().bind(holder.ivHead, mList.get(position).getAvatar());
+                    ImageOptions options = new ImageOptions.Builder().
+                            setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
+                    x.image().bind(holder.ivHead, mList.get(position).getAvatar(), options);
                 }
                 break;
             case 1:
@@ -101,7 +105,9 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
                 }
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
-                    x.image().bind(holder.ivHead, mList.get(position).getAvatar());
+                    ImageOptions options = new ImageOptions.Builder().
+                            setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
+                    x.image().bind(holder.ivHead, mList.get(position).getAvatar(), options);
                 }
                 break;
             case 2:
@@ -122,7 +128,9 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
                 }
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
-                    x.image().bind(holder.ivHead, mList.get(position).getAvatar());
+                    ImageOptions options = new ImageOptions.Builder().
+                            setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
+                    x.image().bind(holder.ivHead, mList.get(position).getAvatar(), options);
                 }
                 break;
         }

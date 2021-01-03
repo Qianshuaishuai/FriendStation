@@ -10,6 +10,7 @@ import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.ui.other.HelpActivity;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -36,6 +37,13 @@ public class MyEarningActivity extends BaseActivity {
 
     @ViewInject(R.id.balance)
     private TextView balance;
+
+    @Event(R.id.score_go)
+    private void scoreGoClick(View view) {
+        Intent intent = new Intent(this, HelpActivity.class);
+        intent.putExtra("mode",1);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
