@@ -55,6 +55,7 @@ import com.babyraising.friendstation.request.UseCoinRequest;
 import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
+import com.babyraising.friendstation.ui.user.PhotoActivity;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.GenerateTestUserSigForRTC;
 import com.babyraising.friendstation.util.T;
@@ -229,13 +230,13 @@ public class ChatActivity extends BaseActivity {
 
     @Event(R.id.tip1)
     private void tip1Click(View view) {
-        Intent intent = new Intent(this, PersonInfoActivity.class);
+        Intent intent = new Intent(this, PhotoActivity.class);
         startActivity(intent);
     }
 
     @Event(R.id.tip2)
     private void tip2Click(View view) {
-        Intent intent = new Intent(this, PersonInfoActivity.class);
+        Intent intent = new Intent(this, MyInfoActivity.class);
         startActivity(intent);
     }
 
@@ -513,13 +514,16 @@ public class ChatActivity extends BaseActivity {
         currentChatId = intent.getIntExtra("chat-user-id", 0);
         videoTip = intent.getIntExtra("video", 0);
         isChatUp = intent.getIntExtra("chat-up", 0);
-        getCurrentUserInfo(currentChatId);
         if (status == Constant.OFFICIAL_INTO_CHAT_CODE) {
             officialLayout.setVisibility(View.VISIBLE);
 //            mainTipLayout.setVisibility(View.VISIBLE);
+            refreshLayout.setVisibility(View.GONE);
+            name.setText("官方小助手");
         } else {
             officialLayout.setVisibility(View.GONE);
             mainTipLayout.setVisibility(View.GONE);
+            refreshLayout.setVisibility(View.VISIBLE);
+            getCurrentUserInfo(currentChatId);
         }
 
         selfUserBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
@@ -840,6 +844,11 @@ public class ChatActivity extends BaseActivity {
                         }
 
                         getUserFullInfo();
+                        break;
+
+                    case 500:
+                        mainTipLayout.setVisibility(View.VISIBLE);
+                        T.s("你当前金币余额不足，请充值");
                         break;
                     default:
                         T.s(response.getMsg());

@@ -30,7 +30,7 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt, cityTxt, ageTxt, heightTxt, jobTxt, signTxt;
         ImageView ivSelected, ivNormal, ivHead;
-        LinearLayout mainLayout;
+        LinearLayout mainLayout,rightLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -45,6 +45,7 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
             ivNormal = (ImageView) view.findViewById(R.id.iv_normal);
             ivHead = (ImageView) view.findViewById(R.id.head);
             mainLayout = (LinearLayout) view.findViewById(R.id.layout_main);
+            rightLayout = (LinearLayout) view.findViewById(R.id.layout_right);
         }
 
     }
@@ -140,14 +141,14 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
             holder.cityTxt.setText(df.format(mList.get(position).getDistance() / 1000) + "km");
         }
 
-        holder.ivNormal.setOnClickListener(new View.OnClickListener() {
+        holder.rightLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 context.goToChat(mList.get(position).getId());
             }
         });
 
-        holder.ivHead.setOnClickListener(new View.OnClickListener() {
+        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 context.goToPersonInfo(mList.get(position).getId());

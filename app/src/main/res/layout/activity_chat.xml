@@ -558,7 +558,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#48000000"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/layout_gift_tip_main"
