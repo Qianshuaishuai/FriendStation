@@ -631,6 +631,7 @@
         android:layout_width="200dip"
         android:layout_height="200dip"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="-100dip"
         android:src="@mipmap/test4"
         android:visibility="gone" />
 </RelativeLayout>

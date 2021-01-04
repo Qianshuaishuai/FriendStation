@@ -338,7 +338,7 @@ public class MomentFragment extends BaseFragment {
                     case 200:
                         T.s("点赞成功");
                         getMomentList();
-
+                        ((FriendStationApplication) getActivity().getApplication()).isUpdateDoTask(8);
                         break;
                     default:
                         T.s(response.getMsg());

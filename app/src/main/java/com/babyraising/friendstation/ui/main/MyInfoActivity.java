@@ -259,6 +259,8 @@ public class MyInfoActivity extends BaseActivity {
                     case 200:
                         T.s("保存成功");
                         finish();
+
+                        ((FriendStationApplication) getApplication()).isUpdateDoTask(6);
                         break;
                     default:
                         T.s(response.getMsg());

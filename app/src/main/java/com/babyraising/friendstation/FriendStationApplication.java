@@ -28,7 +28,12 @@ import com.babyraising.friendstation.bean.EmojiBean;
 import com.babyraising.friendstation.bean.HelpAllBean;
 import com.babyraising.friendstation.bean.HelpBean;
 import com.babyraising.friendstation.bean.LocationBean;
+import com.babyraising.friendstation.bean.TaskBean;
+import com.babyraising.friendstation.bean.TaskNewBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.request.TaskDoRequest;
+import com.babyraising.friendstation.response.TaskResponse;
+import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.service.RTCService;
 import com.babyraising.friendstation.ui.main.PrivacyActivity;
 import com.babyraising.friendstation.ui.user.NoticeActivity;
@@ -46,6 +51,8 @@ import com.tencent.trtc.TRTCCloudListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.BufferedInputStream;
@@ -70,6 +77,8 @@ public class FriendStationApplication extends Application {
     private AMapLocationClientOption mLocationOption;
 
     private AlertDialog noticeDialog;
+
+    private List<TaskNewBean> currentTaskList = new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -638,6 +647,9 @@ public class FriendStationApplication extends Application {
         String beanString = gson.toJson(bean);
         editor.putString("all-info", beanString);
         editor.commit();
+
+        //同步更新任务状态
+        updateTaskList();
     }
 
     public ArrayList<String> getCommonWordData() {
@@ -696,5 +708,116 @@ public class FriendStationApplication extends Application {
 
     public HelpAllBean getHelpData() {
         return gson.fromJson(sp.getString("help-all", ""), HelpAllBean.class);
+    }
+
+    //用户完成任务信息相关
+    public void updateTaskList() {
+        CommonLoginBean bean = getUserInfo();
+        if (bean == null) {
+            return;
+        }
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_TASK);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                TaskResponse response = gson.fromJson(result, TaskResponse.class);
+                System.out.println("MainTaskRecord:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        currentTaskList = response.getData();
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    //判断当前任务是否已做
+    public boolean checkIsDo(int taskId) {
+        for (int t = 0; t < currentTaskList.size(); t++) {
+            if (taskId == currentTaskList.get(t).getId()) {
+                if (currentTaskList.get(t).getIsDone() == 0) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public void isUpdateDoTask(int taskId) {
+        for (int t = 0; t < currentTaskList.size(); t++) {
+            if (taskId == currentTaskList.get(t).getId()) {
+                if (currentTaskList.get(t).getIsDone() == 0) {
+                    doTask(currentTaskList.get(t).getReword(), currentTaskList.get(t).getId());
+                }
+            }
+        }
+    }
+
+    private void doTask(int reword, int taskId) {
+        Gson gson = new Gson();
+        TaskDoRequest request = new TaskDoRequest();
+        request.setTaskId(taskId);
+        request.setReword(reword);
+        CommonLoginBean bean = this.getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_TASK_RECORD_SAVE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("DoTask:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("恭喜你完成任务");
+                        updateTaskList();
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }

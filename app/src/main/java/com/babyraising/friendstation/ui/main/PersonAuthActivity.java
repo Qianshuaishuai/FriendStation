@@ -206,6 +206,8 @@ public class PersonAuthActivity extends BaseActivity {
                                 });
                                 tipMain.setVisibility(View.VISIBLE);
                                 errorLayout.setVisibility(View.GONE);
+
+                                ((FriendStationApplication) getApplication()).isUpdateDoTask(5);
                                 break;
                         }
                         break;

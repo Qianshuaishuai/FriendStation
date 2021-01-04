@@ -128,7 +128,7 @@ public class ChatActivity extends BaseActivity {
 
     @Event(R.id.name)
     private void nameClick(View view) {
-        showAnimation();
+//        showAnimation();
     }
 
     @ViewInject(R.id.anim_show)
@@ -518,6 +518,8 @@ public class ChatActivity extends BaseActivity {
                             break;
                     }
                 }
+
+                ((FriendStationApplication) getApplication()).isUpdateDoTask(12);
             }
 
             @Override

@@ -136,6 +136,7 @@ public class VoiceSignActivity extends BaseActivity {
                     case 200:
                         T.s("上传成功");
                         updateVoiceSign(response.getData());
+                        ((FriendStationApplication) getApplication()).isUpdateDoTask(4);
                         break;
                     default:
                         T.s(response.getMsg());

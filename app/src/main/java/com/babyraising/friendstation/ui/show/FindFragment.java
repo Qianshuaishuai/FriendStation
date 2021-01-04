@@ -243,6 +243,7 @@ public class FindFragment extends BaseFragment {
         }
         T.s("搭讪成功");
         showAnimation();
+        ((FriendStationApplication) getActivity().getApplication()).isUpdateDoTask(11);
         tipFirstLayout.setVisibility(View.GONE);
     }
 

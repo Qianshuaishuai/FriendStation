@@ -82,6 +82,8 @@ public class VoiceSendActivity extends BaseActivity {
         intent.putExtra("video", 1);
         startActivity(intent);
         finish();
+
+        ((FriendStationApplication) getApplication()).isUpdateDoTask(9);
     }
 
     private void translateOneUser() {

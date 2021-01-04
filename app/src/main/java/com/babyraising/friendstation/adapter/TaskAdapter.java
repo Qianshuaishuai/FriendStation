@@ -62,6 +62,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
                 activity.doTask(position);
             }
         });
+
+        if (mList.get(position).getIsDone() == 0){
+            holder.countTxt.setText("+" + mList.get(position).getReword() + "金币");
+            holder.countTxt.setTextColor(activity.getResources().getColor(R.color.colorTaskDo));
+        }else{
+            holder.countTxt.setText("已完成");
+            holder.countTxt.setTextColor(activity.getResources().getColor(R.color.colorRankNormal));
+        }
     }
 
     @Override

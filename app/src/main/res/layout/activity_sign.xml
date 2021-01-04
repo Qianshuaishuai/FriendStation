@@ -258,7 +258,6 @@
     </LinearLayout>
 
     <Button
-        android:visibility="gone"
         android:id="@+id/sign_click"
         android:layout_width="match_parent"
         android:layout_height="50dip"
@@ -268,7 +267,8 @@
         android:background="@drawable/build_user_save_bg"
         android:text="签到"
         android:textColor="#ffffff"
-        android:textSize="15dip" />
+        android:textSize="15dip"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/sign_unclick"
@@ -280,5 +280,6 @@
         android:background="@drawable/shape_sign_bt_bg"
         android:text="今日已签到"
         android:textColor="#B9B8C1"
-        android:textSize="15dip" />
+        android:textSize="15dip"
+        android:visibility="gone" />
 </LinearLayout>

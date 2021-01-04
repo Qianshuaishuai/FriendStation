@@ -322,7 +322,7 @@ public class PhotoActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         getPhotoList();
-
+                        ((FriendStationApplication) getApplication()).isUpdateDoTask(7);
                         break;
                     default:
                         T.s(response.getMsg());

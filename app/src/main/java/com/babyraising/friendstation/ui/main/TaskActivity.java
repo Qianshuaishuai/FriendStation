@@ -18,10 +18,15 @@ import com.babyraising.friendstation.bean.ScoreRecordBean;
 import com.babyraising.friendstation.bean.TaskBean;
 import com.babyraising.friendstation.bean.TaskDetailBean;
 import com.babyraising.friendstation.bean.TaskNewBean;
+import com.babyraising.friendstation.event.TaskEvent;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.response.TaskResponse;
+import com.babyraising.friendstation.ui.MainActivity;
+import com.babyraising.friendstation.ui.user.PhotoActivity;
+import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
@@ -55,6 +60,11 @@ public class TaskActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getTaskList();
     }
 
@@ -73,14 +83,62 @@ public class TaskActivity extends BaseActivity {
     }
 
     public void doTask(int position) {
-        if (list.get(position).isSign() || list.get(position).getTitle().equals("签到")) {
-            Intent intent = new Intent(this, SignActivity.class);
-            startActivity(intent);
+        if (list.get(position).getIsDone() == 1) {
+            T.s("你已完成该任务");
+            return;
         }
+        Intent intent = null;
+        switch (list.get(position).getId()) {
+            case 1:
+                intent = new Intent(this, PersonInfoActivity.class);
+                intent.putExtra("is-task", 1);
+                startActivity(intent);
+                break;
+            case 2:
+                intent = new Intent(this, MomentSendActivity.class);
+                startActivity(intent);
+                break;
+            case 3:
+                intent = new Intent(this, SignActivity.class);
+                startActivity(intent);
+                break;
+            case 4:
+                intent = new Intent(this, VoiceSignActivity.class);
+                startActivity(intent);
+                break;
+            case 5:
+                intent = new Intent(this, PersonAuthActivity.class);
+                startActivity(intent);
+                break;
+            case 6:
+                intent = new Intent(this, MyInfoActivity.class);
+                startActivity(intent);
+                break;
+            case 7:
+                intent = new Intent(this, PhotoActivity.class);
+                startActivity(intent);
+                break;
+            case 8:
+                EventBus.getDefault().post(new TaskEvent(1));
+                finish();
+                break;
+            case 9:
+                EventBus.getDefault().post(new TaskEvent(2));
+                finish();
+                break;
+            case 10:
+                intent = new Intent(this, InviteFriendActivity.class);
+                startActivity(intent);
+                break;
+            case 11:
+                EventBus.getDefault().post(new TaskEvent(3));
+                finish();
+                break;
+            case 12:
+                EventBus.getDefault().post(new TaskEvent(4));
+                finish();
+                break;
 
-        if (list.get(position).getTitle().equals("头像上传")) {
-            Intent intent = new Intent(this, PersonInfoActivity.class);
-            startActivity(intent);
         }
     }
 

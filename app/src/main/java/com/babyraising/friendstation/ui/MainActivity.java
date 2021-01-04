@@ -40,6 +40,8 @@ import com.babyraising.friendstation.bean.TimSendBodyBean;
 import com.babyraising.friendstation.bean.TimSendMsgContentBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.bean.UserMainPageBean;
+import com.babyraising.friendstation.event.DeleteEvent;
+import com.babyraising.friendstation.event.TaskEvent;
 import com.babyraising.friendstation.request.LikeDetailRequest;
 import com.babyraising.friendstation.request.LikeRequest;
 import com.babyraising.friendstation.response.OnlineTimUserResponse;
@@ -63,6 +65,9 @@ import com.tencent.imsdk.common.SystemUtil;
 import com.tencent.imsdk.v2.V2TIMCallback;
 import com.tencent.imsdk.v2.V2TIMManager;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
@@ -174,7 +179,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         if (!Constant.SHOW_TIP) {
             initNoticeTip();
         }
-
+        EventBus.getDefault().register(this);
     }
 
     private void initPermission() {
@@ -636,6 +641,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         V2TIMManager.getInstance().logout(callback);
         Intent intent = new Intent(this, RTCService.class);
         stopService(intent);
+        EventBus.getDefault().unregister(this);
     }
 
     private void initNoticeTip() {
@@ -643,7 +649,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
         // 创建一个view，并且将布局加入view中
         View view = LayoutInflater.from(this).inflate(
-                R.layout.dialog_notice, null, false);
+                R.layout.dialog_notice_copy, null, false);
         // 将view添加到builder中
         builder.setView(view);
         // 创建dialog
@@ -696,5 +702,39 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     private void startNoticeActivity() {
         Intent intent = new Intent(this, NoticeActivity.class);
         startActivity(intent);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onTaskEvent(TaskEvent event) {
+        switch (event.getMode()) {
+            case 1:
+                refreshItemIcon();
+                MenuItem item1 = navigation.getMenu().findItem(R.id.navigation_moment);
+                item1.setIcon(R.mipmap.main_moment_selected);
+                switchFragment(lastfragment, 1);
+                lastfragment = 1;
+                break;
+            case 2:
+                refreshItemIcon();
+                MenuItem item2 = navigation.getMenu().findItem(R.id.navigation_find);
+                item2.setIcon(R.mipmap.main_find_selected);
+                switchFragment(lastfragment, 0);
+                lastfragment = 0;
+                break;
+            case 3:
+                refreshItemIcon();
+                MenuItem item3 = navigation.getMenu().findItem(R.id.navigation_find);
+                item3.setIcon(R.mipmap.main_find_selected);
+                switchFragment(lastfragment, 0);
+                lastfragment = 0;
+                break;
+            case 4:
+                refreshItemIcon();
+                MenuItem item4 = navigation.getMenu().findItem(R.id.navigation_notice);
+                item4.setIcon(R.mipmap.main_notice_selected);
+                switchFragment(lastfragment, 2);
+                lastfragment = 2;
+                break;
+        }
     }
 }

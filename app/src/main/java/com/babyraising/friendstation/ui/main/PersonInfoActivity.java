@@ -307,11 +307,16 @@ public class PersonInfoActivity extends BaseActivity {
     private void initData() {
         Intent intent = getIntent();
         mode = intent.getIntExtra("mode", 0);
+        int isTask = intent.getIntExtra("is-task", 0);
         currentUserId = intent.getIntExtra("user-id", 0);
 
         if (mode == 1) {
             updateLookMe(currentUserId);
             bottomLayout.setVisibility(View.VISIBLE);
+        }
+
+        if (isTask == 1) {
+            photoLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -800,6 +805,7 @@ public class PersonInfoActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         getUserFullInfo();
+                        ((FriendStationApplication) getApplication()).isUpdateDoTask(1);
                         break;
                     default:
                         T.s(response.getMsg());

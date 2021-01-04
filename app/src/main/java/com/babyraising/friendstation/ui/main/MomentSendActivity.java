@@ -425,6 +425,7 @@ public class MomentSendActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         T.s("发布成功");
+                        ((FriendStationApplication) getApplication()).isUpdateDoTask(2);
                         finish();
                         break;
                     default:

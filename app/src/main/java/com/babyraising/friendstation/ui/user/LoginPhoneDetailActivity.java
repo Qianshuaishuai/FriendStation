@@ -14,6 +14,7 @@ import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.request.CodeBodyRequest;
+import com.babyraising.friendstation.request.SetForgetPasswordRequest;
 import com.babyraising.friendstation.request.SetPasswordRequest;
 import com.babyraising.friendstation.response.UmsLoginByMobileResponse;
 import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
@@ -160,15 +161,21 @@ public class LoginPhoneDetailActivity extends BaseActivity {
     }
 
     private void setPasswordForget(String pwd) {
+        Gson gson = new Gson();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_UPDATE_NEWPASSWORD);
-        params.addQueryStringParameter("mobile", currentPhone);
-        params.addQueryStringParameter("newPassword", pwd);
+        SetForgetPasswordRequest request = new SetForgetPasswordRequest();
+        request.setCode("!234");
+        request.setMobile(currentPhone);
+        request.setNewPassword(pwd);
+        request.setOldPassword("");
+        params.setAsJsonContent(true);
+        params.setBodyContent(gson.toJson(request));
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Gson gson = new Gson();
                 UmsUpdatePasswordResponse response = gson.fromJson(result, UmsUpdatePasswordResponse.class);
-                System.out.println(result);
+                System.out.println("setPasswordForget:" + result);
                 switch (response.getCode()) {
                     case 200:
                         T.s("设置成功");

@@ -12,4 +12,5 @@
     <color name="colorRankNormal">#A6A8AD</color>
     <color name="colorPersonAlbumHave">#ffffff</color>
     <color name="colorPersonAlbumNone">#cccccc</color>
+    <color name="colorTaskDo">#FD7E41</color>
 </resources>

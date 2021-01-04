@@ -211,7 +211,7 @@ public class CloseActivity extends BaseActivity {
                                 list.add(newList.get(l));
                             }
                         }
-                        System.out.println(list.size());
+
                         if (list.size() == 0){
                             recyclerView.setVisibility(View.GONE);
                             noneLayout.setVisibility(View.VISIBLE);
@@ -219,6 +219,7 @@ public class CloseActivity extends BaseActivity {
                             recyclerView.setVisibility(View.VISIBLE);
                             noneLayout.setVisibility(View.GONE);
                         }
+                        adapter.notifyDataSetChanged();
                         break;
                     default:
                         recyclerView.setVisibility(View.GONE);

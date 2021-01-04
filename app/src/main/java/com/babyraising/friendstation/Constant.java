@@ -42,7 +42,7 @@ public class Constant {
     public static final String URL_UMS_USER_DELETE_ALBUM = "ums/user/delete/album";
     public static final String URL_UMS_UPDATE = "ums/user/update";
     public static final String URL_UMS_USER_UPDATE_PASSWORD = "ums/user/update/password";
-    public static final String URL_UMS_USER_UPDATE_NEWPASSWORD = "ums/user/update/newPassword";
+    public static final String URL_UMS_USER_UPDATE_NEWPASSWORD = "ums/auth/update/newPassword";
     public static final String URL_UMS_USER_UPDATE_VERIFY = "ums/user/update/verify";
     public static final String URL_USER_GET_USERINTIMACYLIST = "ums/user/get/userIntimacyList";
     public static final String URL_USER_GET_USERRICHLIST = "ums/user/get/userRichList";
@@ -81,6 +81,7 @@ public class Constant {
     public static final String URL_FRIENDS_NOTICE = "friends/notice";
     public static final String URL_FRIENDS_USERVIEW_SAVE = "friends/userView/save";
     public static final String URL_FRIENDS_USERVIEW = "friends/userView";
+    public static final String URL_FRIENDS_TASK_RECORD_SAVE = "friends/taskRecord/save";
 
 
     //腾讯云im相关

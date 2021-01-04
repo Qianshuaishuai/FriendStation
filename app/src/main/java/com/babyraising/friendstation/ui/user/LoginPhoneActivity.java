@@ -157,7 +157,7 @@ public class LoginPhoneActivity extends BaseActivity {
 
         // 创建一个view，并且将布局加入view中
         View view = LayoutInflater.from(this).inflate(
-                R.layout.dialog_notice, null, false);
+                R.layout.dialog_notice_copy, null, false);
         // 将view添加到builder中
         builder.setView(view);
         // 创建dialog
