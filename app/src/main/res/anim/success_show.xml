@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--平移动画标签-->
+    <translate
+        android:duration="2000"
+        android:fromYDelta="100%p"
+        android:toYDelta="0%p" />
+    <!--缩放动画标签-->
+    <scale
+        android:duration="2000"
+        android:fromXScale="0.2"
+        android:fromYScale="0.2"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:toXScale="1.0"
+        android:toYScale="1.0" />
+    <!--透明度动画标签-->
+    <alpha
+        android:duration="2000"
+        android:fromAlpha="0.5"
+        android:toAlpha="1.0" />
+</set>

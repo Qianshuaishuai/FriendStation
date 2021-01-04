@@ -36,6 +36,7 @@ import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.NameUtils;
+import com.babyraising.friendstation.util.NickNameUtil;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 import com.nanchen.compresshelper.CompressHelper;
@@ -68,11 +69,10 @@ public class BuildUserActivity extends BaseActivity {
 
     @Event(R.id.refresh)
     private void refreshClick(View view) {
-        username.setText(NameUtils.getRandomJianHan(3));
+        username.setText(NickNameUtil.generateName());
 
         if (randomList.size() > 0) {
             int math = (int) (Math.random() * randomList.size());
-            System.out.println(math);
             x.image().bind(head, randomList.get(math).getAvatarUrl());
             newHeadIconUrl = randomList.get(math).getAvatarUrl();
         }

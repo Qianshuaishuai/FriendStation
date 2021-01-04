@@ -625,4 +625,12 @@
             android:layout_marginTop="24dip"
             android:src="@mipmap/common_dialog_close" />
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/anim_show"
+        android:layout_width="200dip"
+        android:layout_height="200dip"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/test4"
+        android:visibility="gone" />
 </RelativeLayout>

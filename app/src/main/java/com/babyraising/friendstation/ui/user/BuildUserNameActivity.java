@@ -38,8 +38,11 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @ContentView(R.layout.activity_build_user_name)
@@ -155,6 +158,10 @@ public class BuildUserNameActivity extends BaseActivity {
                     }
                 },
                 mYear, mMonth, mDay);
+
+        Date date1 = new Date();
+        DateFormat format = new SimpleDateFormat("MM-dd");
+        date.setText("1991-" + format.format(date1));
     }
 
 

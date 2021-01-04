@@ -109,7 +109,7 @@ public class PersonAuthActivity extends BaseActivity {
             fileDir.mkdirs();
         }
 
-        File photoFile = new File(fileDir, "photo.jpeg");
+        File photoFile = new File(fileDir, "photo" + System.currentTimeMillis() + ".jpeg");
         mTempPhotoPath = photoFile.getAbsolutePath();
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -236,13 +236,16 @@ public class PersonAuthActivity extends BaseActivity {
 
 
     private void uploadPic(String localPic) {
-        authDialog.show();
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
 
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_UPLOAD);
         params.setConnectTimeout(30000);
         params.addHeader("Authorization", bean.getAccessToken());
         File oldFile = new File(localPic);
+        if (oldFile.getTotalSpace() <= 0) {
+            return;
+        }
+        authDialog.show();
         File newFile = new CompressHelper.Builder(this)
                 .setMaxWidth(180)  // 默认最大宽度为720
                 .setMaxHeight(240) // 默认最大高度为960

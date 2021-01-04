@@ -16,6 +16,8 @@ import com.babyraising.friendstation.ui.main.ScrollImageActivity;
 import com.babyraising.friendstation.ui.show.MomentFragment;
 import com.google.gson.Gson;
 
+import org.xutils.common.util.DensityUtil;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.List;
@@ -88,7 +90,9 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
         });
 
         if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
-            x.image().bind(holder.headIv, mList.get(position).getAvatar());
+            ImageOptions options = new ImageOptions.Builder().
+                    setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
+            x.image().bind(holder.headIv, mList.get(position).getAvatar(), options);
         }
 
         if (!TextUtils.isEmpty(mList.get(position).getNickname())) {

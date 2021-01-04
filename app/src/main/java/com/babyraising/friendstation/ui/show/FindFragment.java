@@ -13,6 +13,8 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -107,6 +109,9 @@ public class FindFragment extends BaseFragment {
     @ViewInject(R.id.type_view3)
     private View typeV3;
 
+    @ViewInject(R.id.anim_show)
+    private ImageView animShow;
+
     @Event(R.id.layout_match)
     private void matchLayoutClick(View view) {
         UserAllInfoBean userBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
@@ -131,7 +136,8 @@ public class FindFragment extends BaseFragment {
             T.s("你当前的用户信息获取有误，请重新登录");
             return;
         }
-        if (TextUtils.isEmpty(userBean.getRecordSign()) && !userBean.getStatusCert().equals("PASS")) {
+
+        if (userBean.getSex() == 2 && (TextUtils.isEmpty(userBean.getRecordSign()) && !userBean.getStatusCert().equals("PASS"))) {
             authDialog.show();
             return;
         }
@@ -236,7 +242,31 @@ public class FindFragment extends BaseFragment {
             adminSendMessage(userAllInfoBean.getId(), selectInt.get(a));
         }
         T.s("搭讪成功");
+        showAnimation();
         tipFirstLayout.setVisibility(View.GONE);
+    }
+
+    private void showAnimation() {
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.success_show);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                animShow.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                animShow.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        animShow.setVisibility(View.VISIBLE);
+        animShow.startAnimation(animation);
+        animation.setRepeatCount(1);
     }
 
     @Event(R.id.type_tv3)
@@ -344,7 +374,7 @@ public class FindFragment extends BaseFragment {
 
             @Override
             public void onFinished() {
-                if (findDialog.isShowing()){
+                if (findDialog.isShowing()) {
                     findDialog.cancel();
                 }
             }

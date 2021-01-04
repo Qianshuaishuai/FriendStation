@@ -32,6 +32,8 @@ import com.tencent.imsdk.message.SoundElement;
 import com.tencent.imsdk.message.TextElement;
 import com.tencent.imsdk.v2.V2TIMConversation;
 
+import org.xutils.common.util.DensityUtil;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.List;
@@ -118,7 +120,6 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
             final int currentId = Integer.parseInt(mList.get(position).getUserID());
             UserMessageBean userBean = getUserData(currentId);
             if (userBean != null) {
-                System.out.println("unread:" + mList.get(position).getUnreadCount());
                 if (mList.get(position).getUnreadCount() == 0) {
                     holder.countTxt.setVisibility(View.GONE);
                 } else {
@@ -131,7 +132,9 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
                 }
 
                 if (!TextUtils.isEmpty(userBean.getAvatar())) {
-                    x.image().bind(holder.iconIv, userBean.getAvatar());
+                    ImageOptions options = new ImageOptions.Builder().
+                            setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
+                    x.image().bind(holder.iconIv,userBean.getAvatar(), options);
                 }
 
                 holder.rightIv.setVisibility(View.GONE);
@@ -141,7 +144,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
                 List<MessageBaseElement> elements = mList.get(position).getLastMessage().getMessage().getMessageBaseElements();
                 if (elements.size() > 0) {
                     if (elements.get(0) instanceof TextElement) {
-                        holder.tipTxt.setText(((TextElement) elements.get(0)).getTextContent());
+                        holder.tipTxt.setText(checkContent(((TextElement) elements.get(0)).getTextContent()));
                     }
 
                     if (elements.get(0) instanceof ImageElement) {

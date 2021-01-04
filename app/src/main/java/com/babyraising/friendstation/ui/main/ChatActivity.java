@@ -26,6 +26,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -124,6 +126,14 @@ public class ChatActivity extends BaseActivity {
     @ViewInject(R.id.name)
     private TextView name;
 
+    @Event(R.id.name)
+    private void nameClick(View view) {
+        showAnimation();
+    }
+
+    @ViewInject(R.id.anim_show)
+    private ImageView animShow;
+
     @ViewInject(R.id.content)
     private EditText content;
 
@@ -197,6 +207,7 @@ public class ChatActivity extends BaseActivity {
     @Event(R.id.chat1)
     private void chat1Click(View view) {
         Intent intent = new Intent(this, GiftActivity.class);
+        intent.putExtra("givenId", currentChatId);
         startActivityForResult(intent, Constant.REQUEST_GIFT_CODE);
     }
 
@@ -492,6 +503,21 @@ public class ChatActivity extends BaseActivity {
             public void onSuccess(V2TIMMessage message) {
                 System.out.println("sendMessage success:" + gson.toJson(message));
                 getMessageList();
+                List<MessageBaseElement> elements = message.getMessage().getMessageBaseElements();
+                if (elements.get(0) instanceof CustomElement) {
+                    Gson gson = new Gson();
+                    CustomElement element = (CustomElement) elements.get(0);
+                    TimCustomBean bean = gson.fromJson(new String(element.getData()), TimCustomBean.class);
+                    switch (bean.getMsgType()) {
+                        case Constant.GIFT_CHAT_CODE:
+                            if (bean.getGiftBean() != null) {
+                                x.image().bind(animShow, bean.getGiftBean().getImage());
+                                showAnimation();
+                                T.s("赠送成功");
+                            }
+                            break;
+                    }
+                }
             }
 
             @Override
@@ -529,6 +555,29 @@ public class ChatActivity extends BaseActivity {
         selfUserBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
 
 
+    }
+
+    private void showAnimation() {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.gift_show);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                animShow.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                animShow.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        animShow.setVisibility(View.VISIBLE);
+        animShow.startAnimation(animation);
+        animation.setRepeatCount(1);
     }
 
     private void initView() {

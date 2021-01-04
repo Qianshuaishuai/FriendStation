@@ -68,7 +68,8 @@
     <RelativeLayout
         android:id="@+id/layout_none"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <RelativeLayout
             android:layout_width="214dip"

@@ -51,6 +51,8 @@ public class GiftActivity extends BaseActivity {
     private UserAllInfoBean userInfoBean;
     private GiftAdapter adapter;
 
+    private int currentChatId = 0;
+
     private List<GiftDetailBean> giftList;
 
     @Event(R.id.back)
@@ -149,7 +151,13 @@ public class GiftActivity extends BaseActivity {
     }
 
     private void initData() {
-
+        Intent intent = getIntent();
+        currentChatId = intent.getIntExtra("givenId", 0);
+        if (currentChatId == 0) {
+            T.s("当前赠送对象信息有误");
+            finish();
+            return;
+        }
     }
 
     private void initView() {
@@ -186,8 +194,8 @@ public class GiftActivity extends BaseActivity {
     private void getGiftList() {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_GIFT);
-        params.addQueryStringParameter("pageNum",50);
-        params.addQueryStringParameter("pageSize",1);
+        params.addQueryStringParameter("pageNum", 50);
+        params.addQueryStringParameter("pageSize", 1);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         x.http().get(params, new Callback.CommonCallback<String>() {
@@ -234,6 +242,7 @@ public class GiftActivity extends BaseActivity {
         GiftOrderSaveRequest request = new GiftOrderSaveRequest();
         request.setAmount(giftBean.getCoinNum());
         request.setCoinGiftId(giftBean.getId());
+        request.setGivenId(currentChatId);
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_GIFT_ORDER_SAVE);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
@@ -247,7 +256,7 @@ public class GiftActivity extends BaseActivity {
                 System.out.println("saveGiftOrder:" + result);
                 switch (response.getCode()) {
                     case 200:
-                        T.s("送出礼物成功");
+//                        T.s("送出礼物成功");
                         Intent intent = new Intent();
                         intent.putExtra("gift-bean", gson.toJson(giftBean));
                         setResult(Constant.REQUEST_GIFT_CODE, intent);
