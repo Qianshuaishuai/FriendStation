@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.util.CopyUtil;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -37,6 +38,12 @@ public class InviteFriendDetailActivity extends BaseActivity {
     @Event(R.id.invite_info)
     private void inviteInfoClick(View view) {
         inviteTipDialog.show();
+        String copyTxt = "[Packet]百度搜索【陌声】下载赚现金\n" +
+                "[Packet]填我邀请码【inviteCode】\n" +
+                "[Packet]你我各得最高【88元】红包\n" +
+                "[Packet]红包可立即提现\n" +
+                "（红包48小时内有效）";
+        CopyUtil.copy(this, copyTxt.replace("inviteCode", inviteCode.getText().toString()));
     }
 
     @Event(R.id.invite_photo)

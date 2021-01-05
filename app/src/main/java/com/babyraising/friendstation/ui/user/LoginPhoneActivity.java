@@ -24,6 +24,9 @@ import com.babyraising.friendstation.ui.MainActivity;
 import com.babyraising.friendstation.ui.main.PrivacyActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -45,7 +48,12 @@ public class LoginPhoneActivity extends BaseActivity {
 
     @Event(R.id.layout_wechat)
     private void wechatLayoutClick(View view) {
-
+        final IWXAPI api = WXAPIFactory.createWXAPI(this, Constant.WX_APPID, true);
+        // send oauth request
+        final SendAuth.Req req = new SendAuth.Req();
+        req.scope = "snsapi_userinfo";
+        req.state = "wechat_sdk_demo_test";
+        api.sendReq(req);
     }
 
     @Event(R.id.next)

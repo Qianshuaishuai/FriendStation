@@ -10,6 +10,7 @@ import com.nanchen.compresshelper.BitmapUtil;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
 import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXTextObject;
 import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
@@ -147,5 +148,24 @@ public class WxShareUtils {
                 return false;
             }
         });
+    }
+
+    public static void descShare(Context context, final String desc, final int sendtype) {
+        final IWXAPI api = WXAPIFactory.createWXAPI(context, Constant.WX_APPID, true);
+        WXTextObject textObj = new WXTextObject();
+        textObj.text = desc;
+
+//用 WXTextObject 对象初始化一个 WXMediaMessage 对象
+        WXMediaMessage msg = new WXMediaMessage();
+        msg.mediaObject = textObj;
+        msg.description = desc;
+
+        SendMessageToWX.Req req = new SendMessageToWX.Req();
+        req.transaction = String.valueOf(System.currentTimeMillis());
+        req.message = msg;
+        req.scene = sendtype == 1 ? SendMessageToWX.Req.WXSceneSession : SendMessageToWX.Req.WXSceneTimeline;
+//调用api接口，发送数据到微信
+        api.sendReq(req);
+
     }
 }

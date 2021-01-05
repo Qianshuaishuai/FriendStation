@@ -4,7 +4,7 @@ public class Constant {
     public static Boolean SHOW_TIP = false;
     public static final Boolean DEBUG = true;
 
-    public static final String WX_APPID = "wxfeda27e75bee03f3";
+    public static final String WX_APPID = "wx78c7973cb4092c03";
 
     public static final int GIFT_CHAT_CODE = 9997;
     public static final int RESULT_CHAT_ROOM_CODE = 9998;

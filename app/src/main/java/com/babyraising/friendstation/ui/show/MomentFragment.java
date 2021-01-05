@@ -89,7 +89,12 @@ public class MomentFragment extends BaseFragment {
     @Event(R.id.layout_share_1)
     private void share1Click(View view) {
         try {
-            WxShareUtils.imageShare(getActivity(), showImgfilePath, showContent, 1);
+            if (TextUtils.isEmpty(showImgfilePath) || showImgfilePath.indexOf("http") == -1) {
+                WxShareUtils.descShare(getActivity(), showContent, 1);
+            } else {
+                WxShareUtils.imageShare(getActivity(), showImgfilePath, showContent, 1);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.toString());
@@ -101,7 +106,11 @@ public class MomentFragment extends BaseFragment {
     @Event(R.id.layout_share_2)
     private void share2Click(View view) {
         try {
-            WxShareUtils.imageShare(getActivity(), showImgfilePath, showContent, 2);
+            if (TextUtils.isEmpty(showImgfilePath) || showImgfilePath.indexOf("http") == -1) {
+                WxShareUtils.descShare(getActivity(), showContent, 2);
+            } else {
+                WxShareUtils.imageShare(getActivity(), showImgfilePath, showContent, 2);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.toString());
