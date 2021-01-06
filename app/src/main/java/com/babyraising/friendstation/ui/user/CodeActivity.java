@@ -21,6 +21,7 @@ import com.babyraising.friendstation.request.SetUserExtraDateRequest;
 import com.babyraising.friendstation.response.UmsGetCodeResponse;
 import com.babyraising.friendstation.response.UmsLoginByMobileResponse;
 import com.babyraising.friendstation.ui.MainActivity;
+import com.babyraising.friendstation.ui.main.NewMainActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -330,7 +331,7 @@ public class CodeActivity extends BaseActivity {
     }
 
     private void startMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, NewMainActivity.class);
         startActivity(intent);
         finish();
     }

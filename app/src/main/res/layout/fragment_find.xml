@@ -237,8 +237,7 @@
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/layout_select"
-        android:layout_marginBottom="60dip">
+        android:layout_below="@+id/layout_select">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list"

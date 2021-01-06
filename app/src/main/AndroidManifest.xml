@@ -62,7 +62,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ui.main.NewMainActivity"></activity>
+        <activity
+            android:name=".ui.main.NewMainActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
         <activity android:name=".ui.main.PrivacyActivity" />
         <activity android:name=".ui.main.VersionActivity" />
         <activity android:name=".ui.user.ForgetActivity" />
@@ -78,6 +82,7 @@
             android:name=".wxapi.WXEntryActivity"
             android:exported="true"
             android:launchMode="singleTop" />
+
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="ece27e15ec1f4059a8fe0c2653760fb4" />

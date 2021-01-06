@@ -174,7 +174,6 @@ public class NoticeFragment extends BaseFragment {
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERMESSAGELIST);
         for (int i = 0; i < idList.size(); i++) {
             params.addParameter("userIdList", idList.get(i));
-            System.out.println(idList.get(i));
         }
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());

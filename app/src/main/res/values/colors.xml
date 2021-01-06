@@ -14,4 +14,6 @@
     <color name="colorPersonAlbumNone">#cccccc</color>
     <color name="colorTaskDo">#FD7E41</color>
     <color name="navpage">#FFE1E8EB</color>
+    <color name="colorTipNormal">#D4D4D4</color>
+    <color name="colorTipSelected">#3C3B41</color>
 </resources>

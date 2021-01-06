@@ -17,6 +17,7 @@ import com.babyraising.friendstation.request.SetUserSexRequest;
 import com.babyraising.friendstation.request.SetusernameAndIconRequest;
 import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
 import com.babyraising.friendstation.ui.MainActivity;
+import com.babyraising.friendstation.ui.main.NewMainActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -196,7 +197,7 @@ public class BuildUserSexActivity extends BaseActivity {
     }
 
     private void startMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, NewMainActivity.class);
         startActivity(intent);
         finish();
     }

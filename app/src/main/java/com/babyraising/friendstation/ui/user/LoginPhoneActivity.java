@@ -21,6 +21,7 @@ import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.response.UmsGetCodeResponse;
 import com.babyraising.friendstation.response.UmsIsFirstLoginResponse;
 import com.babyraising.friendstation.ui.MainActivity;
+import com.babyraising.friendstation.ui.main.NewMainActivity;
 import com.babyraising.friendstation.ui.main.PrivacyActivity;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
@@ -150,7 +151,7 @@ public class LoginPhoneActivity extends BaseActivity {
     }
 
     private void startMainActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, NewMainActivity.class);
         startActivity(intent);
         finish();
     }
