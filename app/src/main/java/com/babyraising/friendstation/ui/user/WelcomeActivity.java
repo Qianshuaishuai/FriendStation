@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -24,6 +25,7 @@ import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.ui.MainActivity;
 import com.babyraising.friendstation.ui.main.PrivacyActivity;
 import com.babyraising.friendstation.util.DisplayUtils;
+import com.babyraising.friendstation.util.T;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
@@ -190,6 +192,8 @@ public class WelcomeActivity extends BaseActivity {
         final Button cancel = (Button) view.findViewById(R.id.cancel);
         final Button sure = (Button) view.findViewById(R.id.sure);
 
+        final CheckBox check = (CheckBox) view.findViewById(R.id.dialog_check);
+
         left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -215,6 +219,10 @@ public class WelcomeActivity extends BaseActivity {
         sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!check.isChecked()) {
+                    T.s("请勾选已表示同意");
+                    return;
+                }
                 noticeDialog.cancel();
             }
         });

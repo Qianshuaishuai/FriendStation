@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -824,6 +825,8 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
         final Button cancel = (Button) view.findViewById(R.id.cancel);
         final Button sure = (Button) view.findViewById(R.id.sure);
 
+        final CheckBox check = (CheckBox) view.findViewById(R.id.dialog_check);
+
         left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -849,6 +852,10 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
         sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!check.isChecked()) {
+                    T.s("请勾选已表示同意");
+                    return;
+                }
                 noticeDialog.cancel();
             }
         });

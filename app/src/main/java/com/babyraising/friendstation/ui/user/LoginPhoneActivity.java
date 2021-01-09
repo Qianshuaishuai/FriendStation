@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -178,6 +179,8 @@ public class LoginPhoneActivity extends BaseActivity {
         final Button cancel = (Button) view.findViewById(R.id.cancel);
         final Button sure = (Button) view.findViewById(R.id.sure);
 
+        final CheckBox check = (CheckBox) view.findViewById(R.id.dialog_check);
+
         left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -203,6 +206,10 @@ public class LoginPhoneActivity extends BaseActivity {
         sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (!check.isChecked()) {
+                    T.s("请勾选已表示同意");
+                    return;
+                }
                 noticeDialog.cancel();
             }
         });
