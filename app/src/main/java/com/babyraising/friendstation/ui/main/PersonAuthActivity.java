@@ -70,7 +70,7 @@ public class PersonAuthActivity extends BaseActivity implements EasyPermissions.
 
     private AlertDialog authDialog;
 
-    private String[] permissions = {Manifest.permission.CAMERA};
+    private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
     @Event(R.id.back)
     private void backClick(View view) {
@@ -284,7 +284,7 @@ public class PersonAuthActivity extends BaseActivity implements EasyPermissions.
         if (requestCode == Constant.REQUEST_PERMISSION_CODE) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("提示！")
-                    .setMessage("如拒绝权限将无法正常使用应用！")
+                    .setMessage("如拒绝权限将无法正常使用该功能！")
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

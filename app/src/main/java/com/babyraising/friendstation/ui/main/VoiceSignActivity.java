@@ -108,9 +108,7 @@ public class VoiceSignActivity extends BaseActivity implements EasyPermissions.P
     }
 
     private void initData() {
-        if (!checkPermission()) {
-            return;
-        }
+        checkPermission();
     }
 
     private void initView() {
@@ -325,7 +323,7 @@ public class VoiceSignActivity extends BaseActivity implements EasyPermissions.P
         if (requestCode == Constant.REQUEST_PERMISSION_CODE) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("提示！")
-                    .setMessage("如拒绝权限将无法正常使用应用！")
+                    .setMessage("如拒绝权限将无法正常使用该功能！")
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

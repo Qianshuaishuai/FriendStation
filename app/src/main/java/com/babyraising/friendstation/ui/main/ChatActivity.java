@@ -1,8 +1,11 @@
 package com.babyraising.friendstation.ui.main;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
@@ -11,7 +14,9 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -81,6 +86,7 @@ import com.tencent.trtc.TRTCCloud;
 import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCCloudListener;
 
+import org.apache.tools.ant.Main;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -105,11 +111,15 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import pub.devrel.easypermissions.EasyPermissions;
+
 import static com.tencent.trtc.TRTCCloudDef.TRTC_APP_SCENE_AUDIOCALL;
 import static com.tencent.trtc.TRTCCloudDef.TRTC_APP_SCENE_VIDEOCALL;
 
 @ContentView(R.layout.activity_chat)
-public class ChatActivity extends BaseActivity {
+public class ChatActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
+
+    private String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
 
     private UserAllInfoBean currentUserBean;
     private UserAllInfoBean selfUserBean;
@@ -174,7 +184,7 @@ public class ChatActivity extends BaseActivity {
     }
 
     @Event(R.id.tv_report_cancel)
-    private void tvReportCancelClick(View view){
+    private void tvReportCancelClick(View view) {
         reportLayout.setVisibility(View.GONE);
     }
 
@@ -606,7 +616,7 @@ public class ChatActivity extends BaseActivity {
 
         selfUserBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
 
-
+        checkPermission();
     }
 
     private void showAnimation() {
@@ -1198,5 +1208,62 @@ public class ChatActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int i = ContextCompat.checkSelfPermission(this, permissions[0]);
+            if (i != PackageManager.PERMISSION_GRANTED) {
+//                showWaringDialog();
+
+//                EasyPermissions.requestPermissions(
+//                        new PermissionRequest.Builder(this, RC_CAMERA_AND_LOCATION, perms)
+//                                .setRationale(R.string.camera_and_location_rationale)
+//                                .setPositiveButtonText(R.string.rationale_ask_ok)
+//                                .setNegativeButtonText(R.string.rationale_ask_cancel)
+//                                .setTheme(R.style.my_fancy_style)
+//                                .build());
+
+                EasyPermissions.requestPermissions(this, "您需要允许以下权限，才可以正常使用该功能",
+                        Constant.REQUEST_PERMISSION_CODE, permissions);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        if (requestCode == Constant.REQUEST_PERMISSION_CODE) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("提示！")
+                    .setMessage("如拒绝权限将无法正常使用该功能！")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 一般情况下如果用户不授权的话，功能是无法运行的，做退出处理
+                            finish();
+                        }
+                    }).show();
+        }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 }
