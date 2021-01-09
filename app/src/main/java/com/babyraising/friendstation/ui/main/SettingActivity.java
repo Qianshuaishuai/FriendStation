@@ -34,6 +34,12 @@ public class SettingActivity extends BaseActivity {
         logout();
     }
 
+    @Event(R.id.layout_service)
+    private void serviceLayoutClick(View view){
+        Intent intent = new Intent(this, CustomerServiceActivity.class);
+        startActivity(intent);
+    }
+
     @Event(R.id.layout_version)
     private void versionClick(View view) {
         Intent intent = new Intent(this, VersionActivity.class);

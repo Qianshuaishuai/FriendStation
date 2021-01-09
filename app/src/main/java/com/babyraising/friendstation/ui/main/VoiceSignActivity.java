@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
@@ -51,6 +52,9 @@ public class VoiceSignActivity extends BaseActivity {
 
     @ViewInject(R.id.content)
     private TextView content;
+
+    @ViewInject(R.id.layout_main)
+    private RelativeLayout mainLayout;
 
     @Event(R.id.layout_refresh)
     private void refreshLayoutClick(View view) {
@@ -136,7 +140,7 @@ public class VoiceSignActivity extends BaseActivity {
                     case 200:
                         T.s("上传成功");
                         updateVoiceSign(response.getData());
-                        ((FriendStationApplication) getApplication()).isUpdateDoTask(4);
+                        ((FriendStationApplication) getApplication()).isUpdateDoTask(VoiceSignActivity.this, mainLayout, 4);
                         break;
                     default:
                         T.s(response.getMsg());

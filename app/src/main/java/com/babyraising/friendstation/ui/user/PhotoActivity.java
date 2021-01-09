@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
@@ -63,6 +64,9 @@ public class PhotoActivity extends BaseActivity {
 
     @ViewInject(R.id.layout_take_photo)
     private LinearLayout takePhotoLayout;
+
+    @ViewInject(R.id.layout_main)
+    private RelativeLayout mainLayout;
 
     @ViewInject(R.id.layout_take_photo)
     private LinearLayout photoLayout;
@@ -329,7 +333,7 @@ public class PhotoActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         getPhotoList();
-                        ((FriendStationApplication) getApplication()).isUpdateDoTask(7);
+                        ((FriendStationApplication) getApplication()).isUpdateDoTask(PhotoActivity.this, mainLayout, 7);
                         break;
                     default:
                         T.s(response.getMsg());

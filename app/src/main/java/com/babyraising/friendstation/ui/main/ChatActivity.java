@@ -134,6 +134,9 @@ public class ChatActivity extends BaseActivity {
     @ViewInject(R.id.anim_show)
     private ImageView animShow;
 
+    @ViewInject(R.id.layout_main)
+    private RelativeLayout mainLayout;
+
     @ViewInject(R.id.content)
     private EditText content;
 
@@ -519,7 +522,7 @@ public class ChatActivity extends BaseActivity {
                     }
                 }
 
-                ((FriendStationApplication) getApplication()).isUpdateDoTask(12);
+                ((FriendStationApplication) getApplication()).isUpdateDoTask(ChatActivity.this, mainLayout, 12);
             }
 
             @Override

@@ -35,6 +35,9 @@ public class VoiceSendActivity extends BaseActivity {
 
     private UserMainPageBean userMainPageBean;
 
+    @ViewInject(R.id.layout_main)
+    private RelativeLayout mainLayout;
+
     @Event(R.id.layout_start)
     private void startLayoutClick(View view) {
         if (userMainPageBean == null || userMainPageBean.getId() == 0) {
@@ -83,7 +86,7 @@ public class VoiceSendActivity extends BaseActivity {
         startActivity(intent);
         finish();
 
-        ((FriendStationApplication) getApplication()).isUpdateDoTask(9);
+        ((FriendStationApplication) getApplication()).isUpdateDoTask(VoiceSendActivity.this, mainLayout, 9);
     }
 
     private void translateOneUser() {

@@ -62,15 +62,22 @@
         android:roundIcon="@mipmap/login_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".ui.main.CustomerServiceActivity"></activity>
         <activity
             android:name=".ui.main.LookPhotoActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.NewMainActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".ui.main.PrivacyActivity" />
-        <activity android:name=".ui.main.VersionActivity" />
-        <activity android:name=".ui.user.ForgetActivity" />
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.PrivacyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.main.VersionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.user.ForgetActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.main.VoiceSignActivity"
             android:screenOrientation="portrait" />

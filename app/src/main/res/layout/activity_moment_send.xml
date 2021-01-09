@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="#FAF9FE"
     android:focusable="true"
+    android:id="@+id/layout_main"
     android:focusableInTouchMode="true"
     tools:context=".ui.main.MomentSendActivity">
 

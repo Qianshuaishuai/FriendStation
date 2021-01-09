@@ -88,6 +88,9 @@ public class FindFragment extends BaseFragment {
     @ViewInject(R.id.list)
     private RecyclerView recycleList;
 
+    @ViewInject(R.id.main_layout)
+    private RelativeLayout mainLayout;
+
     @ViewInject(R.id.tip_content)
     private TextView tipContent;
 
@@ -243,7 +246,7 @@ public class FindFragment extends BaseFragment {
         }
         T.s("搭讪成功");
         showAnimation();
-        ((FriendStationApplication) getActivity().getApplication()).isUpdateDoTask(11);
+        ((FriendStationApplication) getActivity().getApplication()).isUpdateDoTask(getActivity(), mainLayout, 11);
         tipFirstLayout.setVisibility(View.GONE);
     }
 
@@ -312,6 +315,7 @@ public class FindFragment extends BaseFragment {
 
     private void initData() {
         commonWordList = ((FriendStationApplication) getActivity().getApplication()).getCommonWordData();
+
     }
 
     private void translateOneUser2() {
@@ -521,6 +525,7 @@ public class FindFragment extends BaseFragment {
                 getUserList();
             }
         });
+
     }
 
     @Override

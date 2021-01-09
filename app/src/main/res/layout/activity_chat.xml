@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="#faf9fe"
     android:focusable="true"
+    android:id="@+id/layout_main"
     android:focusableInTouchMode="true"
     tools:context=".ui.main.ChatActivity">
 
@@ -95,7 +96,7 @@
                 android:layout_width="240dip"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dip"
-                android:background="@drawable/shape_chat_official_content_bg"
+                android:background="@drawable/shape_chat_content"
                 android:orientation="vertical"
                 android:paddingLeft="15dip"
                 android:paddingTop="10dip"

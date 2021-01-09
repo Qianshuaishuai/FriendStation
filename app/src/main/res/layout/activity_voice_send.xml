@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/voice_send_bg"
+    android:id="@+id/layout_main"
     tools:context=".ui.main.VoiceSendActivity">
 
     <ImageView

@@ -225,12 +225,12 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         if (requestCode == Constant.REQUEST_PERMISSION_CODE) {
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("提示！")
-                    .setMessage("如拒绝权限将无法正常使用应用！")
+                    .setMessage("如拒绝权限部分功能将无法正常使用！")
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // 一般情况下如果用户不授权的话，功能是无法运行的，做退出处理
-                            finish();
+
                         }
                     }).show();
         }

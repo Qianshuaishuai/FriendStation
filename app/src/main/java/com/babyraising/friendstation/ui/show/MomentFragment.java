@@ -77,6 +77,9 @@ public class MomentFragment extends BaseFragment {
     @ViewInject(R.id.list)
     private RecyclerView recycleList;
 
+    @ViewInject(R.id.main_layout)
+    private RelativeLayout mainLayout;
+
     @ViewInject(R.id.type_tv1)
     private TextView typeTv1;
 
@@ -390,7 +393,7 @@ public class MomentFragment extends BaseFragment {
                     case 200:
                         T.s("点赞成功");
                         getMomentList();
-                        ((FriendStationApplication) getActivity().getApplication()).isUpdateDoTask(8);
+                        ((FriendStationApplication) getActivity().getApplication()).isUpdateDoTask(getActivity(), mainLayout, 8);
                         break;
                     default:
                         T.s(response.getMsg());

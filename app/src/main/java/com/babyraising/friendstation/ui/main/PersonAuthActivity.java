@@ -75,6 +75,9 @@ public class PersonAuthActivity extends BaseActivity {
         }
     }
 
+    @ViewInject(R.id.layout_main)
+    private RelativeLayout mainLayout;
+
     @ViewInject(R.id.iv_main)
     private ImageView ivMain;
 
@@ -207,7 +210,7 @@ public class PersonAuthActivity extends BaseActivity {
                                 tipMain.setVisibility(View.VISIBLE);
                                 errorLayout.setVisibility(View.GONE);
 
-                                ((FriendStationApplication) getApplication()).isUpdateDoTask(5);
+                                ((FriendStationApplication) getApplication()).isUpdateDoTask(PersonAuthActivity.this, mainLayout, 5);
                                 break;
                         }
                         break;
@@ -302,7 +305,6 @@ public class PersonAuthActivity extends BaseActivity {
     /**
      * 获取指定文件大小
      *
-     * @param f
      * @return
      * @throws Exception
      */

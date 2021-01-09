@@ -81,6 +81,9 @@ public class PersonInfoActivity extends BaseActivity {
     @ViewInject(R.id.background)
     private ImageView background;
 
+    @ViewInject(R.id.layout_main)
+    private RelativeLayout mainLayout;
+
     @Event(R.id.back)
     private void backClick(View view) {
         finish();
@@ -828,7 +831,7 @@ public class PersonInfoActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         getUserFullInfo();
-                        ((FriendStationApplication) getApplication()).isUpdateDoTask(1);
+                        ((FriendStationApplication) getApplication()).isUpdateDoTask(PersonInfoActivity.this, mainLayout, 1);
                         break;
                     default:
                         T.s(response.getMsg());

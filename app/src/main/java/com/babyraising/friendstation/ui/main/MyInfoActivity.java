@@ -69,6 +69,9 @@ public class MyInfoActivity extends BaseActivity {
     @ViewInject(R.id.luxury)
     private EditText luxury;
 
+    @ViewInject(R.id.layout_main)
+    private RelativeLayout mainLayout;
+
     @ViewInject(R.id.sex)
     private EditText sex;
 
@@ -260,7 +263,7 @@ public class MyInfoActivity extends BaseActivity {
                         T.s("保存成功");
                         finish();
 
-                        ((FriendStationApplication) getApplication()).isUpdateDoTask(6);
+                        ((FriendStationApplication) getApplication()).isUpdateDoTask(MyInfoActivity.this, mainLayout, 6);
                         break;
                     default:
                         T.s(response.getMsg());

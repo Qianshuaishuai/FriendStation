@@ -14,7 +14,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +41,7 @@ import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.service.RTCService;
 import com.babyraising.friendstation.ui.main.PrivacyActivity;
 import com.babyraising.friendstation.ui.user.NoticeActivity;
+import com.babyraising.friendstation.util.DisplayUtils;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -79,6 +84,7 @@ public class FriendStationApplication extends Application {
     private AlertDialog noticeDialog;
 
     private List<TaskNewBean> currentTaskList = new ArrayList<>();
+    private boolean isShowCoinAnimation = false;
 
     @Override
     public void onCreate() {
@@ -767,17 +773,17 @@ public class FriendStationApplication extends Application {
         return true;
     }
 
-    public void isUpdateDoTask(int taskId) {
+    public void isUpdateDoTask(Context context, final RelativeLayout showView, int taskId) {
         for (int t = 0; t < currentTaskList.size(); t++) {
             if (taskId == currentTaskList.get(t).getId()) {
                 if (currentTaskList.get(t).getIsDone() == 0) {
-                    doTask(currentTaskList.get(t).getReword(), currentTaskList.get(t).getId());
+                    doTask(context, showView, currentTaskList.get(t).getReword(), currentTaskList.get(t).getId());
                 }
             }
         }
     }
 
-    private void doTask(int reword, int taskId) {
+    private void doTask(final Context context, final RelativeLayout showView, int reword, int taskId) {
         Gson gson = new Gson();
         TaskDoRequest request = new TaskDoRequest();
         request.setTaskId(taskId);
@@ -797,6 +803,7 @@ public class FriendStationApplication extends Application {
                     case 200:
                         T.s("恭喜你完成任务");
                         updateTaskList();
+                        showCoinAnimation(context, showView);
                         break;
                     default:
 
@@ -819,5 +826,42 @@ public class FriendStationApplication extends Application {
 
             }
         });
+    }
+
+    public void showCoinAnimation(Context context, final RelativeLayout showView) {
+        if (isShowCoinAnimation) {
+            return;
+        }
+        int width = DisplayUtils.dp2px(this, 96);
+        int height = DisplayUtils.dp2px(this, 96);
+        final ImageView imageView = new ImageView(getApplicationContext());
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(width, height);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        imageView.setLayoutParams(params);
+        imageView.setImageResource(R.mipmap.recharge_icon_small);
+        showView.addView(imageView);
+        Animation animation = AnimationUtils.loadAnimation(context, R.anim.success_show);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                showView.removeView(imageView);
+                isShowCoinAnimation = false;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        imageView.startAnimation(animation);
+        animation.setRepeatCount(1);
+
+        isShowCoinAnimation = true;
     }
 }

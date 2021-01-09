@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
@@ -82,6 +83,9 @@ public class MomentSendActivity extends BaseActivity {
 
     @ViewInject(R.id.moment_voice)
     private ImageView momentVoice;
+
+    @ViewInject(R.id.layout_main)
+    private RelativeLayout mainLayout;
 
     @ViewInject(R.id.photo_list)
     private RecyclerView recyclerList;
@@ -425,7 +429,7 @@ public class MomentSendActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         T.s("发布成功");
-                        ((FriendStationApplication) getApplication()).isUpdateDoTask(2);
+                        ((FriendStationApplication) getApplication()).isUpdateDoTask(MomentSendActivity.this, mainLayout, 2);
                         finish();
                         break;
                     default:
