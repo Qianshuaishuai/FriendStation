@@ -88,7 +88,6 @@
             android:layout_height="45dip"
             android:layout_marginTop="8dip"
             android:layout_marginRight="10dip"
-            android:background="@drawable/shape_main_find_top_tip_bg"
             android:orientation="horizontal"
             android:paddingTop="6dip"
             android:paddingRight="15dip"

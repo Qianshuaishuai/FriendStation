@@ -11,8 +11,11 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,6 +27,9 @@ import com.babyraising.friendstation.base.BaseFragment;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.MomentDetailBean;
 import com.babyraising.friendstation.bean.ScoreRecordBean;
+import com.babyraising.friendstation.bean.TimSendBean;
+import com.babyraising.friendstation.bean.TimSendBodyBean;
+import com.babyraising.friendstation.bean.TimSendMsgContentBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.request.FollowRequest;
 import com.babyraising.friendstation.request.LikeDetailRequest;
@@ -37,6 +43,8 @@ import com.babyraising.friendstation.ui.main.MomentSendActivity;
 import com.babyraising.friendstation.ui.main.PersonAuthActivity;
 import com.babyraising.friendstation.ui.main.PersonInfoActivity;
 import com.babyraising.friendstation.ui.main.VoiceSignActivity;
+import com.babyraising.friendstation.util.GenerateTestUserSig;
+import com.babyraising.friendstation.util.RandomUtil;
 import com.babyraising.friendstation.util.T;
 import com.babyraising.friendstation.util.WxShareUtils;
 import com.google.gson.Gson;
@@ -49,7 +57,9 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @ContentView(R.layout.fragment_moment)
 public class MomentFragment extends BaseFragment {
@@ -57,6 +67,8 @@ public class MomentFragment extends BaseFragment {
     private String showContent = "";
     private String showImgfilePath = "";
     private AlertDialog authDialog;
+
+    private List<String> commonWordList;
 
     private int selectType = 1;
     private MomentAdapter adapter;
@@ -85,6 +97,9 @@ public class MomentFragment extends BaseFragment {
 
     @ViewInject(R.id.layout_share_all)
     private RelativeLayout shareAllLayout;
+
+    @ViewInject(R.id.anim_show)
+    private ImageView animShow;
 
     @Event(R.id.layout_share_1)
     private void share1Click(View view) {
@@ -183,13 +198,41 @@ public class MomentFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         initView();
+        initData();
         initAuthTip();
+    }
+
+    private void initData() {
+        commonWordList = ((FriendStationApplication) getActivity().getApplication()).getCommonWordData();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         getMomentList();
+    }
+
+    private void showAnimation() {
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.success_show);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                animShow.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                animShow.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        animShow.setVisibility(View.VISIBLE);
+        animShow.startAnimation(animation);
+        animation.setRepeatCount(1);
     }
 
     /**
@@ -430,9 +473,12 @@ public class MomentFragment extends BaseFragment {
             return;
         }
 
-        Intent intent = new Intent(getActivity(), ChatActivity.class);
-        intent.putExtra("chat-user-id", list.get(position).getUserId());
-        startActivity(intent);
+//        Intent intent = new Intent(getActivity(), ChatActivity.class);
+//        intent.putExtra("chat-user-id", list.get(position).getUserId());
+//        startActivity(intent);
+        adminSendMessage(userBean.getId(), list.get(position).getUserId());
+        T.s("搭讪成功");
+        showAnimation();
     }
 
     private void getMomentList() {
@@ -523,5 +569,73 @@ public class MomentFragment extends BaseFragment {
         if (authDialog.isShowing()) {
             authDialog.cancel();
         }
+    }
+
+    private void adminSendMessage(int sendId, int receiveId) {
+        if (sendId == 0 || receiveId == 0) {
+            System.out.println("接收方或发送方id为0");
+            return;
+        }
+
+        if (sendId == receiveId) {
+            System.out.println("接收方和发送方相同");
+            return;
+        }
+
+        System.out.println("sendId:" + sendId + ", receiveId:" + receiveId);
+        Gson gson = new Gson();
+        Random random = new Random();
+        int n = random.nextInt(commonWordList.size());
+        String word = "";
+        int index = n - 1;
+        if (index >= 0) {
+            word = commonWordList.get(index);
+        } else {
+            word = commonWordList.get(0);
+        }
+        TimSendMsgContentBean contentBean = new TimSendMsgContentBean();
+        contentBean.setText(word);
+        TimSendBodyBean bodyBean = new TimSendBodyBean();
+        bodyBean.setMsgContent(contentBean);
+        bodyBean.setMsgType("TIMTextElem");
+        List<TimSendBodyBean> bodyList = new ArrayList<>();
+        bodyList.add(bodyBean);
+        TimSendBean bean = new TimSendBean();
+        bean.setFrom_Account(String.valueOf(sendId));
+        bean.setTo_Account(String.valueOf(receiveId));
+        bean.setMsgBody(bodyList);
+        bean.setSyncOtherMachine(1);
+        bean.setMsgRandom(RandomUtil.getRandomInt());
+        int nowTime = (int) new Date().getTime();
+        if (nowTime < 0) {
+            nowTime = Math.abs(nowTime);
+        }
+        bean.setMsgTimeStamp(nowTime);
+        String userSig = GenerateTestUserSig.genTestUserSig(Constant.TIM_ADMIN_ACCOUNT);
+        String url = Constant.URL_TIM_SENDMSG + "?sdkappid=" + Constant.TIM_SDK_APPID + "&identifier=" + Constant.TIM_ADMIN_ACCOUNT + "&usersig=" + userSig + "&random=" + RandomUtil.getRandom() + "&contenttype=json";
+        RequestParams params = new RequestParams(url);
+        params.setAsJsonContent(true);
+        params.setBodyContent(gson.toJson(bean));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                System.out.println("adminSendMessage:" + result);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }

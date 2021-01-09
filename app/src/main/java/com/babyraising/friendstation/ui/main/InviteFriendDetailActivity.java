@@ -5,14 +5,19 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.util.CopyUtil;
+
+import net.nightwhistler.htmlspanner.TextUtil;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -87,6 +92,14 @@ public class InviteFriendDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         initInviteTipDialog();
+        initData();
+    }
+
+    private void initData() {
+        UserAllInfoBean userAllInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+        if (!TextUtils.isEmpty(userAllInfoBean.getInviteCode())) {
+            inviteCode.setText(userAllInfoBean.getInviteCode());
+        }
     }
 
     private void initInviteTipDialog() {

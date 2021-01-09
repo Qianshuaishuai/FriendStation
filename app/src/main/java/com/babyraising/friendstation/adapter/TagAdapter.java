@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.bean.TaskDetailBean;
+import com.babyraising.friendstation.ui.main.PersonInfoActivity;
 
 import org.xutils.x;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
 
     private List<String> mList;
+    private PersonInfoActivity activity;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView contentTxt;
@@ -28,7 +30,8 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
 
     }
 
-    public TagAdapter(List<String> mList) {
+    public TagAdapter(PersonInfoActivity activity, List<String> mList) {
+        this.activity = activity;
         this.mList = mList;
     }
 
@@ -42,6 +45,12 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.contentTxt.setText(mList.get(position));
+        holder.contentTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.goToMyInfo();
+            }
+        });
     }
 
     @Override

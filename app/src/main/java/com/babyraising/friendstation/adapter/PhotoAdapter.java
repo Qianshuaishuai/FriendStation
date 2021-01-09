@@ -21,7 +21,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
     private MomentSendActivity activity;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView iconIv, deleteIv,addIv;
+        ImageView iconIv, deleteIv, addIv;
 
         public ViewHolder(View view) {
             super(view);
@@ -54,7 +54,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
             }
         });
 
-        if (position == mList.size() - 1){
+        if (position == mList.size() - 1) {
             holder.iconIv.setVisibility(View.GONE);
             holder.deleteIv.setVisibility(View.GONE);
             holder.addIv.setVisibility(View.VISIBLE);
@@ -64,7 +64,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
                     activity.addNewPhoto();
                 }
             });
-        }else{
+        } else {
             holder.iconIv.setVisibility(View.VISIBLE);
             holder.deleteIv.setVisibility(View.VISIBLE);
             holder.addIv.setVisibility(View.GONE);

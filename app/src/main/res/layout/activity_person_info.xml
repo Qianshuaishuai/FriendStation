@@ -165,6 +165,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dip"
+                        android:layout_marginRight="40dip"
                         android:layout_toRightOf="@+id/tip"></android.support.v7.widget.RecyclerView>
 
                     <ImageView
@@ -362,7 +363,7 @@
                 </LinearLayout>
 
                 <!--基本信息-->
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/layout_basic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -388,7 +389,15 @@
                             android:layout_marginTop="10dip"
                             android:layout_marginBottom="10dip"></android.support.v7.widget.RecyclerView>
                     </LinearLayout>
-                </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="16dip"
+                        android:layout_height="16dip"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="15dip"
+                        android:src="@mipmap/common_right" />
+                </RelativeLayout>
 
 
                 <!--语音签名-->

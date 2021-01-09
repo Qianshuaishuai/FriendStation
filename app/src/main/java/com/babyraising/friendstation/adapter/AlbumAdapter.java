@@ -69,6 +69,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
             holder.deleteIv.setVisibility(View.VISIBLE);
             holder.addIv.setVisibility(View.GONE);
         }
+
+        holder.iconIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                activity.goToLookPhoto(position);
+            }
+        });
     }
 
     @Override

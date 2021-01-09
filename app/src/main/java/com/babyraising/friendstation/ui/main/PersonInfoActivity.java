@@ -175,6 +175,15 @@ public class PersonInfoActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    @Event(R.id.basic_list)
+    private void basicListClick(View view) {
+        if (mode == 1) {
+            return;
+        }
+        Intent intent = new Intent(this, MyInfoActivity.class);
+        startActivity(intent);
+    }
+
     @Event(R.id.layout_basic)
     private void basicLayoutClick(View view) {
         if (mode == 1) {
@@ -318,6 +327,14 @@ public class PersonInfoActivity extends BaseActivity {
         if (isTask == 1) {
             photoLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void goToMyInfo() {
+        if (mode == 1) {
+            return;
+        }
+        Intent intent = new Intent(this, MyInfoActivity.class);
+        startActivity(intent);
     }
 
     public void goToChat2(int userId) {
@@ -717,6 +734,12 @@ public class PersonInfoActivity extends BaseActivity {
 //                            background.setVisibility(View.VISIBLE);
 //                            x.image().bind(background, photoList.get(0).getUrl());
 //                        }
+
+                        if (photoList.size() <= 2) {
+                            AlbumDetailBean bean = new AlbumDetailBean();
+                            bean.setUrl("add");
+                            photoList.add(bean);
+                        }
                         showAlbumAdapter.notifyDataSetChanged();
                         break;
                     default:
@@ -992,8 +1015,8 @@ public class PersonInfoActivity extends BaseActivity {
                 audio.setText("你暂未设置语言签名");
             }
 
-            tagAdapter = new TagAdapter(tagList);
-            GridLayoutManager manager = new GridLayoutManager(this, 3);
+            tagAdapter = new TagAdapter(this, tagList);
+            GridLayoutManager manager = new GridLayoutManager(this, 2);
             basicList.setLayoutManager(manager);
             basicList.setAdapter(tagAdapter);
 

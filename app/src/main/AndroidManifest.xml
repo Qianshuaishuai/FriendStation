@@ -63,17 +63,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
+            android:name=".ui.main.LookPhotoActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".ui.main.NewMainActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".ui.main.PrivacyActivity" />
         <activity android:name=".ui.main.VersionActivity" />
         <activity android:name=".ui.user.ForgetActivity" />
         <activity
             android:name=".ui.main.VoiceSignActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.user.PhotoActivity" />
+        <activity
+            android:name=".ui.user.PhotoActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"

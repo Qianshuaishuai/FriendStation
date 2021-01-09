@@ -542,9 +542,13 @@ public class FindFragment extends BaseFragment {
             return;
         }
 
-        Intent intent = new Intent(getActivity(), ChatActivity.class);
-        intent.putExtra("chat-user-id", userId);
-        startActivity(intent);
+//        Intent intent = new Intent(getActivity(), ChatActivity.class);
+//        intent.putExtra("chat-user-id", userId);
+//        startActivity(intent);
+
+        adminSendMessage(userBean.getId(), userId);
+        T.s("搭讪成功");
+        showAnimation();
     }
 
     public void goToChat2(int userId) {

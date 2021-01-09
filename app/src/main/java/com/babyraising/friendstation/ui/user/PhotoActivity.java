@@ -33,6 +33,7 @@ import com.babyraising.friendstation.request.UpdateAlbumRequest;
 import com.babyraising.friendstation.response.AlbumResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
+import com.babyraising.friendstation.ui.main.LookPhotoActivity;
 import com.babyraising.friendstation.util.DisplayUtils;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.T;
@@ -110,16 +111,16 @@ public class PhotoActivity extends BaseActivity {
 
     private void initView() {
         adapter = new AlbumAdapter(this, photoList);
-        GridLayoutManager manager = new GridLayoutManager(this, 3);
+        GridLayoutManager manager = new GridLayoutManager(this, 4);
 
 
         WindowManager wm1 = this.getWindowManager();
-        int width1 = wm1.getDefaultDisplay().getWidth() - DisplayUtils.dp2px(this, 30);
-        int itemWidth = DisplayUtils.dp2px(this, 69); //每个item的宽度
+        int width1 = wm1.getDefaultDisplay().getWidth() - DisplayUtils.dp2px(this, 60);
+        int itemWidth = DisplayUtils.dp2px(this, 60); //每个item的宽度
 
         photoRecyleViewList.setLayoutManager(manager);
         photoRecyleViewList.setAdapter(adapter);
-        photoRecyleViewList.addItemDecoration(new PhotoSpaceItemDecoration((width1 - itemWidth * 3) / 6));
+        photoRecyleViewList.addItemDecoration(new PhotoSpaceItemDecoration((width1 - itemWidth * 4) / 8));
     }
 
     private void getPhotoList() {
@@ -168,6 +169,12 @@ public class PhotoActivity extends BaseActivity {
         if (takePhotoLayout.getVisibility() == View.GONE) {
             takePhotoLayout.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void goToLookPhoto(int position) {
+        Intent intent = new Intent(this, LookPhotoActivity.class);
+        intent.putExtra("img", photoList.get(position).getUrl());
+        startActivity(intent);
     }
 
     public void deletePhoto(int position) {

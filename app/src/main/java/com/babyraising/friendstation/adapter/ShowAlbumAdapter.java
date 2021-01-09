@@ -19,11 +19,12 @@ public class ShowAlbumAdapter extends RecyclerView.Adapter<ShowAlbumAdapter.View
     private List<AlbumDetailBean> mList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView iconIv;
+        ImageView iconIv,addIv;
 
         public ViewHolder(View view) {
             super(view);
             iconIv = (ImageView) view.findViewById(R.id.icon);
+            addIv = (ImageView) view.findViewById(R.id.add);
         }
 
     }
@@ -41,7 +42,15 @@ public class ShowAlbumAdapter extends RecyclerView.Adapter<ShowAlbumAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        x.image().bind(holder.iconIv, mList.get(position).getUrl());
+        if (mList.get(position).getUrl().equals("add")){
+            holder.addIv.setVisibility(View.VISIBLE);
+            holder.iconIv.setVisibility(View.GONE);
+        }else{
+            holder.addIv.setVisibility(View.GONE);
+            holder.iconIv.setVisibility(View.VISIBLE);
+            x.image().bind(holder.iconIv, mList.get(position).getUrl());
+        }
+
     }
 
     @Override
