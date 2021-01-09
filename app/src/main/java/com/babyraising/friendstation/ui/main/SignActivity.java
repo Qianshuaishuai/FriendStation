@@ -136,6 +136,8 @@ public class SignActivity extends BaseActivity {
                     signClick.setVisibility(View.GONE);
                     signUnClick.setVisibility(View.VISIBLE);
                 }
+
+                day.setText("" + data.get(d).getDays());
             }
         }
     }

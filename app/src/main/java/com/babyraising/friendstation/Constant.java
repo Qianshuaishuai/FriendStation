@@ -23,7 +23,7 @@ public class Constant {
 
     public static final int ACTIVITY_COMMON_REQUEST = 10001;
 
-    public static final String BASE_URL = "http://8.129.108.2/api/";
+    public static final String BASE_URL = "http://api.jyz520.com/api/";
 
     //user部分
     public static final String URL_GET_CODE = "ums/auth/verifyCode";

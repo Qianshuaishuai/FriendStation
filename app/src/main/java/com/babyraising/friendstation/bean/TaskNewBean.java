@@ -10,6 +10,7 @@ public class TaskNewBean {
     private String subTitle;
     private String title;
     private String type;
+    private int days;
 
     public String getIcon() {
         return icon;
@@ -81,5 +82,13 @@ public class TaskNewBean {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getDays() {
+        return days;
+    }
+
+    public void setDays(int days) {
+        this.days = days;
     }
 }
