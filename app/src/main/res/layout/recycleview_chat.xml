@@ -4,6 +4,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dip"
+        android:gravity="center_horizontal"
+        android:text=""
+        android:textColor="#B9B8C1"
+        android:textSize="11dip" />
+
     <LinearLayout
         android:id="@+id/left_layout"
         android:layout_width="wrap_content"

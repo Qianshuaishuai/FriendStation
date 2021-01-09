@@ -136,6 +136,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     @ViewInject(R.id.name)
     private TextView name;
 
+    @ViewInject(R.id.auth_tip)
+    private TextView authTip;
+
     @Event(R.id.name)
     private void nameClick(View view) {
 //        showAnimation();
@@ -846,7 +849,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 Collections.sort(chatList, new Comparator<V2TIMMessage>() {
                     @Override
                     public int compare(V2TIMMessage o1, V2TIMMessage o2) {
-                        return (int) (o1.getMessage().getClientTime() - o2.getMessage().getClientTime());
+                        return (int) (o1.getMessage().getTimestamp() - o2.getMessage().getTimestamp());
                     }
                 });
                 adapter.notifyDataSetChanged();
@@ -886,13 +889,14 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 Collections.sort(chatList, new Comparator<V2TIMMessage>() {
                     @Override
                     public int compare(V2TIMMessage o1, V2TIMMessage o2) {
-                        return (int) (o1.getMessage().getClientTime() - o2.getMessage().getClientTime());
+                        return (int) (o1.getMessage().getTimestamp() - o2.getMessage().getTimestamp());
                     }
                 });
                 adapter.notifyDataSetChanged();
 
                 if (refreshLayout.isRefreshing()) {
                     refreshLayout.setRefreshing(false);
+                    authTip.setVisibility(View.GONE);
                 }
             }
 
@@ -1017,6 +1021,11 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                             }
                             useCoin(4, "", "", word, 0);
                         }
+
+                        if (currentUserBean.getStatusCert().equals("PASS")) {
+                            authTip.setVisibility(View.VISIBLE);
+                        }
+
                         break;
                     case 401:
 

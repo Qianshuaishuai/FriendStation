@@ -51,6 +51,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,7 +68,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView leftSoundTip, rightSoundTip, leftRtcTip, rightRtcTip, leftGiftTip, rightGiftTip;
-        TextView leftContentTxt, rightContentTxt;
+        TextView leftContentTxt, rightContentTxt, timeTxt;
         ImageView leftIcon, leftIvContent, rightIcon, rightIvContent, leftGiftIcon, rightGiftIcon;
         LinearLayout leftLayout, leftVoiceLayout, rightLayout, rightVoiceLayout, rightRtcLayout, leftRtcLayout, leftGiftLayout, rightGiftLayout, leftContentLayout, rightContentLayout;
 
@@ -98,6 +100,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             rightRtcLayout = (LinearLayout) view.findViewById(R.id.right_layout_rtc);
             rightGiftLayout = (LinearLayout) view.findViewById(R.id.layout_gift_right);
             rightContentLayout = (LinearLayout) view.findViewById(R.id.layout_right_content);
+
+            timeTxt = (TextView) view.findViewById(R.id.time);
         }
 
     }
@@ -132,7 +136,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         holder.leftGiftLayout.setVisibility(View.GONE);
         holder.leftContentLayout.setVisibility(View.GONE);
         holder.rightContentLayout.setVisibility(View.GONE);
-
+        holder.timeTxt.setVisibility(View.GONE);
         if (mList.get(position).getMessage().getReceiverUserID().equals(String.valueOf(selfUserInfoBean.getId()))) {
             holder.leftLayout.setVisibility(View.VISIBLE);
             holder.rightLayout.setVisibility(View.GONE);
@@ -370,6 +374,35 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 context.goToPersonInfo();
             }
         });
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        if (position == 0) {
+            holder.timeTxt.setVisibility(View.VISIBLE);
+            holder.timeTxt.setText(translateCurrentTimeShow(mList.get(position).getTimestamp()));
+        } else {
+            long lastTime = mList.get(position - 1).getTimestamp();
+            long currentTime = mList.get(position).getTimestamp();
+
+            long offsetMinute = (currentTime - lastTime) / 1000 / 60;
+            if (offsetMinute > 5) {
+                holder.timeTxt.setVisibility(View.VISIBLE);
+                holder.timeTxt.setText(translateCurrentTimeShow(mList.get(position).getTimestamp()));
+            } else {
+                holder.timeTxt.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private String translateCurrentTimeShow(long showTime) {
+        long currentTime = new Date().getTime();
+        long offsetDay = (currentTime - showTime) / 1000 / 60 / 60 / 24;
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
+        if (offsetDay > 7) {
+            return sdf1.format(showTime);
+        }
+
+        return sdf2.format(showTime);
     }
 
     private String checkContent(String oldContent) {
