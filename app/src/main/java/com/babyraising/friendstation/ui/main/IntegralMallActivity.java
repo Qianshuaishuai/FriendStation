@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
@@ -17,6 +19,7 @@ import com.babyraising.friendstation.bean.ScoreExchangeBean;
 import com.babyraising.friendstation.bean.ScoreExchangeDetailBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.response.ScoreExchangeResponse;
+import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
 import org.xutils.common.Callback;
@@ -37,6 +40,27 @@ public class IntegralMallActivity extends BaseActivity {
     @Event(R.id.back)
     private void back(View view) {
         finish();
+    }
+
+    @ViewInject(R.id.alipay_account)
+    private EditText alipayAccount;
+
+    @ViewInject(R.id.real_name)
+    private EditText realName;
+
+    @Event(R.id.save)
+    private void save(View view) {
+        if (TextUtils.isEmpty(alipayAccount.getText().toString())) {
+            T.s("支付宝账户不能为空");
+            return;
+        }
+
+        if (TextUtils.isEmpty(realName.getText().toString())) {
+            T.s("真实姓名不能为空");
+            return;
+        }
+
+        T.s("该功能正在完善");
     }
 
     @Event(R.id.record)
