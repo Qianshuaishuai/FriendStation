@@ -90,10 +90,8 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
     private TextView count;
 
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.CAMERA,
-            Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS};
+            Manifest.permission.CAMERA};
 
     private CommonLoginBean bean;
     private List<String> commonWordList;
@@ -406,7 +404,7 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // 一般情况下如果用户不授权的话，功能是无法运行的，做退出处理
-                        finish();
+
                     }
                 }).show();
     }
@@ -426,7 +424,7 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // 一般情况下如果用户不授权的话，功能是无法运行的，做退出处理
-                            finish();
+
                         }
                     }).show();
         }

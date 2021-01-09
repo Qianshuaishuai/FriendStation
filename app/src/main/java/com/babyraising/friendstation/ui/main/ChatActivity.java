@@ -131,6 +131,53 @@ public class ChatActivity extends BaseActivity {
 //        showAnimation();
     }
 
+    @Event(R.id.tv_more)
+    private void tvMoreClick(View view) {
+        reportLayout.setVisibility(View.VISIBLE);
+    }
+
+    @ViewInject(R.id.layout_report)
+    private LinearLayout reportLayout;
+
+    @Event(R.id.tv_report1)
+    private void tvReport1Click(View view) {
+        T.s("举报成功");
+        reportLayout.setVisibility(View.GONE);
+    }
+
+
+    @Event(R.id.tv_report2)
+    private void tvReport2Click(View view) {
+        T.s("举报成功");
+        reportLayout.setVisibility(View.GONE);
+    }
+
+
+    @Event(R.id.tv_report3)
+    private void tvReport3Click(View view) {
+        T.s("举报成功");
+        reportLayout.setVisibility(View.GONE);
+    }
+
+
+    @Event(R.id.tv_report4)
+    private void tvReport4Click(View view) {
+        T.s("举报成功");
+        reportLayout.setVisibility(View.GONE);
+    }
+
+
+    @Event(R.id.tv_report5)
+    private void tvReport5Click(View view) {
+        T.s("举报成功");
+        reportLayout.setVisibility(View.GONE);
+    }
+
+    @Event(R.id.tv_report_cancel)
+    private void tvReportCancelClick(View view){
+        reportLayout.setVisibility(View.GONE);
+    }
+
     @ViewInject(R.id.anim_show)
     private ImageView animShow;
 

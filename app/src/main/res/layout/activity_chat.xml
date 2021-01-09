@@ -2,11 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#faf9fe"
     android:focusable="true"
-    android:id="@+id/layout_main"
     android:focusableInTouchMode="true"
     tools:context=".ui.main.ChatActivity">
 
@@ -61,6 +61,18 @@
             android:layout_height="1dip"
             android:layout_alignParentBottom="true"
             android:background="#D4D4D4"></View>
+
+        <TextView
+            android:id="@+id/tv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dip"
+            android:text="···"
+            android:textColor="#000000"
+            android:textSize="20dip"
+            android:textStyle="bold" />
     </RelativeLayout>
 
     <LinearLayout
@@ -635,4 +647,104 @@
         android:layout_marginTop="-100dip"
         android:src="@mipmap/test4"
         android:visibility="gone" />
+
+    <!--举报-->
+    <LinearLayout
+        android:id="@+id/layout_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_report1"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:gravity="center"
+            android:text="恶意骚扰"
+            android:textColor="#3C3B41"
+            android:textSize="16dip" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:layout_marginLeft="15dip"
+            android:layout_marginRight="15dip"
+            android:background="#D4D4D4"></View>
+
+        <TextView
+            android:id="@+id/tv_report2"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:gravity="center"
+            android:text="色情信息"
+            android:textColor="#3C3B41"
+            android:textSize="16dip" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:background="#D4D4D4"></View>
+
+        <TextView
+            android:id="@+id/tv_report3"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:gravity="center"
+            android:text="性别不符"
+            android:textColor="#3C3B41"
+            android:textSize="16dip" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:background="#D4D4D4"></View>
+
+
+        <TextView
+            android:id="@+id/tv_report4"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:gravity="center"
+            android:text="垃圾广告"
+            android:textColor="#3C3B41"
+            android:textSize="16dip" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:background="#D4D4D4"></View>
+
+
+        <TextView
+            android:id="@+id/tv_report5"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:gravity="center"
+            android:text="盗用他人资料"
+            android:textColor="#3C3B41"
+            android:textSize="16dip" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:background="#D4D4D4"></View>
+
+        <TextView
+            android:id="@+id/tv_report_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="50dip"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="#3C3B41"
+            android:textSize="16dip" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:background="#D4D4D4"></View>
+
+    </LinearLayout>
 </RelativeLayout>

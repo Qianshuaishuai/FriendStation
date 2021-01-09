@@ -1,7 +1,13 @@
 package com.babyraising.friendstation.ui.main;
 
+import android.Manifest;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,8 +43,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import pub.devrel.easypermissions.EasyPermissions;
+
 @ContentView(R.layout.activity_voice_sign)
-public class VoiceSignActivity extends BaseActivity {
+public class VoiceSignActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
+
+    private String[] permissions = {Manifest.permission.RECORD_AUDIO};
 
     private List<String> voiceSignList = new ArrayList<>();
 
@@ -98,7 +108,9 @@ public class VoiceSignActivity extends BaseActivity {
     }
 
     private void initData() {
-
+        if (!checkPermission()) {
+            return;
+        }
     }
 
     private void initView() {
@@ -279,4 +291,62 @@ public class VoiceSignActivity extends BaseActivity {
             }
         });
     }
+
+    private boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int i = ContextCompat.checkSelfPermission(this, permissions[0]);
+            if (i != PackageManager.PERMISSION_GRANTED) {
+//                showWaringDialog();
+
+//                EasyPermissions.requestPermissions(
+//                        new PermissionRequest.Builder(this, RC_CAMERA_AND_LOCATION, perms)
+//                                .setRationale(R.string.camera_and_location_rationale)
+//                                .setPositiveButtonText(R.string.rationale_ask_ok)
+//                                .setNegativeButtonText(R.string.rationale_ask_cancel)
+//                                .setTheme(R.style.my_fancy_style)
+//                                .build());
+
+                EasyPermissions.requestPermissions(this, "您需要允许以下权限，才可以正常使用该功能",
+                        Constant.REQUEST_PERMISSION_CODE, permissions);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+        if (requestCode == Constant.REQUEST_PERMISSION_CODE) {
+            AlertDialog dialog = new AlertDialog.Builder(this)
+                    .setTitle("提示！")
+                    .setMessage("如拒绝权限将无法正常使用应用！")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // 一般情况下如果用户不授权的话，功能是无法运行的，做退出处理
+                            finish();
+                        }
+                    }).show();
+        }
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
 }

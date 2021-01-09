@@ -89,6 +89,14 @@ public class PersonInfoActivity extends BaseActivity {
         finish();
     }
 
+    @ViewInject(R.id.tv_more)
+    private TextView tvMore;
+
+    @Event(R.id.tv_more)
+    private void tvMoreClick(View view) {
+        reportLayout.setVisibility(View.VISIBLE);
+    }
+
     @Event(R.id.layout_background)
     private void backgroundClick(View view) {
         if (mode == 1) {
@@ -283,6 +291,48 @@ public class PersonInfoActivity extends BaseActivity {
     @ViewInject(R.id.layout_bottom)
     private LinearLayout bottomLayout;
 
+    @ViewInject(R.id.layout_report)
+    private LinearLayout reportLayout;
+
+    @Event(R.id.tv_report1)
+    private void tvReport1Click(View view) {
+        T.s("举报成功");
+        reportLayout.setVisibility(View.GONE);
+    }
+
+
+    @Event(R.id.tv_report2)
+    private void tvReport2Click(View view) {
+        T.s("举报成功");
+        reportLayout.setVisibility(View.GONE);
+    }
+
+
+    @Event(R.id.tv_report3)
+    private void tvReport3Click(View view) {
+        T.s("举报成功");
+        reportLayout.setVisibility(View.GONE);
+    }
+
+
+    @Event(R.id.tv_report4)
+    private void tvReport4Click(View view) {
+        T.s("举报成功");
+        reportLayout.setVisibility(View.GONE);
+    }
+
+
+    @Event(R.id.tv_report5)
+    private void tvReport5Click(View view) {
+        T.s("举报成功");
+        reportLayout.setVisibility(View.GONE);
+    }
+
+    @Event(R.id.tv_report_cancel)
+    private void tvReportCancelClick(View view){
+        reportLayout.setVisibility(View.GONE);
+    }
+
     @Event(R.id.layout_cancel)
     private void layoutAllPhoto(View view) {
         photoLayout.setVisibility(View.GONE);
@@ -325,10 +375,12 @@ public class PersonInfoActivity extends BaseActivity {
         if (mode == 1) {
             updateLookMe(currentUserId);
             bottomLayout.setVisibility(View.VISIBLE);
+            tvMore.setVisibility(View.VISIBLE);
         }
 
         if (isTask == 1) {
             photoLayout.setVisibility(View.VISIBLE);
+            tvMore.setVisibility(View.GONE);
         }
     }
 
