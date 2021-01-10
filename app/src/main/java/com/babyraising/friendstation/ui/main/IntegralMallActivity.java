@@ -37,32 +37,6 @@ public class IntegralMallActivity extends BaseActivity {
 
     private UserAllInfoBean userInfoBean;
 
-    @Event(R.id.back)
-    private void back(View view) {
-        finish();
-    }
-
-    @ViewInject(R.id.alipay_account)
-    private EditText alipayAccount;
-
-    @ViewInject(R.id.real_name)
-    private EditText realName;
-
-    @Event(R.id.save)
-    private void save(View view) {
-        if (TextUtils.isEmpty(alipayAccount.getText().toString())) {
-            T.s("支付宝账户不能为空");
-            return;
-        }
-
-        if (TextUtils.isEmpty(realName.getText().toString())) {
-            T.s("真实姓名不能为空");
-            return;
-        }
-
-        T.s("该功能正在完善");
-    }
-
     @Event(R.id.record)
     private void recordClick(View view) {
         Intent intent = new Intent(this, ExchangeRecordActivity.class);
@@ -93,17 +67,22 @@ public class IntegralMallActivity extends BaseActivity {
 
     private void initView() {
         list = new ArrayList<>();
-        adapter = new IntegralMallAdapter(list);
+        adapter = new IntegralMallAdapter(this, list);
         adapter.setOnItemClickListener(new IntegralMallAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
-
+                System.out.println(position);
             }
         });
         GridLayoutManager manager = new GridLayoutManager(this, 2);
         recycleList.setLayoutManager(manager);
         recycleList.setAdapter(adapter);
 
+    }
+
+    public void goToDrawal() {
+        Intent intent = new Intent(this, DrawalActivity.class);
+        startActivity(intent);
     }
 
 
@@ -125,6 +104,12 @@ public class IntegralMallActivity extends BaseActivity {
                         for (int l = 0; l < newList.size(); l++) {
                             list.add(newList.get(l));
                         }
+
+                        if (list.size() == 0) {
+                            ScoreExchangeDetailBean bean = new ScoreExchangeDetailBean();
+                            list.add(bean);
+                        }
+
                         adapter.notifyDataSetChanged();
                         break;
                     default:

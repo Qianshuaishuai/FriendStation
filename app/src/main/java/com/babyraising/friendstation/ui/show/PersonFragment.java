@@ -56,8 +56,9 @@ public class PersonFragment extends BaseFragment {
 
     @Event(R.id.layout_look_me)
     private void lookmeLayoutClick(View view) {
-        Intent intent = new Intent(getActivity(), LookMeRecordActivity.class);
-        startActivity(intent);
+        T.s("该功能正在完善");
+//        Intent intent = new Intent(getActivity(), LookMeRecordActivity.class);
+//        startActivity(intent);
     }
 
     @Event(R.id.layout_help)
