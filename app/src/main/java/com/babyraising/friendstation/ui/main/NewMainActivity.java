@@ -514,7 +514,7 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                         initTimLogin();
                         uploadLocation();
                         if (!isFirstAutoSendMesage) {
-                            randomUserSendMessage();
+//                            randomUserSendMessage();
                             isFirstAutoSendMesage = true;
                         }
 

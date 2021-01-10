@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
@@ -92,17 +93,17 @@ public class PersonInfoActivity extends BaseActivity {
     @ViewInject(R.id.tv_more)
     private TextView tvMore;
 
-    @Event(R.id.tv_more)
-    private void tvMoreClick(View view) {
-        reportLayout.setVisibility(View.VISIBLE);
-    }
+//    @Event(R.id.tv_more)
+//    private void tvMoreClick(View view) {
+//        moreLayout.setVisibility(View.VISIBLE);
+//    }
 
     @Event(R.id.layout_background)
     private void backgroundClick(View view) {
-        if (mode == 1) {
-            return;
-        }
-        photoLayout.setVisibility(View.VISIBLE);
+//        if (mode == 1) {
+//            return;
+//        }
+//        photoLayout.setVisibility(View.VISIBLE);
     }
 
     @ViewInject(R.id.name)
@@ -119,6 +120,32 @@ public class PersonInfoActivity extends BaseActivity {
 
     @ViewInject(R.id.luxury)
     private TextView luxury;
+
+    @ViewInject(R.id.layout_more)
+    private LinearLayout moreLayout;
+
+    @Event(R.id.tv_more1)
+    private void tvMore1Click(View view) {
+        T.s("该功能正在完善");
+        moreLayout.setVisibility(View.GONE);
+    }
+
+    @Event(R.id.tv_more2)
+    private void tvMore2Click(View view) {
+        moreLayout.setVisibility(View.GONE);
+        reportLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Event(R.id.tv_more3)
+    private void tvMore3Click(View view) {
+        T.s("拉黑成功");
+        moreLayout.setVisibility(View.GONE);
+    }
+
+    @Event(R.id.tv_more_cancel)
+    private void tvMoreCancelClick(View view) {
+        moreLayout.setVisibility(View.GONE);
+    }
 
     @ViewInject(R.id.photo_list)
     private RecyclerView photoRecyclviewList;
@@ -329,7 +356,7 @@ public class PersonInfoActivity extends BaseActivity {
     }
 
     @Event(R.id.tv_report_cancel)
-    private void tvReportCancelClick(View view){
+    private void tvReportCancelClick(View view) {
         reportLayout.setVisibility(View.GONE);
     }
 
@@ -376,11 +403,30 @@ public class PersonInfoActivity extends BaseActivity {
             updateLookMe(currentUserId);
             bottomLayout.setVisibility(View.VISIBLE);
             tvMore.setVisibility(View.VISIBLE);
+            tvMore.setText("···");
+            tvMore.setTextSize(20);
+            tvMore.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            tvMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    moreLayout.setVisibility(View.VISIBLE);
+                }
+            });
+        }else{
+            tvMore.setVisibility(View.VISIBLE);
+            tvMore.setText("更换头像");
+            tvMore.setTextSize(14);
+            tvMore.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+            tvMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    photoLayout.setVisibility(View.VISIBLE);
+                }
+            });
         }
 
         if (isTask == 1) {
             photoLayout.setVisibility(View.VISIBLE);
-            tvMore.setVisibility(View.GONE);
         }
     }
 

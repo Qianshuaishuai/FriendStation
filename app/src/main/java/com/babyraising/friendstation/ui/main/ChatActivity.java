@@ -139,6 +139,33 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     @ViewInject(R.id.auth_tip)
     private TextView authTip;
 
+
+    @ViewInject(R.id.layout_more)
+    private LinearLayout moreLayout;
+
+    @Event(R.id.tv_more1)
+    private void tvMore1Click(View view) {
+        T.s("该功能正在完善");
+        moreLayout.setVisibility(View.GONE);
+    }
+
+    @Event(R.id.tv_more2)
+    private void tvMore2Click(View view) {
+        moreLayout.setVisibility(View.GONE);
+        reportLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Event(R.id.tv_more3)
+    private void tvMore3Click(View view) {
+        T.s("拉黑成功");
+        moreLayout.setVisibility(View.GONE);
+    }
+
+    @Event(R.id.tv_more_cancel)
+    private void tvMoreCancelClick(View view) {
+        moreLayout.setVisibility(View.GONE);
+    }
+
     @Event(R.id.name)
     private void nameClick(View view) {
 //        showAnimation();
@@ -146,7 +173,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     @Event(R.id.tv_more)
     private void tvMoreClick(View view) {
-        reportLayout.setVisibility(View.VISIBLE);
+        moreLayout.setVisibility(View.VISIBLE);
     }
 
     @ViewInject(R.id.layout_report)
