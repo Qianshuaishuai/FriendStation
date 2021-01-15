@@ -320,15 +320,24 @@ public class PersonAuthActivity extends BaseActivity implements EasyPermissions.
             return;
         }
         authDialog.show();
-        File newFile = new CompressHelper.Builder(this)
-                .setMaxWidth(180)  // 默认最大宽度为720
-                .setMaxHeight(240) // 默认最大高度为960
-                .setQuality(80)    // 默认压缩质量为80
-                .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
-                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
-                .build()
-                .compressToFile(oldFile);
+        File newFile = null;
+        try {
+            newFile = new CompressHelper.Builder(this)
+                    .setMaxWidth(360)  // 默认最大宽度为720
+                    .setMaxHeight(480) // 默认最大高度为960
+                    .setQuality(80)    // 默认压缩质量为80
+                    .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
+                    .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                    .build()
+                    .compressToFile(oldFile);
+        } catch (Exception e) {
+            newFile = oldFile;
+        }
+
+        if (newFile == null) {
+            return;
+        }
         params.setAsJsonContent(true);
         List<KeyValue> list = new ArrayList<>();
         list.add(new KeyValue("file", newFile));

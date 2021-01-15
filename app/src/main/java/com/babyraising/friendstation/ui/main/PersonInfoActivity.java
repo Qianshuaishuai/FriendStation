@@ -412,7 +412,7 @@ public class PersonInfoActivity extends BaseActivity {
                     moreLayout.setVisibility(View.VISIBLE);
                 }
             });
-        }else{
+        } else {
             tvMore.setVisibility(View.VISIBLE);
             tvMore.setText("更换头像");
             tvMore.setTextSize(14);
@@ -1156,7 +1156,7 @@ public class PersonInfoActivity extends BaseActivity {
             fileDir.mkdirs();
         }
 
-        File photoFile = new File(fileDir, "photo.jpeg");
+        File photoFile = new File(fileDir, "photo" + System.currentTimeMillis() + ".jpeg");
         mTempPhotoPath = photoFile.getAbsolutePath();
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -1196,17 +1196,27 @@ public class PersonInfoActivity extends BaseActivity {
         params.addHeader("Authorization", bean.getAccessToken());
         File oldFile = new File(localPic);
         if (oldFile.getTotalSpace() == 0) {
+            System.out.println("取消拍照");
             return;
         }
-        File newFile = new CompressHelper.Builder(this)
-                .setMaxWidth(360)  // 默认最大宽度为720
-                .setMaxHeight(480) // 默认最大高度为960
-                .setQuality(80)    // 默认压缩质量为80
-                .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
-                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
-                .build()
-                .compressToFile(oldFile);
+        File newFile = null;
+        try {
+            newFile = new CompressHelper.Builder(this)
+                    .setMaxWidth(360)  // 默认最大宽度为720
+                    .setMaxHeight(480) // 默认最大高度为960
+                    .setQuality(80)    // 默认压缩质量为80
+                    .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
+                    .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                    .build()
+                    .compressToFile(oldFile);
+        } catch (Exception e) {
+            newFile = oldFile;
+        }
+
+        if (newFile == null) {
+            return;
+        }
         params.setAsJsonContent(true);
         List<KeyValue> list = new ArrayList<>();
         list.add(new KeyValue("file", newFile));
@@ -1255,12 +1265,14 @@ public class PersonInfoActivity extends BaseActivity {
 
         switch (requestCode) {
             case RC_CHOOSE_PHOTO:
-                Uri uri = data.getData();
-                String filePath = FileUtil.getFilePathByUri(this, uri);
-                if (!TextUtils.isEmpty(filePath)) {
-                    uploadPic(filePath);
-                } else {
-                    T.s("选择照片出错");
+                if (data != null) {
+                    Uri uri = data.getData();
+                    String filePath = FileUtil.getFilePathByUri(this, uri);
+                    if (!TextUtils.isEmpty(filePath)) {
+                        uploadPic(filePath);
+                    } else {
+                        T.s("选择照片出错");
+                    }
                 }
                 break;
             case RC_TAKE_PHOTO:

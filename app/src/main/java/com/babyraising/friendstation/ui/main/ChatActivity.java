@@ -1207,7 +1207,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             fileDir.mkdirs();
         }
 
-        File photoFile = new File(fileDir, "photo.jpeg");
+        File photoFile = new File(fileDir, "photo" + System.currentTimeMillis() + ".jpeg");
         mTempPhotoPath = photoFile.getAbsolutePath();
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

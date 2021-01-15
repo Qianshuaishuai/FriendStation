@@ -266,7 +266,8 @@ public class MyInfoActivity extends BaseActivity {
                         ((FriendStationApplication) getApplication()).isUpdateDoTask(MyInfoActivity.this, mainLayout, 6);
                         break;
                     default:
-                        T.s(response.getMsg());
+                        finish();
+                        T.s("系统出错，请联系管理员");
                         break;
                 }
             }

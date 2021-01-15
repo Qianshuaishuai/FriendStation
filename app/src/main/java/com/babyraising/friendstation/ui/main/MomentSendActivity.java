@@ -268,7 +268,7 @@ public class MomentSendActivity extends BaseActivity implements EasyPermissions.
             fileDir.mkdirs();
         }
 
-        File photoFile = new File(fileDir, "photo.jpeg");
+        File photoFile = new File(fileDir, "photo" + System.currentTimeMillis() + ".jpeg");
         mTempPhotoPath = photoFile.getAbsolutePath();
 
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -298,15 +298,28 @@ public class MomentSendActivity extends BaseActivity implements EasyPermissions.
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_UPLOAD);
         params.addHeader("Authorization", bean.getAccessToken());
         File oldFile = new File(localPic);
-        File newFile = new CompressHelper.Builder(this)
-                .setMaxWidth(100)  // 默认最大宽度为720
-                .setMaxHeight(100) // 默认最大高度为960
-                .setQuality(80)    // 默认压缩质量为80
-                .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
-                .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
-                        Environment.DIRECTORY_PICTURES).getAbsolutePath())
-                .build()
-                .compressToFile(oldFile);
+        if(oldFile.getTotalSpace() == 0){
+            System.out.println("取消拍照");
+            return;
+        }
+        File newFile = null;
+        try {
+            newFile = new CompressHelper.Builder(this)
+                    .setMaxWidth(360)  // 默认最大宽度为720
+                    .setMaxHeight(480) // 默认最大高度为960
+                    .setQuality(80)    // 默认压缩质量为80
+                    .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
+                    .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                    .build()
+                    .compressToFile(oldFile);
+        } catch (Exception e) {
+            newFile = oldFile;
+        }
+
+        if (newFile == null) {
+            return;
+        }
         params.setAsJsonContent(true);
         List<KeyValue> list = new ArrayList<>();
         list.add(new KeyValue("file", newFile));
