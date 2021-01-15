@@ -153,8 +153,7 @@
                 android:layout_marginTop="15dip"
                 android:background="#ffffff"
                 android:gravity="center_vertical"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/income_detail"
@@ -177,16 +176,36 @@
                     android:textSize="15dip" />
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/detail_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rank_list"
+            <LinearLayout
+                android:id="@+id/layout_detail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"></android.support.v7.widget.RecyclerView>
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/detail_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_rank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ff00ff"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rank_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
+
+            </LinearLayout>
+
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

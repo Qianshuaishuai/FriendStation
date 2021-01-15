@@ -10,17 +10,22 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.adapter.ExchangeRecordDetailAdapter;
+import com.babyraising.friendstation.adapter.RankIncomeAdapter;
+import com.babyraising.friendstation.adapter.RankVulgarAdapter;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.ScoreOrderSortListBean;
 import com.babyraising.friendstation.bean.ScoreRecordBean;
 import com.babyraising.friendstation.bean.ScoreRecordDetailBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.response.ScoreOrderSortListResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.util.CopyUtil;
 import com.google.gson.Gson;
@@ -46,6 +51,9 @@ public class InviteFriendDetailActivity extends BaseActivity {
     private ExchangeRecordDetailAdapter detailAdapter;
     private List<ScoreRecordDetailBean> detailList;
 
+    private RankIncomeAdapter rankIncomeAdapter;
+    private List<ScoreOrderSortListBean> rankList;
+
     @Event(R.id.back)
     private void backClick(View view) {
         finish();
@@ -62,6 +70,12 @@ public class InviteFriendDetailActivity extends BaseActivity {
 
     @ViewInject(R.id.count_tip)
     private TextView countTip;
+
+    @ViewInject(R.id.layout_rank)
+    private LinearLayout layoutRank;
+
+    @ViewInject(R.id.layout_detail)
+    private LinearLayout layoutDetail;
 
     @Event(R.id.invite_info)
     private void inviteInfoClick(View view) {
@@ -87,8 +101,8 @@ public class InviteFriendDetailActivity extends BaseActivity {
             incomeDetail.setTextColor(getResources().getColor(R.color.colorInviteSelected));
             incomeRank.setTextColor(getResources().getColor(R.color.colorInviteNormal));
             getExchangeList();
-            detailRecycleView.setVisibility(View.VISIBLE);
-            rankRecycleView.setVisibility(View.GONE);
+            layoutDetail.setVisibility(View.VISIBLE);
+            layoutRank.setVisibility(View.GONE);
         }
     }
 
@@ -98,8 +112,10 @@ public class InviteFriendDetailActivity extends BaseActivity {
             type = 1;
             incomeDetail.setTextColor(getResources().getColor(R.color.colorInviteNormal));
             incomeRank.setTextColor(getResources().getColor(R.color.colorInviteSelected));
-            detailRecycleView.setVisibility(View.GONE);
-            rankRecycleView.setVisibility(View.VISIBLE);
+            layoutDetail.setVisibility(View.GONE);
+            layoutRank.setVisibility(View.VISIBLE);
+//
+//            getRankList();
         }
     }
 
@@ -117,6 +133,7 @@ public class InviteFriendDetailActivity extends BaseActivity {
         initData();
         initView();
         getExchangeList();
+        getRankList();
     }
 
     private void initView() {
@@ -125,6 +142,15 @@ public class InviteFriendDetailActivity extends BaseActivity {
         LinearLayoutManager detailManager = new LinearLayoutManager(this);
         detailRecycleView.setAdapter(detailAdapter);
         detailRecycleView.setLayoutManager(detailManager);
+
+        rankList = new ArrayList<>();
+        rankIncomeAdapter = new RankIncomeAdapter(rankList);
+        LinearLayoutManager rankManager = new LinearLayoutManager(this);
+        rankRecycleView.setAdapter(rankIncomeAdapter);
+        rankRecycleView.setLayoutManager(rankManager);
+
+//        layoutRank.setVisibility(View.GONE);
+//        layoutDetail.setVisibility(View.VISIBLE);
     }
 
     private void initData() {
@@ -179,6 +205,48 @@ public class InviteFriendDetailActivity extends BaseActivity {
                                 detailList.add(response.getData().get(s).getList().get(d));
                             }
                         }
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void getRankList() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_SCORE_ORDER_SORT_LIST);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                ScoreOrderSortListResponse response = gson.fromJson(result, ScoreOrderSortListResponse.class);
+                System.out.println("IncomeRankList:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        rankList.clear();
+                        for (int s = 0; s < response.getData().size(); s++) {
+                            rankList.add(response.getData().get(s));
+                        }
+                        rankIncomeAdapter.notifyDataSetChanged();
                         break;
                     default:
 
