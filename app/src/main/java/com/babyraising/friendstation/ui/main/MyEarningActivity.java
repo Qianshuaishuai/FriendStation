@@ -3,6 +3,7 @@ package com.babyraising.friendstation.ui.main;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -11,6 +12,7 @@ import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.ui.other.HelpActivity;
+import com.google.gson.Gson;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -41,7 +43,7 @@ public class MyEarningActivity extends BaseActivity {
     @Event(R.id.score_go)
     private void scoreGoClick(View view) {
         Intent intent = new Intent(this, HelpActivity.class);
-        intent.putExtra("mode",1);
+        intent.putExtra("mode", 1);
         startActivity(intent);
     }
 
@@ -54,6 +56,9 @@ public class MyEarningActivity extends BaseActivity {
 
     private void initData() {
         userInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
-        balance.setText("" + userInfoBean.getUserCount().getNumScore());
+        Gson gson = new Gson();
+        if (userInfoBean != null) {
+            balance.setText("" + userInfoBean.getUserCount().getNumScore());
+        }
     }
 }

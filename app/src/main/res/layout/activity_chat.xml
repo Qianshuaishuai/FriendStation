@@ -244,7 +244,7 @@
                 android:id="@+id/chat_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/auth_tip"
+                android:layout_below="@+id/moment_tip"
                 android:paddingBottom="120dip"></android.support.v7.widget.RecyclerView>
 
             <TextView
@@ -254,6 +254,27 @@
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dip"
+                android:layout_marginBottom="8dip"
+                android:background="@drawable/chat_auth_tip_bg"
+                android:paddingLeft="10dip"
+                android:paddingTop="5dip"
+                android:paddingRight="10dip"
+                android:paddingBottom="5dip"
+                android:text="对方已通过真人认证，可以放心交流。"
+                android:textColor="#9692B1"
+                android:textSize="11dip"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/moment_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/auth_tip"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="30dip"
+                android:layout_marginTop="10dip"
+                android:layout_marginRight="30dip"
                 android:layout_marginBottom="8dip"
                 android:background="@drawable/chat_auth_tip_bg"
                 android:paddingLeft="10dip"
@@ -686,12 +707,14 @@
             android:gravity="center"
             android:text="分享"
             android:textColor="#3C3B41"
-            android:textSize="16dip" />
+            android:textSize="16dip"
+            android:visibility="gone" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dip"
-            android:background="#D4D4D4"></View>
+            android:background="#D4D4D4"
+            android:visibility="gone"></View>
 
         <TextView
             android:id="@+id/tv_more2"

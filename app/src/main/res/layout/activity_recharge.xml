@@ -86,13 +86,14 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/layout_top_top"></android.support.v7.widget.RecyclerView>
+        android:layout_below="@+id/layout_top_top"
+        android:layout_marginBottom="60dip"></android.support.v7.widget.RecyclerView>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="36dip"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="48dip"
+        android:layout_marginBottom="18dip"
         android:gravity="center"
         android:orientation="horizontal">
 

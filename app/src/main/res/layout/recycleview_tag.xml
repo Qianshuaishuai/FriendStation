@@ -11,12 +11,12 @@
         android:layout_marginTop="12dip"
         android:layout_marginRight="30dip"
         android:background="@drawable/shape_tag_shadow_bg"
-        android:ellipsize="end"
         android:gravity="center"
         android:paddingLeft="10dip"
         android:paddingTop="3dip"
         android:paddingRight="10dip"
         android:paddingBottom="3dip"
         android:singleLine="true"
-        android:textColor="#9A4AC1" />
+        android:textColor="#9A4AC1"
+        android:textSize="10dip" />
 </LinearLayout>

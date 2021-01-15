@@ -6,7 +6,7 @@ public class UserAllCountBean {
     private int numFans;
     private int numFollow;
     private int numFriends;
-    private int numScore;
+    private double numScore;
 
     public int getNumAlbum() {
         return numAlbum;
@@ -48,11 +48,11 @@ public class UserAllCountBean {
         this.numFriends = numFriends;
     }
 
-    public int getNumScore() {
+    public double getNumScore() {
         return numScore;
     }
 
-    public void setNumScore(int numScore) {
+    public void setNumScore(double numScore) {
         this.numScore = numScore;
     }
 }

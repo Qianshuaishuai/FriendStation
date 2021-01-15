@@ -62,7 +62,7 @@ public class RechargeActivity extends BaseActivity {
     @Event(R.id.question)
     private void scoreGoClick(View view) {
         Intent intent = new Intent(this, HelpActivity.class);
-        intent.putExtra("mode",2);
+        intent.putExtra("mode", 2);
         startActivity(intent);
     }
 
@@ -118,6 +118,16 @@ public class RechargeActivity extends BaseActivity {
                         List<CoinPayDetailBean> newList = response.getData().getRecords();
                         for (int l = 0; l < newList.size(); l++) {
                             list.add(newList.get(l));
+                        }
+
+                        if (list.size() == 0) {
+                            CoinPayDetailBean bean = new CoinPayDetailBean();
+                            list.add(bean);
+                            list.add(bean);
+                            list.add(bean);
+                            list.add(bean);
+                            list.add(bean);
+                            list.add(bean);
                         }
                         adapter.notifyDataSetChanged();
                         break;

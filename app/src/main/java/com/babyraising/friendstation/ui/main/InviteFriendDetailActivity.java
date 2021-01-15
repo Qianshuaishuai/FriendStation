@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -11,17 +12,30 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.adapter.ExchangeRecordDetailAdapter;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.ScoreRecordBean;
+import com.babyraising.friendstation.bean.ScoreRecordDetailBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.util.CopyUtil;
+import com.google.gson.Gson;
 
 import net.nightwhistler.htmlspanner.TextUtil;
 
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ContentView(R.layout.activity_invite_friend_detail)
 public class InviteFriendDetailActivity extends BaseActivity {
@@ -29,10 +43,19 @@ public class InviteFriendDetailActivity extends BaseActivity {
     private AlertDialog inviteTipDialog;
     private int type = 0;
 
+    private ExchangeRecordDetailAdapter detailAdapter;
+    private List<ScoreRecordDetailBean> detailList;
+
     @Event(R.id.back)
     private void backClick(View view) {
         finish();
     }
+
+    @ViewInject(R.id.detail_list)
+    private RecyclerView detailRecycleView;
+
+    @ViewInject(R.id.rank_list)
+    private RecyclerView rankRecycleView;
 
     @ViewInject(R.id.invite_code)
     private TextView inviteCode;
@@ -63,6 +86,9 @@ public class InviteFriendDetailActivity extends BaseActivity {
             type = 0;
             incomeDetail.setTextColor(getResources().getColor(R.color.colorInviteSelected));
             incomeRank.setTextColor(getResources().getColor(R.color.colorInviteNormal));
+            getExchangeList();
+            detailRecycleView.setVisibility(View.VISIBLE);
+            rankRecycleView.setVisibility(View.GONE);
         }
     }
 
@@ -72,6 +98,8 @@ public class InviteFriendDetailActivity extends BaseActivity {
             type = 1;
             incomeDetail.setTextColor(getResources().getColor(R.color.colorInviteNormal));
             incomeRank.setTextColor(getResources().getColor(R.color.colorInviteSelected));
+            detailRecycleView.setVisibility(View.GONE);
+            rankRecycleView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -81,18 +109,22 @@ public class InviteFriendDetailActivity extends BaseActivity {
     @ViewInject(R.id.income_rank)
     private TextView incomeRank;
 
-    @ViewInject(R.id.detail_list)
-    private RecyclerView detailList;
-
-    @ViewInject(R.id.rank_list)
-    private RecyclerView rankList;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         initInviteTipDialog();
         initData();
+        initView();
+        getExchangeList();
+    }
+
+    private void initView() {
+        detailList = new ArrayList<>();
+        detailAdapter = new ExchangeRecordDetailAdapter(detailList);
+        LinearLayoutManager detailManager = new LinearLayoutManager(this);
+        detailRecycleView.setAdapter(detailAdapter);
+        detailRecycleView.setLayoutManager(detailManager);
     }
 
     private void initData() {
@@ -126,5 +158,48 @@ public class InviteFriendDetailActivity extends BaseActivity {
 
         inviteTipDialog.setCancelable(false);
 //        tipDialog.show();
+    }
+
+    private void getExchangeList() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_SCORE_ORDER);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                ScoreRecordResponse response = gson.fromJson(result, ScoreRecordResponse.class);
+                System.out.println("ExchangeRecord:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        detailList.clear();
+                        for (int s = 0; s < response.getData().size(); s++) {
+                            for (int d = 0; d < response.getData().get(s).getList().size(); d++) {
+                                detailList.add(response.getData().get(s).getList().get(d));
+                            }
+                        }
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_show_pic"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <ImageView
+        android:id="@+id/welcome_img"
+        android:layout_width="match_parent"
+        android:layout_height="300dip"
+        android:src="@mipmap/welcome_one" />
+
+    <ImageView
+        android:id="@+id/welcome_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/welcome_img"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/welcome_icon" />
+
+    <TextView
+        android:id="@+id/tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/welcome_icon"
+        android:layout_centerHorizontal="true"
+        android:text="人生何处不加友"
+        android:textColor="#ff37445a"
+        android:textSize="14dip" />
+
+    <TextView
+        android:id="@+id/code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tip"
+        android:layout_centerHorizontal="true"
+        android:text="邀请码:XXXXXX"
+        android:textColor="#ffff7c93"
+        android:textSize="18dip" />
+</RelativeLayout>

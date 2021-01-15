@@ -69,6 +69,7 @@ public class Constant {
     public static final String URL_FRIENDS_GIFT_PRESENT_SAVE = "friends/giftPresent/save";
     public static final String URL_FRIENDS_SCORE = "friends/score";
     public static final String URL_FRIENDS_SCORE_ORDER = "friends/scoreOrder";
+    public static final String URL_FRIENDS_SCORE_ORDER_SORT_LIST = "friends/scoreOrder/sortList";
     public static final String URL_FRIENDS_COIN = "friends/coin";
     public static final String URL_FRIENDS_COIN_ORDER = "friends/coinOrder";
     public static final String URL_FRIENDS_COIN_RECORD = "friends/coinRecord";
@@ -82,6 +83,7 @@ public class Constant {
     public static final String URL_FRIENDS_USERVIEW_SAVE = "friends/userView/save";
     public static final String URL_FRIENDS_USERVIEW = "friends/userView";
     public static final String URL_FRIENDS_TASK_RECORD_SAVE = "friends/taskRecord/save";
+    public static final String URL_FRIENDS_MOMENTSLISTBYID = "friends/moments/getMomentsListById";
 
 
     //腾讯云im相关

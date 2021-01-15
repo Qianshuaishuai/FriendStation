@@ -59,6 +59,7 @@ import com.babyraising.friendstation.detector.KeyboardStatusDetector;
 import com.babyraising.friendstation.event.DeleteEvent;
 import com.babyraising.friendstation.request.GiftOrderSaveRequest;
 import com.babyraising.friendstation.request.UseCoinRequest;
+import com.babyraising.friendstation.response.MomentByUserIDResponse;
 import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
@@ -139,6 +140,8 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     @ViewInject(R.id.auth_tip)
     private TextView authTip;
 
+    @ViewInject(R.id.moment_tip)
+    private TextView momentTIp;
 
     @ViewInject(R.id.layout_more)
     private LinearLayout moreLayout;
@@ -924,6 +927,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 if (refreshLayout.isRefreshing()) {
                     refreshLayout.setRefreshing(false);
                     authTip.setVisibility(View.GONE);
+                    momentTIp.setVisibility(View.GONE);
                 }
             }
 
@@ -1016,7 +1020,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     }
 
 
-    private void getCurrentUserInfo(int currentChatId) {
+    private void getCurrentUserInfo(final int currentChatId) {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_GET_FULL_BYID);
         params.addParameter("userId", currentChatId);
@@ -1029,6 +1033,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 switch (response.getCode()) {
                     case 200:
                         currentUserBean = response.getData();
+                        getCurrentUserMomentList(currentChatId);
                         checkWordList = ((FriendStationApplication) getApplication()).getCheckWordList();
                         updateCurrentInfo();
                         getMessageList();
@@ -1059,6 +1064,53 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                         break;
                     default:
                         T.s("获取聊天用户资料失败!");
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void getCurrentUserMomentList(int currentChatId) {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_MOMENTSLISTBYID);
+        params.addParameter("userId", currentChatId);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                MomentByUserIDResponse response = gson.fromJson(result, MomentByUserIDResponse.class);
+                System.out.println("CurrentUserMomentList" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        if (response.getData().size() > 0) {
+                            momentTIp.setVisibility(View.VISIBLE);
+                            if (!TextUtils.isEmpty(response.getData().get(0).getContent())) {
+                                momentTIp.setText(response.getData().get(0).getContent());
+                            }
+                        } else {
+                            momentTIp.setVisibility(View.GONE);
+                        }
+                        break;
+                    case 401:
+
+                        break;
+                    default:
+                        T.s("获取聊天用户动态失败!");
                         break;
                 }
             }
