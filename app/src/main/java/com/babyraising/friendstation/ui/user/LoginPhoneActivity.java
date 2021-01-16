@@ -123,7 +123,7 @@ public class LoginPhoneActivity extends BaseActivity {
         intent.putExtra("phone", phone);
         intent.putExtra("status", 1);
         startActivity(intent);
-        finish();
+//        finish();
     }
 
     private void startPasswordActivity(String phone) {
@@ -131,7 +131,7 @@ public class LoginPhoneActivity extends BaseActivity {
         intent.putExtra("phone", phone);
         intent.putExtra("status", 2);
         startActivity(intent);
-        finish();
+//        finish();
     }
 
     @Event(R.id.know)
@@ -161,8 +161,8 @@ public class LoginPhoneActivity extends BaseActivity {
 
     private void startMainActivity() {
         Intent intent = new Intent(this, NewMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        finish();
     }
 
     private void initView() {

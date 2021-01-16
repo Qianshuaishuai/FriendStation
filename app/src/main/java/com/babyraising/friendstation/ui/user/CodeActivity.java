@@ -332,8 +332,8 @@ public class CodeActivity extends BaseActivity {
 
     private void startMainActivity() {
         Intent intent = new Intent(this, NewMainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        finish();
     }
 
     private void codeLogin() {
@@ -389,6 +389,5 @@ public class CodeActivity extends BaseActivity {
         Intent intent = new Intent(this, LoginPhoneDetailActivity.class);
         intent.putExtra("phone", currentPhone);
         startActivity(intent);
-        finish();
     }
 }

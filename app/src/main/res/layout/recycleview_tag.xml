@@ -13,10 +13,10 @@
         android:background="@drawable/shape_tag_shadow_bg"
         android:gravity="center"
         android:paddingLeft="10dip"
-        android:paddingTop="3dip"
+        android:paddingTop="4dip"
         android:paddingRight="10dip"
-        android:paddingBottom="3dip"
+        android:paddingBottom="4dip"
         android:singleLine="true"
         android:textColor="#9A4AC1"
-        android:textSize="10dip" />
+        android:textSize="12dip" />
 </LinearLayout>

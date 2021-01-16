@@ -16,4 +16,5 @@
     <color name="navpage">#FFE1E8EB</color>
     <color name="colorTipNormal">#D4D4D4</color>
     <color name="colorTipSelected">#3C3B41</color>
+    <color name="colorTag">#9A4AC1</color>
 </resources>

@@ -18,6 +18,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -38,6 +39,8 @@ import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.AlbumDetailBean;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.decoration.FirstShowSpaceItemDecoration;
+import com.babyraising.friendstation.decoration.TagSpaceItemDecoration;
 import com.babyraising.friendstation.request.FollowRequest;
 import com.babyraising.friendstation.request.SetusernameAndIconRequest;
 import com.babyraising.friendstation.response.AlbumResponse;
@@ -47,6 +50,7 @@ import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.ui.user.PhotoActivity;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.T;
+import com.babyraising.friendstation.view.CustomLayout;
 import com.github.lassana.recorder.AudioRecorder;
 import com.github.lassana.recorder.AudioRecorderBuilder;
 import com.google.gson.Gson;
@@ -64,7 +68,9 @@ import org.xutils.x;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @ContentView(R.layout.activity_person_info)
@@ -84,6 +90,9 @@ public class PersonInfoActivity extends BaseActivity {
 
     @ViewInject(R.id.layout_photo_show)
     private RelativeLayout photoShowLayout;
+
+    @ViewInject(R.id.layout_basic_show)
+    private LinearLayout basicShowLayout;
 
     @ViewInject(R.id.photo_right)
     private ImageView photoRight;
@@ -184,9 +193,9 @@ public class PersonInfoActivity extends BaseActivity {
 
     @ViewInject(R.id.monologue)
     private TextView monologue;
-
-    @ViewInject(R.id.basic_list)
-    private RecyclerView basicList;
+//
+//    @ViewInject(R.id.basic_list)
+//    private RecyclerView basicList;
 
     @ViewInject(R.id.audio)
     private TextView audio;
@@ -204,6 +213,15 @@ public class PersonInfoActivity extends BaseActivity {
         }
 
         Intent intent = new Intent(this, VoiceSignActivity.class);
+        startActivity(intent);
+    }
+
+    @Event(R.id.layout_basic_show)
+    private void layoutBasicShow(View view) {
+        Intent intent = new Intent(this, MyInfoActivity.class);
+        if (mode == 1) {
+            intent.putExtra("mode", 1);
+        }
         startActivity(intent);
     }
 
@@ -228,14 +246,14 @@ public class PersonInfoActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    @Event(R.id.basic_list)
-    private void basicListClick(View view) {
-        if (mode == 1) {
-            return;
-        }
-        Intent intent = new Intent(this, MyInfoActivity.class);
-        startActivity(intent);
-    }
+//    @Event(R.id.basic_list)
+//    private void basicListClick(View view) {
+//        if (mode == 1) {
+//            return;
+//        }
+//        Intent intent = new Intent(this, MyInfoActivity.class);
+//        startActivity(intent);
+//    }
 
     @Event(R.id.layout_basic)
     private void basicLayoutClick(View view) {
@@ -243,7 +261,9 @@ public class PersonInfoActivity extends BaseActivity {
 //            return;
 //        }
         Intent intent = new Intent(this, MyInfoActivity.class);
-        intent.putExtra("mode", 1);
+        if (mode == 1) {
+            intent.putExtra("mode", 1);
+        }
         startActivity(intent);
     }
 
@@ -456,7 +476,9 @@ public class PersonInfoActivity extends BaseActivity {
 //            return;
 //        }
         Intent intent = new Intent(this, MyInfoActivity.class);
-        intent.putExtra("mode", 1);
+        if (mode == 1) {
+            intent.putExtra("mode", 1);
+        }
         startActivity(intent);
     }
 
@@ -1101,7 +1123,7 @@ public class PersonInfoActivity extends BaseActivity {
                 }
 
                 if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getBirthday())) {
-                    tagList.add("生日:" + userAllInfoBean.getUserExtra().getBirthday());
+                    tagList.add("年龄:" + getAge(userAllInfoBean.getUserExtra().getBirthday()) + "岁");
                 }
 
                 if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getConstellation())) {
@@ -1142,10 +1164,43 @@ public class PersonInfoActivity extends BaseActivity {
                 audio.setText("暂未设置语言签名");
             }
 
-            tagAdapter = new TagAdapter(this, tagList);
-            GridLayoutManager manager = new GridLayoutManager(this, 2);
-            basicList.setLayoutManager(manager);
-            basicList.setAdapter(tagAdapter);
+//            tagAdapter = new TagAdapter(this, tagList);
+//            GridLayoutManager manager = new GridLayoutManager(this, 2);
+//            basicList.setLayoutManager(manager);
+//            basicList.setAdapter(tagAdapter);
+//            basicList.addItemDecoration(new TagSpaceItemDecoration(30));
+
+            basicShowLayout.removeAllViews();
+            LinearLayout currentLayout = new LinearLayout(this);
+            LinearLayout.LayoutParams layoutParams = new
+                    LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.topMargin = 36;
+            currentLayout.setOrientation(LinearLayout.HORIZONTAL);
+            currentLayout.setLayoutParams(layoutParams);
+            for (int t = 0; t < tagList.size(); t++) {
+                TextView newTextView = new TextView(this);
+                LinearLayout.LayoutParams params = new
+                        LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                params.rightMargin = 54;
+                params.gravity = Gravity.CENTER;
+                newTextView.setText(tagList.get(t));
+                newTextView.setLayoutParams(params);
+                newTextView.setTextColor(getResources().getColor(R.color.colorTag));
+                newTextView.setTextSize(12);
+                newTextView.setBackgroundResource(R.drawable.shape_tag_shadow_bg);
+                newTextView.setPadding(28, 12, 28, 12);
+
+                if (t % 2 == 0) {
+                    currentLayout = new LinearLayout(this);
+                    currentLayout.setOrientation(LinearLayout.HORIZONTAL);
+                    currentLayout.addView(newTextView);
+                    currentLayout.setLayoutParams(layoutParams);
+                } else {
+                    currentLayout.addView(newTextView);
+                    basicShowLayout.addView(currentLayout);
+                }
+//                basicShowLayout.addView(newTextView);
+            }
 
             if (!TextUtils.isEmpty(userAllInfoBean.getStatusCert()) && (userAllInfoBean.getStatusCert().equals("PASS") || userAllInfoBean.getStatusCert().equals("已认证"))) {
                 auth.setText("已认证");
@@ -1284,6 +1339,28 @@ public class PersonInfoActivity extends BaseActivity {
             }
         });
     }
+
+    private int getAge(String birthday) {
+        if (!TextUtils.isEmpty(birthday)) {
+            try {
+                String yearStr = birthday.substring(0, 4);
+                int year = Integer.parseInt(yearStr);
+                return Integer.parseInt(getCurrentYear()) - year;
+            } catch (Exception e) {
+                return 0;
+            }
+
+        }
+
+        return 0;
+    }
+
+    public static String getCurrentYear() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        Date date = new Date();
+        return sdf.format(date);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

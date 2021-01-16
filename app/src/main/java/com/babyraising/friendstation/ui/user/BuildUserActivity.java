@@ -239,7 +239,6 @@ public class BuildUserActivity extends BaseActivity {
     private void startInfoDateActivity() {
         Intent intent = new Intent(this, BuildUserNameActivity.class);
         startActivity(intent);
-        finish();
     }
 
     private void choosePhoto() {

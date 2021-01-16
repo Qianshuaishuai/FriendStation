@@ -404,12 +404,22 @@
                                 android:textColor="#B9B8C1"
                                 android:textSize="14dip" />
 
-                            <android.support.v7.widget.RecyclerView
-                                android:id="@+id/basic_list"
+                            <!--<android.support.v7.widget.RecyclerView-->
+                            <!--android:id="@+id/basic_list"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_marginTop="10dip"-->
+                            <!--android:layout_marginBottom="10dip"></android.support.v7.widget.RecyclerView>
+                            -->
+                            <LinearLayout
+                                android:id="@+id/layout_basic_show"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="10dip"
-                                android:layout_marginBottom="10dip"></android.support.v7.widget.RecyclerView>
+                                android:layout_marginBottom="10dip"
+                                android:orientation="vertical"
+                                android:paddingTop="10dip"
+                                android:paddingBottom="10dip"></LinearLayout>
                         </LinearLayout>
 
                         <ImageView

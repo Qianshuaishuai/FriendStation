@@ -154,7 +154,7 @@ public class SettingActivity extends BaseActivity {
 
     private void startLoginActivity() {
         Intent intent = new Intent(this, LoginPhoneActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-        finish();
     }
 }

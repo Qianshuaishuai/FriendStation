@@ -207,7 +207,6 @@ public class LoginPhoneDetailActivity extends BaseActivity {
     private void startInfoActivity() {
         Intent intent = new Intent(this, BuildUserActivity.class);
         startActivity(intent);
-        finish();
     }
 
     private void initView() {

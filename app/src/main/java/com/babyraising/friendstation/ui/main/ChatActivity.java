@@ -140,6 +140,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     @ViewInject(R.id.auth_tip)
     private TextView authTip;
 
+    @ViewInject(R.id.find_tip)
+    private TextView findTip;
+
     @ViewInject(R.id.moment_tip)
     private TextView momentTIp;
 
@@ -882,6 +885,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                         return (int) (o1.getMessage().getTimestamp() - o2.getMessage().getTimestamp());
                     }
                 });
+
                 adapter.notifyDataSetChanged();
                 goToListBottom();
             }
@@ -923,7 +927,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                     }
                 });
                 adapter.notifyDataSetChanged();
-
+                findTip.setVisibility(View.GONE);
                 if (refreshLayout.isRefreshing()) {
                     refreshLayout.setRefreshing(false);
                     authTip.setVisibility(View.GONE);

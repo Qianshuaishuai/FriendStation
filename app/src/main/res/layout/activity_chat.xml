@@ -244,7 +244,7 @@
                 android:id="@+id/chat_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/moment_tip"
+                android:layout_below="@+id/find_tip"
                 android:paddingBottom="120dip"></android.support.v7.widget.RecyclerView>
 
             <TextView
@@ -282,6 +282,27 @@
                 android:paddingRight="10dip"
                 android:paddingBottom="5dip"
                 android:text="对方已通过真人认证，可以放心交流。"
+                android:textColor="#9692B1"
+                android:textSize="11dip"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/find_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/moment_tip"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="30dip"
+                android:layout_marginTop="10dip"
+                android:layout_marginRight="30dip"
+                android:layout_marginBottom="8dip"
+                android:background="@drawable/chat_auth_tip_bg"
+                android:paddingLeft="10dip"
+                android:paddingTop="5dip"
+                android:paddingRight="10dip"
+                android:paddingBottom="5dip"
+                android:text="丘比特觉得你们两很有缘，赶快聊天吧，别错过缘分～"
                 android:textColor="#9692B1"
                 android:textSize="11dip"
                 android:visibility="gone" />
