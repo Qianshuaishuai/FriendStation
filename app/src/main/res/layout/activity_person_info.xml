@@ -356,8 +356,11 @@
                                         android:id="@+id/monologue"
                                         android:layout_width="wrap_content"
                                         android:layout_height="49dip"
+                                        android:layout_marginRight="36dip"
                                         android:background="@null"
+                                        android:ellipsize="end"
                                         android:gravity="center_vertical"
+                                        android:singleLine="true"
                                         android:textColor="#3C3B41"
                                         android:textSize="14dip" />
 

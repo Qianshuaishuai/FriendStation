@@ -47,6 +47,7 @@ import com.babyraising.friendstation.response.AlbumResponse;
 import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
+import com.babyraising.friendstation.ui.InwordActivity;
 import com.babyraising.friendstation.ui.user.PhotoActivity;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.T;
@@ -290,7 +291,7 @@ public class PersonInfoActivity extends BaseActivity {
         if (mode == 1) {
             return;
         }
-        Intent intent = new Intent(this, MyInfoActivity.class);
+        Intent intent = new Intent(this, InwordActivity.class);
         startActivity(intent);
     }
 

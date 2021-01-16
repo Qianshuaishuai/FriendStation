@@ -63,7 +63,8 @@
         android:roundIcon="@mipmap/login_logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".ui.main.DrawalActivity"></activity>
+        <activity android:name=".ui.InwordActivity"></activity>
+        <activity android:name=".ui.main.DrawalActivity" />
         <activity android:name=".ui.main.CustomerServiceActivity" />
         <activity
             android:name=".ui.main.LookPhotoActivity"

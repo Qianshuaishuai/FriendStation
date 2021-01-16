@@ -2,9 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/layout_main"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".ui.main.MyInfoActivity">
 
     <LinearLayout
@@ -65,7 +67,7 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
@@ -81,12 +83,63 @@
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        <!--<View-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="1dip"-->
+                        <!--android:background="#d4d4d4"></View>-->
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right" />
+                    </RelativeLayout>
                 </LinearLayout>
+
+                <!--name-->
+                <LinearLayout
+                    android:id="@+id/layout_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dip"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="72dip"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dip"
+                        android:text="姓名："
+                        android:textColor="#B9B8C1"
+                        android:textSize="14dip" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dip"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/name"
+                            android:layout_width="match_parent"
+                            android:layout_height="49dip"
+                            android:background="@null"
+                            android:textColor="#3C3B41"
+                            android:textSize="14dip" />
+
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right"
+                            android:visibility="gone" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+
                 <!--sex-->
                 <LinearLayout
                     android:id="@+id/layout_sex"
@@ -103,7 +156,7 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
@@ -119,11 +172,15 @@
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right"
+                            android:visibility="gone" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <!--date-->
@@ -141,7 +198,7 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
@@ -157,11 +214,14 @@
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <!--constellation-->
@@ -179,7 +239,7 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
@@ -191,14 +251,18 @@
                             android:layout_width="match_parent"
                             android:layout_height="49dip"
                             android:background="@null"
+                            android:editable="false"
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <!--address-->
@@ -216,7 +280,7 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
@@ -231,11 +295,14 @@
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <!--inword-->
@@ -253,7 +320,7 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
@@ -264,15 +331,22 @@
                             android:id="@+id/inword"
                             android:layout_width="match_parent"
                             android:layout_height="49dip"
+                            android:layout_marginRight="36dip"
                             android:background="@null"
+                            android:editable="false"
+                            android:ellipsize="end"
+                            android:singleLine="true"
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <!--job-->
@@ -290,26 +364,38 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <EditText
+                        <!--<EditText-->
+                        <!--android:id="@+id/job"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="49dip"-->
+                        <!--android:background="@null"-->
+                        <!--android:textColor="#3C3B41"-->
+                        <!--android:textSize="14dip" />-->
+
+                        <Spinner
                             android:id="@+id/job"
                             android:layout_width="match_parent"
                             android:layout_height="49dip"
                             android:background="@null"
+                            android:entries="@array/jobArray"
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <!--height-->
@@ -327,27 +413,39 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <EditText
+                        <!--<EditText-->
+                        <!--android:id="@+id/height"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="49dip"-->
+                        <!--android:background="@null"-->
+                        <!--android:inputType="number"-->
+                        <!--android:textColor="#3C3B41"-->
+                        <!--android:textSize="14dip" />-->
+
+                        <Spinner
                             android:id="@+id/height"
                             android:layout_width="match_parent"
                             android:layout_height="49dip"
                             android:background="@null"
-                            android:inputType="number"
+                            android:entries="@array/heightArray"
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <!--weight-->
@@ -365,27 +463,39 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <EditText
+                        <!--<EditText-->
+                        <!--android:id="@+id/weight"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="49dip"-->
+                        <!--android:background="@null"-->
+                        <!--android:inputType="number"-->
+                        <!--android:textColor="#3C3B41"-->
+                        <!--android:textSize="14dip" />-->
+
+                        <Spinner
                             android:id="@+id/weight"
                             android:layout_width="match_parent"
                             android:layout_height="49dip"
                             android:background="@null"
-                            android:inputType="number"
+                            android:entries="@array/weightArray"
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <!--education-->
@@ -403,26 +513,38 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <EditText
+                        <!--<EditText-->
+                        <!--android:id="@+id/education"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="49dip"-->
+                        <!--android:background="@null"-->
+                        <!--android:textColor="#3C3B41"-->
+                        <!--android:textSize="14dip" />-->
+
+                        <Spinner
                             android:id="@+id/education"
                             android:layout_width="match_parent"
                             android:layout_height="49dip"
                             android:background="@null"
+                            android:entries="@array/educationArray"
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <!--income-->
@@ -440,26 +562,38 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <EditText
+                        <!--<EditText-->
+                        <!--android:id="@+id/income"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="49dip"-->
+                        <!--android:background="@null"-->
+                        <!--android:textColor="#3C3B41"-->
+                        <!--android:textSize="14dip" />-->
+
+                        <Spinner
                             android:id="@+id/income"
                             android:layout_width="match_parent"
                             android:layout_height="49dip"
                             android:background="@null"
+                            android:entries="@array/incomeArray"
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <!--emotion-->
@@ -477,26 +611,38 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <EditText
+                        <!--<EditText-->
+                        <!--android:id="@+id/emotion"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="49dip"-->
+                        <!--android:background="@null"-->
+                        <!--android:textColor="#3C3B41"-->
+                        <!--android:textSize="14dip" />-->
+
+                        <Spinner
                             android:id="@+id/emotion"
                             android:layout_width="match_parent"
                             android:layout_height="49dip"
                             android:background="@null"
+                            android:entries="@array/emotionArray"
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <!--charm -->
@@ -514,26 +660,38 @@
                         android:textColor="#B9B8C1"
                         android:textSize="14dip" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dip"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <EditText
+                        <!--<EditText-->
+                        <!--android:id="@+id/charm"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="49dip"-->
+                        <!--android:background="@null"-->
+                        <!--android:textColor="#3C3B41"-->
+                        <!--android:textSize="14dip" />-->
+
+                        <Spinner
                             android:id="@+id/charm"
                             android:layout_width="match_parent"
                             android:layout_height="49dip"
                             android:background="@null"
+                            android:entries="@array/charmArray"
                             android:textColor="#3C3B41"
                             android:textSize="14dip" />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dip"
-                            android:background="#d4d4d4"></View>
-                    </LinearLayout>
+                        <ImageView
+                            android:layout_width="16dip"
+                            android:layout_height="16dip"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dip"
+                            android:src="@mipmap/common_right" />
+                    </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

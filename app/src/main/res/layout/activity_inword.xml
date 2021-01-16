@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAF9FE"
+    android:orientation="vertical"
+    tools:context=".ui.InwordActivity">
+
+    <RelativeLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="48dip"
+        android:background="#ffffff">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="16dip"
+            android:layout_height="16dip"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dip"
+            android:src="@mipmap/common_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="内心独白"
+            android:textColor="#ff3c3b41"
+            android:textSize="17dip" />
+
+        <TextView
+            android:id="@+id/sure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dip"
+            android:text="确定"
+            android:textColor="#F75184"
+            android:textSize="14dip" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dip"
+            android:layout_alignParentBottom="true"
+            android:background="#D4D4D4"></View>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="240dip"
+        android:background="#ffffff">
+
+        <EditText
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="240dip"
+            android:layout_marginLeft="24dip"
+            android:layout_marginTop="24dip"
+            android:layout_marginRight="24dip"
+            android:layout_marginBottom="24dip"
+            android:background="@null"
+            android:gravity="start"
+            android:maxLength="200" />
+
+        <TextView
+            android:id="@+id/count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="15dip"
+            android:layout_marginBottom="15dip"
+            android:text="0/200"
+            android:textColor="@color/colorTipSelected"
+            android:textSize="12dip" />
+    </RelativeLayout>
+</LinearLayout>
