@@ -25,6 +25,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
@@ -67,6 +68,8 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
 
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
+    private boolean editStatus = false;
+
     @Event(R.id.back)
     private void back(View view) {
         finish();
@@ -83,6 +86,20 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
 
     @ViewInject(R.id.content)
     private EditText content;
+
+    @ViewInject(R.id.edit)
+    private TextView edit;
+
+    @Event(R.id.edit)
+    private void editClick(View view) {
+        adapter.updateEditStatus(editStatus);
+        editStatus = !editStatus;
+        if (editStatus) {
+            edit.setText("编辑");
+        } else {
+            edit.setText("编辑完成");
+        }
+    }
 
     @Event(R.id.layout_camera)
     private void cameraClick(View view) {

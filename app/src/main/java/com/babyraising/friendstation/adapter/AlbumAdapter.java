@@ -19,6 +19,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
     private List<AlbumDetailBean> mList;
     private PhotoActivity activity;
+    private boolean editStatus = false;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView iconIv, deleteIv, addIv;
@@ -57,17 +58,28 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         if (position == mList.size() - 1) {
             holder.iconIv.setVisibility(View.GONE);
             holder.deleteIv.setVisibility(View.GONE);
-            holder.addIv.setVisibility(View.VISIBLE);
             holder.addIv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     activity.addNewPhoto();
                 }
             });
+
+            if (editStatus) {
+                holder.addIv.setVisibility(View.VISIBLE);
+            } else {
+                holder.addIv.setVisibility(View.GONE);
+            }
         } else {
             holder.iconIv.setVisibility(View.VISIBLE);
             holder.deleteIv.setVisibility(View.VISIBLE);
             holder.addIv.setVisibility(View.GONE);
+
+            if (editStatus) {
+                holder.deleteIv.setVisibility(View.VISIBLE);
+            } else {
+                holder.deleteIv.setVisibility(View.GONE);
+            }
         }
 
         holder.iconIv.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +88,12 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                 activity.goToLookPhoto(position);
             }
         });
+
+    }
+
+    public void updateEditStatus(boolean status) {
+        this.editStatus = status;
+        notifyDataSetChanged();
     }
 
     @Override
