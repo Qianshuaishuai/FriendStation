@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
@@ -39,6 +40,9 @@ public class IncomeRecordActivity extends BaseActivity {
 
     @ViewInject(R.id.list)
     private RecyclerView recordList;
+
+    @ViewInject(R.id.none_tv)
+    private TextView noneTv;
 
     private IncomeRecordAdapter adapter;
     private List<CoinRecordBean> list;
@@ -79,14 +83,22 @@ public class IncomeRecordActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         list.clear();
-//                        List<CoinRecordBean> newList = response.getData();
-//                        for (int l = 0; l < newList.size(); l++) {
-//                            list.add(newList.get(l));
-//                        }
-//                        adapter.notifyDataSetChanged();
+                        List<CoinRecordBean> newList = response.getData();
+                        for (int l = 0; l < newList.size(); l++) {
+                            list.add(newList.get(l));
+                        }
+                        adapter.notifyDataSetChanged();
+                        if (list.size() == 0) {
+                            recordList.setVisibility(View.GONE);
+                            noneTv.setVisibility(View.VISIBLE);
+                        } else {
+                            recordList.setVisibility(View.VISIBLE);
+                            noneTv.setVisibility(View.GONE);
+                        }
                         break;
                     default:
-
+                        recordList.setVisibility(View.GONE);
+                        noneTv.setVisibility(View.VISIBLE);
                         break;
                 }
             }

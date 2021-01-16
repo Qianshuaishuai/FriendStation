@@ -188,6 +188,7 @@
                             android:layout_toRightOf="@+id/tip"></android.support.v7.widget.RecyclerView>
 
                         <ImageView
+                            android:id="@+id/photo_right"
                             android:layout_width="16dip"
                             android:layout_height="16dip"
                             android:layout_alignParentRight="true"
@@ -254,6 +255,7 @@
                                         android:orientation="horizontal">
 
                                         <ImageView
+                                            android:id="@+id/auth_right"
                                             android:layout_width="16dip"
                                             android:layout_height="16dip"
                                             android:layout_marginRight="15dip"
@@ -366,6 +368,7 @@
                                         android:orientation="horizontal">
 
                                         <ImageView
+                                            android:id="@+id/say_right"
                                             android:layout_width="16dip"
                                             android:layout_height="16dip"
                                             android:layout_marginRight="15dip"
@@ -477,6 +480,7 @@
                                         android:orientation="horizontal">
 
                                         <ImageView
+                                            android:id="@+id/voice_right"
                                             android:layout_width="16dip"
                                             android:layout_height="16dip"
                                             android:layout_marginRight="15dip"

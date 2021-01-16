@@ -48,6 +48,9 @@ public class LoginPhoneActivity extends BaseActivity {
     @ViewInject(R.id.know)
     private TextView know;
 
+    @ViewInject(R.id.check_know)
+    private CheckBox checkKnow;
+
     @Event(R.id.layout_wechat)
     private void wechatLayoutClick(View view) {
         final IWXAPI api = WXAPIFactory.createWXAPI(this, Constant.WX_APPID, true);
@@ -68,6 +71,11 @@ public class LoginPhoneActivity extends BaseActivity {
 
         if (phone.length() != 11) {
             T.s("请输入正确的手机号");
+            return;
+        }
+
+        if (!checkKnow.isChecked()) {
+            T.s("请先勾选同意用户须知");
             return;
         }
 

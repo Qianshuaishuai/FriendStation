@@ -82,6 +82,21 @@ public class PersonInfoActivity extends BaseActivity {
     @ViewInject(R.id.background)
     private ImageView background;
 
+    @ViewInject(R.id.layout_photo_show)
+    private RelativeLayout photoShowLayout;
+
+    @ViewInject(R.id.photo_right)
+    private ImageView photoRight;
+
+    @ViewInject(R.id.auth_right)
+    private ImageView authRight;
+
+    @ViewInject(R.id.say_right)
+    private ImageView sayRight;
+
+    @ViewInject(R.id.voice_right)
+    private ImageView voiceRight;
+
     @ViewInject(R.id.layout_main)
     private RelativeLayout mainLayout;
 
@@ -224,10 +239,11 @@ public class PersonInfoActivity extends BaseActivity {
 
     @Event(R.id.layout_basic)
     private void basicLayoutClick(View view) {
-        if (mode == 1) {
-            return;
-        }
+//        if (mode == 1) {
+//            return;
+//        }
         Intent intent = new Intent(this, MyInfoActivity.class);
+        intent.putExtra("mode", 1);
         startActivity(intent);
     }
 
@@ -412,6 +428,11 @@ public class PersonInfoActivity extends BaseActivity {
                     moreLayout.setVisibility(View.VISIBLE);
                 }
             });
+
+            photoRight.setVisibility(View.GONE);
+            authRight.setVisibility(View.GONE);
+            sayRight.setVisibility(View.GONE);
+            voiceRight.setVisibility(View.GONE);
         } else {
             tvMore.setVisibility(View.VISIBLE);
             tvMore.setText("更换头像");
@@ -431,10 +452,11 @@ public class PersonInfoActivity extends BaseActivity {
     }
 
     public void goToMyInfo() {
-        if (mode == 1) {
-            return;
-        }
+//        if (mode == 1) {
+//            return;
+//        }
         Intent intent = new Intent(this, MyInfoActivity.class);
+        intent.putExtra("mode", 1);
         startActivity(intent);
     }
 
@@ -884,6 +906,10 @@ public class PersonInfoActivity extends BaseActivity {
                             photoList.add(response.getData().getRecords().get(i));
                         }
                         showAlbumAdapter.notifyDataSetChanged();
+
+                        if (photoList.size() == 0 && mode == 1) {
+                            photoShowLayout.setVisibility(View.GONE);
+                        }
                         break;
                     default:
 
@@ -1113,7 +1139,7 @@ public class PersonInfoActivity extends BaseActivity {
             if (!TextUtils.isEmpty(userAllInfoBean.getRecordSign())) {
                 playSound(userAllInfoBean.getRecordSign());
             } else {
-                audio.setText("你暂未设置语言签名");
+                audio.setText("暂未设置语言签名");
             }
 
             tagAdapter = new TagAdapter(this, tagList);

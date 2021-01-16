@@ -43,6 +43,11 @@ public class IntegralMallActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    @Event(R.id.back)
+    private void backClick(View view){
+        finish();
+    }
+
     @ViewInject(R.id.count)
     private TextView count;
 

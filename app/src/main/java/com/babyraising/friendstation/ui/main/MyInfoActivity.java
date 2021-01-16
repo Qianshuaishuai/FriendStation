@@ -42,9 +42,15 @@ public class MyInfoActivity extends BaseActivity {
     private UserAllInfoBean userAllInfoBean;
     private DatePickerDialog yearMonthDatePickerDialog;
 
+    private int mode = 0;
+
     @Event(R.id.back)
     private void backClick(View view) {
-        saveUserInfo();
+        if (mode == 1) {
+            finish();
+        } else {
+            saveUserInfo();
+        }
     }
 
     @Event(R.id.layout_sex)
@@ -63,6 +69,9 @@ public class MyInfoActivity extends BaseActivity {
 
     @Event(R.id.date)
     private void dateClick(View view) {
+        if (mode == 1) {
+            return;
+        }
         yearMonthDatePickerDialog.show();
     }
 
@@ -115,7 +124,29 @@ public class MyInfoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        initData();
         initDatePicker();
+    }
+
+    private void initData() {
+        Intent intent = getIntent();
+        mode = intent.getIntExtra("mode", 0);
+
+        if (mode == 1) {
+            luxury.setEnabled(false);
+            sex.setEnabled(false);
+            date.setEnabled(false);
+            constellation.setEnabled(false);
+            address.setEnabled(false);
+            inword.setEnabled(false);
+            job.setEnabled(false);
+            height.setEnabled(false);
+            weight.setEnabled(false);
+            education.setEnabled(false);
+            emotion.setEnabled(false);
+            charm.setEnabled(false);
+            income.setEnabled(false);
+        }
     }
 
     private void initDatePicker() {

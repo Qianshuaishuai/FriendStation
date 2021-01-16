@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
@@ -45,6 +46,9 @@ public class ExchangeRecordActivity extends BaseActivity {
     private ExchangeRecordAdapter adapter;
     private List<ScoreRecordBean> list;
 
+    @ViewInject(R.id.none_tv)
+    private TextView noneTv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,9 +89,18 @@ public class ExchangeRecordActivity extends BaseActivity {
                             list.add(newList.get(l));
                         }
                         adapter.notifyDataSetChanged();
+
+                        if (list.size() == 0) {
+                            recordList.setVisibility(View.GONE);
+                            noneTv.setVisibility(View.VISIBLE);
+                        } else {
+                            recordList.setVisibility(View.VISIBLE);
+                            noneTv.setVisibility(View.GONE);
+                        }
                         break;
                     default:
-
+                        recordList.setVisibility(View.GONE);
+                        noneTv.setVisibility(View.VISIBLE);
                         break;
                 }
             }
