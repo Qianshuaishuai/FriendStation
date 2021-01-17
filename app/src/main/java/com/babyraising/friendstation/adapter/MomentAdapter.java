@@ -74,7 +74,9 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
 
         holder.contentTxt.setText(mList.get(position).getContent());
         if (!TextUtils.isEmpty(mList.get(position).getPicUrl1()) && (mList.get(position).getPicUrl1().indexOf("http") != -1)) {
-            x.image().bind(holder.contentImgIv, mList.get(position).getPicUrl1());
+            ImageOptions options = new ImageOptions.Builder().
+                    setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
+            x.image().bind(holder.contentImgIv, mList.get(position).getPicUrl1(), options);
             holder.contentImgIv.setVisibility(View.VISIBLE);
         } else if (!TextUtils.isEmpty(mList.get(position).getPicUrl1()) && (mList.get(position).getPicUrl1().indexOf("http") == -1)) {
             holder.contentImgIv.setVisibility(View.GONE);

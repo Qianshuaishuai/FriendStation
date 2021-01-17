@@ -8,7 +8,6 @@
         android:id="@+id/icon"
         android:layout_width="60dip"
         android:layout_height="60dip"
-        android:layout_marginTop="9dip"
         android:visibility="gone" />
 
 
@@ -16,7 +15,6 @@
         android:id="@+id/add"
         android:layout_width="60dip"
         android:layout_height="60dip"
-        android:layout_marginTop="9dip"
         android:src="@mipmap/moment_send_add"
         android:visibility="gone" />
 

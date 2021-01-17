@@ -35,10 +35,10 @@
     </RelativeLayout>
 
     <ImageView
-        android:src="@mipmap/test1"
-        android:scaleType="fitXY"
         android:id="@+id/main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true" />
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/layout_top"
+        android:scaleType="fitCenter"
+        android:src="@mipmap/test1" />
 </RelativeLayout>

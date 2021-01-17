@@ -43,7 +43,7 @@ public class LookPhotoActivity extends BaseActivity {
         if (!TextUtils.isEmpty(imgUrl)) {
 
             ImageOptions options = new ImageOptions.Builder().
-                    setImageScaleType(ImageView.ScaleType.CENTER_CROP).
+                    setImageScaleType(ImageView.ScaleType.FIT_CENTER).
                     build();
 
             x.image().bind(main, imgUrl, options);

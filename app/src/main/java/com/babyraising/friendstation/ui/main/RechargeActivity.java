@@ -23,6 +23,7 @@ import com.babyraising.friendstation.response.CoinPayResponse;
 import com.babyraising.friendstation.response.ScoreExchangeResponse;
 import com.babyraising.friendstation.ui.other.HelpActivity;
 import com.google.gson.Gson;
+import com.tencent.imsdk.v2.V2TIMMessage;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -32,6 +33,8 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @ContentView(R.layout.activity_recharge)
@@ -129,6 +132,12 @@ public class RechargeActivity extends BaseActivity {
 //                            list.add(bean);
 //                            list.add(bean);
 //                        }
+                        Collections.sort(list, new Comparator<CoinPayDetailBean>() {
+                            @Override
+                            public int compare(CoinPayDetailBean o1, CoinPayDetailBean o2) {
+                                return (int) (o1.getSort() - o2.getSort());
+                            }
+                        });
                         adapter.notifyDataSetChanged();
                         break;
                     default:

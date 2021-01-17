@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -126,7 +127,10 @@ public class ScrollImageActivity extends BaseActivity {
         }
 
         if (!TextUtils.isEmpty(momentDetailBean.getPicUrl1())) {
-            x.image().bind(main, momentDetailBean.getPicUrl1());
+            ImageOptions options = new ImageOptions.Builder().
+                    setImageScaleType(ImageView.ScaleType.FIT_CENTER)
+                    .build();
+            x.image().bind(main, momentDetailBean.getPicUrl1(), options);
         }
 
         liked = momentDetailBean.getLikeStatus();
