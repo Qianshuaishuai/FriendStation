@@ -84,6 +84,7 @@ public class Constant {
     public static final String URL_FRIENDS_USERVIEW = "friends/userView";
     public static final String URL_FRIENDS_TASK_RECORD_SAVE = "friends/taskRecord/save";
     public static final String URL_FRIENDS_MOMENTSLISTBYID = "friends/moments/getMomentsListById";
+    public static final String URL_FRIENDS_COINORDER_BEFORESAVE = "friends/coinOrder/beforeSave";
 
 
     //腾讯云im相关

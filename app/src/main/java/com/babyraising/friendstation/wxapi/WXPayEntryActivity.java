@@ -2,6 +2,8 @@ package com.babyraising.friendstation.wxapi;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.event.PayResultEvent;
+import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 import com.tencent.mm.opensdk.modelbase.BaseReq;
 import com.tencent.mm.opensdk.modelbase.BaseResp;
@@ -47,7 +49,19 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler {
     @Override
     public void onResp(BaseResp resp) {
         Gson gson = new Gson();
-        System.out.println("onResp : " + gson.toJson(resp));
+        System.out.println(gson.toJson(resp));
+        switch (resp.errCode) {
+            case -1:
+                T.s("支付出错");
+                break;
+            case -2:
+                T.s("支付取消");
+                break;
+            case 0:
+                T.s("支付成功");
+                EventBus.getDefault().post(new PayResultEvent());
+                break;
+        }
         finish();
     }
 }

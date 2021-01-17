@@ -44,14 +44,24 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 
     @Override
     public void onResp(BaseResp resp) {
-        if (resp.errCode == 0) {
-            T.s("授权成功");
+        try {
             SendAuth.Resp sendResp = (SendAuth.Resp) resp;
             String code = sendResp.code;
             System.out.println(code);
-        }else{
-            T.s("授权失败");
+            T.s("授权成功");
+            if (resp.errCode == 0) {
+                T.s("授权成功");
+            } else {
+                T.s("授权失败");
+            }
+        } catch (Exception e) {
+            if (resp.errCode == 0) {
+                T.s("分享成功");
+            } else {
+                T.s("分享失败");
+            }
         }
+
         finish();
     }
 }

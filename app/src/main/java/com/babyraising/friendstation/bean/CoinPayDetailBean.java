@@ -9,8 +9,8 @@ public class CoinPayDetailBean {
     private int id;
     private boolean isBuyOnce;
     private boolean isForFirst;
-    private int price;
-    private int priceOrigin;
+    private double price;
+    private double priceOrigin;
     private int sort;
     private String statusOrder;
     private String subTitle;
@@ -80,19 +80,19 @@ public class CoinPayDetailBean {
         isForFirst = forFirst;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public int getPriceOrigin() {
+    public double getPriceOrigin() {
         return priceOrigin;
     }
 
-    public void setPriceOrigin(int priceOrigin) {
+    public void setPriceOrigin(double priceOrigin) {
         this.priceOrigin = priceOrigin;
     }
 

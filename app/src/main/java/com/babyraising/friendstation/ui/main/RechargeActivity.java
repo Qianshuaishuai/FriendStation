@@ -120,15 +120,15 @@ public class RechargeActivity extends BaseActivity {
                             list.add(newList.get(l));
                         }
 
-                        if (list.size() == 0) {
-                            CoinPayDetailBean bean = new CoinPayDetailBean();
-                            list.add(bean);
-                            list.add(bean);
-                            list.add(bean);
-                            list.add(bean);
-                            list.add(bean);
-                            list.add(bean);
-                        }
+//                        if (list.size() == 0) {
+//                            CoinPayDetailBean bean = new CoinPayDetailBean();
+//                            list.add(bean);
+//                            list.add(bean);
+//                            list.add(bean);
+//                            list.add(bean);
+//                            list.add(bean);
+//                            list.add(bean);
+//                        }
                         adapter.notifyDataSetChanged();
                         break;
                     default:
