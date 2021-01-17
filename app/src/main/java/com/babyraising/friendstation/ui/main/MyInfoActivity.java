@@ -456,7 +456,7 @@ public class MyInfoActivity extends BaseActivity {
         String[] heightArray = getResources().getStringArray(R.array.heightArray);
         int currentHeightIndex = 0;
         for (int h = 0; h < heightArray.length; h++) {
-            if (userAllInfoBean.getUserExtra().getWork().equals(heightArray[h])) {
+            if (userAllInfoBean.getUserExtra().getHeight() == Integer.parseInt(heightArray[h])) {
                 currentHeightIndex = h;
             }
         }
@@ -465,7 +465,7 @@ public class MyInfoActivity extends BaseActivity {
         String[] weightArray = getResources().getStringArray(R.array.weightArray);
         int currentWeightIndex = 0;
         for (int w = 0; w < weightArray.length; w++) {
-            if (userAllInfoBean.getUserExtra().getWork().equals(weightArray[w])) {
+            if (userAllInfoBean.getUserExtra().getHeight() == Integer.parseInt(weightArray[w])) {
                 currentWeightIndex = w;
             }
         }
@@ -477,7 +477,7 @@ public class MyInfoActivity extends BaseActivity {
             String[] educationArray = getResources().getStringArray(R.array.educationArray);
             int currentIndex = 0;
             for (int j = 0; j < educationArray.length; j++) {
-                if (userAllInfoBean.getUserExtra().getWork().equals(educationArray[j])) {
+                if (userAllInfoBean.getUserExtra().getEducation().equals(educationArray[j])) {
                     currentIndex = j;
                 }
             }
@@ -489,7 +489,7 @@ public class MyInfoActivity extends BaseActivity {
             String[] incomeArray = getResources().getStringArray(R.array.incomeArray);
             int currentIndex = 0;
             for (int j = 0; j < incomeArray.length; j++) {
-                if (userAllInfoBean.getUserExtra().getWork().equals(incomeArray[j])) {
+                if (userAllInfoBean.getUserExtra().getIncome().equals(incomeArray[j])) {
                     currentIndex = j;
                 }
             }
@@ -501,7 +501,7 @@ public class MyInfoActivity extends BaseActivity {
             String[] emotionArray = getResources().getStringArray(R.array.emotionArray);
             int currentIndex = 0;
             for (int j = 0; j < emotionArray.length; j++) {
-                if (userAllInfoBean.getUserExtra().getWork().equals(emotionArray[j])) {
+                if (userAllInfoBean.getUserExtra().getEmotionState().equals(emotionArray[j])) {
                     currentIndex = j;
                 }
             }
@@ -513,7 +513,7 @@ public class MyInfoActivity extends BaseActivity {
             String[] charmArray = getResources().getStringArray(R.array.charmArray);
             int currentIndex = 0;
             for (int j = 0; j < charmArray.length; j++) {
-                if (userAllInfoBean.getUserExtra().getWork().equals(charmArray[j])) {
+                if (userAllInfoBean.getUserExtra().getSexPart().equals(charmArray[j])) {
                     currentIndex = j;
                 }
             }

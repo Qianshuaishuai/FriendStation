@@ -29,7 +29,7 @@
     </string-array>
 
     <string-array name="heightArray">
-        <item>未设置</item>
+        <item>0</item>
         <item>150</item>
         <item>151</item>
         <item>152</item>
@@ -84,7 +84,7 @@
     </string-array>
 
     <string-array name="weightArray">
-        <item>未设置</item>
+        <item>0</item>
         <item>30</item>
         <item>31</item>
         <item>32</item>

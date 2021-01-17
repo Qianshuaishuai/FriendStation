@@ -1,6 +1,7 @@
 package com.babyraising.friendstation.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,26 @@ public class IncomeRecordDetailAdapter extends RecyclerView.Adapter<IncomeRecord
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        int changeType = Integer.parseInt(mList.get(position).getChangeType());
+        switch (changeType) {
+            case 0:
+                holder.countTxt.setText(mList.get(position).getAmount() + " 金币");
+                break;
+            case 1:
+                holder.countTxt.setText("-" + mList.get(position).getAmount() + " 金币");
+                break;
+            case 2:
+                holder.countTxt.setText("-" + mList.get(position).getAmount() + " 金币");
+                break;
+        }
 
+        if (!TextUtils.isEmpty(mList.get(position).getTime())) {
+            holder.timeTxt.setText(mList.get(position).getTime());
+        }
+
+        if (!TextUtils.isEmpty(mList.get(position).getGoodsName())) {
+            holder.detailTxt.setText(mList.get(position).getGoodsName());
+        }
     }
 
     @Override

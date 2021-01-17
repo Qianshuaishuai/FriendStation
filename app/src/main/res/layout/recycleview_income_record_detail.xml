@@ -16,7 +16,7 @@
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="16:30"
+            android:text=""
             android:textColor="#3C3B41"
             android:textSize="14dip" />
 
@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="-1 金币"
+            android:text=""
             android:textColor="#FD7E41"
             android:textSize="14dip" />
     </RelativeLayout>
@@ -41,7 +41,7 @@
             android:id="@+id/detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="兑换商品 10元人民币"
+            android:text=""
             android:textColor="#3C3B41"
             android:textSize="14dip" />
 
