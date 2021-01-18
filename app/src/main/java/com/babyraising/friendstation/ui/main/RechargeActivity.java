@@ -1,6 +1,7 @@
 package com.babyraising.friendstation.ui.main;
 
 import android.content.Intent;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,6 +22,7 @@ import com.babyraising.friendstation.bean.ScoreExchangeDetailBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.response.CoinPayResponse;
 import com.babyraising.friendstation.response.ScoreExchangeResponse;
+import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.ui.other.HelpActivity;
 import com.google.gson.Gson;
 import com.tencent.imsdk.v2.V2TIMMessage;
@@ -36,9 +38,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @ContentView(R.layout.activity_recharge)
 public class RechargeActivity extends BaseActivity {
+
+    private Timer timer1;
+    private TimerTask timerTask1;
 
     private UserAllInfoBean userInfoBean;
 
@@ -75,12 +82,25 @@ public class RechargeActivity extends BaseActivity {
 
         initView();
         initData();
+        initTimer();
+    }
+
+    private void initTimer() {
+//        timer1 = new Timer();
+//        timerTask1 = new TimerTask() {
+//            @Override
+//            public void run() {
+//                getRechargeList();
+//            }
+//        };
+//        timer1.schedule(timerTask1, 0, 2000);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         getRechargeList();
+        getUserFullInfo();
     }
 
     private void initView() {
@@ -98,10 +118,50 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void initData() {
-        userInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
-        if (userInfoBean != null) {
-            count.setText("" + userInfoBean.getUserCount().getNumCoin());
-        }
+//        userInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+//        if (userInfoBean != null) {
+//            count.setText("" + userInfoBean.getUserCount().getNumCoin());
+//        }
+    }
+
+    private void getUserFullInfo() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_FULL);
+        params.addHeader("Authorization", bean.getAccessToken());
+        System.out.println(bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
+                System.out.println("gift-userFullInfo" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());
+                        userInfoBean = response.getData();
+                        count.setText("" + userInfoBean.getUserCount().getNumCoin());
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void getRechargeList() {

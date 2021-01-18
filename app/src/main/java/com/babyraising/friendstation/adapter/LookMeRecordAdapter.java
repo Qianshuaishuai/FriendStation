@@ -70,8 +70,8 @@ public class LookMeRecordAdapter extends RecyclerView.Adapter<LookMeRecordAdapte
                     holder.jobTxt.setText(mList.get(position).getWork());
                 }
 
-                if (mList.get(position).getHeight() != 0) {
-                    holder.ageTxt.setText(mList.get(position).getHeight() + "cm");
+                if (!TextUtils.isEmpty(mList.get(position).getHeight())) {
+                    holder.ageTxt.setText(mList.get(position).getHeight());
                 }
 
                 if (!TextUtils.isEmpty(mList.get(position).getIncome())) {
@@ -93,8 +93,8 @@ public class LookMeRecordAdapter extends RecyclerView.Adapter<LookMeRecordAdapte
                     holder.jobTxt.setText(mList.get(position).getWork());
                 }
 
-                if (mList.get(position).getHeight() != 0) {
-                    holder.ageTxt.setText(mList.get(position).getHeight() + "cm");
+                if (!TextUtils.isEmpty(mList.get(position).getHeight())) {
+                    holder.ageTxt.setText(mList.get(position).getHeight());
                 }
 
                 if (!TextUtils.isEmpty(mList.get(position).getIncome())) {
@@ -116,8 +116,8 @@ public class LookMeRecordAdapter extends RecyclerView.Adapter<LookMeRecordAdapte
                     holder.jobTxt.setText(mList.get(position).getWork());
                 }
 
-                if (mList.get(position).getHeight() != 0) {
-                    holder.heightTxt.setText(mList.get(position).getHeight() + "cm");
+                if (!TextUtils.isEmpty(mList.get(position).getHeight())) {
+                    holder.ageTxt.setText(mList.get(position).getHeight());
                 }
 
                 if (getAge(mList.get(position).getAvatar()) > 0) {

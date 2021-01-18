@@ -35,6 +35,17 @@
                 android:textColor="#ff3c3b41"
                 android:textSize="17dip" />
 
+            <TextView
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dip"
+                android:text="保存"
+                android:textColor="#F75184"
+                android:textSize="14dip" />
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dip"
@@ -121,6 +132,7 @@
                         android:orientation="vertical">
 
                         <EditText
+                            android:editable="false"
                             android:id="@+id/name"
                             android:layout_width="match_parent"
                             android:layout_height="49dip"
@@ -134,8 +146,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="15dip"
-                            android:src="@mipmap/common_right"
-                            android:visibility="gone" />
+                            android:src="@mipmap/common_right" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -288,6 +299,7 @@
                         android:orientation="vertical">
 
                         <EditText
+                            android:editable="false"
                             android:id="@+id/address"
                             android:layout_width="match_parent"
                             android:layout_height="49dip"
@@ -380,6 +392,7 @@
                         <!--android:textSize="14dip" />-->
 
                         <Spinner
+                            style="@style/spinner_style"
                             android:id="@+id/job"
                             android:layout_width="match_parent"
                             android:layout_height="49dip"

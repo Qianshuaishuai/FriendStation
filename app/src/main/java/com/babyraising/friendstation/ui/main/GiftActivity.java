@@ -66,9 +66,9 @@ public class GiftActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    @Event(R.id.send)
-    private void sendClick(View view) {
-
+    @Event(R.id.cancel)
+    private void cancelClick(View view) {
+        finish();
     }
 
     @ViewInject(R.id.count)

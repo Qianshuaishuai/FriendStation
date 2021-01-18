@@ -1139,8 +1139,8 @@ public class PersonInfoActivity extends BaseActivity {
                     tagList.add("职业:" + userAllInfoBean.getUserExtra().getWork());
                 }
 
-                tagList.add("身高:" + userAllInfoBean.getUserExtra().getHeight() + "cm");
-                tagList.add("体重:" + userAllInfoBean.getUserExtra().getWeight() + "kg");
+                tagList.add("身高:" + userAllInfoBean.getUserExtra().getHeight());
+                tagList.add("体重:" + userAllInfoBean.getUserExtra().getWeight());
 
                 if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getEducation())) {
                     tagList.add("学历:" + userAllInfoBean.getUserExtra().getEducation());
@@ -1226,18 +1226,18 @@ public class PersonInfoActivity extends BaseActivity {
     }
 
     private void choosePhoto() {
-//        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
-//        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-//        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
-        Intent intent = new Intent();
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("image/*");
-        if (Build.VERSION.SDK_INT < 19) {
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-        } else {
-            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-        }
-        startActivityForResult(intent, RC_CHOOSE_PHOTO);
+        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
+//        Intent intent = new Intent();
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+//        intent.setType("image/*");
+//        if (Build.VERSION.SDK_INT < 19) {
+//            intent.setAction(Intent.ACTION_GET_CONTENT);
+//        } else {
+//            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+//        }
+//        startActivityForResult(intent, RC_CHOOSE_PHOTO);
     }
 
     private void takePhoto() {

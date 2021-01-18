@@ -5,12 +5,12 @@ public class SetUserFullExtraRequest {
     private String constellation;
     private String education;
     private String emotionState;
-    private int height;
+    private String height;
     private String income;
     private String introduce;
     private String location;
     private String sexPart;
-    private int weight;
+    private String weight;
     private String work;
 
     public String getBirthday() {
@@ -45,11 +45,11 @@ public class SetUserFullExtraRequest {
         this.emotionState = emotionState;
     }
 
-    public int getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 
@@ -85,11 +85,11 @@ public class SetUserFullExtraRequest {
         this.sexPart = sexPart;
     }
 
-    public int getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 

@@ -306,7 +306,7 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
         initPermission();
         initFragment();
         initPermission();
-        if (!Constant.SHOW_TIP) {
+        if (((FriendStationApplication) getApplication()).getIsFirstTip() == 0) {
             initNoticeTip();
         }
         EventBus.getDefault().register(this);
@@ -861,7 +861,7 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
         });
         noticeDialog.show();
         noticeDialog.setCanceledOnTouchOutside(false);
-        Constant.SHOW_TIP = true;
+        ((FriendStationApplication) getApplication()).saveIsFirstTip(1);
     }
 
     private void startPrivacyActivity() {

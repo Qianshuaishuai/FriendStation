@@ -1,19 +1,19 @@
 package com.babyraising.friendstation.bean;
 
 public class CoinRecordDetailBean {
-    private int amount;
+    private double changeNum;
     private String changeType;
     private String gmtCreate;
     private String gmtModify;
     private String goodsName;
     private String time;
 
-    public int getAmount() {
-        return amount;
+    public double getChangeNum() {
+        return changeNum;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setChangeNum(double changeNum) {
+        this.changeNum = changeNum;
     }
 
     public String getChangeType() {

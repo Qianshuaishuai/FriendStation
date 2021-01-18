@@ -5,7 +5,7 @@ public class UserMainPageBean {
     private String nickname;
     private String avatar;
     private String statusCert;
-    private int height;
+    private String height;
     private String income;
     private String work;
     private String emotionState;
@@ -56,11 +56,11 @@ public class UserMainPageBean {
         this.statusCert = statusCert;
     }
 
-    public int getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 

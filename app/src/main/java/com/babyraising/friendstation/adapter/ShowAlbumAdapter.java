@@ -10,6 +10,8 @@ import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.bean.AlbumDetailBean;
 import com.babyraising.friendstation.ui.user.PhotoActivity;
 
+import org.xutils.common.util.DensityUtil;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public class ShowAlbumAdapter extends RecyclerView.Adapter<ShowAlbumAdapter.View
     private List<AlbumDetailBean> mList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView iconIv,addIv;
+        ImageView iconIv, addIv;
 
         public ViewHolder(View view) {
             super(view);
@@ -42,13 +44,15 @@ public class ShowAlbumAdapter extends RecyclerView.Adapter<ShowAlbumAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        if (mList.get(position).getUrl().equals("add")){
+        if (mList.get(position).getUrl().equals("add")) {
             holder.addIv.setVisibility(View.VISIBLE);
             holder.iconIv.setVisibility(View.GONE);
-        }else{
+        } else {
             holder.addIv.setVisibility(View.GONE);
             holder.iconIv.setVisibility(View.VISIBLE);
-            x.image().bind(holder.iconIv, mList.get(position).getUrl());
+            ImageOptions options = new ImageOptions.Builder().
+                    setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
+            x.image().bind(holder.iconIv, mList.get(position).getUrl(), options);
         }
 
     }

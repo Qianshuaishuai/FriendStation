@@ -90,6 +90,9 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
     @ViewInject(R.id.edit)
     private TextView edit;
 
+    @ViewInject(R.id.layout_none)
+    private LinearLayout noneLayout;
+
     @Event(R.id.edit)
     private void editClick(View view) {
         adapter.updateEditStatus(editStatus);
@@ -170,11 +173,19 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
                         for (int i = 0; i < response.getData().getRecords().size(); i++) {
                             photoList.add(response.getData().getRecords().get(i));
                         }
+                        if (photoList.size() == 0) {
+                            photoRecyleViewList.setVisibility(View.GONE);
+                            noneLayout.setVisibility(View.VISIBLE);
+                        } else {
+                            photoRecyleViewList.setVisibility(View.VISIBLE);
+                            noneLayout.setVisibility(View.GONE);
+                        }
                         photoList.add(new AlbumDetailBean());
                         adapter.notifyDataSetChanged();
                         break;
                     default:
-
+                        photoRecyleViewList.setVisibility(View.GONE);
+                        noneLayout.setVisibility(View.VISIBLE);
                         break;
                 }
             }
@@ -403,18 +414,18 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
     }
 
     private void choosePhoto() {
-//        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
-//        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        Intent intent = new Intent();
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("image/*");
-        if (Build.VERSION.SDK_INT < 19) {
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-        } else {
-            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-        }
-        startActivityForResult(intent, RC_CHOOSE_PHOTO);
-//        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
+        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+//        Intent intent = new Intent();
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+//        intent.setType("image/*");
+//        if (Build.VERSION.SDK_INT < 19) {
+//            intent.setAction(Intent.ACTION_GET_CONTENT);
+//        } else {
+//            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+//        }
+//        startActivityForResult(intent, RC_CHOOSE_PHOTO);
+        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
     }
 
     private boolean checkPermission() {

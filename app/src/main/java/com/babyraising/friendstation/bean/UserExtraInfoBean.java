@@ -7,14 +7,14 @@ public class UserExtraInfoBean {
     private String emotionState;
     private String gmtCreate;
     private String gmtModify;
-    private int height;
+    private String height;
     private int id;
     private String income;
     private String introduce;
     private String location;
     private String sexPart;
     private int userId;
-    private int weight;
+    private String weight;
     private String work;
 
     public String getBirthday() {
@@ -65,11 +65,11 @@ public class UserExtraInfoBean {
         this.gmtModify = gmtModify;
     }
 
-    public int getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 
@@ -121,11 +121,11 @@ public class UserExtraInfoBean {
         this.userId = userId;
     }
 
-    public int getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 

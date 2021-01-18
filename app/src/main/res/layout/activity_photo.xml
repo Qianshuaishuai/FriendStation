@@ -135,5 +135,30 @@
         </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/layout_none"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="快来上传靓照"
+            android:textSize="18dip" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dip"
+            android:gravity="center_horizontal"
+            android:text="照片严禁涉黄以及违规，严重时将被封号"
+            android:textColor="@color/colorRankNormal"
+            android:textSize="14dip" />
+    </LinearLayout>
+
 
 </RelativeLayout>

@@ -153,7 +153,7 @@ public class LoginPhoneActivity extends BaseActivity {
         if (bean != null && !TextUtils.isEmpty(bean.getAccessToken())) {
             startMainActivity();
         } else {
-            if (!Constant.SHOW_TIP) {
+            if (((FriendStationApplication) getApplication()).getIsFirstTip() == 0) {
                 initNoticeTip();
             }
         }
@@ -223,7 +223,7 @@ public class LoginPhoneActivity extends BaseActivity {
         });
         noticeDialog.show();
         noticeDialog.setCanceledOnTouchOutside(false);
-        Constant.SHOW_TIP = true;
+        ((FriendStationApplication) getApplication()).saveIsFirstTip(1);
     }
 
     private void startPrivacyActivity() {

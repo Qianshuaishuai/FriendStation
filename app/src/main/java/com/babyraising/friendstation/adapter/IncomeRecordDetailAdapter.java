@@ -45,13 +45,13 @@ public class IncomeRecordDetailAdapter extends RecyclerView.Adapter<IncomeRecord
         int changeType = Integer.parseInt(mList.get(position).getChangeType());
         switch (changeType) {
             case 0:
-                holder.countTxt.setText(mList.get(position).getAmount() + " 金币");
+                holder.countTxt.setText((int) mList.get(position).getChangeNum() + " 金币");
                 break;
             case 1:
-                holder.countTxt.setText("-" + mList.get(position).getAmount() + " 金币");
+                holder.countTxt.setText("-" + (int) mList.get(position).getChangeNum() + " 金币");
                 break;
             case 2:
-                holder.countTxt.setText("-" + mList.get(position).getAmount() + " 金币");
+                holder.countTxt.setText("-" + (int) mList.get(position).getChangeNum() + " 金币");
                 break;
         }
 

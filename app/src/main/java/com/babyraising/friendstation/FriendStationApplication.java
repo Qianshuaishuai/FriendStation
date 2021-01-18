@@ -86,6 +86,8 @@ public class FriendStationApplication extends Application {
     private List<TaskNewBean> currentTaskList = new ArrayList<>();
     private boolean isShowCoinAnimation = false;
 
+    private AMapLocation currentLocation = null;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -409,7 +411,7 @@ public class FriendStationApplication extends Application {
             public void onLocationChanged(AMapLocation aMapLocation) {
                 double latitude = aMapLocation.getLatitude();//获取纬度
                 double longitude = aMapLocation.getLongitude();//获取经度
-//                System.out.println("location: latitude:" + latitude + ",longitude:" + longitude);
+                System.out.println("location: latitude:" + latitude + ",longitude:" + longitude + ", city:" + aMapLocation.getCity());
                 if (longitude == 0.0 && latitude == 0.0) {
                     return;
                 }
@@ -418,6 +420,7 @@ public class FriendStationApplication extends Application {
                 bean.setLatitude(latitude);
                 bean.setLongitude(longitude);
                 saveCurrentLocation(bean);
+                currentLocation = aMapLocation;
             }
         };
         //初始化定位
@@ -430,7 +433,6 @@ public class FriendStationApplication extends Application {
         mLocationOption.setNeedAddress(true);
         mLocationOption.setHttpTimeOut(20000);
         mLocationOption.setLocationCacheEnable(false);
-        mLocationOption.setOnceLocation(false);
         /**
          * 设置定位场景，目前支持三种场景（签到、出行、运动，默认无场景）
          */
@@ -438,6 +440,10 @@ public class FriendStationApplication extends Application {
         if (null != mLocationClient) {
             mLocationClient.setLocationOption(mLocationOption);
         }
+    }
+
+    public AMapLocation getCurrentCityLocation() {
+        return currentLocation;
     }
 
 
@@ -638,6 +644,15 @@ public class FriendStationApplication extends Application {
 
     public LocationBean getCurrentLocation() {
         return gson.fromJson(sp.getString("location", ""), LocationBean.class);
+    }
+
+    public void saveIsFirstTip(int status) {
+        editor.putInt("is-first-tip", status);
+        editor.commit();
+    }
+
+    public int getIsFirstTip() {
+        return sp.getInt("is-first-tip", 0);
     }
 
     public void saveIsFirstLogin(int status) {

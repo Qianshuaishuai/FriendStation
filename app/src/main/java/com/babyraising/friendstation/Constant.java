@@ -10,6 +10,9 @@ public class Constant {
     public static final int RESULT_CHAT_ROOM_CODE = 9998;
     public static final int INVITE_CHAT_ROOM_CODE = 9999;
 
+    public static final int EDIT_INFO_MODE_NAME = 1111;
+    public static final int EDIT_INFO_MODE_ADDRESS = 1112;
+
     public static final int CODE_VOICE_TIP_REQUEST = 11111;
 
     public static final int OFFICIAL_INTO_CHAT_CODE = 999;

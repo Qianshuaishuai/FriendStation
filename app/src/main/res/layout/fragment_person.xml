@@ -201,8 +201,7 @@
             android:layout_marginTop="14dip"
             android:layout_marginBottom="14dip"
             android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:visibility="gone">
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="17dip"
@@ -221,8 +220,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dip"
-            android:background="#D4D4D4"
-            android:visibility="gone"></View>
+            android:background="#D4D4D4"></View>
 
         <LinearLayout
             android:id="@+id/layout_help"

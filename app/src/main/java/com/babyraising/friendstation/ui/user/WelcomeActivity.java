@@ -67,7 +67,7 @@ public class WelcomeActivity extends BaseActivity {
         if (status == 1) {
             startMainActivity();
         } else {
-            if (!Constant.SHOW_TIP) {
+            if (((FriendStationApplication) getApplication()).getIsFirstTip() == 0) {
                 initNoticeTip();
 //                initNoticePopupWindow();
             }
@@ -228,7 +228,7 @@ public class WelcomeActivity extends BaseActivity {
         });
         noticeDialog.show();
         noticeDialog.setCanceledOnTouchOutside(false);
-        Constant.SHOW_TIP = true;
+        ((FriendStationApplication) getApplication()).saveIsFirstTip(1);
     }
 
     private void startPrivacyActivity() {

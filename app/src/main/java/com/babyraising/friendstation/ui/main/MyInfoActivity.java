@@ -2,8 +2,10 @@ package com.babyraising.friendstation.ui.main;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatSpinner;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.amap.api.location.AMapLocation;
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
@@ -29,6 +32,7 @@ import com.babyraising.friendstation.ui.user.BuildUserActivity;
 import com.babyraising.friendstation.ui.user.BuildUserNameActivity;
 import com.babyraising.friendstation.ui.user.BuildUserSexActivity;
 import com.babyraising.friendstation.util.DateUtil;
+import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
@@ -56,12 +60,18 @@ public class MyInfoActivity extends BaseActivity {
 
     @Event(R.id.back)
     private void backClick(View view) {
-        if (mode == 1) {
-            finish();
-        } else {
+        finish();
+    }
+
+    @Event(R.id.save)
+    private void saveClick(View view) {
+        if (mode != 1) {
             saveUserInfo();
         }
     }
+
+    @ViewInject(R.id.save)
+    private TextView saveTv;
 
     @Event(R.id.layout_sex)
     private void sexLayoutClick(View view) {
@@ -94,6 +104,14 @@ public class MyInfoActivity extends BaseActivity {
     @ViewInject(R.id.name)
     private EditText name;
 
+    @Event(R.id.name)
+    private void nameClick(View view) {
+        Intent intent = new Intent(this, EditEasyTextActivity.class);
+        intent.putExtra("mode", 1);
+        intent.putExtra("value", name.getText().toString());
+        startActivity(intent);
+    }
+
     @ViewInject(R.id.sex)
     private EditText sex;
 
@@ -105,6 +123,14 @@ public class MyInfoActivity extends BaseActivity {
 
     @ViewInject(R.id.address)
     private EditText address;
+
+    @Event(R.id.address)
+    private void addressClick(View view) {
+        Intent intent = new Intent(this, EditEasyTextActivity.class);
+        intent.putExtra("mode", 2);
+        intent.putExtra("value", address.getText().toString());
+        startActivity(intent);
+    }
 
     @ViewInject(R.id.inword)
     private EditText inword;
@@ -212,6 +238,8 @@ public class MyInfoActivity extends BaseActivity {
             charm.setEnabled(false);
             income.setEnabled(false);
             name.setEnabled(false);
+            name.setEnabled(false);
+            saveTv.setVisibility(View.GONE);
         }
     }
 
@@ -313,11 +341,11 @@ public class MyInfoActivity extends BaseActivity {
         }
 
         if (!TextUtils.isEmpty(height.getSelectedItem().toString())) {
-            extraRequest.setHeight(Integer.parseInt(height.getSelectedItem().toString()));
+            extraRequest.setHeight(height.getSelectedItem().toString());
         }
 
         if (!TextUtils.isEmpty(weight.getSelectedItem().toString())) {
-            extraRequest.setWeight(Integer.parseInt(weight.getSelectedItem().toString()));
+            extraRequest.setWeight(weight.getSelectedItem().toString());
         }
 
         if (!TextUtils.isEmpty(income.getSelectedItem().toString())) {
@@ -354,8 +382,8 @@ public class MyInfoActivity extends BaseActivity {
         if (!TextUtils.isEmpty(userAllInfoBean.getSign())) {
             request.setSign(userAllInfoBean.getSign());
         }
-
-        request.setSex(userAllInfoBean.getSex());
+//
+//        request.setSex(userAllInfoBean.getSex());
         request.setUserExtra(extraRequest);
 
         Gson gson = new Gson();
@@ -366,6 +394,7 @@ public class MyInfoActivity extends BaseActivity {
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         params.setBodyContent(gson.toJson(request));
+        System.out.println(gson.toJson(request));
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -435,6 +464,11 @@ public class MyInfoActivity extends BaseActivity {
 
         if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getLocation())) {
             address.setText(userAllInfoBean.getUserExtra().getLocation());
+        } else {
+            AMapLocation location = ((FriendStationApplication) getApplication()).getCurrentCityLocation();
+            if (location != null) {
+                address.setText(location.getCity());
+            }
         }
 
         //内心独白缺失
@@ -456,7 +490,7 @@ public class MyInfoActivity extends BaseActivity {
         String[] heightArray = getResources().getStringArray(R.array.heightArray);
         int currentHeightIndex = 0;
         for (int h = 0; h < heightArray.length; h++) {
-            if (userAllInfoBean.getUserExtra().getHeight() == Integer.parseInt(heightArray[h])) {
+            if (userAllInfoBean.getUserExtra().getHeight().equals(heightArray[h])) {
                 currentHeightIndex = h;
             }
         }
@@ -465,7 +499,7 @@ public class MyInfoActivity extends BaseActivity {
         String[] weightArray = getResources().getStringArray(R.array.weightArray);
         int currentWeightIndex = 0;
         for (int w = 0; w < weightArray.length; w++) {
-            if (userAllInfoBean.getUserExtra().getHeight() == Integer.parseInt(weightArray[w])) {
+            if (userAllInfoBean.getUserExtra().getWeight().equals(weightArray[w])) {
                 currentWeightIndex = w;
             }
         }

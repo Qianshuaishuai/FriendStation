@@ -5,7 +5,6 @@ public class SetUserFullRequest {
     private String inviteCode;
     private String avatar;
     private String nickname;
-    private int sex;
     private String sign;
 
     public String getInviteCode() {
@@ -38,14 +37,6 @@ public class SetUserFullRequest {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public int getSex() {
-        return sex;
-    }
-
-    public void setSex(int sex) {
-        this.sex = sex;
     }
 
     public String getSign() {

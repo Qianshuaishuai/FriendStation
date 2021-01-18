@@ -16,6 +16,8 @@ import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.request.SetUserFullExtraRequest;
 import com.babyraising.friendstation.request.SetUserFullRequest;
+import com.babyraising.friendstation.request.SetUserInwordExtraRequest;
+import com.babyraising.friendstation.request.SetUserInwordRequest;
 import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.ui.main.MyInfoActivity;
@@ -125,8 +127,8 @@ public class InwordActivity extends BaseActivity {
     }
 
     private void saveUserInfo() {
-        SetUserFullRequest request = new SetUserFullRequest();
-        SetUserFullExtraRequest extraRequest = new SetUserFullExtraRequest();
+        SetUserInwordRequest request = new SetUserInwordRequest();
+        SetUserInwordExtraRequest extraRequest = new SetUserInwordExtraRequest();
         if (!TextUtils.isEmpty(content.getText().toString())) {
             extraRequest.setIntroduce(content.getText().toString());
         }
@@ -141,6 +143,7 @@ public class InwordActivity extends BaseActivity {
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         params.setBodyContent(gson.toJson(request));
+        System.out.println(gson.toJson(request));
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
