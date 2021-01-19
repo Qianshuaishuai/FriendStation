@@ -468,8 +468,9 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                 int unreadCount = 0;
                 for (int n = 0; n < newList.size(); n++) {
                     unreadCount = unreadCount + newList.get(n).getUnreadCount();
+                    System.out.println("id:" + newList.get(n).getUserID());
+                    System.out.println("unreadCount:" + newList.get(n).getUnreadCount());
                 }
-                System.out.println("currentUnreadCount:" + unreadCount);
                 if (unreadCount == 0) {
                     count.setVisibility(View.GONE);
                 } else if (unreadCount >= 100) {

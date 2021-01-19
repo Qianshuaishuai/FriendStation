@@ -174,11 +174,21 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
                         }
                     });
                 }
-                holder.timeTxt.setText(DatesUtil.timeStamp2Date(String.valueOf(mList.get(position).getLastMessage().getTimestamp()), "HH:mm"));
+                holder.timeTxt.setText(translateCurrentTimeShow(mList.get(position).getLastMessage().getTimestamp()));
             }
 
 
         }
+    }
+
+    private String translateCurrentTimeShow(long showTime) {
+        long currentTime = System.currentTimeMillis() / 1000;
+        long offsetDay = (currentTime - showTime) / 60 / 60 / 24;
+        if (offsetDay > 1) {
+            return DatesUtil.timeStamp2Date(String.valueOf(showTime), "yyyy-MM-dd HH:mm");
+        }
+
+        return DatesUtil.timeStamp2Date(String.valueOf(showTime), "HH:mm");
     }
 
     private String checkContent(String oldContent) {

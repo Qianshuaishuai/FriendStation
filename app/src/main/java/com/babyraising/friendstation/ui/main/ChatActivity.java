@@ -599,6 +599,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             public void onSuccess(V2TIMMessage message) {
                 System.out.println("sendMessage success:" + gson.toJson(message));
                 getMessageList();
+                setMessageRead(message.getUserID());
                 List<MessageBaseElement> elements = message.getMessage().getMessageBaseElements();
                 if (elements.get(0) instanceof CustomElement) {
                     Gson gson = new Gson();
@@ -838,6 +839,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     }
 
     private void setMessageRead(String userId) {
+        System.out.println("setMessageRead:" + userId);
         V2TIMCallback callback = new V2TIMCallback() {
             @Override
             public void onSuccess() {
@@ -1062,7 +1064,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                         if (currentUserBean.getStatusCert().equals("PASS")) {
                             authTip.setVisibility(View.VISIBLE);
                         }
-
+                        setMessageRead(String.valueOf(currentChatId));
                         break;
                     case 401:
 

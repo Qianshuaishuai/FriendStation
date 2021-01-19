@@ -377,7 +377,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             }
         });
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println("timestamp:" + DatesUtil.timeStamp2Date(String.valueOf(mList.get(position).getTimestamp()), "yyyy-MM-dd HH:mm"));
+//        System.out.println("timestamp:" + DatesUtil.timeStamp2Date(String.valueOf(mList.get(position).getTimestamp()), "yyyy-MM-dd HH:mm"));
 //        System.out.println("timestamp:" + mList.get(position).getTimestamp() / 1000);
 //        System.out.println("timestamp:" + translateCurrentTimeShow(mList.get(position).getTimestamp() / 1000));
         if (position == 0) {
@@ -413,7 +413,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             e.printStackTrace();
         }
 
-        System.out.println("day:" + day);
+//        System.out.println("day:" + day);
         if (day < 1) {  //今天
             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
             return format.format(date);
@@ -426,9 +426,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private String translateCurrentTimeShow(long showTime) {
         long currentTime = System.currentTimeMillis() / 1000;
         long offsetDay = (currentTime - showTime) / 60 / 60 / 24;
-        System.out.println("offsetDay:" + offsetDay);
-        System.out.println("showTime:" + showTime);
-        System.out.println("currentTime:" + currentTime);
+//        System.out.println("offsetDay:" + offsetDay);
+//        System.out.println("showTime:" + showTime);
+//        System.out.println("currentTime:" + currentTime);
         if (offsetDay > 1) {
             return DatesUtil.timeStamp2Date(String.valueOf(showTime), "yyyy-MM-dd HH:mm");
         }

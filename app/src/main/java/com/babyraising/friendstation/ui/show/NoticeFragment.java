@@ -153,6 +153,8 @@ public class NoticeFragment extends BaseFragment {
                 for (int n = 0; n < newList.size(); n++) {
                     list.add(newList.get(n));
                     idList.add(Integer.valueOf(newList.get(n).getUserID()));
+                    System.out.println("id:" + newList.get(n).getUserID());
+                    System.out.println("unreadCount:" + newList.get(n).getUnreadCount());
                 }
 
                 if (idList != null && idList.size() > 0) {
