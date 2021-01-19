@@ -431,7 +431,8 @@ public class FriendStationApplication extends Application {
         mLocationOption = new AMapLocationClientOption();
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
         mLocationOption.setNeedAddress(true);
-        mLocationOption.setHttpTimeOut(20000);
+        mLocationOption.setHttpTimeOut(60000);
+        mLocationOption.setInterval(60000);
         mLocationOption.setLocationCacheEnable(false);
         /**
          * 设置定位场景，目前支持三种场景（签到、出行、运动，默认无场景）

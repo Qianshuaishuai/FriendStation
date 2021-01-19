@@ -42,25 +42,29 @@ public class IncomeRecordDetailAdapter extends RecyclerView.Adapter<IncomeRecord
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        int changeType = Integer.parseInt(mList.get(position).getChangeType());
-        switch (changeType) {
-            case 0:
-                holder.countTxt.setText((int) mList.get(position).getChangeNum() + " 金币");
-                break;
-            case 1:
-                holder.countTxt.setText("-" + (int) mList.get(position).getChangeNum() + " 金币");
-                break;
-            case 2:
-                holder.countTxt.setText("-" + (int) mList.get(position).getChangeNum() + " 金币");
-                break;
-        }
+//        int changeType = Integer.parseInt(mList.get(position).getChangeType());
+//        switch (changeType) {
+//            case 0:
+//
+//                break;
+//            case 1:
+//                holder.countTxt.setText("-" + (int) mList.get(position).getChangeNum() + " 金币");
+//                break;
+//            case 2:
+//                holder.countTxt.setText("-" + (int) mList.get(position).getChangeNum() + " 金币");
+//                break;
+//        }
+
+        holder.countTxt.setText(mList.get(position).getChangeNum() + " 金币");
 
         if (!TextUtils.isEmpty(mList.get(position).getTime())) {
             holder.timeTxt.setText(mList.get(position).getTime());
         }
 
-        if (!TextUtils.isEmpty(mList.get(position).getGoodsName())) {
-            holder.detailTxt.setText(mList.get(position).getGoodsName());
+        if (!TextUtils.isEmpty(mList.get(position).getMemo())) {
+            holder.detailTxt.setText(mList.get(position).getMemo());
+        }else{
+            holder.detailTxt.setText("暂无明细");
         }
     }
 

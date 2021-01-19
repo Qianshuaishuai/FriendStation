@@ -35,6 +35,7 @@ public class Constant {
     public static final String URL_LOGINBYPASSWORD = "ums/auth/loginByPassword";
     public static final String URL_LOGINBYMOBILE = "ums/auth/loginByMobile";
     public static final String URL_AUTH_CHECKCODE = "ums/auth/checkCode";
+    public static final String URL_AUTH_WX_GETACCESSTOKEN = "ums/auth/wx/getAccessToken";
 
     public static final String URL_UMS_USER = "ums/user";
     public static final String URL_UMS_USER_ALBUM_PAGE = "ums/user/album/page";

@@ -22,6 +22,7 @@ import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.bean.UserMessageBean;
 import com.babyraising.friendstation.ui.main.ChatActivity;
 import com.babyraising.friendstation.ui.main.CloseActivity;
+import com.babyraising.friendstation.util.DatesUtil;
 import com.babyraising.friendstation.util.T;
 import com.babyraising.friendstation.util.TimeUtils;
 import com.google.gson.Gson;
@@ -134,7 +135,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
                 if (!TextUtils.isEmpty(userBean.getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
                             setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
-                    x.image().bind(holder.iconIv,userBean.getAvatar(), options);
+                    x.image().bind(holder.iconIv, userBean.getAvatar(), options);
                 }
 
                 holder.rightIv.setVisibility(View.GONE);
@@ -173,7 +174,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
                         }
                     });
                 }
-                holder.timeTxt.setText(TimeUtils.timeStamp2Date(mList.get(position).getLastMessage().getTimestamp()));
+                holder.timeTxt.setText(DatesUtil.timeStamp2Date(String.valueOf(mList.get(position).getLastMessage().getTimestamp()), "HH:mm"));
             }
 
 

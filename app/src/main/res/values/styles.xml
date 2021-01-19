@@ -19,6 +19,7 @@
     <!-- spinner -->
     <style name="spinner_style">
         <item name="android:background">#48000000</item>
+        <item name="android:windowBackground">#48000000</item>
         <!--<item name="android:paddingLeft">5dip</item>-->
     </style>
 </resources>

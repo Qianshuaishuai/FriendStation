@@ -134,7 +134,7 @@ public class RechargeActivity extends BaseActivity {
             public void onSuccess(String result) {
                 Gson gson = new Gson();
                 UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
-                System.out.println("gift-userFullInfo" + result);
+                System.out.println("recharge-userFullInfo" + result);
                 switch (response.getCode()) {
                     case 200:
                         ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());

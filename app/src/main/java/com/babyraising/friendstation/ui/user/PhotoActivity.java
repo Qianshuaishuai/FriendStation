@@ -6,8 +6,10 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.http.SslCertificate;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -258,6 +260,19 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
         }
     }
 
+    private Uri getImageStreamFromExternal() {
+        File externalPubPath = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES
+        );
+
+        Uri uri = null;
+        if (externalPubPath.exists()) {
+            uri = Uri.fromFile(externalPubPath);
+        }
+
+        return uri;
+    }
+
     private void uploadPic(String localPic) {
 
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
@@ -414,8 +429,9 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
     }
 
     private void choosePhoto() {
-        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
-        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        Intent intentToPickPic = new Intent(Intent.ACTION_PICK_ACTIVITY, getImageStreamFromExternal());
+        System.out.println(getImageStreamFromExternal());
+        intentToPickPic.setDataAndType(getImageStreamFromExternal(), "image/*");
 //        Intent intent = new Intent();
 //        intent.addCategory(Intent.CATEGORY_OPENABLE);
 //        intent.setType("image/*");
@@ -426,6 +442,18 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
 //        }
 //        startActivityForResult(intent, RC_CHOOSE_PHOTO);
         startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
+    }
+
+    private String getRealPathFromURI(Uri uri) {
+        try {
+            Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            return cursor.getString(idx);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private boolean checkPermission() {
@@ -497,7 +525,9 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
                 }
                 try {
                     Uri uri = data.getData();
+                    System.out.println("uri:" + uri);
                     String filePath = FileUtil.getFilePathByUri(this, uri);
+                    System.out.println("filePath:" + filePath);
                     if (!TextUtils.isEmpty(filePath)) {
                         uploadPic(filePath);
                     } else {

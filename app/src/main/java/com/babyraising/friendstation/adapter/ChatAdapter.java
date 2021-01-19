@@ -29,6 +29,7 @@ import com.babyraising.friendstation.bean.TimCustomBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.ui.main.ChatActivity;
 import com.babyraising.friendstation.util.ChatUtil;
+import com.babyraising.friendstation.util.DatesUtil;
 import com.babyraising.friendstation.util.TimeUtils;
 import com.google.gson.Gson;
 import com.tencent.imsdk.message.CustomElement;
@@ -51,6 +52,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -375,15 +377,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             }
         });
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+        System.out.println("timestamp:" + DatesUtil.timeStamp2Date(String.valueOf(mList.get(position).getTimestamp()), "yyyy-MM-dd HH:mm"));
+//        System.out.println("timestamp:" + mList.get(position).getTimestamp() / 1000);
+//        System.out.println("timestamp:" + translateCurrentTimeShow(mList.get(position).getTimestamp() / 1000));
         if (position == 0) {
             holder.timeTxt.setVisibility(View.VISIBLE);
             holder.timeTxt.setText(translateCurrentTimeShow(mList.get(position).getTimestamp()));
+
         } else {
             long lastTime = mList.get(position - 1).getTimestamp();
             long currentTime = mList.get(position).getTimestamp();
-
-            long offsetMinute = (currentTime - lastTime) / 1000 / 60;
+            long offsetMinute = (currentTime - lastTime) / 60;
+//            long offsetMinute = (currentTime - lastTime) / 1000 / 60;
             if (offsetMinute > 5) {
                 holder.timeTxt.setVisibility(View.VISIBLE);
                 holder.timeTxt.setText(translateCurrentTimeShow(mList.get(position).getTimestamp()));
@@ -393,16 +398,42 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         }
     }
 
-    private String translateCurrentTimeShow(long showTime) {
-        long currentTime = new Date().getTime();
-        long offsetDay = (currentTime - showTime) / 1000 / 60 / 60 / 24;
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
-        if (offsetDay > 7) {
-            return sdf1.format(showTime);
+    private String handleDate(long time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date(time * 1000);
+        long day = 0;
+        try {
+            Date old = sdf.parse(sdf.format(date));
+            Date now = sdf.parse(sdf.format(new Date()));
+            long oldTime = old.getTime();
+            long nowTime = now.getTime();
+
+            day = (nowTime - oldTime) / (24 * 60 * 60 * 1000);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
 
-        return sdf2.format(showTime);
+        System.out.println("day:" + day);
+        if (day < 1) {  //今天
+            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+            return format.format(date);
+        } else {    //可依次类推
+            SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+            return format.format(date);
+        }
+    }
+
+    private String translateCurrentTimeShow(long showTime) {
+        long currentTime = System.currentTimeMillis() / 1000;
+        long offsetDay = (currentTime - showTime) / 60 / 60 / 24;
+        System.out.println("offsetDay:" + offsetDay);
+        System.out.println("showTime:" + showTime);
+        System.out.println("currentTime:" + currentTime);
+        if (offsetDay > 1) {
+            return DatesUtil.timeStamp2Date(String.valueOf(showTime), "yyyy-MM-dd HH:mm");
+        }
+
+        return DatesUtil.timeStamp2Date(String.valueOf(showTime), "HH:mm");
     }
 
     private String checkContent(String oldContent) {
