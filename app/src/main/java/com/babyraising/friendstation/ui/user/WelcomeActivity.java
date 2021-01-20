@@ -67,10 +67,10 @@ public class WelcomeActivity extends BaseActivity {
         if (status == 1) {
             startMainActivity();
         } else {
-            if (((FriendStationApplication) getApplication()).getIsFirstTip() == 0) {
-                initNoticeTip();
-//                initNoticePopupWindow();
-            }
+//            if (((FriendStationApplication) getApplication()).getIsFirstTip() == 0) {
+//                initNoticeTip();
+////                initNoticePopupWindow();
+//            }
         }
     }
 

@@ -254,7 +254,7 @@ public class LoginPhoneActivity extends BaseActivity {
                 System.out.println("WX_LOGIN:" + result);
                 switch (response.getCode()) {
                     case 200:
-
+                        T.s("获取微信用户信息成功哦你");
                         break;
                     default:
                         T.s("获取微信用户信息失败");

@@ -8,12 +8,12 @@ public class UserExtraInfoBean {
     private String gmtCreate;
     private String gmtModify;
     private String height;
-    private int id;
+    private long id;
     private String income;
     private String introduce;
     private String location;
     private String sexPart;
-    private int userId;
+    private long userId;
     private String weight;
     private String work;
 
@@ -73,11 +73,11 @@ public class UserExtraInfoBean {
         this.height = height;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -113,11 +113,11 @@ public class UserExtraInfoBean {
         this.sexPart = sexPart;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

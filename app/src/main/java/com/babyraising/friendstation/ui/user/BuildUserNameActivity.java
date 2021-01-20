@@ -106,6 +106,7 @@ public class BuildUserNameActivity extends BaseActivity {
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         params.setBodyContent(gson.toJson(request));
+        System.out.println("saveUserDate:" + gson.toJson(request));
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

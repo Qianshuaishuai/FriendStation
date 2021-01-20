@@ -13,6 +13,9 @@ public class Constant {
     public static final int EDIT_INFO_MODE_NAME = 1111;
     public static final int EDIT_INFO_MODE_ADDRESS = 1112;
 
+    //支付对象
+    public static final int PAY_FOR_COIN = 9999;
+
     public static final int CODE_VOICE_TIP_REQUEST = 11111;
 
     public static final int OFFICIAL_INTO_CHAT_CODE = 999;

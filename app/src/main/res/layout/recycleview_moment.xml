@@ -30,7 +30,7 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="布朗"
+                android:text="未知用户"
                 android:textColor="#37445A"
                 android:textSize="15dip" />
 
@@ -57,7 +57,7 @@
                 android:id="@+id/sex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="女"
+                android:text="未知"
                 android:textColor="#A6A8AD"
                 android:textSize="12dip" />
 

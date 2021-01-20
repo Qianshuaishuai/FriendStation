@@ -8,10 +8,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.net.http.SslCertificate;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,9 +25,12 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -60,9 +66,14 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.valuesfeng.picker.Picker;
+import io.valuesfeng.picker.engine.GlideEngine;
+import io.valuesfeng.picker.engine.LoadEngine;
+import io.valuesfeng.picker.utils.PicturePickerUtils;
 import pub.devrel.easypermissions.EasyPermissions;
 
 @ContentView(R.layout.activity_photo)
@@ -300,6 +311,25 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
             newFile = oldFile;
         }
 
+//        if (localPic.contains(".jpeg")) {
+//            final BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inJustDecodeBounds = true;
+//            Bitmap bitmap = BitmapFactory.decodeFile(localPic, options);
+//            String tmpFile = Environment.getExternalStoragePublicDirectory(
+//                    Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/cachePng.png";
+//            System.out.println("tmpFile:" + tmpFile);
+//            try {
+//                FileOutputStream out = new FileOutputStream(tmpFile);
+//                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // 100-best quality
+//                out.close();
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//
+//            newFile = new File(tmpFile);
+//            System.out.println("tmpFileSize:" + newFile.getTotalSpace());
+//        }
+
         if (newFile == null) {
             return;
         }
@@ -429,19 +459,39 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
     }
 
     private void choosePhoto() {
-        Intent intentToPickPic = new Intent(Intent.ACTION_PICK_ACTIVITY, getImageStreamFromExternal());
-        System.out.println(getImageStreamFromExternal());
-        intentToPickPic.setDataAndType(getImageStreamFromExternal(), "image/*");
-//        Intent intent = new Intent();
-//        intent.addCategory(Intent.CATEGORY_OPENABLE);
-//        intent.setType("image/*");
-//        if (Build.VERSION.SDK_INT < 19) {
-//            intent.setAction(Intent.ACTION_GET_CONTENT);
-//        } else {
-//            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-//        }
-//        startActivityForResult(intent, RC_CHOOSE_PHOTO);
-        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
+//        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, getImageStreamFromExternal());
+//        intentToPickPic.setDataAndType(getImageStreamFromExternal(), "image/*");
+////        Intent intent = new Intent();
+////        intent.addCategory(Intent.CATEGORY_OPENABLE);
+////        intent.setType("image/*");
+////        if (Build.VERSION.SDK_INT < 19) {
+////            intent.setAction(Intent.ACTION_GET_CONTENT);
+////        } else {
+////            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+////        }
+////        startActivityForResult(intent, RC_CHOOSE_PHOTO);
+//        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
+//        YUtils.startForPickGalleryPhotoVideo(this, new BaseCallBack() {
+//            @Override
+//            public void onSuccess(String path) {
+//                System.out.println("choose-photo-path:" + path);
+//                if (!TextUtils.isEmpty(path)) {
+//                    uploadPic(path);
+//                } else {
+//                    T.s("选择照片出错");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int errCode) {
+//
+//            }
+//        });
+        Picker.from(this)
+                .count(1)
+                .enableCamera(false)
+                .setEngine(new GlideEngine())
+                .forResult(RC_CHOOSE_PHOTO);
     }
 
     private String getRealPathFromURI(Uri uri) {
@@ -523,18 +573,27 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
                 if (data == null) {
                     return;
                 }
-                try {
-                    Uri uri = data.getData();
-                    System.out.println("uri:" + uri);
-                    String filePath = FileUtil.getFilePathByUri(this, uri);
+//                try {
+//                    Uri uri = data.getData();
+//                    System.out.println("uri:" + uri);
+//                    String filePath = FileUtil.getFilePathByUri(this, uri);
+//                    System.out.println("filePath:" + filePath);
+//                    if (!TextUtils.isEmpty(filePath)) {
+//                        uploadPic(filePath);
+//                    } else {
+//                        T.s("选择照片出错");
+//                    }
+//                } catch (Exception e) {
+//                    System.out.println("e:" + e.toString());
+//                }
+
+                List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+                for (Uri u : mSelected) {
+                    String filePath = FileUtil.getFilePathByUri(this, u);
                     System.out.println("filePath:" + filePath);
                     if (!TextUtils.isEmpty(filePath)) {
                         uploadPic(filePath);
-                    } else {
-                        T.s("选择照片出错");
                     }
-                } catch (Exception e) {
-                    System.out.println("e:" + e.toString());
                 }
                 break;
             case RC_TAKE_PHOTO:
