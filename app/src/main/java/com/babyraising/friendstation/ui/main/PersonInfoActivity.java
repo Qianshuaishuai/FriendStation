@@ -74,6 +74,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.valuesfeng.picker.Picker;
+import io.valuesfeng.picker.engine.GlideEngine;
+import io.valuesfeng.picker.utils.PicturePickerUtils;
+
 @ContentView(R.layout.activity_person_info)
 public class PersonInfoActivity extends BaseActivity {
 
@@ -222,6 +226,7 @@ public class PersonInfoActivity extends BaseActivity {
         Intent intent = new Intent(this, MyInfoActivity.class);
         if (mode == 1) {
             intent.putExtra("mode", 1);
+            intent.putExtra("userId", currentUserId);
         }
         startActivity(intent);
     }
@@ -264,6 +269,7 @@ public class PersonInfoActivity extends BaseActivity {
         Intent intent = new Intent(this, MyInfoActivity.class);
         if (mode == 1) {
             intent.putExtra("mode", 1);
+            intent.putExtra("userId", currentUserId);
         }
         startActivity(intent);
     }
@@ -479,6 +485,7 @@ public class PersonInfoActivity extends BaseActivity {
         Intent intent = new Intent(this, MyInfoActivity.class);
         if (mode == 1) {
             intent.putExtra("mode", 1);
+            intent.putExtra("userId", currentUserId);
         }
         startActivity(intent);
     }
@@ -1139,8 +1146,13 @@ public class PersonInfoActivity extends BaseActivity {
                     tagList.add("职业:" + userAllInfoBean.getUserExtra().getWork());
                 }
 
-                tagList.add("身高:" + userAllInfoBean.getUserExtra().getHeight());
-                tagList.add("体重:" + userAllInfoBean.getUserExtra().getWeight());
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getHeight())) {
+                    tagList.add("身高:" + userAllInfoBean.getUserExtra().getHeight());
+                }
+
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getWeight())) {
+                    tagList.add("体重:" + userAllInfoBean.getUserExtra().getWeight());
+                }
 
                 if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getEducation())) {
                     tagList.add("学历:" + userAllInfoBean.getUserExtra().getEducation());
@@ -1226,9 +1238,9 @@ public class PersonInfoActivity extends BaseActivity {
     }
 
     private void choosePhoto() {
-        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
-        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
+//        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+//        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+//        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
 //        Intent intent = new Intent();
 //        intent.addCategory(Intent.CATEGORY_OPENABLE);
 //        intent.setType("image/*");
@@ -1238,6 +1250,11 @@ public class PersonInfoActivity extends BaseActivity {
 //            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
 //        }
 //        startActivityForResult(intent, RC_CHOOSE_PHOTO);
+        Picker.from(this)
+                .count(1)
+                .enableCamera(false)
+                .setEngine(new GlideEngine())
+                .forResult(RC_CHOOSE_PHOTO);
     }
 
     private void takePhoto() {
@@ -1378,13 +1395,23 @@ public class PersonInfoActivity extends BaseActivity {
 
         switch (requestCode) {
             case RC_CHOOSE_PHOTO:
-                if (data != null) {
-                    Uri uri = data.getData();
-                    String filePath = FileUtil.getFilePathByUri(this, uri);
-                    if (!TextUtils.isEmpty(filePath)) {
-                        uploadPic(filePath);
-                    } else {
-                        T.s("选择照片出错");
+//                if (data != null) {
+//                    Uri uri = data.getData();
+//                    String filePath = FileUtil.getFilePathByUri(this, uri);
+//                    if (!TextUtils.isEmpty(filePath)) {
+//                        uploadPic(filePath);
+//                    } else {
+//                        T.s("选择照片出错");
+//                    }
+//                }
+                if (data!=null){
+                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+                    for (Uri u : mSelected) {
+                        String filePath = FileUtil.getFilePathByUri(this, u);
+                        System.out.println("filePath:" + filePath);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            uploadPic(filePath);
+                        }
                     }
                 }
                 break;

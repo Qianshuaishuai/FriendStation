@@ -63,6 +63,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.valuesfeng.picker.Picker;
+import io.valuesfeng.picker.engine.GlideEngine;
+import io.valuesfeng.picker.utils.PicturePickerUtils;
 import pub.devrel.easypermissions.EasyPermissions;
 
 @ContentView(R.layout.activity_moment_send)
@@ -298,7 +301,7 @@ public class MomentSendActivity extends BaseActivity implements EasyPermissions.
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_UPLOAD);
         params.addHeader("Authorization", bean.getAccessToken());
         File oldFile = new File(localPic);
-        if(oldFile.getTotalSpace() == 0){
+        if (oldFile.getTotalSpace() == 0) {
             System.out.println("取消拍照");
             return;
         }
@@ -479,9 +482,9 @@ public class MomentSendActivity extends BaseActivity implements EasyPermissions.
 
 
     private void choosePhoto() {
-        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
-        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
+//        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+//        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+//        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
 //        Intent intent = new Intent();
 //        intent.addCategory(Intent.CATEGORY_OPENABLE);
 //        intent.setType("image/*");
@@ -491,6 +494,11 @@ public class MomentSendActivity extends BaseActivity implements EasyPermissions.
 //            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
 //        }
 //        startActivityForResult(intent, RC_CHOOSE_PHOTO);
+        Picker.from(this)
+                .count(1)
+                .enableCamera(false)
+                .setEngine(new GlideEngine())
+                .forResult(RC_CHOOSE_PHOTO);
     }
 
     @Override
@@ -499,13 +507,23 @@ public class MomentSendActivity extends BaseActivity implements EasyPermissions.
 
         switch (requestCode) {
             case RC_CHOOSE_PHOTO:
+//                if (data != null) {
+//                    Uri uri = data.getData();
+//                    String filePath = FileUtil.getFilePathByUri(this, uri);
+//                    if (!TextUtils.isEmpty(filePath)) {
+//                        uploadPic(filePath);
+//                    } else {
+//                        T.s("选择照片出错");
+//                    }
+//                }
                 if (data != null) {
-                    Uri uri = data.getData();
-                    String filePath = FileUtil.getFilePathByUri(this, uri);
-                    if (!TextUtils.isEmpty(filePath)) {
-                        uploadPic(filePath);
-                    } else {
-                        T.s("选择照片出错");
+                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+                    for (Uri u : mSelected) {
+                        String filePath = FileUtil.getFilePathByUri(this, u);
+                        System.out.println("filePath:" + filePath);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            uploadPic(filePath);
+                        }
                     }
                 }
 

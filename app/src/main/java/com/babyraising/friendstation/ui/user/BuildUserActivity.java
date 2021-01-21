@@ -57,6 +57,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import io.valuesfeng.picker.Picker;
+import io.valuesfeng.picker.engine.GlideEngine;
+import io.valuesfeng.picker.utils.PicturePickerUtils;
+
 @ContentView(R.layout.activity_build_user)
 public class BuildUserActivity extends BaseActivity {
 
@@ -240,12 +244,13 @@ public class BuildUserActivity extends BaseActivity {
     private void startInfoDateActivity() {
         Intent intent = new Intent(this, BuildUserNameActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void choosePhoto() {
-        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
-        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
+//        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+//        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+//        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
 //        Intent intent = new Intent();
 //        intent.addCategory(Intent.CATEGORY_OPENABLE);
 //        intent.setType("image/*");
@@ -255,6 +260,11 @@ public class BuildUserActivity extends BaseActivity {
 //            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
 //        }
 //        startActivityForResult(intent, RC_CHOOSE_PHOTO);
+        Picker.from(this)
+                .count(1)
+                .enableCamera(false)
+                .setEngine(new GlideEngine())
+                .forResult(RC_CHOOSE_PHOTO);
     }
 
     @Override
@@ -263,13 +273,23 @@ public class BuildUserActivity extends BaseActivity {
 
         switch (requestCode) {
             case RC_CHOOSE_PHOTO:
-                if (data != null) {
-                    Uri uri = data.getData();
-                    String filePath = FileUtil.getFilePathByUri(this, uri);
-                    if (!TextUtils.isEmpty(filePath)) {
-                        uploadPic(filePath);
-                    } else {
-                        T.s("选择照片出错");
+//                if (data != null) {
+//                    Uri uri = data.getData();
+//                    String filePath = FileUtil.getFilePathByUri(this, uri);
+//                    if (!TextUtils.isEmpty(filePath)) {
+//                        uploadPic(filePath);
+//                    } else {
+//                        T.s("选择照片出错");
+//                    }
+//                }
+                if (data!=null){
+                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+                    for (Uri u : mSelected) {
+                        String filePath = FileUtil.getFilePathByUri(this, u);
+                        System.out.println("filePath:" + filePath);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            uploadPic(filePath);
+                        }
                     }
                 }
                 break;

@@ -587,12 +587,14 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
 //                    System.out.println("e:" + e.toString());
 //                }
 
-                List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
-                for (Uri u : mSelected) {
-                    String filePath = FileUtil.getFilePathByUri(this, u);
-                    System.out.println("filePath:" + filePath);
-                    if (!TextUtils.isEmpty(filePath)) {
-                        uploadPic(filePath);
+                if (data!=null){
+                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+                    for (Uri u : mSelected) {
+                        String filePath = FileUtil.getFilePathByUri(this, u);
+                        System.out.println("filePath:" + filePath);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            uploadPic(filePath);
+                        }
                     }
                 }
                 break;

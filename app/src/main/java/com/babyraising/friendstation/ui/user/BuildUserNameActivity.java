@@ -169,5 +169,6 @@ public class BuildUserNameActivity extends BaseActivity {
     private void startInfoSexActivity() {
         Intent intent = new Intent(this, BuildUserSexActivity.class);
         startActivity(intent);
+        finish();
     }
 }

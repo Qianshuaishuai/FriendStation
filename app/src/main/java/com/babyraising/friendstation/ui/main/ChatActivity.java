@@ -112,6 +112,9 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import io.valuesfeng.picker.Picker;
+import io.valuesfeng.picker.engine.GlideEngine;
+import io.valuesfeng.picker.utils.PicturePickerUtils;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static com.tencent.trtc.TRTCCloudDef.TRTC_APP_SCENE_AUDIOCALL;
@@ -808,13 +811,23 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
         switch (requestCode) {
             case RC_CHOOSE_PHOTO:
-                if (data != null) {
-                    Uri uri = data.getData();
-                    String filePath = FileUtil.getFilePathByUri(this, uri);
-                    if (!TextUtils.isEmpty(filePath)) {
-                        uploadPic(filePath);
-                    } else {
-                        T.s("选择照片出错");
+//                if (data != null) {
+//                    Uri uri = data.getData();
+//                    String filePath = FileUtil.getFilePathByUri(this, uri);
+//                    if (!TextUtils.isEmpty(filePath)) {
+//                        uploadPic(filePath);
+//                    } else {
+//                        T.s("选择照片出错");
+//                    }
+//                }
+                if (data!=null){
+                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+                    for (Uri u : mSelected) {
+                        String filePath = FileUtil.getFilePathByUri(this, u);
+                        System.out.println("filePath:" + filePath);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            uploadPic(filePath);
+                        }
                     }
                 }
                 break;
@@ -1238,9 +1251,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     }
 
     private void choosePhoto() {
-        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
-        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
+//        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+//        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+//        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
 //        Intent intent = new Intent();
 //        intent.addCategory(Intent.CATEGORY_OPENABLE);
 //        intent.setType("image/*");
@@ -1250,6 +1263,11 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 //            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
 //        }
 //        startActivityForResult(intent, RC_CHOOSE_PHOTO);
+        Picker.from(this)
+                .count(1)
+                .enableCamera(false)
+                .setEngine(new GlideEngine())
+                .forResult(RC_CHOOSE_PHOTO);
     }
 
     private void initVoiceTip() {

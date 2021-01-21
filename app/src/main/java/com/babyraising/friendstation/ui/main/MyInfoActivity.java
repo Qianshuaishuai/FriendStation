@@ -55,6 +55,7 @@ public class MyInfoActivity extends BaseActivity {
     private DatePickerDialog yearMonthDatePickerDialog;
 
     private int mode = 0;
+    private int currentUserId = 0;
 
     private boolean isFirstShow = false;
 
@@ -222,6 +223,7 @@ public class MyInfoActivity extends BaseActivity {
     private void initData() {
         Intent intent = getIntent();
         mode = intent.getIntExtra("mode", 0);
+        currentUserId = intent.getIntExtra("userId", 0);
 
         if (mode == 1) {
             luxury.setEnabled(false);
@@ -280,7 +282,50 @@ public class MyInfoActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getUserFullInfo();
+        if (mode == 0) {
+            getUserFullInfo();
+        } else {
+            getUserInfoForOther();
+        }
+    }
+
+    private void getUserInfoForOther() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_GET_FULL_BYID);
+        params.addParameter("userId", currentUserId);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
+                System.out.println("CurrentUserInfo" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        uploadData(response.getData());
+                        break;
+                    default:
+                        T.s("获取用户资料失败!");
+                        finish();
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void getUserFullInfo() {
@@ -296,7 +341,7 @@ public class MyInfoActivity extends BaseActivity {
                 switch (response.getCode()) {
                     case 200:
                         ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());
-                        uploadData();
+                        uploadData(response.getData());
                         break;
                     default:
 
@@ -374,7 +419,6 @@ public class MyInfoActivity extends BaseActivity {
         if (!TextUtils.isEmpty(userAllInfoBean.getInviteCode())) {
             request.setInviteCode(userAllInfoBean.getInviteCode());
         }
-
         if (!TextUtils.isEmpty(userAllInfoBean.getNickname())) {
             request.setNickname(userAllInfoBean.getNickname());
         }
@@ -432,8 +476,8 @@ public class MyInfoActivity extends BaseActivity {
         });
     }
 
-    private void uploadData() {
-        userAllInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+    private void uploadData(UserAllInfoBean bean) {
+        userAllInfoBean = bean;
 
         //暂时没有
         luxury.setText("0");
@@ -487,23 +531,27 @@ public class MyInfoActivity extends BaseActivity {
             job.setSelection(currentIndex);
         }
 
-        String[] heightArray = getResources().getStringArray(R.array.heightArray);
-        int currentHeightIndex = 0;
-        for (int h = 0; h < heightArray.length; h++) {
-            if (userAllInfoBean.getUserExtra().getHeight().equals(heightArray[h])) {
-                currentHeightIndex = h;
+        if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getHeight())) {
+            String[] heightArray = getResources().getStringArray(R.array.heightArray);
+            int currentHeightIndex = 0;
+            for (int h = 0; h < heightArray.length; h++) {
+                if (userAllInfoBean.getUserExtra().getHeight().equals(heightArray[h])) {
+                    currentHeightIndex = h;
+                }
             }
+            height.setSelection(currentHeightIndex);
         }
-        height.setSelection(currentHeightIndex);
 
-        String[] weightArray = getResources().getStringArray(R.array.weightArray);
-        int currentWeightIndex = 0;
-        for (int w = 0; w < weightArray.length; w++) {
-            if (userAllInfoBean.getUserExtra().getWeight().equals(weightArray[w])) {
-                currentWeightIndex = w;
+        if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getWeight())) {
+            String[] weightArray = getResources().getStringArray(R.array.weightArray);
+            int currentWeightIndex = 0;
+            for (int w = 0; w < weightArray.length; w++) {
+                if (userAllInfoBean.getUserExtra().getWeight().equals(weightArray[w])) {
+                    currentWeightIndex = w;
+                }
             }
+            weight.setSelection(currentWeightIndex);
         }
-        weight.setSelection(currentWeightIndex);
 
 
         if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getEducation())) {

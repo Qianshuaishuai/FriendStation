@@ -191,7 +191,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.BuildUserActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+
+        </activity>
+
         <activity
             android:name=".ui.main.VoiceSelfActivity"
             android:screenOrientation="portrait" />

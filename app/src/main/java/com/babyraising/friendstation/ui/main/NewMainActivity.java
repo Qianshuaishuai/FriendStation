@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +45,9 @@ import com.babyraising.friendstation.ui.show.FindFragment;
 import com.babyraising.friendstation.ui.show.MomentFragment;
 import com.babyraising.friendstation.ui.show.NoticeFragment;
 import com.babyraising.friendstation.ui.show.PersonFragment;
+import com.babyraising.friendstation.ui.user.BuildUserActivity;
+import com.babyraising.friendstation.ui.user.BuildUserNameActivity;
+import com.babyraising.friendstation.ui.user.BuildUserSexActivity;
 import com.babyraising.friendstation.ui.user.LoginPhoneActivity;
 import com.babyraising.friendstation.ui.user.NoticeActivity;
 import com.babyraising.friendstation.util.DisplayUtils;
@@ -512,6 +516,7 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                     case 200:
                         ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());
                         allInfoBean = response.getData();
+                        judgeIsAllInfo(response.getData());
                         initTimLogin();
                         uploadLocation();
                         if (!isFirstAutoSendMesage) {
@@ -553,6 +558,28 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
 
             }
         });
+    }
+
+    private void judgeIsAllInfo(UserAllInfoBean data) {
+        //如果头像和名字均为设置，跳回设置
+        if (TextUtils.isEmpty(data.getNickname()) && TextUtils.isEmpty(data.getAvatar())) {
+            Intent intent = new Intent(this, BuildUserActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            T.s("请先完善个人信息");
+        }
+        if (TextUtils.isEmpty(data.getUserExtra().getBirthday())) {
+            Intent intent = new Intent(this, BuildUserNameActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            T.s("请先完善个人信息");
+        }
+        if (data.getSex() == 0) {
+            Intent intent = new Intent(this, BuildUserSexActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            T.s("请先完善个人信息");
+        }
     }
 
     private void randomUserSendMessage() {
