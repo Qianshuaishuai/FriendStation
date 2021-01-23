@@ -24,6 +24,7 @@ import com.babyraising.friendstation.request.SetUserFullRequest;
 import com.babyraising.friendstation.request.SetUserSexRequest;
 import com.babyraising.friendstation.response.UmsUpdateUsernameAndIconResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
+import com.babyraising.friendstation.util.DateUtil;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 import com.nanchen.compresshelper.CompressHelper;
@@ -39,6 +40,7 @@ import org.xutils.x;
 
 import java.io.File;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,6 +51,8 @@ import java.util.List;
 public class BuildUserNameActivity extends BaseActivity {
 
     private DatePickerDialog yearMonthDatePickerDialog;
+
+    private String currentConstellation = "";
 
     @Event(R.id.back)
     private void backClick(View view) {
@@ -95,6 +99,7 @@ public class BuildUserNameActivity extends BaseActivity {
         SetUserFullRequest request = new SetUserFullRequest();
         SetUserFullExtraRequest extraRequest = new SetUserFullExtraRequest();
         extraRequest.setBirthday(date.getText().toString());
+        extraRequest.setConstellation(currentConstellation);
         request.setUserExtra(extraRequest);
         request.setInviteCode(invite.getText().toString());
 
@@ -156,6 +161,18 @@ public class BuildUserNameActivity extends BaseActivity {
                         if (layoutDatePicker.getVisibility() == View.VISIBLE) {
                             layoutDatePicker.setVisibility(View.GONE);
                         }
+
+                        try {
+                            String timeStr = year + "-" + (month + 1) + "-" + dayOfMonth;
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            Date date = sdf.parse(timeStr);
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(date);
+                            currentConstellation = DateUtil.date2Constellation(calendar);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 },
                 mYear, mMonth, mDay);
@@ -163,6 +180,18 @@ public class BuildUserNameActivity extends BaseActivity {
         Date date1 = new Date();
         DateFormat format = new SimpleDateFormat("MM-dd");
         date.setText("1991-" + format.format(date1));
+
+        try {
+//            String timeStr = year + "-" + (month + 1) + "-" + dayOfMonth;
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date2 = sdf.parse(date.getText().toString());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date2);
+            currentConstellation = DateUtil.date2Constellation(calendar);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

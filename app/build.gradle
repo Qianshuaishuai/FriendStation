@@ -63,7 +63,7 @@ dependencies {
 
 //    implementation 'com.tencent.imsdk:imsdk:4.9.1'
 //    implementation 'com.tencent.imsdk:tuikit:xxx版本'
-    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+//    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

@@ -254,9 +254,10 @@ public class MomentSendActivity extends BaseActivity implements EasyPermissions.
             return;
         }
 
-        if (takePhotoLayout.getVisibility() == View.GONE) {
-            takePhotoLayout.setVisibility(View.VISIBLE);
-        }
+//        if (takePhotoLayout.getVisibility() == View.GONE) {
+//            takePhotoLayout.setVisibility(View.VISIBLE);
+//        }
+        choosePhoto();
     }
 
     public void deletePhoto(int position) {

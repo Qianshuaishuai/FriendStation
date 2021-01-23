@@ -39,6 +39,7 @@ public class Constant {
     public static final String URL_LOGINBYMOBILE = "ums/auth/loginByMobile";
     public static final String URL_AUTH_CHECKCODE = "ums/auth/checkCode";
     public static final String URL_AUTH_WX_GETACCESSTOKEN = "ums/auth/wx/getAccessToken";
+    public static final String URL_AUTH_WX_LOGINBYWXCODE = "ums/auth/wx/loginByWxCode";
 
     public static final String URL_UMS_USER = "ums/user";
     public static final String URL_UMS_USER_ALBUM_PAGE = "ums/user/album/page";
@@ -92,6 +93,8 @@ public class Constant {
     public static final String URL_FRIENDS_TASK_RECORD_SAVE = "friends/taskRecord/save";
     public static final String URL_FRIENDS_MOMENTSLISTBYID = "friends/moments/getMomentsListById";
     public static final String URL_FRIENDS_COINORDER_BEFORESAVE = "friends/coinOrder/beforeSave";
+
+    public static final String URL_FRIENDS_COINORDER_ALIPAYORDER = "friends/coinOrder/aliPayOrder";
 
 
     //腾讯云im相关

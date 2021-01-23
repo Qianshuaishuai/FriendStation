@@ -76,7 +76,7 @@
                     android:layout_marginLeft="2dip"
                     android:text=""
                     android:textColor="#ffffff"
-                    android:textSize="14dip" />
+                    android:textSize="12dip" />
             </LinearLayout>
 
             <!--<View-->
@@ -98,7 +98,7 @@
                 android:paddingBottom="2dip"
                 android:text=""
                 android:textColor="#ffffff"
-                android:textSize="14dip" />
+                android:textSize="12dip" />
 
             <!--<View-->
             <!--android:layout_width="0.5dip"-->
@@ -119,7 +119,7 @@
                 android:paddingBottom="2dip"
                 android:text=""
                 android:textColor="#ffffff"
-                android:textSize="14dip" />
+                android:textSize="12dip" />
 
             <!--<View-->
             <!--android:layout_width="0.5dip"-->
@@ -154,11 +154,14 @@
         </LinearLayout>
 
         <TextView
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:maxWidth="200dip"
             android:id="@+id/sign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
-            android:text="你见过凌晨四点的太阳么？"
+            android:text="用户暂未设置签名"
             android:textColor="#444463"
             android:textSize="12dip" />
     </LinearLayout>
@@ -187,10 +190,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="15dip"
-            android:layout_marginBottom="2dip"
+            android:layout_marginRight="12dip"
+            android:layout_marginBottom="4dip"
             android:text="搭讪"
             android:textColor="@color/colorTipSelected"
-            android:textSize="14dip" />
+            android:textSize="12dip" />
     </LinearLayout>
 </LinearLayout>

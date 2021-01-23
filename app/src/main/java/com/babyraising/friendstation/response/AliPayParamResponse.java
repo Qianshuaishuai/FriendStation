@@ -5,7 +5,7 @@ import com.babyraising.friendstation.bean.AliPayParamBean;
 public class AliPayParamResponse {
     private int code;
     private String msg ;
-    private AliPayParamBean data;
+    private String data;
 
     public int getCode() {
         return code;
@@ -23,11 +23,11 @@ public class AliPayParamResponse {
         this.msg = msg;
     }
 
-    public AliPayParamBean getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(AliPayParamBean data) {
+    public void setData(String data) {
         this.data = data;
     }
 }

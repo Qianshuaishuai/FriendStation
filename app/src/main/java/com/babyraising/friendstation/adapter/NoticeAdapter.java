@@ -174,7 +174,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
                         }
                     });
                 }
-                holder.timeTxt.setText(translateCurrentTimeShow(mList.get(position).getLastMessage().getTimestamp()));
+                holder.timeTxt.setText(DatesUtil.timeStamp2Date(String.valueOf(mList.get(position).getLastMessage().getTimestamp()), "HH:mm"));
             }
 
 

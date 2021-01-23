@@ -24,6 +24,7 @@ import com.babyraising.friendstation.event.WxAuthEvent;
 import com.babyraising.friendstation.response.UmsGetCodeResponse;
 import com.babyraising.friendstation.response.UmsIsFirstLoginResponse;
 import com.babyraising.friendstation.response.UserWxLoginResponse;
+import com.babyraising.friendstation.response.WxLoginResponse;
 import com.babyraising.friendstation.ui.MainActivity;
 import com.babyraising.friendstation.ui.main.NewMainActivity;
 import com.babyraising.friendstation.ui.main.PrivacyActivity;
@@ -59,6 +60,10 @@ public class LoginPhoneActivity extends BaseActivity {
 
     @Event(R.id.layout_wechat)
     private void wechatLayoutClick(View view) {
+        if (!checkKnow.isChecked()) {
+            T.s("请先勾选同意用户须知");
+            return;
+        }
         final IWXAPI api = WXAPIFactory.createWXAPI(this, Constant.WX_APPID, true);
         // send oauth request
         final SendAuth.Req req = new SendAuth.Req();
@@ -171,6 +176,11 @@ public class LoginPhoneActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    private void startBuildActivity() {
+        Intent intent = new Intent(this, BuildUserActivity.class);
+        startActivity(intent);
+    }
+
     private void initView() {
         know.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
@@ -243,18 +253,24 @@ public class LoginPhoneActivity extends BaseActivity {
     }
 
     private void wxLogin(String code) {
-        System.out.println("code :" + code);
-        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_AUTH_WX_GETACCESSTOKEN);
+//        System.out.println("code :" + code);
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_AUTH_WX_LOGINBYWXCODE);
         params.addQueryStringParameter("code", code);
-        x.http().get(params, new Callback.CommonCallback<String>() {
+        x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Gson gson = new Gson();
-                UserWxLoginResponse response = gson.fromJson(result, UserWxLoginResponse.class);
+                WxLoginResponse response = gson.fromJson(result, WxLoginResponse.class);
                 System.out.println("WX_LOGIN:" + result);
                 switch (response.getCode()) {
                     case 200:
-                        T.s("获取微信用户信息成功哦你");
+//                        T.s("获取微信用户信息成功");
+                        ((FriendStationApplication) getApplication()).saveUserInfo(response.getData());
+                        if (response.getData().isFirstLogin()) {
+                            startBuildActivity();
+                        } else {
+                            startMainActivity();
+                        }
                         break;
                     default:
                         T.s("获取微信用户信息失败");
@@ -288,6 +304,8 @@ public class LoginPhoneActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(WxAuthEvent event) {
         if (!TextUtils.isEmpty(event.getCode())) {
+//            wxLogin(event.getCode());
+//            System.out.println("code :" + event.getCode());
             wxLogin(event.getCode());
         }
     }

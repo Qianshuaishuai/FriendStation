@@ -14,6 +14,7 @@ public class UserLookMeBean {
     private double distance;
     private String birthday;
     private int sex;
+    private UserExtraInfoBean userExtra;
 
     public double getDistance() {
         return distance;
@@ -117,5 +118,13 @@ public class UserLookMeBean {
 
     public void setSex(int sex) {
         this.sex = sex;
+    }
+
+    public UserExtraInfoBean getUserExtra() {
+        return userExtra;
+    }
+
+    public void setUserExtra(UserExtraInfoBean userExtra) {
+        this.userExtra = userExtra;
     }
 }

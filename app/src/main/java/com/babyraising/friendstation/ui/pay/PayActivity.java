@@ -77,7 +77,7 @@ public class PayActivity extends BaseActivity {
             goToWxPay();
         } else {
             goToAliPay();
-            T.s("支付宝支付功能正在完善中");
+//            T.s("支付宝支付功能正在完善中");
         }
     }
 
@@ -87,7 +87,7 @@ public class PayActivity extends BaseActivity {
         request.setCoinGoodsId(String.valueOf(payDetailBean.getId()));
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
         Gson gson = new Gson();
-        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_COINORDER_BEFORESAVE);
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_COINORDER_ALIPAYORDER);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         params.setBodyContent(gson.toJson(request));
@@ -125,14 +125,13 @@ public class PayActivity extends BaseActivity {
         });
     }
 
-    private void payForAli(AliPayParamBean data) {
-        final String orderInfo = "";
+    private void payForAli(final String data) {
         Runnable payRunnable = new Runnable() {
 
             @Override
             public void run() {
                 PayTask alipay = new PayTask(PayActivity.this);
-                Map<String, String> result = alipay.payV2(orderInfo, true);
+                Map<String, String> result = alipay.payV2(data, true);
 
                 Message msg = new Message();
                 msg.what = Constant.PAY_FOR_COIN;
@@ -147,14 +146,15 @@ public class PayActivity extends BaseActivity {
 
     private Handler payHandler = new Handler() {
         public void handleMessage(Message msg) {
+            Gson gson = new Gson();
             PayResult payResult = new PayResult((Map<String, String>) msg.obj);
             /**
              对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
              */
             String resultStatus = payResult.getResultStatus();
+            System.out.println("alipay-resultStatus:" + gson.toJson(payResult));
             // 判断resultStatus 为9000则代表支付成功
             if (TextUtils.equals(resultStatus, "9000")) {
-                Gson gson = new Gson();
                 String resultInfo = payResult.getResult();// 同步返回需要验证的信息
                 PayDetailResult result = gson.fromJson(resultInfo, PayDetailResult.class);
 
@@ -162,6 +162,8 @@ public class PayActivity extends BaseActivity {
                 String payTotal = result.getAlipay_trade_app_pay_response().getTotal_amount();
 //                DoPayOrder(Constant.PAY_TYPE_ALI, orderNo, Double.parseDouble(payTotal), balancePayPrice);
                 T.s("支付成功");
+            } else if (TextUtils.equals(resultStatus, "4000")) {
+                T.s("请先下载支付宝客户端!");
             } else {
                 // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
 //                startHomeActivity();

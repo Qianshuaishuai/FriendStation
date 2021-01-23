@@ -29,22 +29,22 @@ public class CloseRecordAdapter extends RecyclerView.Adapter<CloseRecordAdapter.
     private CloseActivity context;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTxt, cityTxt, ageTxt, heightTxt, jobTxt, incomeTxt, signTxt;
-        ImageView ivSelected, ivNormal, ivHead;
+        TextView tip1Txt, tip2Txt, tip3Txt, signTxt, nameTxt;
+        ImageView ivSelected, ivNormal, ivHead, ivSex;
         LinearLayout mainLayout, rightLayout;
 
         public ViewHolder(View view) {
             super(view);
-            nameTxt = (TextView) view.findViewById(R.id.name);
-            cityTxt = (TextView) view.findViewById(R.id.city);
-            ageTxt = (TextView) view.findViewById(R.id.age);
-            heightTxt = (TextView) view.findViewById(R.id.height);
-            jobTxt = (TextView) view.findViewById(R.id.job);
+            tip1Txt = (TextView) view.findViewById(R.id.tip1);
+            tip2Txt = (TextView) view.findViewById(R.id.tip2);
+            tip3Txt = (TextView) view.findViewById(R.id.tip3);
             signTxt = (TextView) view.findViewById(R.id.sign);
-            incomeTxt = (TextView) view.findViewById(R.id.income);
+            nameTxt = (TextView) view.findViewById(R.id.name);
+//            incomeTxt = (TextView) view.findViewById(R.id.income);
             ivSelected = (ImageView) view.findViewById(R.id.iv_selected);
             ivNormal = (ImageView) view.findViewById(R.id.iv_normal);
             ivHead = (ImageView) view.findViewById(R.id.head);
+            ivSex = (ImageView) view.findViewById(R.id.sex);
             mainLayout = (LinearLayout) view.findViewById(R.id.layout_main);
             rightLayout = (LinearLayout) view.findViewById(R.id.layout_right);
         }
@@ -67,21 +67,23 @@ public class CloseRecordAdapter extends RecyclerView.Adapter<CloseRecordAdapter.
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         switch (mList.get(position).getSex()) {
             case 0:
-                if (!TextUtils.isEmpty(mList.get(position).getWork())) {
-                    holder.jobTxt.setText(mList.get(position).getWork());
-                }
+//                if (!TextUtils.isEmpty(mList.get(position).getWork())) {
+//                    holder.jobTxt.setText(mList.get(position).getWork());
+//                }
+//
+//                if (mList.get(position).getHeight() != 0) {
+//                    holder.ageTxt.setText(mList.get(position).getHeight() + "cm");
+//                }
+//
+//                if (!TextUtils.isEmpty(mList.get(position).getIncome())) {
+//                    holder.heightTxt.setText(mList.get(position).getIncome());
+//                }
+//
+//                if (!TextUtils.isEmpty(mList.get(position).getNickName())) {
+//                    holder.nameTxt.setText(mList.get(position).getNickName());
+//                }
 
-                if (!TextUtils.isEmpty(mList.get(position).getHeight())) {
-                    holder.ageTxt.setText(mList.get(position).getHeight());
-                }
-
-                if (!TextUtils.isEmpty(mList.get(position).getIncome())) {
-                    holder.heightTxt.setText(mList.get(position).getIncome());
-                }
-
-                if (!TextUtils.isEmpty(mList.get(position).getNickName())) {
-                    holder.nameTxt.setText(mList.get(position).getNickName());
-                }
+                holder.ivSex.setImageResource(R.mipmap.common_female);
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
@@ -90,20 +92,23 @@ public class CloseRecordAdapter extends RecyclerView.Adapter<CloseRecordAdapter.
                 }
                 break;
             case 1:
-                if (!TextUtils.isEmpty(mList.get(position).getWork())) {
-                    holder.jobTxt.setText(mList.get(position).getWork());
-                }
+//                if (!TextUtils.isEmpty(mList.get(position).getWork())) {
+//                    holder.jobTxt.setText(mList.get(position).getWork());
+//                }
+//
+//                if (mList.get(position).getHeight() != 0) {
+//                    holder.ageTxt.setText(mList.get(position).getHeight() + "cm");
+//                }
+//
+//                if (!TextUtils.isEmpty(mList.get(position).getIncome())) {
+//                    holder.heightTxt.setText(mList.get(position).getIncome());
+//                }
+//
+//                if (!TextUtils.isEmpty(mList.get(position).getNickName())) {
+//                    holder.nameTxt.setText(mList.get(position).getNickName());
+//                }
 
-                if (!TextUtils.isEmpty(mList.get(position).getHeight())) {
-                    holder.ageTxt.setText(mList.get(position).getHeight());
-                }
-                if (!TextUtils.isEmpty(mList.get(position).getIncome())) {
-                    holder.heightTxt.setText(mList.get(position).getIncome());
-                }
-
-                if (!TextUtils.isEmpty(mList.get(position).getNickName())) {
-                    holder.nameTxt.setText(mList.get(position).getNickName());
-                }
+                holder.ivSex.setImageResource(R.mipmap.common_female);
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
@@ -112,20 +117,23 @@ public class CloseRecordAdapter extends RecyclerView.Adapter<CloseRecordAdapter.
                 }
                 break;
             case 2:
-                if (!TextUtils.isEmpty(mList.get(position).getWork())) {
-                    holder.jobTxt.setText(mList.get(position).getWork());
-                }
+//                if (!TextUtils.isEmpty(mList.get(position).getWork())) {
+//                    holder.jobTxt.setText(mList.get(position).getWork());
+//                }
+//
+//                if (mList.get(position).getHeight() != 0) {
+//                    holder.heightTxt.setText(mList.get(position).getHeight() + "cm");
+//                }
+//
+//                if (getAge(mList.get(position).getAvatar()) > 0) {
+//                    holder.ageTxt.setText(mList.get(position).getIncome());
+//                }
+//
+//                if (!TextUtils.isEmpty(mList.get(position).getNickName())) {
+//                    holder.nameTxt.setText(mList.get(position).getNickName());
+//                }
 
-                if (!TextUtils.isEmpty(mList.get(position).getHeight())) {
-                    holder.ageTxt.setText(mList.get(position).getHeight());
-                }
-                if (getAge(mList.get(position).getAvatar()) > 0) {
-                    holder.ageTxt.setText(mList.get(position).getIncome());
-                }
-
-                if (!TextUtils.isEmpty(mList.get(position).getNickName())) {
-                    holder.nameTxt.setText(mList.get(position).getNickName());
-                }
+                holder.ivSex.setImageResource(R.mipmap.common_male);
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
@@ -140,6 +148,43 @@ public class CloseRecordAdapter extends RecyclerView.Adapter<CloseRecordAdapter.
 //            holder.cityTxt.setText(df.format(mList.get(position).getDistance() / 1000) + "km");
 //        }
 
+        if (!TextUtils.isEmpty(mList.get(position).getNickName())) {
+            holder.nameTxt.setText(mList.get(position).getNickName());
+        }
+
+        if (mList.get(position).getUserExtra() == null) {
+            holder.tip2Txt.setVisibility(View.GONE);
+            holder.tip3Txt.setVisibility(View.GONE);
+            holder.tip1Txt.setText("" + 0);
+        } else {
+            if (!TextUtils.isEmpty(mList.get(position).getUserExtra().getBirthday())) {
+                holder.tip1Txt.setText("" + getAge(mList.get(position).getUserExtra().getBirthday()));
+                holder.tip1Txt.setVisibility(View.VISIBLE);
+            } else {
+                holder.tip1Txt.setVisibility(View.GONE);
+            }
+
+            if (!TextUtils.isEmpty(mList.get(position).getUserExtra().getSexPart())) {
+                holder.tip2Txt.setText(mList.get(position).getUserExtra().getConstellation());
+                holder.tip2Txt.setVisibility(View.VISIBLE);
+            } else {
+                holder.tip2Txt.setVisibility(View.GONE);
+            }
+
+            if (!TextUtils.isEmpty(mList.get(position).getUserExtra().getSexPart())) {
+                holder.tip3Txt.setText("魅力部位:" + mList.get(position).getUserExtra().getSexPart());
+                holder.tip3Txt.setVisibility(View.VISIBLE);
+            } else {
+                holder.tip3Txt.setVisibility(View.GONE);
+            }
+
+            if (!TextUtils.isEmpty(mList.get(position).getUserExtra().getIntroduce())){
+                holder.signTxt.setText(mList.get(position).getUserExtra().getIntroduce());
+            }else{
+                holder.signTxt.setText("用户暂未设置签名");
+            }
+        }
+
         holder.rightLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -153,23 +198,6 @@ public class CloseRecordAdapter extends RecyclerView.Adapter<CloseRecordAdapter.
                 context.goToPersonInfo(mList.get(position).getId());
             }
         });
-
-
-//        holder.ivNormal.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                context.goToChat(mList.get(position).getId());
-//            }
-//        });
-//
-//        holder.ivHead.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                context.goToPersonInfo(mList.get(position).getId());
-//            }
-//        });
-
-        holder.signTxt.setText("用户暂未设置签名");
     }
 
     private int getAge(String birthday) {

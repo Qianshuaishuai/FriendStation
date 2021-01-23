@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="兑换记录"
+            android:text="积分记录"
             android:textColor="#ff3c3b41"
             android:textSize="17dip" />
 

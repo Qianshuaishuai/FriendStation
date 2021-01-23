@@ -468,14 +468,15 @@ public class PersonInfoActivity extends BaseActivity {
             tvMore.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    photoLayout.setVisibility(View.VISIBLE);
+//                    photoLayout.setVisibility(View.VISIBLE);
+                    choosePhoto();
                 }
             });
         }
 
-        if (isTask == 1) {
-            photoLayout.setVisibility(View.VISIBLE);
-        }
+//        if (isTask == 1) {
+//            photoLayout.setVisibility(View.VISIBLE);
+//        }
     }
 
     public void goToMyInfo() {

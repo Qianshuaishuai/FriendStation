@@ -81,7 +81,7 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
 
     private String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 
-    private boolean editStatus = false;
+    private boolean editStatus = true;
 
     @Event(R.id.back)
     private void back(View view) {
@@ -112,8 +112,21 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
         editStatus = !editStatus;
         if (editStatus) {
             edit.setText("编辑");
+            if (photoList.size() == 0) {
+                photoRecyleViewList.setVisibility(View.GONE);
+                noneLayout.setVisibility(View.VISIBLE);
+            }
+
+            if (photoList.size() == 1) {
+                if (TextUtils.isEmpty(photoList.get(0).getUrl())) {
+                    photoRecyleViewList.setVisibility(View.GONE);
+                    noneLayout.setVisibility(View.VISIBLE);
+                }
+            }
         } else {
             edit.setText("编辑完成");
+            photoRecyleViewList.setVisibility(View.VISIBLE);
+            noneLayout.setVisibility(View.GONE);
         }
     }
 
@@ -186,9 +199,18 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
                         for (int i = 0; i < response.getData().getRecords().size(); i++) {
                             photoList.add(response.getData().getRecords().get(i));
                         }
-                        if (photoList.size() == 0) {
-                            photoRecyleViewList.setVisibility(View.GONE);
-                            noneLayout.setVisibility(View.VISIBLE);
+                        if (editStatus) {
+                            if (photoList.size() == 0) {
+                                photoRecyleViewList.setVisibility(View.GONE);
+                                noneLayout.setVisibility(View.VISIBLE);
+                            }
+
+                            if (photoList.size() == 1) {
+                                if (TextUtils.isEmpty(photoList.get(0).getUrl())) {
+                                    photoRecyleViewList.setVisibility(View.GONE);
+                                    noneLayout.setVisibility(View.VISIBLE);
+                                }
+                            }
                         } else {
                             photoRecyleViewList.setVisibility(View.VISIBLE);
                             noneLayout.setVisibility(View.GONE);
@@ -224,9 +246,10 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
         if (!checkPermission()) {
             return;
         }
-        if (takePhotoLayout.getVisibility() == View.GONE) {
-            takePhotoLayout.setVisibility(View.VISIBLE);
-        }
+//        if (takePhotoLayout.getVisibility() == View.GONE) {
+//            takePhotoLayout.setVisibility(View.VISIBLE);
+//        }
+        choosePhoto();
     }
 
     public void goToLookPhoto(int position) {
@@ -587,7 +610,7 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
 //                    System.out.println("e:" + e.toString());
 //                }
 
-                if (data!=null){
+                if (data != null) {
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
                         String filePath = FileUtil.getFilePathByUri(this, u);

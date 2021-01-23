@@ -96,6 +96,9 @@ public class MyInfoActivity extends BaseActivity {
         yearMonthDatePickerDialog.show();
     }
 
+    @ViewInject(R.id.title)
+    private TextView title;
+
     @ViewInject(R.id.luxury)
     private EditText luxury;
 
@@ -416,9 +419,9 @@ public class MyInfoActivity extends BaseActivity {
             request.setAvatar(userAllInfoBean.getAvatar());
         }
 
-        if (!TextUtils.isEmpty(userAllInfoBean.getInviteCode())) {
-            request.setInviteCode(userAllInfoBean.getInviteCode());
-        }
+//        if (!TextUtils.isEmpty(userAllInfoBean.getInviteCode())) {
+//            request.setInviteCode(userAllInfoBean.getInviteCode());
+//        }
         if (!TextUtils.isEmpty(userAllInfoBean.getNickname())) {
             request.setNickname(userAllInfoBean.getNickname());
         }
@@ -492,6 +495,12 @@ public class MyInfoActivity extends BaseActivity {
             case 2:
                 sex.setText("女");
                 break;
+        }
+
+        if (mode == 1) {
+            if (!TextUtils.isEmpty(userAllInfoBean.getNickname())) {
+                title.setText(userAllInfoBean.getNickname() + "的资料");
+            }
         }
 
         if (!TextUtils.isEmpty(userAllInfoBean.getNickname())) {

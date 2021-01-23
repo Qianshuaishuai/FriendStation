@@ -171,10 +171,16 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
             }
 
             if (!TextUtils.isEmpty(mList.get(position).getUserExtra().getSexPart())) {
-                holder.tip3Txt.setText(mList.get(position).getUserExtra().getSexPart());
+                holder.tip3Txt.setText("魅力部位:" + mList.get(position).getUserExtra().getSexPart());
                 holder.tip3Txt.setVisibility(View.VISIBLE);
             } else {
                 holder.tip3Txt.setVisibility(View.GONE);
+            }
+
+            if (!TextUtils.isEmpty(mList.get(position).getUserExtra().getIntroduce())) {
+                holder.signTxt.setText(mList.get(position).getUserExtra().getIntroduce());
+            } else {
+                holder.signTxt.setText("用户暂未设置签名");
             }
         }
 
@@ -191,8 +197,6 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
                 context.goToPersonInfo(mList.get(position).getId());
             }
         });
-
-        holder.signTxt.setText("用户暂未设置签名");
     }
 
     private int getAge(String birthday) {

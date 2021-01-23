@@ -567,18 +567,21 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             T.s("请先完善个人信息");
+            return;
         }
-        if (TextUtils.isEmpty(data.getUserExtra().getBirthday())) {
+        if (data.getUserExtra() == null || TextUtils.isEmpty(data.getUserExtra().getBirthday())) {
             Intent intent = new Intent(this, BuildUserNameActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             T.s("请先完善个人信息");
+            return;
         }
         if (data.getSex() == 0) {
             Intent intent = new Intent(this, BuildUserSexActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             T.s("请先完善个人信息");
+            return;
         }
     }
 
