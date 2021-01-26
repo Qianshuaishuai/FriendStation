@@ -51,6 +51,7 @@ import com.babyraising.friendstation.ui.InwordActivity;
 import com.babyraising.friendstation.ui.user.PhotoActivity;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.T;
+import com.babyraising.friendstation.util.TypeUtil;
 import com.babyraising.friendstation.view.CustomLayout;
 import com.github.lassana.recorder.AudioRecorder;
 import com.github.lassana.recorder.AudioRecorderBuilder;
@@ -90,6 +91,8 @@ public class PersonInfoActivity extends BaseActivity {
     private ShowAlbumAdapter showAlbumAdapter;
     private int followed = 0;
 
+    private boolean isPlayVoiceSign = true;
+
     @ViewInject(R.id.background)
     private ImageView background;
 
@@ -104,6 +107,29 @@ public class PersonInfoActivity extends BaseActivity {
 
     @ViewInject(R.id.auth_right)
     private ImageView authRight;
+
+    @ViewInject(R.id.voice_opera)
+    private ImageView voiceOpera;
+
+    @Event(R.id.voice_opera)
+    private void voiceOperaClick(View view) {
+        if (isPlayVoiceSign) {
+            if (mediaPlayer == null) {
+                return;
+            }
+
+            mediaPlayer.pause();
+            voiceOpera.setImageResource(R.mipmap.common_play);
+        } else {
+            if (mediaPlayer == null) {
+                return;
+            }
+
+            mediaPlayer.start();
+            voiceOpera.setImageResource(R.mipmap.common_pause);
+        }
+        isPlayVoiceSign = !isPlayVoiceSign;
+    }
 
     @ViewInject(R.id.say_right)
     private ImageView sayRight;
@@ -594,6 +620,8 @@ public class PersonInfoActivity extends BaseActivity {
             mediaPlayer.start();
             currentRecordDur = mediaPlayer.getDuration();
             audio.setText(currentRecordDur / 1000 + "S");
+            voiceOpera.setImageResource(R.mipmap.common_pause);
+            isPlayVoiceSign = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1143,39 +1171,41 @@ public class PersonInfoActivity extends BaseActivity {
                     tagList.add("所在地:" + userAllInfoBean.getUserExtra().getLocation());
                 }
 
-                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getWork())) {
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getWork()) && !userAllInfoBean.getUserExtra().getWork().equals("未设置")) {
                     tagList.add("职业:" + userAllInfoBean.getUserExtra().getWork());
                 }
 
-                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getHeight())) {
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getHeight()) && !userAllInfoBean.getUserExtra().getHeight().equals("未设置")) {
                     tagList.add("身高:" + userAllInfoBean.getUserExtra().getHeight());
                 }
 
-                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getWeight())) {
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getWeight()) && !userAllInfoBean.getUserExtra().getWeight().equals("未设置")) {
                     tagList.add("体重:" + userAllInfoBean.getUserExtra().getWeight());
                 }
 
-                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getEducation())) {
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getEducation()) && !userAllInfoBean.getUserExtra().getEducation().equals("未设置")) {
                     tagList.add("学历:" + userAllInfoBean.getUserExtra().getEducation());
                 }
 
-                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getIncome())) {
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getIncome()) && !userAllInfoBean.getUserExtra().getIncome().equals("未设置")) {
                     tagList.add("收入:" + userAllInfoBean.getUserExtra().getIncome());
                 }
 
-                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getEmotionState())) {
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getEmotionState()) && !userAllInfoBean.getUserExtra().getEmotionState().equals("未设置")) {
                     tagList.add("情感状态:" + userAllInfoBean.getUserExtra().getEmotionState());
                 }
 
-                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getSexPart())) {
+                if (!TextUtils.isEmpty(userAllInfoBean.getUserExtra().getSexPart()) && !userAllInfoBean.getUserExtra().getSexPart().equals("未设置")) {
                     tagList.add("魅力部位:" + userAllInfoBean.getUserExtra().getSexPart());
                 }
             }
 
             if (!TextUtils.isEmpty(userAllInfoBean.getRecordSign())) {
                 playSound(userAllInfoBean.getRecordSign());
+                voiceOpera.setVisibility(View.VISIBLE);
             } else {
                 audio.setText("暂未设置语言签名");
+                voiceOpera.setVisibility(View.GONE);
             }
 
 //            tagAdapter = new TagAdapter(this, tagList);
@@ -1209,10 +1239,14 @@ public class PersonInfoActivity extends BaseActivity {
                     currentLayout.setOrientation(LinearLayout.HORIZONTAL);
                     currentLayout.addView(newTextView);
                     currentLayout.setLayoutParams(layoutParams);
+                    if (t == tagList.size() - 1) {
+                        basicShowLayout.addView(currentLayout);
+                    }
                 } else {
                     currentLayout.addView(newTextView);
                     basicShowLayout.addView(currentLayout);
                 }
+
 //                basicShowLayout.addView(newTextView);
             }
 
@@ -1251,11 +1285,22 @@ public class PersonInfoActivity extends BaseActivity {
 //            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
 //        }
 //        startActivityForResult(intent, RC_CHOOSE_PHOTO);
-        Picker.from(this)
-                .count(1)
-                .enableCamera(false)
-                .setEngine(new GlideEngine())
-                .forResult(RC_CHOOSE_PHOTO);
+//        Picker.from(this)
+//                .count(1)
+//                .enableCamera(false)
+//                .setEngine(new GlideEngine())
+//                .forResult(RC_CHOOSE_PHOTO);
+        if (TypeUtil.isHuawei()) {
+            Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+            intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+            startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
+        } else {
+            Picker.from(this)
+                    .count(1)
+                    .enableCamera(false)
+                    .setEngine(new GlideEngine())
+                    .forResult(RC_CHOOSE_PHOTO);
+        }
     }
 
     private void takePhoto() {
@@ -1405,7 +1450,35 @@ public class PersonInfoActivity extends BaseActivity {
 //                        T.s("选择照片出错");
 //                    }
 //                }
-                if (data!=null){
+//                if (data != null) {
+//                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+//                    for (Uri u : mSelected) {
+//                        String filePath = FileUtil.getFilePathByUri(this, u);
+//                        System.out.println("filePath:" + filePath);
+//                        if (!TextUtils.isEmpty(filePath)) {
+//                            uploadPic(filePath);
+//                        }
+//                    }
+//                }
+                if (data == null) {
+                    return;
+                }
+                if (TypeUtil.isHuawei()) {
+                    try {
+                        Uri uri = data.getData();
+                        System.out.println("uri:" + uri);
+                        String filePath = FileUtil.getFilePathByUri(this, uri);
+                        System.out.println("filePath:" + filePath);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            uploadPic(filePath);
+                        } else {
+                            T.s("选择照片出错");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("e:" + e.toString());
+                    }
+
+                } else {
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
                         String filePath = FileUtil.getFilePathByUri(this, u);

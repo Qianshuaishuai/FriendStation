@@ -23,6 +23,7 @@ import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.ScoreOrderSortListBean;
 import com.babyraising.friendstation.bean.ScoreRecordBean;
+import com.babyraising.friendstation.bean.ScoreRecordDetail2Bean;
 import com.babyraising.friendstation.bean.ScoreRecordDetailBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.response.ScoreOrderSortListResponse;
@@ -49,7 +50,7 @@ public class InviteFriendDetailActivity extends BaseActivity {
     private int type = 0;
 
     private ExchangeRecordDetailAdapter detailAdapter;
-    private List<ScoreRecordDetailBean> detailList;
+    private List<ScoreRecordDetail2Bean> detailList;
 
     private RankIncomeAdapter rankIncomeAdapter;
     private List<ScoreOrderSortListBean> rankList;
@@ -115,7 +116,7 @@ public class InviteFriendDetailActivity extends BaseActivity {
             layoutDetail.setVisibility(View.GONE);
             layoutRank.setVisibility(View.VISIBLE);
 //
-//            getRankList();
+            getRankList();
         }
     }
 

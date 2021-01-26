@@ -130,12 +130,16 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
 
                 if (!TextUtils.isEmpty(userBean.getNickname())) {
                     holder.nameTxt.setText(userBean.getNickname());
+                } else {
+                    holder.nameTxt.setText("昵称未设置");
                 }
 
                 if (!TextUtils.isEmpty(userBean.getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
                             setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
                     x.image().bind(holder.iconIv, userBean.getAvatar(), options);
+                } else {
+                    holder.iconIv.setImageResource(R.mipmap.test4);
                 }
 
                 holder.rightIv.setVisibility(View.GONE);
@@ -175,9 +179,9 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.ViewHolder
                     });
                 }
                 holder.timeTxt.setText(DatesUtil.timeStamp2Date(String.valueOf(mList.get(position).getLastMessage().getTimestamp()), "HH:mm"));
+            } else {
+                //如果之前用户被删除
             }
-
-
         }
     }
 

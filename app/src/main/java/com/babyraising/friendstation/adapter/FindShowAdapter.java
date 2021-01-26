@@ -88,6 +88,8 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
                     ImageOptions options = new ImageOptions.Builder().
                             setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
                     x.image().bind(holder.ivHead, mList.get(position).getAvatar(), options);
+                } else {
+                    holder.ivHead.setImageResource(R.mipmap.look_me_head);
                 }
                 break;
             case 1:
@@ -113,6 +115,8 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
                     ImageOptions options = new ImageOptions.Builder().
                             setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
                     x.image().bind(holder.ivHead, mList.get(position).getAvatar(), options);
+                } else {
+                    holder.ivHead.setImageResource(R.mipmap.look_me_head);
                 }
                 break;
             case 2:
@@ -138,6 +142,8 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
                     ImageOptions options = new ImageOptions.Builder().
                             setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
                     x.image().bind(holder.ivHead, mList.get(position).getAvatar(), options);
+                } else {
+                    holder.ivHead.setImageResource(R.mipmap.look_me_head);
                 }
                 break;
         }
@@ -149,6 +155,8 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
 
         if (!TextUtils.isEmpty(mList.get(position).getNickName())) {
             holder.nameTxt.setText(mList.get(position).getNickName());
+        } else {
+            holder.nameTxt.setText("昵称未设置");
         }
 
         if (mList.get(position).getUserExtra() == null) {
@@ -197,6 +205,7 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
                 context.goToPersonInfo(mList.get(position).getId());
             }
         });
+
     }
 
     private int getAge(String birthday) {

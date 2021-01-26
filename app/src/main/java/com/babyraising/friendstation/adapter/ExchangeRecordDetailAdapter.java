@@ -1,19 +1,21 @@
 package com.babyraising.friendstation.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.bean.ScoreRecordDetail2Bean;
 import com.babyraising.friendstation.bean.ScoreRecordDetailBean;
 
 import java.util.List;
 
 public class ExchangeRecordDetailAdapter extends RecyclerView.Adapter<ExchangeRecordDetailAdapter.ViewHolder> {
 
-    private List<ScoreRecordDetailBean> mList;
+    private List<ScoreRecordDetail2Bean> mList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView timeTxt, countTxt, detailTxt, balanceTxt;
@@ -29,7 +31,7 @@ public class ExchangeRecordDetailAdapter extends RecyclerView.Adapter<ExchangeRe
 
     }
 
-    public ExchangeRecordDetailAdapter(List<ScoreRecordDetailBean> mList) {
+    public ExchangeRecordDetailAdapter(List<ScoreRecordDetail2Bean> mList) {
         this.mList = mList;
     }
 
@@ -42,7 +44,22 @@ public class ExchangeRecordDetailAdapter extends RecyclerView.Adapter<ExchangeRe
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.timeTxt.setText(mList.get(position).getGmtCreate());
+//        holder.timeTxt.setText(mList.get(position).getGmtCreate());
+        if (!TextUtils.isEmpty(mList.get(position).getTime())) {
+            holder.timeTxt.setText(mList.get(position).getTime());
+        }
+
+        if (!TextUtils.isEmpty(mList.get(position).getGoodsName())) {
+            holder.detailTxt.setText(mList.get(position).getGoodsName());
+        }
+
+        holder.balanceTxt.setText("积分余额" + mList.get(position).getScoreRemain());
+
+        if (mList.get(position).getMemo() > 0) {
+            holder.timeTxt.setText("+" + mList.get(position).getMemo());
+        } else {
+            holder.timeTxt.setText(mList.get(position).getMemo());
+        }
     }
 
     @Override

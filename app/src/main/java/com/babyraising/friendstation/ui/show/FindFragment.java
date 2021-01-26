@@ -39,6 +39,7 @@ import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.decoration.FirstShowSpaceItemDecoration;
 import com.babyraising.friendstation.decoration.SpaceItemDecoration;
+import com.babyraising.friendstation.event.UpdateMessageEvent;
 import com.babyraising.friendstation.response.FriendResponse;
 import com.babyraising.friendstation.response.NoticeResponse;
 import com.babyraising.friendstation.response.OnlineTimUserResponse;
@@ -58,6 +59,7 @@ import com.google.gson.Gson;
 
 import net.nightwhistler.htmlspanner.TextUtil;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
@@ -834,6 +836,7 @@ public class FindFragment extends BaseFragment {
             @Override
             public void onSuccess(String result) {
                 System.out.println("adminSendMessage:" + result);
+                EventBus.getDefault().post(new UpdateMessageEvent());
             }
 
             @Override

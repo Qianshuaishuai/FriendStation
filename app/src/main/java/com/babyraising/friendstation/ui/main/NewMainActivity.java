@@ -36,6 +36,7 @@ import com.babyraising.friendstation.bean.TimSendMsgContentBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.event.TaskEvent;
+import com.babyraising.friendstation.event.UpdateMessageEvent;
 import com.babyraising.friendstation.response.OnlineTimUserResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
@@ -379,6 +380,10 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
             transaction.add(R.id.layout, fragments[index]);
         }
         transaction.show(fragments[index]).commitAllowingStateLoss();
+
+        if (index == 2) {
+            EventBus.getDefault().post(new UpdateMessageEvent());
+        }
     }
 
     private void initPermission() {

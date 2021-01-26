@@ -187,13 +187,12 @@ public class PersonAuthActivity extends BaseActivity implements EasyPermissions.
         params.addHeader("Authorization", bean.getAccessToken());
         final VerifyDetailRequest request = new VerifyDetailRequest();
         VerifyRequest request1 = new VerifyRequest();
-        request1.setImg(mTempPhotoPath);
+        request1.setImg(newPath);
         request.setVerifyUpdateVO(request1);
-
         Gson gson = new Gson();
         params.setAsJsonContent(true);
-        params.addHeader("Authorization", bean.getAccessToken());
-        params.setBodyContent(gson.toJson(request));
+        params.setBodyContent(gson.toJson(request1));
+        System.out.println(gson.toJson(request1));
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -326,7 +325,7 @@ public class PersonAuthActivity extends BaseActivity implements EasyPermissions.
                     .setMaxWidth(360)  // 默认最大宽度为720
                     .setMaxHeight(480) // 默认最大高度为960
                     .setQuality(80)    // 默认压缩质量为80
-                    .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
+                    .setCompressFormat(Bitmap.CompressFormat.PNG) // 设置默认压缩为jpg格式
                     .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
                             Environment.DIRECTORY_PICTURES).getAbsolutePath())
                     .build()
@@ -348,6 +347,7 @@ public class PersonAuthActivity extends BaseActivity implements EasyPermissions.
             public void onSuccess(String result) {
                 Gson gson = new Gson();
                 UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
+                System.out.println("uploadPic:" + result);
                 switch (response.getCode()) {
                     case 200:
 //                        AlbumDetailBean bean = new AlbumDetailBean();

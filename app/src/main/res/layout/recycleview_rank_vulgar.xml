@@ -30,9 +30,10 @@
 
         <TextView
             android:id="@+id/rank_normal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dip"
+            android:layout_height="20dip"
             android:layout_marginLeft="20dip"
+            android:gravity="center"
             android:text="4"
             android:textColor="#5B4FBD"
             android:textSize="12dip"
@@ -56,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="56dip"
-            android:text="香香"
+            android:text=""
             android:textColor="#444463"
             android:textSize="15dip" />
 

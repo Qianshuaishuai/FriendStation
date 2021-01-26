@@ -53,7 +53,8 @@ public class TaskActivity extends BaseActivity {
 
     @Event(R.id.layout_invite)
     private void inviteLayoutClick(View view) {
-
+        Intent intent = new Intent(this, InviteFriendDetailActivity.class);
+        startActivity(intent);
     }
 
     @Override

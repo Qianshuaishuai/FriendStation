@@ -43,6 +43,7 @@ import com.babyraising.friendstation.response.UmsLoginByMobileResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.T;
+import com.babyraising.friendstation.util.TypeUtil;
 import com.github.lassana.recorder.AudioRecorder;
 import com.github.lassana.recorder.AudioRecorderBuilder;
 import com.google.gson.Gson;
@@ -495,11 +496,22 @@ public class MomentSendActivity extends BaseActivity implements EasyPermissions.
 //            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
 //        }
 //        startActivityForResult(intent, RC_CHOOSE_PHOTO);
-        Picker.from(this)
-                .count(1)
-                .enableCamera(false)
-                .setEngine(new GlideEngine())
-                .forResult(RC_CHOOSE_PHOTO);
+//        Picker.from(this)
+//                .count(1)
+//                .enableCamera(false)
+//                .setEngine(new GlideEngine())
+//                .forResult(RC_CHOOSE_PHOTO);
+        if (TypeUtil.isHuawei()) {
+            Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+            intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+            startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
+        } else {
+            Picker.from(this)
+                    .count(1)
+                    .enableCamera(false)
+                    .setEngine(new GlideEngine())
+                    .forResult(RC_CHOOSE_PHOTO);
+        }
     }
 
     @Override
@@ -517,7 +529,35 @@ public class MomentSendActivity extends BaseActivity implements EasyPermissions.
 //                        T.s("选择照片出错");
 //                    }
 //                }
-                if (data != null) {
+//                if (data != null) {
+//                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+//                    for (Uri u : mSelected) {
+//                        String filePath = FileUtil.getFilePathByUri(this, u);
+//                        System.out.println("filePath:" + filePath);
+//                        if (!TextUtils.isEmpty(filePath)) {
+//                            uploadPic(filePath);
+//                        }
+//                    }
+//                }
+                if (data == null) {
+                    return;
+                }
+                if (TypeUtil.isHuawei()){
+                    try {
+                        Uri uri = data.getData();
+                        System.out.println("uri:" + uri);
+                        String filePath = FileUtil.getFilePathByUri(this, uri);
+                        System.out.println("filePath:" + filePath);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            uploadPic(filePath);
+                        } else {
+                            T.s("选择照片出错");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("e:" + e.toString());
+                    }
+
+                }else{
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
                         String filePath = FileUtil.getFilePathByUri(this, u);
@@ -527,6 +567,7 @@ public class MomentSendActivity extends BaseActivity implements EasyPermissions.
                         }
                     }
                 }
+
 
                 break;
             case RC_TAKE_PHOTO:

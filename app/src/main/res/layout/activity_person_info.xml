@@ -145,9 +145,9 @@
                                     android:textSize="14dip" />
 
                                 <!--<View-->
-                                    <!--android:layout_width="match_parent"-->
-                                    <!--android:layout_height="1dip"-->
-                                    <!--android:background="#d4d4d4"></View>-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="1dip"-->
+                                <!--android:background="#d4d4d4"></View>-->
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -266,9 +266,9 @@
                                 </LinearLayout>
 
                                 <!--<View-->
-                                    <!--android:layout_width="match_parent"-->
-                                    <!--android:layout_height="1dip"-->
-                                    <!--android:background="#d4d4d4"></View>-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="1dip"-->
+                                <!--android:background="#d4d4d4"></View>-->
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -312,9 +312,9 @@
                                     android:textSize="14dip" />
 
                                 <!--<View-->
-                                    <!--android:layout_width="match_parent"-->
-                                    <!--android:layout_height="1dip"-->
-                                    <!--android:background="#d4d4d4"></View>-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="1dip"-->
+                                <!--android:background="#d4d4d4"></View>-->
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -382,9 +382,9 @@
                                 </LinearLayout>
 
                                 <!--<View-->
-                                    <!--android:layout_width="match_parent"-->
-                                    <!--android:layout_height="1dip"-->
-                                    <!--android:background="#d4d4d4"></View>-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="1dip"-->
+                                <!--android:background="#d4d4d4"></View>-->
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -488,6 +488,13 @@
                                         android:textColor="#B9B8C1"
                                         android:textSize="15dip" />
 
+                                    <ImageView
+                                        android:id="@+id/voice_opera"
+                                        android:layout_width="24dip"
+                                        android:layout_height="24dip"
+                                        android:layout_marginLeft="12dip"
+                                        android:src="@mipmap/common_pause" />
+
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
@@ -504,9 +511,9 @@
                                 </LinearLayout>
 
                                 <!--<View-->
-                                    <!--android:layout_width="match_parent"-->
-                                    <!--android:layout_height="1dip"-->
-                                    <!--android:background="#d4d4d4"></View>-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="1dip"-->
+                                <!--android:background="#d4d4d4"></View>-->
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>

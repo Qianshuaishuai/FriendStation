@@ -177,7 +177,7 @@ public class LoginPhoneActivity extends BaseActivity {
     }
 
     private void startBuildActivity() {
-        Intent intent = new Intent(this, BuildUserActivity.class);
+        Intent intent = new Intent(this, BuildUserNameActivity.class);
         startActivity(intent);
     }
 

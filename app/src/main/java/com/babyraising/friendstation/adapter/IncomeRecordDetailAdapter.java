@@ -55,7 +55,12 @@ public class IncomeRecordDetailAdapter extends RecyclerView.Adapter<IncomeRecord
 //                break;
 //        }
 
-        holder.countTxt.setText(mList.get(position).getChangeNum() + " 金币");
+        if (mList.get(position).getChangeNum() > 0) {
+            holder.countTxt.setText("+" + mList.get(position).getChangeNum() + " 金币");
+        } else {
+            holder.countTxt.setText(mList.get(position).getChangeNum() + " 金币");
+        }
+
 
         if (!TextUtils.isEmpty(mList.get(position).getTime())) {
             holder.timeTxt.setText(mList.get(position).getTime());
@@ -63,7 +68,7 @@ public class IncomeRecordDetailAdapter extends RecyclerView.Adapter<IncomeRecord
 
         if (!TextUtils.isEmpty(mList.get(position).getMemo())) {
             holder.detailTxt.setText(mList.get(position).getMemo());
-        }else{
+        } else {
             holder.detailTxt.setText("暂无明细");
         }
     }

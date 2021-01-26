@@ -53,6 +53,7 @@ import com.babyraising.friendstation.ui.main.LookPhotoActivity;
 import com.babyraising.friendstation.util.DisplayUtils;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.T;
+import com.babyraising.friendstation.util.TypeUtil;
 import com.google.gson.Gson;
 import com.nanchen.compresshelper.CompressHelper;
 
@@ -482,8 +483,7 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
     }
 
     private void choosePhoto() {
-//        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, getImageStreamFromExternal());
-//        intentToPickPic.setDataAndType(getImageStreamFromExternal(), "image/*");
+
 ////        Intent intent = new Intent();
 ////        intent.addCategory(Intent.CATEGORY_OPENABLE);
 ////        intent.setType("image/*");
@@ -510,11 +510,17 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
 //
 //            }
 //        });
-        Picker.from(this)
-                .count(1)
-                .enableCamera(false)
-                .setEngine(new GlideEngine())
-                .forResult(RC_CHOOSE_PHOTO);
+
+        if (TypeUtil.isHuawei()) {
+            Intent intentToPickPic = new Intent(Intent.ACTION_PICK, getImageStreamFromExternal());
+            intentToPickPic.setDataAndType(getImageStreamFromExternal(), "image/*");
+        } else {
+            Picker.from(this)
+                    .count(1)
+                    .enableCamera(false)
+                    .setEngine(new GlideEngine())
+                    .forResult(RC_CHOOSE_PHOTO);
+        }
     }
 
     private String getRealPathFromURI(Uri uri) {
@@ -596,21 +602,22 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
                 if (data == null) {
                     return;
                 }
-//                try {
-//                    Uri uri = data.getData();
-//                    System.out.println("uri:" + uri);
-//                    String filePath = FileUtil.getFilePathByUri(this, uri);
-//                    System.out.println("filePath:" + filePath);
-//                    if (!TextUtils.isEmpty(filePath)) {
-//                        uploadPic(filePath);
-//                    } else {
-//                        T.s("选择照片出错");
-//                    }
-//                } catch (Exception e) {
-//                    System.out.println("e:" + e.toString());
-//                }
+                if (TypeUtil.isHuawei()){
+                    try {
+                        Uri uri = data.getData();
+                        System.out.println("uri:" + uri);
+                        String filePath = FileUtil.getFilePathByUri(this, uri);
+                        System.out.println("filePath:" + filePath);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            uploadPic(filePath);
+                        } else {
+                            T.s("选择照片出错");
+                        }
+                    } catch (Exception e) {
+                        System.out.println("e:" + e.toString());
+                    }
 
-                if (data != null) {
+                }else{
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
                         String filePath = FileUtil.getFilePathByUri(this, u);
@@ -620,6 +627,7 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
                         }
                     }
                 }
+
                 break;
             case RC_TAKE_PHOTO:
                 if (!TextUtils.isEmpty(mTempPhotoPath)) {

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class ScoreRecordBean {
     private String dateTime;
-    private ArrayList<ScoreRecordDetailBean> list;
+    private ArrayList<ScoreRecordDetail2Bean> list;
 
     public String getDateTime() {
         return dateTime;
@@ -14,11 +14,11 @@ public class ScoreRecordBean {
         this.dateTime = dateTime;
     }
 
-    public ArrayList<ScoreRecordDetailBean> getList() {
+    public ArrayList<ScoreRecordDetail2Bean> getList() {
         return list;
     }
 
-    public void setList(ArrayList<ScoreRecordDetailBean> list) {
+    public void setList(ArrayList<ScoreRecordDetail2Bean> list) {
         this.list = list;
     }
 }

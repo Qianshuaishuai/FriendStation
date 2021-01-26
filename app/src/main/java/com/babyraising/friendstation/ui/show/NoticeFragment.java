@@ -21,6 +21,7 @@ import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.TimCustomBean;
 import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.bean.UserMessageBean;
+import com.babyraising.friendstation.event.UpdateMessageEvent;
 import com.babyraising.friendstation.request.CodeBodyRequest;
 import com.babyraising.friendstation.response.UmsLoginByMobileResponse;
 import com.babyraising.friendstation.response.UserMainPageResponse;
@@ -36,6 +37,9 @@ import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMMessage;
 import com.tencent.imsdk.v2.V2TIMValueCallback;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
@@ -108,7 +112,7 @@ public class NoticeFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        EventBus.getDefault().register(this);
         initView();
     }
 
@@ -137,6 +141,12 @@ public class NoticeFragment extends BaseFragment {
         getConversationList();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
     private void getConversationList() {
         V2TIMValueCallback<V2TIMConversationResult> callback = new V2TIMValueCallback<V2TIMConversationResult>() {
 
@@ -153,12 +163,15 @@ public class NoticeFragment extends BaseFragment {
                 for (int n = 0; n < newList.size(); n++) {
                     list.add(newList.get(n));
                     idList.add(Integer.valueOf(newList.get(n).getUserID()));
-                    System.out.println("id:" + newList.get(n).getUserID());
-                    System.out.println("unreadCount:" + newList.get(n).getUnreadCount());
+//                    System.out.println("id:" + newList.get(n).getUserID());
+//                    System.out.println("unreadCount:" + newList.get(n).getUnreadCount());
                 }
-
                 if (idList != null && idList.size() > 0) {
                     getUserListForMessage();
+                } else {
+                    if (refreshLayout.isRefreshing()) {
+                        refreshLayout.setRefreshing(false);
+                    }
                 }
 
             }
@@ -219,5 +232,10 @@ public class NoticeFragment extends BaseFragment {
 
             }
         });
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onUpdateMessageEvent(UpdateMessageEvent event) {
+        getConversationList();
     }
 }
