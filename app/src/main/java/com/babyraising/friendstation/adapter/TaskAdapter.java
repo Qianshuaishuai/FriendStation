@@ -59,14 +59,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
         holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.doTask(position);
+                activity.doTask(mList.get(position));
             }
         });
 
-        if (mList.get(position).getIsDone() == 0){
+        if (mList.get(position).getIsDone() == 0) {
             holder.countTxt.setText("+" + mList.get(position).getReword() + "金币");
             holder.countTxt.setTextColor(activity.getResources().getColor(R.color.colorTaskDo));
-        }else{
+        } else {
             holder.countTxt.setText("已完成");
             holder.countTxt.setTextColor(activity.getResources().getColor(R.color.colorRankNormal));
         }

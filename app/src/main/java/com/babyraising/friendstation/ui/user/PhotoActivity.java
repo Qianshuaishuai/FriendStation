@@ -514,6 +514,7 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
         if (TypeUtil.isHuawei()) {
             Intent intentToPickPic = new Intent(Intent.ACTION_PICK, getImageStreamFromExternal());
             intentToPickPic.setDataAndType(getImageStreamFromExternal(), "image/*");
+            startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
         } else {
             Picker.from(this)
                     .count(1)

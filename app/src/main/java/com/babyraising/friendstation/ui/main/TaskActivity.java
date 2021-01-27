@@ -45,11 +45,16 @@ public class TaskActivity extends BaseActivity {
         finish();
     }
 
-    @ViewInject(R.id.list)
-    private RecyclerView recycleList;
+    @ViewInject(R.id.new_list)
+    private RecyclerView newRecycleList;
 
-    private TaskAdapter adapter;
-    private List<TaskNewBean> list;
+    @ViewInject(R.id.every_list)
+    private RecyclerView everyRecycleList;
+
+    private TaskAdapter newAdapter;
+    private TaskAdapter everyAdapter;
+    private List<TaskNewBean> newList;
+    private List<TaskNewBean> everyList;
 
     @Event(R.id.layout_invite)
     private void inviteLayoutClick(View view) {
@@ -70,26 +75,38 @@ public class TaskActivity extends BaseActivity {
     }
 
     private void initView() {
-        list = new ArrayList<>();
-        adapter = new TaskAdapter(this, list);
-        adapter.setOnItemClickListener(new TaskAdapter.OnItemClickListener() {
+        newList = new ArrayList<>();
+        newAdapter = new TaskAdapter(this, newList);
+        newAdapter.setOnItemClickListener(new TaskAdapter.OnItemClickListener() {
             @Override
             public void onClick(int position) {
 //                doTask(position);
             }
         });
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        recycleList.setLayoutManager(manager);
-        recycleList.setAdapter(adapter);
+        LinearLayoutManager newManager = new LinearLayoutManager(this);
+        newRecycleList.setLayoutManager(newManager);
+        newRecycleList.setAdapter(newAdapter);
+
+        everyList = new ArrayList<>();
+        everyAdapter = new TaskAdapter(this, everyList);
+        everyAdapter.setOnItemClickListener(new TaskAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(int position) {
+//                doTask(position);
+            }
+        });
+        LinearLayoutManager everyManager = new LinearLayoutManager(this);
+        everyRecycleList.setLayoutManager(everyManager);
+        everyRecycleList.setAdapter(everyAdapter);
     }
 
-    public void doTask(int position) {
-        if (list.get(position).getIsDone() == 1) {
+    public void doTask(TaskNewBean bean) {
+        if (bean.getIsDone() == 1) {
             T.s("你已完成该任务");
             return;
         }
         Intent intent = null;
-        switch (list.get(position).getId()) {
+        switch (bean.getId()) {
             case 1:
                 intent = new Intent(this, PersonInfoActivity.class);
                 intent.putExtra("is-task", 1);
@@ -156,12 +173,18 @@ public class TaskActivity extends BaseActivity {
                 System.out.println("TaskRecord:" + result);
                 switch (response.getCode()) {
                     case 200:
-                        list.clear();
-                        List<TaskNewBean> newList = response.getData();
-                        for (int l = 0; l < newList.size(); l++) {
-                            list.add(newList.get(l));
+                        newList.clear();
+                        everyList.clear();
+                        List<TaskNewBean> taskList = response.getData();
+                        for (int l = 0; l < taskList.size(); l++) {
+                            if (taskList.get(l).getType().equals("首次")) {
+                                newList.add(taskList.get(l));
+                            } else {
+                                everyList.add(taskList.get(l));
+                            }
                         }
-                        adapter.notifyDataSetChanged();
+                        newAdapter.notifyDataSetChanged();
+                        everyAdapter.notifyDataSetChanged();
                         break;
                     default:
 

@@ -236,9 +236,19 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
                 android:id="@+id/background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
+            <!--<com.jgabrielfreitas.core.BlurImageView-->
+                <!--android:id="@+id/background"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--app:radius="25" />-->
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/chat_list"
@@ -879,4 +889,10 @@
             android:background="#D4D4D4"></View>
 
     </LinearLayout>
+
+    <com.ldoublem.loadingviewlib.view.LVRingProgress
+        android:layout_centerInParent="true"
+        android:id="@+id/anim"
+        android:layout_width="50dip"
+        android:layout_height="50dip" />
 </RelativeLayout>

@@ -7,19 +7,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,12 +27,10 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -50,76 +46,68 @@ import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.EmojiBean;
 import com.babyraising.friendstation.bean.GiftDetailBean;
-import com.babyraising.friendstation.bean.TIMChatBean;
 import com.babyraising.friendstation.bean.TimCustomBean;
 import com.babyraising.friendstation.bean.TimRTCInviteBean;
 import com.babyraising.friendstation.bean.TimRTCResultBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
-import com.babyraising.friendstation.detector.KeyboardStatusDetector;
 import com.babyraising.friendstation.event.DeleteEvent;
-import com.babyraising.friendstation.request.GiftOrderSaveRequest;
+import com.babyraising.friendstation.event.ImageEvent;
 import com.babyraising.friendstation.request.UseCoinRequest;
 import com.babyraising.friendstation.response.MomentByUserIDResponse;
 import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
-import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.ui.user.PhotoActivity;
 import com.babyraising.friendstation.util.FileUtil;
-import com.babyraising.friendstation.util.GenerateTestUserSigForRTC;
 import com.babyraising.friendstation.util.T;
-import com.babyraising.friendstation.util.TimeUtils;
 import com.babyraising.friendstation.util.TypeUtil;
+import com.babyraising.friendstation.view.BlurTransformation;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.github.lassana.recorder.AudioRecorder;
 import com.github.lassana.recorder.AudioRecorderBuilder;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.nanchen.compresshelper.CompressHelper;
+import com.ldoublem.loadingviewlib.view.LVRingProgress;
 import com.tencent.imsdk.message.CustomElement;
 import com.tencent.imsdk.message.MessageBaseElement;
 import com.tencent.imsdk.v2.V2TIMAdvancedMsgListener;
 import com.tencent.imsdk.v2.V2TIMCallback;
 import com.tencent.imsdk.v2.V2TIMManager;
 import com.tencent.imsdk.v2.V2TIMMessage;
-import com.tencent.imsdk.v2.V2TIMMessageManager;
 import com.tencent.imsdk.v2.V2TIMMessageReceipt;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
 import com.tencent.imsdk.v2.V2TIMValueCallback;
 import com.tencent.trtc.TRTCCloud;
-import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCCloudListener;
 
-import org.apache.tools.ant.Main;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.xutils.common.Callback;
-import org.xutils.common.util.KeyValue;
 import org.xutils.http.RequestParams;
-import org.xutils.http.body.MultipartBody;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.Collator;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import io.valuesfeng.picker.Picker;
 import io.valuesfeng.picker.engine.GlideEngine;
 import io.valuesfeng.picker.utils.PicturePickerUtils;
+import jp.wasabeef.blurry.Blurry;
 import pub.devrel.easypermissions.EasyPermissions;
-
-import static com.tencent.trtc.TRTCCloudDef.TRTC_APP_SCENE_AUDIOCALL;
-import static com.tencent.trtc.TRTCCloudDef.TRTC_APP_SCENE_VIDEOCALL;
 
 @ContentView(R.layout.activity_chat)
 public class ChatActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
@@ -137,6 +125,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     private AlertDialog voiceLoadingTip;
 
     private int videoTip = 0;
+
+    @ViewInject(R.id.anim)
+    private LVRingProgress anim;
 
     @ViewInject(R.id.name)
     private TextView name;
@@ -462,6 +453,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         initDeleteEvent();
 
         initEmoji();
+
     }
 
     private void initEmoji() {
@@ -779,6 +771,11 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         });
         content.clearFocus();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        anim.setPorBarStartColor(getResources().getColor(R.color.colorPink));
+        anim.setPorBarEndColor(getResources().getColor(R.color.colorPink));
+        anim.setViewColor(getResources().getColor(R.color.colorPink));
+//        anim.setTextColor(getResources().getColor(R.color.colorPink));
     }
 
     private void startVoiceSelfActivity(TimRTCInviteBean bean) {
@@ -831,7 +828,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 //                        }
 //                    }
 //                }
-                if (TypeUtil.isHuawei()){
+                if (TypeUtil.isHuawei()) {
                     try {
                         Uri uri = data.getData();
                         System.out.println("uri:" + uri);
@@ -846,7 +843,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                         System.out.println("e:" + e.toString());
                     }
 
-                }else{
+                } else {
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
                         String filePath = FileUtil.getFilePathByUri(this, u);
@@ -897,6 +894,8 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
 
     private void getMessageList() {
+        anim.startAnim();
+        anim.setVisibility(View.VISIBLE);
         V2TIMValueCallback<List<V2TIMMessage>> callback = new V2TIMValueCallback<List<V2TIMMessage>>() {
             @Override
             public void onSuccess(List<V2TIMMessage> v2TIMMessages) {
@@ -930,11 +929,19 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
                 adapter.notifyDataSetChanged();
                 goToListBottom();
+
+                if (anim != null) {
+                    anim.stopAnim();
+                    anim.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void onError(int code, String desc) {
-
+                if (anim != null) {
+                    anim.stopAnim();
+                    anim.setVisibility(View.GONE);
+                }
             }
         };
         V2TIMManager.getMessageManager().getC2CHistoryMessageList(String.valueOf(currentChatId), 10, null, callback);
@@ -1193,8 +1200,56 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         chatListRecycleView.setAdapter(adapter);
 
         if (!TextUtils.isEmpty(currentUserBean.getAvatar())) {
-            x.image().bind(background, currentUserBean.getAvatar());
+//            x.image().bind(background, currentUserBean.getAvatar());
+//            background.setBlur(12);
+
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    //需要在子线程中处理的逻辑
+//                    getBitmap(currentUserBean.getAvatar());
+//                }
+//            }).start();
+            RequestOptions options = new RequestOptions()
+                    .transform(new BlurTransformation(this, 25, 1))
+                    .error(R.mipmap.test4);
+            Glide.with(this)
+                    .load(currentUserBean.getAvatar())
+                    .apply(options)
+                    .into(background);
         }
+    }
+
+    public Bitmap getBitmap(String url) {
+        Bitmap bm = null;
+        try {
+            URL iconUrl = new URL(url);
+            URLConnection conn = iconUrl.openConnection();
+            HttpURLConnection http = (HttpURLConnection) conn;
+
+            int length = http.getContentLength();
+
+            conn.connect();
+            // 获得图像的字符流
+            InputStream is = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is, length);
+            Bitmap oldbm = BitmapFactory.decodeStream(bis);
+            bis.close();
+            is.close();// 关闭流
+            int width = background.getMeasuredWidth();
+            int height = background.getMeasuredHeight();
+            int src_w = oldbm.getWidth();
+            int src_h = oldbm.getHeight();
+            float scale_w = ((float) width) / src_w;
+            float scale_h = ((float) height) / src_h;
+            Matrix matrix = new Matrix();
+            matrix.postScale(scale_w, scale_h);
+            bm = Bitmap.createBitmap(oldbm, 0, 0, src_w, src_h, matrix, true);
+            EventBus.getDefault().post(new ImageEvent(bm));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bm;
     }
 
     private void uploadPic(final String localPic) {
@@ -1326,6 +1381,15 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     public void onDeleteEvent(DeleteEvent event) {
         System.out.println("delete notify");
         getMessageList();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onImageEvent(ImageEvent event) {
+        System.out.println("image upload");
+        if (event.getBitmap() != null) {
+            Blurry.with(this).radius(5).from(event.getBitmap()).into(background);
+//            background.setImageBitmap(event.getBitmap());
+        }
     }
 
 
