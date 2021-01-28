@@ -65,7 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dip"
-                    android:text="0069688"
+                    android:text="------"
                     android:textColor="#5B4FBD"
                     android:textSize="25dip" />
 

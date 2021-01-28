@@ -34,8 +34,10 @@ import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
 import com.babyraising.friendstation.bean.CommonLoginBean;
+import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.request.VerifyDetailRequest;
 import com.babyraising.friendstation.request.VerifyRequest;
+import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.response.VerifyResponse;
 import com.babyraising.friendstation.util.FileUtil;
@@ -115,6 +117,51 @@ public class PersonAuthActivity extends BaseActivity implements EasyPermissions.
         super.onCreate(savedInstanceState);
 
         initAuthTip();
+        getUserFullInfo();
+    }
+
+    private void getUserFullInfo() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_FULL);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
+                switch (response.getCode()) {
+                    case 200:
+                        if (!TextUtils.isEmpty(response.getData().getStatusCert()) && (response.getData().getStatusCert().equals("PASS") || response.getData().getStatusCert().equals("已认证"))) {
+                            retake.setText("已认证");
+                            retake.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    T.s("你已成功认证过!");
+                                }
+                            });
+                        }
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void takePhoto() {
@@ -322,8 +369,8 @@ public class PersonAuthActivity extends BaseActivity implements EasyPermissions.
         File newFile = null;
         try {
             newFile = new CompressHelper.Builder(this)
-                    .setMaxWidth(360)  // 默认最大宽度为720
-                    .setMaxHeight(480) // 默认最大高度为960
+                    .setMaxWidth(90)  // 默认最大宽度为720
+                    .setMaxHeight(120) // 默认最大高度为960
                     .setQuality(80)    // 默认压缩质量为80
                     .setCompressFormat(Bitmap.CompressFormat.PNG) // 设置默认压缩为jpg格式
                     .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(

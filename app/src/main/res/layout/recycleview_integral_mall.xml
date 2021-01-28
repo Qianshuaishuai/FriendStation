@@ -9,15 +9,14 @@
     <ImageView
         android:id="@+id/icon"
         android:layout_width="147dip"
-        android:layout_height="111dip"
-        android:src="@mipmap/sign_icon" />
+        android:layout_height="111dip" />
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="9.5dip"
-        android:text="10元人民币"
+        android:text="0元人民币"
         android:textColor="#3C3B41"
         android:textSize="14dip" />
 

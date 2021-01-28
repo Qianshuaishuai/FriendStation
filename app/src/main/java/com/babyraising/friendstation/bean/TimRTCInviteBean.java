@@ -7,6 +7,7 @@ public class TimRTCInviteBean {
     private int type;
     private String inviteName;
     private String receiveName;
+    private String receiveIcon;
 
     public int getInviteId() {
         return inviteId;
@@ -54,5 +55,13 @@ public class TimRTCInviteBean {
 
     public void setReceiveName(String receiveName) {
         this.receiveName = receiveName;
+    }
+
+    public String getReceiveIcon() {
+        return receiveIcon;
+    }
+
+    public void setReceiveIcon(String receiveIcon) {
+        this.receiveIcon = receiveIcon;
     }
 }

@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -35,9 +37,12 @@ import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCCloudListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.xutils.common.util.DensityUtil;
+import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +57,12 @@ public class VoiceTipActivity extends BaseActivity {
     private TimRTCInviteBean bean;
     private UserAllInfoBean userAllInfoBean;
     private Gson gson = new Gson();
+
+    @ViewInject(R.id.voice_default_head)
+    private ImageView voiceDefaultHead;
+
+    @ViewInject(R.id.voice_show_head)
+    private ImageView voiceShowHead;
 
     @Event(R.id.layout_close)
     private void closeLayoutClick(View view) {
@@ -103,6 +114,13 @@ public class VoiceTipActivity extends BaseActivity {
         bean = gson.fromJson(intent.getStringExtra("voice-invite-bean"), TimRTCInviteBean.class);
         if (bean != null) {
             content.setText(bean.getInviteName() + " 向你发来语音请求");
+            if (!TextUtils.isEmpty(bean.getReceiveIcon())) {
+                voiceDefaultHead.setVisibility(View.GONE);
+                voiceShowHead.setVisibility(View.VISIBLE);
+                ImageOptions options = new ImageOptions.Builder().
+                        setRadius(DensityUtil.dip2px(100)).setCrop(true).build();
+                x.image().bind(voiceShowHead, bean.getReceiveIcon(), options);
+            }
         } else {
             T.s("未找到邀请人信息");
             finish();

@@ -110,10 +110,10 @@ public class IntegralMallActivity extends BaseActivity {
                             list.add(newList.get(l));
                         }
 
-                        if (list.size() == 0) {
-                            ScoreExchangeDetailBean bean = new ScoreExchangeDetailBean();
-                            list.add(bean);
-                        }
+//                        if (list.size() == 0) {
+//                            ScoreExchangeDetailBean bean = new ScoreExchangeDetailBean();
+//                            list.add(bean);
+//                        }
 
                         adapter.notifyDataSetChanged();
                         break;

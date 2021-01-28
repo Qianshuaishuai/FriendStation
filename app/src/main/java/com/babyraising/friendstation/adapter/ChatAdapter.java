@@ -139,127 +139,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         holder.leftContentLayout.setVisibility(View.GONE);
         holder.rightContentLayout.setVisibility(View.GONE);
         holder.timeTxt.setVisibility(View.GONE);
-        if (mList.get(position).getMessage().getReceiverUserID().equals(String.valueOf(selfUserInfoBean.getId()))) {
-            holder.leftLayout.setVisibility(View.VISIBLE);
-            holder.rightLayout.setVisibility(View.GONE);
-            List<MessageBaseElement> elements = mList.get(position).getMessage().getMessageBaseElements();
-            if (elements.size() > 0) {
-                if (elements.get(0) instanceof TextElement) {
-                    if (!TextUtils.isEmpty(((TextElement) elements.get(0)).getTextContent())) {
-                        holder.leftContentLayout.setVisibility(View.VISIBLE);
-                        holder.leftContentLayout.removeAllViews();
-                        String showContent = checkContent(((TextElement) elements.get(0)).getTextContent());
-                        boolean isHaveEmoji = false;
-                        for (int e = 0; e < emojiList.size(); e++) {
-                            int brokenInt = 0;
-                            while (showContent.indexOf(emojiList.get(e).getName()) != -1 && brokenInt <= 100) {
-                                isHaveEmoji = true;
-                                int emojiStartIndex = showContent.indexOf(emojiList.get(e).getName());
-                                if (emojiStartIndex == 0) {
-                                    String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
-                                    ImageView imageView = new ImageView(context);
-                                    LinearLayout.LayoutParams params = new
-                                            LinearLayout.LayoutParams(25, 25);
-                                    imageView.setLayoutParams(params);
-                                    x.image().bind(imageView, emojiList.get(e).getUrl());
-                                    holder.leftContentLayout.addView(imageView);
-                                    showContent = showContent.replaceFirst(regexp, "");
-                                } else {
-                                    String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
-                                    String text = showContent.substring(0, emojiStartIndex);
-                                    TextView textView = new TextView(context);
-                                    textView.setText(text);
-                                    textView.setTextSize(14);
-                                    textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
-                                    holder.leftContentLayout.addView(textView);
-                                    showContent = showContent.replace(text, "");
-
-                                    ImageView imageView = new ImageView(context);
-                                    LinearLayout.LayoutParams params = new
-                                            LinearLayout.LayoutParams(25, 25);
-                                    imageView.setLayoutParams(params);
-                                    x.image().bind(imageView, emojiList.get(e).getUrl());
-                                    holder.leftContentLayout.addView(imageView);
-                                    showContent = showContent.replaceFirst(regexp, "");
-                                }
-
-                                brokenInt++;
-                            }
-//
-//
-                        }
-
-                        if (!isHaveEmoji || !TextUtils.isEmpty(showContent)) {
-                            TextView textView = new TextView(context);
-                            textView.setText(showContent);
-                            textView.setTextSize(14);
-                            textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
-                            holder.leftContentLayout.addView(textView);
-                        }
-                    }
-                }
-
-                if (elements.get(0) instanceof ImageElement) {
-                    x.image().bind(holder.leftIvContent, ((ImageElement) elements.get(0)).getThumbImageUrl());
-                    holder.leftIvContent.setVisibility(View.VISIBLE);
-                }
-
-                if (elements.get(0) instanceof SoundElement) {
-                    holder.leftVoiceLayout.setVisibility(View.VISIBLE);
-                    final SoundElement element = (SoundElement) elements.get(0);
-                    int showDur = element.getSoundDuration() / 1000;
-                    holder.leftSoundTip.setText(showDur + "s");
-                    holder.leftVoiceLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            context.playSound(element.getSoundDownloadUrl());
-                        }
-                    });
-                }
-
-                if (elements.get(0) instanceof CustomElement) {
-                    Gson gson = new Gson();
-                    CustomElement element = (CustomElement) elements.get(0);
-                    TimCustomBean bean = gson.fromJson(new String(element.getData()), TimCustomBean.class);
-                    switch (bean.getMsgType()) {
-                        case Constant.RESULT_CHAT_ROOM_CODE:
-                            holder.leftRtcLayout.setVisibility(View.VISIBLE);
-                            if (bean.getResultBean().getReceipt() == -1 || bean.getResultBean().getDuration() == 0) {
-                                holder.leftRtcTip.setText("对方已拒绝");
-                            } else {
-                                holder.leftRtcTip.setText(" 时长: " + TimeUtils.getShowTime(bean.getResultBean().getDuration()));
-                            }
-                            break;
-                        case Constant.GIFT_CHAT_CODE:
-                            if (bean.getGiftBean() != null) {
-                                holder.leftGiftLayout.setVisibility(View.VISIBLE);
-                                x.image().bind(holder.leftGiftIcon, bean.getGiftBean().getImage());
-                                if (!TextUtils.isEmpty(bean.getGiftBean().getTitle())) {
-                                    holder.leftGiftTip.setText(bean.getGiftBean().getTitle());
-                                }
-                            }
-                            break;
-                    }
-                }
-
-                if (!TextUtils.isEmpty(currentUserInfoBean.getAvatar())) {
-                    ImageOptions options = new ImageOptions.Builder().
-                            setRadius(DensityUtil.dip2px(38)).setCrop(true).build();
-                    x.image().bind(holder.leftIcon, currentUserInfoBean.getAvatar());
-                } else {
-
-//                    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.test4);
-//                    //设置bitmap.getWidth()可以获得圆形
-//                    Bitmap bitmap1 = ChatUtil.ClipSquareBitmap(bitmap, 200, bitmap.getWidth());
-                    holder.leftIcon.setImageResource(R.mipmap.test4);
-                }
-            }
-
-        } else {
+        if (mList.get(position).getMessage().getReceiverUserID() == null) {
             holder.leftLayout.setVisibility(View.GONE);
             holder.rightLayout.setVisibility(View.VISIBLE);
-
-            List<MessageBaseElement> elements = mList.get(position).getMessage().getMessageBaseElements();
+            final List<MessageBaseElement> elements = mList.get(position).getMessage().getMessageBaseElements();
             if (elements.size() > 0) {
                 if (elements.get(0) instanceof TextElement) {
                     if (!TextUtils.isEmpty(((TextElement) elements.get(0)).getTextContent())) {
@@ -314,8 +197,35 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 }
 
                 if (elements.get(0) instanceof ImageElement) {
-                    x.image().bind(holder.rightIvContent, ((ImageElement) elements.get(0)).getThumbImageUrl());
-                    holder.rightIvContent.setVisibility(View.VISIBLE);
+//                    x.image().bind(holder.rightIvContent, ((ImageElement) elements.get(0)).getThumbImageUrl());
+//                    holder.rightIvContent.setVisibility(View.VISIBLE);
+
+                    if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getThumbImageUrl())) {
+                        ImageOptions options = new ImageOptions.Builder().setCrop(true).
+                                build();
+                        x.image().bind(holder.rightIvContent, ((ImageElement) elements.get(0)).getThumbImageUrl(), options);
+                        holder.rightIvContent.setVisibility(View.VISIBLE);
+                    } else {
+                        if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
+                            ImageOptions options = new ImageOptions.Builder().setCrop(true).
+                                    build();
+                            x.image().bind(holder.rightIvContent, ((ImageElement) elements.get(0)).getOriginImageFilePath(), options);
+                            holder.rightIvContent.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    holder.rightIvContent.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getThumbImageUrl())) {
+                                context.goToScrollImage(((ImageElement) elements.get(0)).getThumbImageUrl());
+                            } else {
+                                if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
+                                    context.goToScrollImage(((ImageElement) elements.get(0)).getOriginImageFilePath());
+                                }
+                            }
+                        }
+                    });
                 }
 
                 if (elements.get(0) instanceof SoundElement) {
@@ -366,6 +276,289 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 //                    Bitmap bitmap1 = ChatUtil.ClipSquareBitmap(bitmap, 200, bitmap.getWidth());
 //                    holder.rightIcon.setImageBitmap(bitmap1);
                     holder.rightIcon.setImageResource(R.mipmap.test4);
+                }
+            }
+        } else {
+            if (mList.get(position).getMessage().getReceiverUserID().equals(String.valueOf(selfUserInfoBean.getId()))) {
+                holder.leftLayout.setVisibility(View.VISIBLE);
+                holder.rightLayout.setVisibility(View.GONE);
+                final List<MessageBaseElement> elements = mList.get(position).getMessage().getMessageBaseElements();
+                if (elements.size() > 0) {
+                    if (elements.get(0) instanceof TextElement) {
+                        if (!TextUtils.isEmpty(((TextElement) elements.get(0)).getTextContent())) {
+                            holder.leftContentLayout.setVisibility(View.VISIBLE);
+                            holder.leftContentLayout.removeAllViews();
+                            String showContent = checkContent(((TextElement) elements.get(0)).getTextContent());
+                            boolean isHaveEmoji = false;
+                            for (int e = 0; e < emojiList.size(); e++) {
+                                int brokenInt = 0;
+                                while (showContent.indexOf(emojiList.get(e).getName()) != -1 && brokenInt <= 100) {
+                                    isHaveEmoji = true;
+                                    int emojiStartIndex = showContent.indexOf(emojiList.get(e).getName());
+                                    if (emojiStartIndex == 0) {
+                                        String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+                                        ImageView imageView = new ImageView(context);
+                                        LinearLayout.LayoutParams params = new
+                                                LinearLayout.LayoutParams(25, 25);
+                                        imageView.setLayoutParams(params);
+                                        x.image().bind(imageView, emojiList.get(e).getUrl());
+                                        holder.leftContentLayout.addView(imageView);
+                                        showContent = showContent.replaceFirst(regexp, "");
+                                    } else {
+                                        String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+                                        String text = showContent.substring(0, emojiStartIndex);
+                                        TextView textView = new TextView(context);
+                                        textView.setText(text);
+                                        textView.setTextSize(14);
+                                        textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
+                                        holder.leftContentLayout.addView(textView);
+                                        showContent = showContent.replace(text, "");
+
+                                        ImageView imageView = new ImageView(context);
+                                        LinearLayout.LayoutParams params = new
+                                                LinearLayout.LayoutParams(25, 25);
+                                        imageView.setLayoutParams(params);
+                                        x.image().bind(imageView, emojiList.get(e).getUrl());
+                                        holder.leftContentLayout.addView(imageView);
+                                        showContent = showContent.replaceFirst(regexp, "");
+                                    }
+
+                                    brokenInt++;
+                                }
+//
+//
+                            }
+
+                            if (!isHaveEmoji || !TextUtils.isEmpty(showContent)) {
+                                TextView textView = new TextView(context);
+                                textView.setText(showContent);
+                                textView.setTextSize(14);
+                                textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
+                                holder.leftContentLayout.addView(textView);
+                            }
+                        }
+                    }
+
+                    if (elements.get(0) instanceof ImageElement) {
+                        if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getThumbImageUrl())) {
+                            ImageOptions options = new ImageOptions.Builder().setCrop(true).
+                                    build();
+                            x.image().bind(holder.leftIvContent, ((ImageElement) elements.get(0)).getThumbImageUrl(), options);
+                            holder.leftIvContent.setVisibility(View.VISIBLE);
+                        } else {
+                            if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
+                                ImageOptions options = new ImageOptions.Builder().setCrop(true).
+                                        build();
+                                x.image().bind(holder.leftIvContent, ((ImageElement) elements.get(0)).getOriginImageFilePath(), options);
+                                holder.leftIvContent.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+
+                        holder.leftIvContent.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getThumbImageUrl())) {
+                                    context.goToScrollImage(((ImageElement) elements.get(0)).getThumbImageUrl());
+                                } else {
+                                    if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
+                                        context.goToScrollImage(((ImageElement) elements.get(0)).getOriginImageFilePath());
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    if (elements.get(0) instanceof SoundElement) {
+                        holder.leftVoiceLayout.setVisibility(View.VISIBLE);
+                        final SoundElement element = (SoundElement) elements.get(0);
+                        int showDur = element.getSoundDuration() / 1000;
+                        holder.leftSoundTip.setText(showDur + "s");
+                        holder.leftVoiceLayout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                context.playSound(element.getSoundDownloadUrl());
+                            }
+                        });
+                    }
+
+                    if (elements.get(0) instanceof CustomElement) {
+                        Gson gson = new Gson();
+                        CustomElement element = (CustomElement) elements.get(0);
+                        TimCustomBean bean = gson.fromJson(new String(element.getData()), TimCustomBean.class);
+                        switch (bean.getMsgType()) {
+                            case Constant.RESULT_CHAT_ROOM_CODE:
+                                holder.leftRtcLayout.setVisibility(View.VISIBLE);
+                                if (bean.getResultBean().getReceipt() == -1 || bean.getResultBean().getDuration() == 0) {
+                                    holder.leftRtcTip.setText("对方已拒绝");
+                                } else {
+                                    holder.leftRtcTip.setText(" 时长: " + TimeUtils.getShowTime(bean.getResultBean().getDuration()));
+                                }
+                                break;
+                            case Constant.GIFT_CHAT_CODE:
+                                if (bean.getGiftBean() != null) {
+                                    holder.leftGiftLayout.setVisibility(View.VISIBLE);
+                                    x.image().bind(holder.leftGiftIcon, bean.getGiftBean().getImage());
+                                    if (!TextUtils.isEmpty(bean.getGiftBean().getTitle())) {
+                                        holder.leftGiftTip.setText(bean.getGiftBean().getTitle());
+                                    }
+                                }
+                                break;
+                        }
+                    }
+
+                    if (!TextUtils.isEmpty(currentUserInfoBean.getAvatar())) {
+                        ImageOptions options = new ImageOptions.Builder().
+                                setRadius(DensityUtil.dip2px(38)).setCrop(true).build();
+                        x.image().bind(holder.leftIcon, currentUserInfoBean.getAvatar());
+                    } else {
+
+//                    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.test4);
+//                    //设置bitmap.getWidth()可以获得圆形
+//                    Bitmap bitmap1 = ChatUtil.ClipSquareBitmap(bitmap, 200, bitmap.getWidth());
+                        holder.leftIcon.setImageResource(R.mipmap.test4);
+                    }
+                }
+
+            } else {
+                holder.leftLayout.setVisibility(View.GONE);
+                holder.rightLayout.setVisibility(View.VISIBLE);
+
+                final List<MessageBaseElement> elements = mList.get(position).getMessage().getMessageBaseElements();
+                if (elements.size() > 0) {
+                    if (elements.get(0) instanceof TextElement) {
+                        if (!TextUtils.isEmpty(((TextElement) elements.get(0)).getTextContent())) {
+                            holder.rightContentLayout.setVisibility(View.VISIBLE);
+                            holder.rightContentLayout.removeAllViews();
+                            String showContent = checkContent(((TextElement) elements.get(0)).getTextContent());
+                            boolean isHaveEmoji = false;
+                            for (int e = 0; e < emojiList.size(); e++) {
+                                while (showContent.indexOf(emojiList.get(e).getName()) != -1) {
+                                    isHaveEmoji = true;
+                                    int emojiStartIndex = showContent.indexOf(emojiList.get(e).getName());
+                                    if (emojiStartIndex == 0) {
+                                        String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+                                        ImageView imageView = new ImageView(context);
+                                        LinearLayout.LayoutParams params = new
+                                                LinearLayout.LayoutParams(25, 25);
+                                        imageView.setLayoutParams(params);
+                                        x.image().bind(imageView, emojiList.get(e).getUrl());
+                                        holder.rightContentLayout.addView(imageView);
+                                        showContent = showContent.replaceFirst(regexp, "");
+                                    } else {
+                                        String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+                                        String text = showContent.substring(0, emojiStartIndex);
+                                        TextView textView = new TextView(context);
+                                        textView.setText(text);
+                                        textView.setTextSize(14);
+                                        textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
+                                        holder.rightContentLayout.addView(textView);
+                                        showContent = showContent.replace(text, "");
+
+                                        ImageView imageView = new ImageView(context);
+                                        LinearLayout.LayoutParams params = new
+                                                LinearLayout.LayoutParams(25, 25);
+                                        imageView.setLayoutParams(params);
+                                        x.image().bind(imageView, emojiList.get(e).getUrl());
+                                        holder.rightContentLayout.addView(imageView);
+                                        showContent = showContent.replaceFirst(regexp, "");
+                                    }
+                                }
+//
+//
+                            }
+
+                            if (!isHaveEmoji || !TextUtils.isEmpty(showContent)) {
+                                TextView textView = new TextView(context);
+                                textView.setText(showContent);
+                                textView.setTextSize(14);
+                                textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
+                                holder.rightContentLayout.addView(textView);
+                            }
+                        }
+                    }
+
+                    if (elements.get(0) instanceof ImageElement) {
+//                    x.image().bind(holder.rightIvContent, ((ImageElement) elements.get(0)).getThumbImageUrl());
+//                    holder.rightIvContent.setVisibility(View.VISIBLE);
+
+                        if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getThumbImageUrl())) {
+                            ImageOptions options = new ImageOptions.Builder().setCrop(true).
+                                    build();
+                            x.image().bind(holder.rightIvContent, ((ImageElement) elements.get(0)).getThumbImageUrl(), options);
+                            holder.rightIvContent.setVisibility(View.VISIBLE);
+                        } else {
+                            if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
+                                ImageOptions options = new ImageOptions.Builder().setCrop(true).
+                                        build();
+                                x.image().bind(holder.rightIvContent, ((ImageElement) elements.get(0)).getOriginImageFilePath(), options);
+                                holder.rightIvContent.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                        holder.rightIvContent.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getThumbImageUrl())) {
+                                    context.goToScrollImage(((ImageElement) elements.get(0)).getThumbImageUrl());
+                                } else {
+                                    if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
+                                        context.goToScrollImage(((ImageElement) elements.get(0)).getOriginImageFilePath());
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    if (elements.get(0) instanceof SoundElement) {
+                        holder.rightVoiceLayout.setVisibility(View.VISIBLE);
+                        final SoundElement element = (SoundElement) elements.get(0);
+                        int showDur = element.getSoundDuration() / 1000;
+                        holder.rightSoundTip.setText(showDur + "s");
+                        holder.rightVoiceLayout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                context.playSound(element.getSoundDownloadUrl());
+                            }
+                        });
+                    }
+
+                    if (elements.get(0) instanceof CustomElement) {
+                        Gson gson = new Gson();
+                        CustomElement element = (CustomElement) elements.get(0);
+                        TimCustomBean bean = gson.fromJson(new String(element.getData()), TimCustomBean.class);
+                        switch (bean.getMsgType()) {
+                            case Constant.RESULT_CHAT_ROOM_CODE:
+                                holder.rightRtcLayout.setVisibility(View.VISIBLE);
+                                if (bean.getResultBean().getReceipt() == -1 || bean.getResultBean().getDuration() == 0) {
+                                    holder.rightRtcTip.setText("已挂断");
+                                } else {
+                                    holder.rightRtcTip.setText(" 时长: " + TimeUtils.getShowTime(bean.getResultBean().getDuration()));
+                                }
+                                break;
+                            case Constant.GIFT_CHAT_CODE:
+                                holder.rightGiftLayout.setVisibility(View.VISIBLE);
+                                if (bean.getGiftBean() != null) {
+                                    x.image().bind(holder.rightGiftIcon, bean.getGiftBean().getImage());
+                                    if (!TextUtils.isEmpty(bean.getGiftBean().getTitle())) {
+                                        holder.rightGiftTip.setText(bean.getGiftBean().getTitle());
+                                    }
+                                }
+                                break;
+                        }
+                    }
+
+                    if (!TextUtils.isEmpty(selfUserInfoBean.getAvatar())) {
+                        ImageOptions options = new ImageOptions.Builder().
+                                setRadius(DensityUtil.dip2px(38)).setCrop(true).build();
+                        x.image().bind(holder.rightIcon, selfUserInfoBean.getAvatar());
+                    } else {
+//                    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.test4);
+//                    //设置bitmap.getWidth()可以获得圆形
+//                    Bitmap bitmap1 = ChatUtil.ClipSquareBitmap(bitmap, 200, bitmap.getWidth());
+//                    holder.rightIcon.setImageBitmap(bitmap1);
+                        holder.rightIcon.setImageResource(R.mipmap.test4);
+                    }
                 }
             }
         }

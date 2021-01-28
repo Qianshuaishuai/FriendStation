@@ -10,8 +10,15 @@
     android:focusableInTouchMode="true"
     tools:context=".ui.main.ChatActivity">
 
+    <ImageView
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY" />
 
     <RelativeLayout
+        android:background="#00000000"
         android:id="@+id/layout_top"
         android:layout_width="match_parent"
         android:layout_height="48dip"
@@ -24,7 +31,7 @@
             android:layout_height="16dip"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dip"
-            android:src="@mipmap/common_back" />
+            android:src="@mipmap/common_white_back" />
 
         <RelativeLayout
             android:id="@+id/layout_number"
@@ -52,15 +59,15 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text=""
-            android:textColor="#ff3c3b41"
+            android:textColor="#ffffff"
             android:textSize="17dip"
             android:textStyle="bold" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dip"
-            android:layout_alignParentBottom="true"
-            android:background="#D4D4D4"></View>
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dip"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:background="#D4D4D4"></View>-->
 
         <TextView
             android:id="@+id/tv_more"
@@ -70,7 +77,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dip"
             android:text="···"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
             android:textSize="20dip"
             android:textStyle="bold" />
     </RelativeLayout>
@@ -235,20 +242,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:id="@+id/background"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
             <!--<com.jgabrielfreitas.core.BlurImageView-->
-                <!--android:id="@+id/background"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_alignParentTop="true"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--app:radius="25" />-->
+            <!--android:id="@+id/background"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_alignParentTop="true"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--app:radius="25" />-->
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/chat_list"
@@ -891,8 +891,9 @@
     </LinearLayout>
 
     <com.ldoublem.loadingviewlib.view.LVRingProgress
-        android:layout_centerInParent="true"
+        android:visibility="gone"
         android:id="@+id/anim"
         android:layout_width="50dip"
-        android:layout_height="50dip" />
+        android:layout_height="50dip"
+        android:layout_centerInParent="true" />
 </RelativeLayout>

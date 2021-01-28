@@ -1,6 +1,7 @@
 package com.babyraising.friendstation.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class IntegralMallAdapter extends RecyclerView.Adapter<IntegralMallAdapte
             integralTxt = (TextView) view.findViewById(R.id.integral);
             countTxt = (TextView) view.findViewById(R.id.count);
             iconIv = (ImageView) view.findViewById(R.id.icon);
-            layoutMain = (LinearLayout)view.findViewById(R.id.layout_main);
+            layoutMain = (LinearLayout) view.findViewById(R.id.layout_main);
         }
 
     }
@@ -50,10 +51,12 @@ public class IntegralMallAdapter extends RecyclerView.Adapter<IntegralMallAdapte
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-//        holder.nameTxt.setText(mList.get(position).getTitle());
-//        holder.integralTxt.setText(mList.get(position).getPrice() + "积分");
-//        holder.countTxt.setText(mList.get(position).getTitle());
-//        holder.nameTxt.setText(mList.get(position).getTitle());
+        if (!TextUtils.isEmpty(mList.get(position).getTitle())) {
+            holder.nameTxt.setText(mList.get(position).getTitle());
+        }
+
+        holder.integralTxt.setText(mList.get(position).getPrice() + "积分");
+        holder.countTxt.setText(mList.get(position).getChangeCount() + "人已换");
         holder.layoutMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

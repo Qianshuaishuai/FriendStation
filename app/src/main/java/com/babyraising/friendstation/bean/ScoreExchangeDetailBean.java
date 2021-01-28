@@ -15,6 +15,7 @@ public class ScoreExchangeDetailBean {
     private String subTitle;
     private String title;
     private String type;
+    private int changeCount;
 
     public String getGmtCreate() {
         return gmtCreate;
@@ -126,5 +127,13 @@ public class ScoreExchangeDetailBean {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getChangeCount() {
+        return changeCount;
+    }
+
+    public void setChangeCount(int changeCount) {
+        this.changeCount = changeCount;
     }
 }

@@ -50,6 +50,7 @@ import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.ui.InwordActivity;
 import com.babyraising.friendstation.ui.user.PhotoActivity;
 import com.babyraising.friendstation.util.FileUtil;
+import com.babyraising.friendstation.util.PhotoUtil;
 import com.babyraising.friendstation.util.T;
 import com.babyraising.friendstation.util.TypeUtil;
 import com.babyraising.friendstation.view.CustomLayout;
@@ -265,12 +266,12 @@ public class PersonInfoActivity extends BaseActivity {
         if (mode == 1) {
             return;
         }
-        if (auth.equals("已认证")) {
+        if (auth.getText().toString().equals("已认证")) {
             T.s("你已认证！");
             return;
         }
 
-        if (auth.equals("审核中")) {
+        if (auth.getText().toString().equals("审核中")) {
             T.s("正在审核中！");
             return;
         }
@@ -1481,8 +1482,8 @@ public class PersonInfoActivity extends BaseActivity {
                 } else {
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
-                        String filePath = FileUtil.getFilePathByUri(this, u);
-                        System.out.println("filePath:" + filePath);
+                        String oldFilePath = FileUtil.getFilePathByUri(this, u);
+                        String filePath = PhotoUtil.amendRotatePhoto(oldFilePath, this);
                         if (!TextUtils.isEmpty(filePath)) {
                             uploadPic(filePath);
                         }

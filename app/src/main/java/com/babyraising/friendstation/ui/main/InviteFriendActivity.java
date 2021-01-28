@@ -34,11 +34,23 @@ public class InviteFriendActivity extends BaseActivity {
 
     @Event(R.id.save)
     private void saveClick(View view) {
+        UserAllInfoBean bean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+        if (bean == null || TextUtils.isEmpty(bean.getInviteCode())) {
+            T.s("你的邀请信息有误，请联系管理员");
+            return;
+        }
         T.s("已将邀请图片保存到相册");
     }
 
     @Event(R.id.layout_wechat)
     private void layoutWechatClick(View view) {
+
+        UserAllInfoBean bean = ((FriendStationApplication) getApplication()).getUserAllInfo();
+        if (bean == null || TextUtils.isEmpty(bean.getInviteCode())) {
+            T.s("你的邀请信息有误，请联系管理员");
+            return;
+        }
+
         if (TextUtils.isEmpty(currentImgUrl)) {
             T.s("生成邀请图片失败");
             return;

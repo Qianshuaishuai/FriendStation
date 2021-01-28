@@ -58,17 +58,18 @@ import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.ui.user.PhotoActivity;
 import com.babyraising.friendstation.util.FileUtil;
+import com.babyraising.friendstation.util.PhotoUtil;
 import com.babyraising.friendstation.util.T;
 import com.babyraising.friendstation.util.TypeUtil;
-import com.babyraising.friendstation.view.BlurTransformation;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
-import com.bumptech.glide.request.RequestOptions;
 import com.github.lassana.recorder.AudioRecorder;
 import com.github.lassana.recorder.AudioRecorderBuilder;
 import com.google.gson.Gson;
 import com.ldoublem.loadingviewlib.view.LVRingProgress;
+import com.nanchen.compresshelper.CompressHelper;
 import com.tencent.imsdk.message.CustomElement;
+import com.tencent.imsdk.message.ImageElement;
 import com.tencent.imsdk.message.MessageBaseElement;
 import com.tencent.imsdk.v2.V2TIMAdvancedMsgListener;
 import com.tencent.imsdk.v2.V2TIMCallback;
@@ -107,6 +108,7 @@ import io.valuesfeng.picker.Picker;
 import io.valuesfeng.picker.engine.GlideEngine;
 import io.valuesfeng.picker.utils.PicturePickerUtils;
 import jp.wasabeef.blurry.Blurry;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import pub.devrel.easypermissions.EasyPermissions;
 
 @ContentView(R.layout.activity_chat)
@@ -176,6 +178,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     private void tvMoreClick(View view) {
         moreLayout.setVisibility(View.VISIBLE);
     }
+
+    @ViewInject(R.id.tv_more)
+    private TextView tvMore;
 
     @ViewInject(R.id.layout_report)
     private LinearLayout reportLayout;
@@ -258,6 +263,12 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     @ViewInject(R.id.send_voice)
     private TextView sendVoice;
+
+    @ViewInject(R.id.back)
+    private ImageView back;
+
+    @ViewInject(R.id.layout_top)
+    private RelativeLayout topLayout;
 
     @ViewInject(R.id.layout_input_content)
     private RelativeLayout inputContentLayout;
@@ -453,7 +464,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         initDeleteEvent();
 
         initEmoji();
-
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     private void initEmoji() {
@@ -565,6 +576,53 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         });
     }
 
+    private void sendLocalTextMessage(String text) {
+        V2TIMMessage message = V2TIMManager.getMessageManager().createTextMessage(text);
+        chatList.add(message);
+        adapter.notifyDataSetChanged();
+        goToListBottom();
+    }
+
+    private void sendLocalVoiceMessage(String voiceUrl, int dur) {
+        V2TIMMessage message = V2TIMManager.getMessageManager().createSoundMessage(voiceUrl, dur);
+        chatList.add(message);
+        adapter.notifyDataSetChanged();
+        goToListBottom();
+    }
+
+    private void sendLocalImageMessage(String picUrl) {
+        File oldFile = new File(picUrl);
+        if (oldFile.getTotalSpace() == 0) {
+            System.out.println("未找到图片");
+            return;
+        }
+
+        File newFile = null;
+        try {
+            newFile = new CompressHelper.Builder(this)
+                    .setMaxWidth(198)  // 默认最大宽度为720
+                    .setQuality(80)    // 默认压缩质量为80
+                    .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
+                    .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+                            Environment.DIRECTORY_PICTURES).getAbsolutePath())
+                    .build()
+                    .compressToFile(oldFile);
+        } catch (Exception e) {
+            newFile = oldFile;
+        }
+
+        V2TIMMessage message = V2TIMManager.getMessageManager().createImageMessage(newFile.getAbsolutePath());
+        chatList.add(message);
+        adapter.notifyDataSetChanged();
+        goToListBottomForSpecialImage();
+    }
+
+    public void goToScrollImage(String filePath) {
+        Intent intent = new Intent(this, LookPhotoActivity.class);
+        intent.putExtra("img", filePath);
+        startActivity(intent);
+    }
+
     private void sendTextMessage(String text) {
         V2TIMMessage message = V2TIMManager.getMessageManager().createTextMessage(text);
         sendMessage(message);
@@ -583,9 +641,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     @Override
     protected void onResume() {
         super.onResume();
-        if (currentUserBean != null) {
-            getMessageList();
-        }
+//        if (currentUserBean != null) {
+//
+//        }
     }
 
     private void sendMessage(V2TIMMessage message) {
@@ -594,7 +652,6 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             @Override
             public void onSuccess(V2TIMMessage message) {
                 System.out.println("sendMessage success:" + gson.toJson(message));
-                getMessageList();
                 setMessageRead(message.getUserID());
                 List<MessageBaseElement> elements = message.getMessage().getMessageBaseElements();
                 if (elements.get(0) instanceof CustomElement) {
@@ -610,6 +667,10 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                             }
                             break;
                     }
+                }
+
+                if (!(elements.get(0) instanceof ImageElement)) {
+                    getMessageList();
                 }
 
                 ((FriendStationApplication) getApplication()).isUpdateDoTask(ChatActivity.this, mainLayout, 12);
@@ -640,6 +701,12 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 //            mainTipLayout.setVisibility(View.VISIBLE);
             refreshLayout.setVisibility(View.GONE);
             name.setText("官方小助手");
+            topLayout.setBackgroundColor(getResources().getColor(R.color.colorPersonAlbumHave));
+            name.setTextColor(getResources().getColor(R.color.colorTipSelected));
+            back.setImageResource(R.mipmap.common_back);
+            tvMore.setTextColor(getResources().getColor(R.color.colorTipSelected));
+            tvMore.setVisibility(View.GONE);
+            anim.setVisibility(View.GONE);
         } else {
             officialLayout.setVisibility(View.GONE);
             mainTipLayout.setVisibility(View.GONE);
@@ -687,6 +754,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEND) {
                     useCoin(1, "", "", "", 0);
+                    sendLocalTextMessage(content.getText().toString());
                 }
                 return false;
             }
@@ -792,6 +860,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             String word = data.getStringExtra("common-word");
             if (!TextUtils.isEmpty(word)) {
                 useCoin(4, "", "", word, 0);
+                sendLocalTextMessage(word);
             }
         }
 
@@ -809,6 +878,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
         switch (requestCode) {
             case RC_CHOOSE_PHOTO:
+                if (data == null) {
+                    return;
+                }
 //                if (data != null) {
 //                    Uri uri = data.getData();
 //                    String filePath = FileUtil.getFilePathByUri(this, uri);
@@ -846,8 +918,8 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 } else {
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
-                        String filePath = FileUtil.getFilePathByUri(this, u);
-                        System.out.println("filePath:" + filePath);
+                        String oldFilePath = FileUtil.getFilePathByUri(this, u);
+                        String filePath = PhotoUtil.amendRotatePhoto(oldFilePath, this);
                         if (!TextUtils.isEmpty(filePath)) {
                             uploadPic(filePath);
                         }
@@ -856,9 +928,10 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 break;
             case RC_TAKE_PHOTO:
                 if (!TextUtils.isEmpty(mTempPhotoPath)) {
-                    uploadPic(mTempPhotoPath);
+                    String filepath = PhotoUtil.amendRotatePhoto(mTempPhotoPath, this);
+                    uploadPic(filepath);
                 } else {
-                    T.s("选择照片出错");
+                    T.s("拍摄照片出错");
                 }
                 break;
 
@@ -872,6 +945,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 }
                 break;
         }
+
     }
 
     private void setMessageRead(String userId) {
@@ -894,8 +968,8 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
 
     private void getMessageList() {
-        anim.startAnim();
-        anim.setVisibility(View.VISIBLE);
+//        anim.startAnim();
+//        anim.setVisibility(View.VISIBLE);
         V2TIMValueCallback<List<V2TIMMessage>> callback = new V2TIMValueCallback<List<V2TIMMessage>>() {
             @Override
             public void onSuccess(List<V2TIMMessage> v2TIMMessages) {
@@ -930,18 +1004,18 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 adapter.notifyDataSetChanged();
                 goToListBottom();
 
-                if (anim != null) {
-                    anim.stopAnim();
-                    anim.setVisibility(View.GONE);
-                }
+//                if (anim != null) {
+//                    anim.stopAnim();
+//                    anim.setVisibility(View.GONE);
+//                }
             }
 
             @Override
             public void onError(int code, String desc) {
-                if (anim != null) {
-                    anim.stopAnim();
-                    anim.setVisibility(View.GONE);
-                }
+//                if (anim != null) {
+//                    anim.stopAnim();
+//                    anim.setVisibility(View.GONE);
+//                }
             }
         };
         V2TIMManager.getMessageManager().getC2CHistoryMessageList(String.valueOf(currentChatId), 10, null, callback);
@@ -1048,6 +1122,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                     case 500:
                         mainTipLayout.setVisibility(View.VISIBLE);
                         T.s("你当前金币余额不足，请充值");
+                        getMessageList();
                         break;
                     default:
                         T.s(response.getMsg());
@@ -1105,6 +1180,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                                 word = wordList.get(0);
                             }
                             useCoin(4, "", "", word, 0);
+                            sendLocalTextMessage(word);
                         }
 
                         if (currentUserBean.getStatusCert().equals("PASS")) {
@@ -1191,6 +1267,12 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         linearLayoutManager.scrollToPositionWithOffset(adapter.getItemCount() - 1, Integer.MIN_VALUE);
     }
 
+    private void goToListBottomForSpecialImage() {
+        LinearLayoutManager linearLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
+//        linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.scrollToPositionWithOffset(adapter.getItemCount() - 1, Integer.MIN_VALUE);
+    }
+
     private void updateCurrentInfo() {
         name.setText(currentUserBean.getNickname());
         chatList = new ArrayList<>();
@@ -1210,13 +1292,19 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 //                    getBitmap(currentUserBean.getAvatar());
 //                }
 //            }).start();
-            RequestOptions options = new RequestOptions()
-                    .transform(new BlurTransformation(this, 25, 1))
-                    .error(R.mipmap.test4);
+
             Glide.with(this)
                     .load(currentUserBean.getAvatar())
-                    .apply(options)
+                    .error(R.mipmap.notice_error)
+                    .bitmapTransform(new BlurTransformation(this, 6, 1), new CenterCrop(this))
                     .into(background);
+        } else {
+            topLayout.setBackgroundColor(getResources().getColor(R.color.colorPersonAlbumHave));
+            name.setTextColor(getResources().getColor(R.color.colorTipSelected));
+            back.setImageResource(R.mipmap.common_back);
+            tvMore.setTextColor(getResources().getColor(R.color.colorTipSelected));
+            tvMore.setVisibility(View.GONE);
+            anim.setVisibility(View.GONE);
         }
     }
 
@@ -1254,10 +1342,12 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     private void uploadPic(final String localPic) {
         useCoin(2, localPic, "", "", 0);
+        sendLocalImageMessage(localPic);
     }
 
     private void uploadRecord(final String recordPic, final int timeOffset) {
         useCoin(3, "", recordPic, "", timeOffset);
+        sendLocalVoiceMessage(recordPic, timeOffset);
     }
 
     private void sendReceiptMessage(int status) {
@@ -1279,6 +1369,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         bean.setType(mode);
         bean.setInviteName(selfUserBean.getNickname());
         bean.setReceiveName(currentUserBean.getNickname());
+        bean.setReceiveIcon(currentUserBean.getAvatar());
         customBean.setMsgType(Constant.INVITE_CHAT_ROOM_CODE);
         customBean.setInviteBean(bean);
         V2TIMMessage message = V2TIMManager.getMessageManager().createCustomMessage(gson.toJson(customBean).getBytes());

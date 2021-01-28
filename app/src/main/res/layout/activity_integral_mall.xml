@@ -92,7 +92,8 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="25dip"
         android:layout_marginRight="25dip"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="20dip">
 
     </android.support.v7.widget.RecyclerView>
 </LinearLayout>

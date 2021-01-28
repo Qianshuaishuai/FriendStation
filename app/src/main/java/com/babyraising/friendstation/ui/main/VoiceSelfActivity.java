@@ -3,7 +3,9 @@ package com.babyraising.friendstation.ui.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -34,9 +36,12 @@ import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCCloudListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.xutils.common.util.DensityUtil;
+import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +66,12 @@ public class VoiceSelfActivity extends BaseActivity {
 //        }
         cancelTIMRTC();
     }
+
+    @ViewInject(R.id.voice_default_head)
+    private ImageView voiceDefaultHead;
+
+    @ViewInject(R.id.voice_show_head)
+    private ImageView voiceShowHead;
 
     @ViewInject(R.id.content)
     private TextView content;
@@ -94,9 +105,16 @@ public class VoiceSelfActivity extends BaseActivity {
     private void initData() {
         Intent intent = getIntent();
         bean = gson.fromJson(intent.getStringExtra("voice-send-bean"), TimRTCInviteBean.class);
-        System.out.println(intent.getStringExtra("voice-send-bean"));
+        System.out.println("test:" + gson.toJson(bean));
         if (bean != null) {
-            content.setText(bean.getInviteName() + "你正在向 " + bean.getReceiveName() + " 发送语音邀请");
+            content.setText("正在等待 " + bean.getReceiveName() + " 接听");
+            if (!TextUtils.isEmpty(bean.getReceiveIcon())) {
+                voiceDefaultHead.setVisibility(View.GONE);
+                voiceShowHead.setVisibility(View.VISIBLE);
+                ImageOptions options = new ImageOptions.Builder().
+                        setRadius(DensityUtil.dip2px(100)).setCrop(true).build();
+                x.image().bind(voiceShowHead, bean.getReceiveIcon(), options);
+            }
         } else {
             T.s("未找到接收人信息");
             finish();

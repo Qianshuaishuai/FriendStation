@@ -43,6 +43,7 @@ import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.NameUtils;
 import com.babyraising.friendstation.util.NickNameUtil;
+import com.babyraising.friendstation.util.PhotoUtil;
 import com.babyraising.friendstation.util.T;
 import com.babyraising.friendstation.util.TypeUtil;
 import com.google.gson.Gson;
@@ -335,8 +336,8 @@ public class BuildUserActivity extends BaseActivity implements EasyPermissions.P
                 }else{
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
-                        String filePath = FileUtil.getFilePathByUri(this, u);
-                        System.out.println("filePath:" + filePath);
+                        String oldFilePath = FileUtil.getFilePathByUri(this, u);
+                        String filePath = PhotoUtil.amendRotatePhoto(oldFilePath, this);
                         if (!TextUtils.isEmpty(filePath)) {
                             uploadPic(filePath);
                         }

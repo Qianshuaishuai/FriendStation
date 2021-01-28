@@ -29,6 +29,7 @@ import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.response.ScoreOrderSortListResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
 import com.babyraising.friendstation.util.CopyUtil;
+import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
 import net.nightwhistler.htmlspanner.TextUtil;
@@ -80,8 +81,14 @@ public class InviteFriendDetailActivity extends BaseActivity {
 
     @Event(R.id.invite_info)
     private void inviteInfoClick(View view) {
+
+        if (inviteCode.getText().toString().equals("------")) {
+            T.s("你的邀请信息有误，请联系管理员");
+            return;
+        }
+
         inviteTipDialog.show();
-        String copyTxt = "[Packet]百度搜索【陌声】下载赚现金\n" +
+        String copyTxt = "[Packet]百度搜索【加友站】下载赚现金\n" +
                 "[Packet]填我邀请码【inviteCode】\n" +
                 "[Packet]你我各得最高【88元】红包\n" +
                 "[Packet]红包可立即提现\n" +
@@ -158,6 +165,8 @@ public class InviteFriendDetailActivity extends BaseActivity {
         UserAllInfoBean userAllInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
         if (!TextUtils.isEmpty(userAllInfoBean.getInviteCode())) {
             inviteCode.setText(userAllInfoBean.getInviteCode());
+        } else {
+            T.s("你的邀请信息有误，请联系管理员");
         }
     }
 

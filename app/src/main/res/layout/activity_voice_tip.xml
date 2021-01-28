@@ -7,12 +7,21 @@
     android:background="@mipmap/voice_background"
     tools:context=".ui.main.VoiceTipActivity">
 
+
     <ImageView
+        android:id="@+id/voice_default_head"
         android:layout_width="266dip"
         android:layout_height="273dip"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="28dip"
         android:src="@mipmap/voice_head_icon" />
+
+    <ImageView
+        android:id="@+id/voice_show_head"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dip" />
 
     <RelativeLayout
         android:id="@+id/layout_tip"
