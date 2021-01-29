@@ -18,9 +18,15 @@ import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.ScoreExchangeBean;
 import com.babyraising.friendstation.bean.ScoreExchangeDetailBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
+import com.babyraising.friendstation.request.PayRequest;
+import com.babyraising.friendstation.request.TranslateCoinRequest;
+import com.babyraising.friendstation.response.CommonResponse;
 import com.babyraising.friendstation.response.ScoreExchangeResponse;
+import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
+import com.babyraising.friendstation.response.WxPayParamResponse;
 import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
+import com.tencent.imsdk.v2.V2TIMMessage;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -30,6 +36,8 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @ContentView(R.layout.activity_integral_mall)
@@ -44,7 +52,7 @@ public class IntegralMallActivity extends BaseActivity {
     }
 
     @Event(R.id.back)
-    private void backClick(View view){
+    private void backClick(View view) {
         finish();
     }
 
@@ -62,12 +70,57 @@ public class IntegralMallActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         initView();
         initData();
-        getIntegralList();
     }
 
     private void initData() {
-        userInfoBean = ((FriendStationApplication) getApplication()).getUserAllInfo();
-        count.setText("" + userInfoBean.getUserCount().getNumScore());
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getUserFullInfo();
+        getIntegralList();
+    }
+
+    private void getUserFullInfo() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_FULL);
+        params.addHeader("Authorization", bean.getAccessToken());
+        System.out.println(bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
+                System.out.println("recharge-userFullInfo" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());
+                        userInfoBean = response.getData();
+                        count.setText("" + userInfoBean.getUserCount().getNumScore());
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     private void initView() {
@@ -85,11 +138,79 @@ public class IntegralMallActivity extends BaseActivity {
 
     }
 
-    public void goToDrawal() {
+    public void translateScore(int position) {
+        double currentScore = userInfoBean.getUserCount().getNumScore();
+        ScoreExchangeDetailBean bean = list.get(position);
+
+        if (bean != null) {
+
+            if (currentScore < bean.getPrice()) {
+                T.s("你当前积分不足与兑换商品");
+                return;
+            }
+
+            if (!TextUtils.isEmpty(bean.getType()) && bean.getType().equals("金币")) {
+                translateCoin(bean.getPrice(), bean.getId());
+            }
+
+            if (!TextUtils.isEmpty(bean.getType()) && bean.getType().equals("现金")) {
+                goToDrawal(bean);
+            }
+        }
+
+    }
+
+    public void goToDrawal(ScoreExchangeDetailBean bean) {
         Intent intent = new Intent(this, DrawalActivity.class);
+        intent.putExtra("score-bean", new Gson().toJson(bean));
         startActivity(intent);
     }
 
+    private void translateCoin(int amount, int scoreGoodsId) {
+        TranslateCoinRequest request = new TranslateCoinRequest();
+        request.setAmount(amount);
+        request.setScoreGoodsId(scoreGoodsId);
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        Gson gson = new Gson();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_SCORE_ORDER_SAVE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        System.out.println(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                CommonResponse response = gson.fromJson(result, CommonResponse.class);
+                System.out.println("TranslateCoin:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        T.s("兑换成功");
+                        getUserFullInfo();
+                        getIntegralList();
+                        break;
+                    default:
+                        T.s("你当前积分不足与兑换商品");
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
 
     private void getIntegralList() {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
@@ -110,11 +231,17 @@ public class IntegralMallActivity extends BaseActivity {
                             list.add(newList.get(l));
                         }
 
+
 //                        if (list.size() == 0) {
 //                            ScoreExchangeDetailBean bean = new ScoreExchangeDetailBean();
 //                            list.add(bean);
 //                        }
-
+                        Collections.sort(list, new Comparator<ScoreExchangeDetailBean>() {
+                            @Override
+                            public int compare(ScoreExchangeDetailBean o1, ScoreExchangeDetailBean o2) {
+                                return o1.getSort() - o2.getSort();
+                            }
+                        });
                         adapter.notifyDataSetChanged();
                         break;
                     default:

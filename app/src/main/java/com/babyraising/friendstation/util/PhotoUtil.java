@@ -1,10 +1,13 @@
 package com.babyraising.friendstation.util;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Environment;
 
 import java.io.File;
@@ -139,6 +142,58 @@ public class PhotoUtil {
         Bitmap bitmap = rotaingImageView(angle, bmp);
 // 保存修复后的图片并返回保存后的图片路径
         return savePhotoToSD(bitmap, context);
+    }
+
+    public static String newAmendRotatePhoto(Uri mImageCaptureUri, Context context) {
+        ContentResolver cr = context.getContentResolver();
+        Cursor cursor = cr.query(mImageCaptureUri, null, null, null, null);// 根据Uri从数据库中找
+        if (cursor != null) {
+            cursor.moveToFirst();// 把游标移动到首位，因为这里的Uri是包含ID的所以是唯一的不需要循环找指向第一个就是了
+            String filePath = cursor.getString(cursor.getColumnIndex("_data"));// 获取图片路径
+            String orientation = cursor.getString(cursor
+                    .getColumnIndex("orientation"));// 获取旋转的角度
+            cursor.close();
+            if (filePath != null) {
+                Bitmap bitmap = BitmapFactory.decodeFile(filePath);//根据Path读取资源图片
+                int angle = 0;
+                if (orientation != null && !"".equals(orientation)) {
+                    angle = Integer.parseInt(orientation);
+                }
+                if (angle != 0) {
+                    // 下面的方法主要作用是把图片转一个角度，也可以放大缩小等
+                    Matrix m = new Matrix();
+                    int width = bitmap.getWidth();
+                    int height = bitmap.getHeight();
+                    m.setRotate(angle); // 旋转angle度
+                    bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height,
+                            m, true);// 从新生成图片
+
+                }
+                return savePhotoToSD(bitmap, context);
+            }
+        }
+        return "";
+    }
+
+    public static String newAmendRotatePhoto2(String filePath, Context context) {
+
+        if (filePath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath);//根据Path读取资源图片
+            int angle = readPictureDegree(filePath);
+            if (angle != 0) {
+                // 下面的方法主要作用是把图片转一个角度，也可以放大缩小等
+                Matrix m = new Matrix();
+                int width = bitmap.getWidth();
+                int height = bitmap.getHeight();
+                m.setRotate(angle); // 旋转angle度
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height,
+                        m, true);// 从新生成图片
+
+            }
+            return savePhotoToSD(bitmap, context);
+        }
+
+        return "";
     }
 
     /**

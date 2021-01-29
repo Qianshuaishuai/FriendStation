@@ -4,7 +4,7 @@ public class ScoreRecordDetail2Bean {
     private int amount;
     private String gmtCreate;
     private String goodsName;
-    private int memo;
+    private String memo;
     private double scoreRemain;
     private String time;
 
@@ -32,11 +32,11 @@ public class ScoreRecordDetail2Bean {
         this.goodsName = goodsName;
     }
 
-    public int getMemo() {
+    public String getMemo() {
         return memo;
     }
 
-    public void setMemo(int memo) {
+    public void setMemo(String memo) {
         this.memo = memo;
     }
 

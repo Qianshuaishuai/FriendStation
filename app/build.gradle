@@ -61,6 +61,8 @@ dependencies {
     implementation 'com.ldoublem.loadingview:loadingviewlib:1.0'
     implementation 'com.github.jgabrielfreitas:BlurImageView:1.0.1'
     implementation 'jp.wasabeef:glide-transformations:2.0.1'
+    implementation 'com.lzy.widget:imagepicker:0.6.1'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 //    implementation (name: 'alipaySdk-15.6.8-20191021122514', ext: 'aar')
 //    compile (name: 'alipaysdk-15.8.01.210112203525', ext: 'aar')
 //    implementation 'com.tencent.imsdk:tuikit:5.0.10'

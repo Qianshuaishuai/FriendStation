@@ -55,10 +55,18 @@ public class ExchangeRecordDetailAdapter extends RecyclerView.Adapter<ExchangeRe
 
         holder.balanceTxt.setText("积分余额" + mList.get(position).getScoreRemain());
 
-        if (mList.get(position).getMemo() > 0) {
-            holder.timeTxt.setText("+" + mList.get(position).getMemo());
+        if (mList.get(position).getMemo() != null && !TextUtils.isEmpty(mList.get(position).getMemo())) {
+            holder.detailTxt.setText(mList.get(position).getMemo());
+        }
+
+        if (mList.get(position).getGoodsName() != null && !TextUtils.isEmpty(mList.get(position).getGoodsName())) {
+            holder.detailTxt.setText(mList.get(position).getGoodsName());
+        }
+//
+        if (mList.get(position).getAmount() > 0) {
+            holder.countTxt.setText("+" + mList.get(position).getAmount());
         } else {
-            holder.timeTxt.setText(mList.get(position).getMemo());
+            holder.countTxt.setText("" + mList.get(position).getAmount());
         }
     }
 

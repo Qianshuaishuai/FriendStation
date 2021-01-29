@@ -201,13 +201,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 //                    holder.rightIvContent.setVisibility(View.VISIBLE);
 
                     if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getThumbImageUrl())) {
-                        ImageOptions options = new ImageOptions.Builder().setCrop(true).
+                        ImageOptions options = new ImageOptions.Builder().setCrop(true).setRadius(DensityUtil.dip2px(8)).
                                 build();
                         x.image().bind(holder.rightIvContent, ((ImageElement) elements.get(0)).getThumbImageUrl(), options);
                         holder.rightIvContent.setVisibility(View.VISIBLE);
                     } else {
                         if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
-                            ImageOptions options = new ImageOptions.Builder().setCrop(true).
+                            ImageOptions options = new ImageOptions.Builder().setCrop(true).setRadius(DensityUtil.dip2px(8)).
                                     build();
                             x.image().bind(holder.rightIvContent, ((ImageElement) elements.get(0)).getOriginImageFilePath(), options);
                             holder.rightIvContent.setVisibility(View.VISIBLE);
@@ -217,8 +217,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     holder.rightIvContent.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getThumbImageUrl())) {
-                                context.goToScrollImage(((ImageElement) elements.get(0)).getThumbImageUrl());
+                            if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getLargeImageUrl())) {
+                                context.goToScrollImage(((ImageElement) elements.get(0)).getLargeImageUrl());
                             } else {
                                 if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
                                     context.goToScrollImage(((ImageElement) elements.get(0)).getOriginImageFilePath());
@@ -341,13 +341,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
                     if (elements.get(0) instanceof ImageElement) {
                         if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getThumbImageUrl())) {
-                            ImageOptions options = new ImageOptions.Builder().setCrop(true).
+                            ImageOptions options = new ImageOptions.Builder().setCrop(true).setRadius(DensityUtil.dip2px(8)).
                                     build();
                             x.image().bind(holder.leftIvContent, ((ImageElement) elements.get(0)).getThumbImageUrl(), options);
                             holder.leftIvContent.setVisibility(View.VISIBLE);
                         } else {
                             if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
-                                ImageOptions options = new ImageOptions.Builder().setCrop(true).
+                                ImageOptions options = new ImageOptions.Builder().setCrop(true).setRadius(DensityUtil.dip2px(8)).
                                         build();
                                 x.image().bind(holder.leftIvContent, ((ImageElement) elements.get(0)).getOriginImageFilePath(), options);
                                 holder.leftIvContent.setVisibility(View.VISIBLE);
@@ -358,8 +358,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         holder.leftIvContent.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getThumbImageUrl())) {
-                                    context.goToScrollImage(((ImageElement) elements.get(0)).getThumbImageUrl());
+                                if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getLargeImageUrl())) {
+                                    context.goToScrollImage(((ImageElement) elements.get(0)).getLargeImageUrl());
                                 } else {
                                     if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
                                         context.goToScrollImage(((ImageElement) elements.get(0)).getOriginImageFilePath());
@@ -483,13 +483,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 //                    holder.rightIvContent.setVisibility(View.VISIBLE);
 
                         if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getThumbImageUrl())) {
-                            ImageOptions options = new ImageOptions.Builder().setCrop(true).
+                            ImageOptions options = new ImageOptions.Builder().setRadius(DensityUtil.dip2px(8)).
                                     build();
                             x.image().bind(holder.rightIvContent, ((ImageElement) elements.get(0)).getThumbImageUrl(), options);
                             holder.rightIvContent.setVisibility(View.VISIBLE);
                         } else {
                             if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
-                                ImageOptions options = new ImageOptions.Builder().setCrop(true).
+                                ImageOptions options = new ImageOptions.Builder().setRadius(DensityUtil.dip2px(8)).
                                         build();
                                 x.image().bind(holder.rightIvContent, ((ImageElement) elements.get(0)).getOriginImageFilePath(), options);
                                 holder.rightIvContent.setVisibility(View.VISIBLE);
@@ -499,8 +499,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         holder.rightIvContent.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getThumbImageUrl())) {
-                                    context.goToScrollImage(((ImageElement) elements.get(0)).getThumbImageUrl());
+                                if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getLargeImageUrl())) {
+                                    context.goToScrollImage(((ImageElement) elements.get(0)).getLargeImageUrl());
                                 } else {
                                     if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
                                         context.goToScrollImage(((ImageElement) elements.get(0)).getOriginImageFilePath());

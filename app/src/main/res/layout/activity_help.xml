@@ -160,7 +160,8 @@
             android:text="人工客服："
             android:textColor="#ff3c3b41"
             android:textSize="15dip"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <View
             android:layout_width="match_parent"
@@ -174,7 +175,8 @@
             android:layout_marginTop="15dip"
             android:text="客服联系微信：xxxxxxxxx"
             android:textColor="#ff3c3b41"
-            android:textSize="14dip" />
+            android:textSize="14dip"
+            android:visibility="gone" />
     </LinearLayout>
 
     <LinearLayout

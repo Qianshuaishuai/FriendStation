@@ -14,6 +14,8 @@ import com.babyraising.friendstation.bean.ScoreExchangeBean;
 import com.babyraising.friendstation.bean.ScoreExchangeDetailBean;
 import com.babyraising.friendstation.ui.main.IntegralMallActivity;
 
+import org.xutils.x;
+
 import java.util.List;
 
 public class IntegralMallAdapter extends RecyclerView.Adapter<IntegralMallAdapter.ViewHolder> {
@@ -55,12 +57,16 @@ public class IntegralMallAdapter extends RecyclerView.Adapter<IntegralMallAdapte
             holder.nameTxt.setText(mList.get(position).getTitle());
         }
 
+        if (!TextUtils.isEmpty(mList.get(position).getImg())) {
+            x.image().bind(holder.iconIv, mList.get(position).getImg());
+        }
+
         holder.integralTxt.setText(mList.get(position).getPrice() + "积分");
         holder.countTxt.setText(mList.get(position).getChangeCount() + "人已换");
         holder.layoutMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.goToDrawal();
+                activity.translateScore(position);
             }
         });
     }

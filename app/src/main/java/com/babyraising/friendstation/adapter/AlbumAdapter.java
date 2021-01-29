@@ -11,6 +11,8 @@ import com.babyraising.friendstation.bean.AlbumDetailBean;
 import com.babyraising.friendstation.ui.main.MomentSendActivity;
 import com.babyraising.friendstation.ui.user.PhotoActivity;
 
+import org.xutils.common.util.DensityUtil;
+import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.util.List;
@@ -47,7 +49,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        x.image().bind(holder.iconIv, mList.get(position).getUrl());
+        ImageOptions options = new ImageOptions.Builder().setRadius(DensityUtil.dip2px(8)).build();
+        x.image().bind(holder.iconIv, mList.get(position).getUrl(), options);
         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

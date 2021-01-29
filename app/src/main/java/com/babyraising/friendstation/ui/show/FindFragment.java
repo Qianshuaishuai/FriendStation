@@ -557,6 +557,7 @@ public class FindFragment extends BaseFragment {
 
         adminSendMessage(userBean.getId(), userId);
         T.s("搭讪成功");
+        ((FriendStationApplication) getActivity().getApplication()).isUpdateDoTask(getActivity(), mainLayout, 11);
         showAnimation();
     }
 
