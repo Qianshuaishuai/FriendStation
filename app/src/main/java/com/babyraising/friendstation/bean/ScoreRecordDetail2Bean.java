@@ -1,18 +1,18 @@
 package com.babyraising.friendstation.bean;
 
 public class ScoreRecordDetail2Bean {
-    private int amount;
+    private double amount;
     private String gmtCreate;
     private String goodsName;
     private String memo;
     private double scoreRemain;
     private String time;
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 

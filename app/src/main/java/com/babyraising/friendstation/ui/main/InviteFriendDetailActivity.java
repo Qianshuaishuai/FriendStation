@@ -2,6 +2,7 @@ package com.babyraising.friendstation.ui.main;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,11 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.adapter.ExchangeRecordAdapter;
 import com.babyraising.friendstation.adapter.ExchangeRecordDetailAdapter;
 import com.babyraising.friendstation.adapter.RankIncomeAdapter;
 import com.babyraising.friendstation.adapter.RankVulgarAdapter;
@@ -50,11 +53,14 @@ public class InviteFriendDetailActivity extends BaseActivity {
     private AlertDialog inviteTipDialog;
     private int type = 0;
 
-    private ExchangeRecordDetailAdapter detailAdapter;
-    private List<ScoreRecordDetail2Bean> detailList;
+    private ExchangeRecordAdapter detailAdapter;
+    private List<ScoreRecordBean> detailList;
 
     private RankIncomeAdapter rankIncomeAdapter;
     private List<ScoreOrderSortListBean> rankList;
+
+    @ViewInject(R.id.tip)
+    private TextView tip;
 
     @Event(R.id.back)
     private void backClick(View view) {
@@ -78,6 +84,9 @@ public class InviteFriendDetailActivity extends BaseActivity {
 
     @ViewInject(R.id.layout_detail)
     private LinearLayout layoutDetail;
+
+    @ViewInject(R.id.scrollview)
+    private ScrollView scrollView;
 
     @Event(R.id.invite_info)
     private void inviteInfoClick(View view) {
@@ -146,7 +155,7 @@ public class InviteFriendDetailActivity extends BaseActivity {
 
     private void initView() {
         detailList = new ArrayList<>();
-        detailAdapter = new ExchangeRecordDetailAdapter(detailList);
+        detailAdapter = new ExchangeRecordAdapter(this, detailList);
         LinearLayoutManager detailManager = new LinearLayoutManager(this);
         detailRecycleView.setAdapter(detailAdapter);
         detailRecycleView.setLayoutManager(detailManager);
@@ -211,10 +220,16 @@ public class InviteFriendDetailActivity extends BaseActivity {
                     case 200:
                         detailList.clear();
                         for (int s = 0; s < response.getData().size(); s++) {
-                            for (int d = 0; d < response.getData().get(s).getList().size(); d++) {
-                                detailList.add(response.getData().get(s).getList().get(d));
+                            detailList.add(response.getData().get(s));
+                        }
+                        if (type == 0) {
+                            if (detailList.size() == 0) {
+                                tip.setVisibility(View.VISIBLE);
+                            } else {
+                                tip.setVisibility(View.GONE);
                             }
                         }
+                        detailAdapter.notifyDataSetChanged();
                         break;
                     default:
 
@@ -256,6 +271,15 @@ public class InviteFriendDetailActivity extends BaseActivity {
                         for (int s = 0; s < response.getData().size(); s++) {
                             rankList.add(response.getData().get(s));
                         }
+
+                        if (type == 1) {
+                            if (rankList.size() == 0) {
+                                tip.setVisibility(View.VISIBLE);
+                            } else {
+                                tip.setVisibility(View.GONE);
+                            }
+                        }
+
                         rankIncomeAdapter.notifyDataSetChanged();
                         break;
                     default:

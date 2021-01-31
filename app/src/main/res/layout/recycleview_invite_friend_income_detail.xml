@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="积分余额：5.09"
+            android:text="积分余额："
             android:textColor="#3C3B41"
             android:textSize="14dip" />
 

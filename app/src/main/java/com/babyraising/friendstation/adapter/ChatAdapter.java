@@ -207,6 +207,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         holder.rightIvContent.setVisibility(View.VISIBLE);
                     } else {
                         if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
+                            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.rightIvContent.getLayoutParams();
+                            params.width = 198;
+                            params.height = 320;
+                            holder.rightIvContent.setLayoutParams(params);
                             ImageOptions options = new ImageOptions.Builder().setCrop(true).setRadius(DensityUtil.dip2px(8)).
                                     build();
                             x.image().bind(holder.rightIvContent, ((ImageElement) elements.get(0)).getOriginImageFilePath(), options);
@@ -489,6 +493,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             holder.rightIvContent.setVisibility(View.VISIBLE);
                         } else {
                             if (!TextUtils.isEmpty(((ImageElement) elements.get(0)).getOriginImageFilePath())) {
+                                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.rightIvContent.getLayoutParams();
+                                params.width = 198;
+                                params.height = 320;
+                                holder.rightIvContent.setLayoutParams(params);
                                 ImageOptions options = new ImageOptions.Builder().setRadius(DensityUtil.dip2px(8)).
                                         build();
                                 x.image().bind(holder.rightIvContent, ((ImageElement) elements.get(0)).getOriginImageFilePath(), options);

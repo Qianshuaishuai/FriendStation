@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dip"
                 android:layout_marginRight="15dip"
-                android:text="5.09"
+                android:text=""
                 android:textColor="#FD7E41"
                 android:textSize="14dip" />
         </LinearLayout>

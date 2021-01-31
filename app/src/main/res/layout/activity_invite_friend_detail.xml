@@ -36,6 +36,7 @@
     </RelativeLayout>
 
     <ScrollView
+        android:id="@+id/scrollview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -49,6 +50,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
                 android:background="@mipmap/invite_friend_top_bg"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
@@ -88,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dip"
-                    android:text="1. 请漏出上半身并保持姿势端正;"
+                    android:text="【第一重奖励】好友每日充值的8%现金"
                     android:textColor="#B9B8C1"
                     android:textSize="14dip" />
 
@@ -96,7 +99,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dip"
-                    android:text="2. 请保证头像和真人一致;"
+                    android:text="【第二重奖励】好友每次礼物收益的8%现金"
                     android:textColor="#B9B8C1"
                     android:textSize="14dip" />
 
@@ -104,7 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dip"
-                    android:text="3. 拍照仅用作认证，官方会对其保密,可放心认证。"
+                    android:text="【第三重奖励】完成邀请任务金币奖励"
                     android:textColor="#B9B8C1"
                     android:textSize="14dip" />
             </LinearLayout>
@@ -175,6 +178,17 @@
                     android:textColor="#B9B8C1"
                     android:textSize="15dip" />
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/tip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dip"
+                android:gravity="center_horizontal"
+                android:text="快去邀请好友赚收益"
+                android:textSize="16dip"
+                android:textStyle="bold"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/layout_detail"

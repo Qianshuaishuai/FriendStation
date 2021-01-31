@@ -49,7 +49,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        ImageOptions options = new ImageOptions.Builder().setRadius(DensityUtil.dip2px(8)).build();
+        ImageOptions options = new ImageOptions.Builder().
+                setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
         x.image().bind(holder.iconIv, mList.get(position).getUrl(), options);
         holder.deleteIv.setOnClickListener(new View.OnClickListener() {
             @Override

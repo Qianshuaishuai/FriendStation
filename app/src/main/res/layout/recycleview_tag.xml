@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dip"
-        android:layout_marginRight="30dip"
+        android:layout_marginRight="15dip"
         android:background="@drawable/shape_tag_shadow_bg"
         android:gravity="center"
         android:paddingLeft="10dip"
@@ -18,5 +18,5 @@
         android:paddingBottom="4dip"
         android:singleLine="true"
         android:textColor="#9A4AC1"
-        android:textSize="12dip" />
+        android:textSize="11dip" />
 </LinearLayout>

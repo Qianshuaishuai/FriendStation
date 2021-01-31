@@ -97,7 +97,7 @@ public class PersonInfoActivity extends BaseActivity {
     private ShowAlbumAdapter showAlbumAdapter;
     private int followed = 0;
 
-    private boolean isPlayVoiceSign = true;
+    private boolean isPlayVoiceSign = false;
 
     @ViewInject(R.id.background)
     private ImageView background;
@@ -271,15 +271,15 @@ public class PersonInfoActivity extends BaseActivity {
         if (mode == 1) {
             return;
         }
-        if (auth.getText().toString().equals("已认证")) {
-            T.s("你已认证！");
-            return;
-        }
+//        if (auth.getText().toString().equals("已认证")) {
+//            T.s("你已认证！");
+//            return;
+//        }
 
-        if (auth.getText().toString().equals("审核中")) {
-            T.s("正在审核中！");
-            return;
-        }
+//        if (auth.getText().toString().equals("审核中")) {
+//            T.s("正在审核中！");
+//            return;
+//        }
         Intent intent = new Intent(this, PersonAuthActivity.class);
         startActivity(intent);
     }
@@ -623,11 +623,11 @@ public class PersonInfoActivity extends BaseActivity {
             mediaPlayer.setDataSource(url);
             mediaPlayer.setLooping(true);
             mediaPlayer.prepare();
-            mediaPlayer.start();
+//            mediaPlayer.start();
             currentRecordDur = mediaPlayer.getDuration();
             audio.setText(currentRecordDur / 1000 + "S");
-            voiceOpera.setImageResource(R.mipmap.common_pause);
-            isPlayVoiceSign = true;
+//            voiceOpera.setImageResource(R.mipmap.common_pause);
+//            isPlayVoiceSign = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1307,20 +1307,28 @@ public class PersonInfoActivity extends BaseActivity {
 //                    .setEngine(new GlideEngine())
 //                    .forResult(RC_CHOOSE_PHOTO);
 //        }
-        ImagePicker imagePicker = ImagePicker.getInstance();
-        imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
-        imagePicker.setShowCamera(false);  //显示拍照按钮
-        imagePicker.setCrop(false);        //允许裁剪（单选才有效）
-        imagePicker.setSaveRectangle(true); //是否按矩形区域保存
-        imagePicker.setMultiMode(false); //是否按矩形区域保存
-        imagePicker.setSelectLimit(1);    //选中数量限制
-        imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
-        imagePicker.setFocusWidth(800);   //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
-        imagePicker.setFocusHeight(800);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
-        imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
-        imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
-        Intent intent = new Intent(this, ImageGridActivity.class);
-        startActivityForResult(intent, RC_CHOOSE_PHOTO);
+        if (TypeUtil.isHuawei()) {
+            ImagePicker imagePicker = ImagePicker.getInstance();
+            imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
+            imagePicker.setShowCamera(false);  //显示拍照按钮
+            imagePicker.setCrop(false);        //允许裁剪（单选才有效）
+            imagePicker.setSaveRectangle(true); //是否按矩形区域保存
+            imagePicker.setMultiMode(false); //是否按矩形区域保存
+            imagePicker.setSelectLimit(1);    //选中数量限制
+            imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
+            imagePicker.setFocusWidth(800);   //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
+            imagePicker.setFocusHeight(800);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
+            imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
+            imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
+            Intent intent = new Intent(this, ImageGridActivity.class);
+            startActivityForResult(intent, RC_CHOOSE_PHOTO);
+        } else {
+            Picker.from(this)
+                    .count(1)
+                    .enableCamera(false)
+                    .setEngine(new GlideEngine())
+                    .forResult(RC_CHOOSE_PHOTO);
+        }
     }
 
     private void takePhoto() {
@@ -1376,9 +1384,9 @@ public class PersonInfoActivity extends BaseActivity {
         File newFile = null;
         try {
             newFile = new CompressHelper.Builder(this)
-                    .setMaxWidth(360)  // 默认最大宽度为720
-                    .setMaxHeight(480) // 默认最大高度为960
-                    .setQuality(80)    // 默认压缩质量为80
+                    .setMaxWidth(1080)  // 默认最大宽度为720
+                    .setMaxHeight(1920) // 默认最大高度为960
+                    .setQuality(60)    // 默认压缩质量为80
                     .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
                     .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
                             Environment.DIRECTORY_PICTURES).getAbsolutePath())
@@ -1508,11 +1516,23 @@ public class PersonInfoActivity extends BaseActivity {
 //                        }
 //                    }
 //                }
-                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                for (int i = 0; i < images.size(); i++) {
-                    String filePath = PhotoUtil.newAmendRotatePhoto2(images.get(i).path, this);
-                    if (!TextUtils.isEmpty(filePath)) {
-                        uploadPic(filePath);
+                if (TypeUtil.isHuawei()) {
+                    ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                    for (int i = 0; i < images.size(); i++) {
+                        String filePath = PhotoUtil.amendRotatePhoto(images.get(i).path, this);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            uploadPic(filePath);
+                        }
+                    }
+
+                } else {
+                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+                    for (Uri u : mSelected) {
+                        String oldFilePath = FileUtil.getFilePathByUri(this, u);
+                        String filePath = PhotoUtil.amendRotatePhoto(oldFilePath, this);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            uploadPic(filePath);
+                        }
                     }
                 }
                 break;

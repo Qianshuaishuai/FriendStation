@@ -101,6 +101,9 @@ public class PersonAuthActivity extends BaseActivity implements EasyPermissions.
     @ViewInject(R.id.layout_error)
     private RelativeLayout errorLayout;
 
+    @ViewInject(R.id.error_tv)
+    private TextView errorTv;
+
     @ViewInject(R.id.retake)
     private Button retake;
 
@@ -139,6 +142,10 @@ public class PersonAuthActivity extends BaseActivity implements EasyPermissions.
                                     T.s("你已成功认证过!");
                                 }
                             });
+                            x.image().bind(ivMain, response.getData().getCertAvatar());
+                            retake.setText("已认证通过");
+                            errorLayout.setVisibility(View.VISIBLE);
+                            errorTv.setText("已认证通过");
                         }
                         break;
                     default:

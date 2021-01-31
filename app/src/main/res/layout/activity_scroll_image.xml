@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     tools:context=".ui.main.ScrollImageActivity">
 
     <RelativeLayout
         android:id="@+id/layout_top"
         android:layout_width="match_parent"
-        android:layout_height="48dip">
+        android:layout_height="48dip"
+        android:background="#292929">
 
         <ImageView
             android:id="@+id/back"
@@ -17,21 +19,21 @@
             android:layout_height="16dip"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dip"
-            android:src="@mipmap/common_back" />
+            android:src="@mipmap/common_white_back" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="放大图片"
-            android:textColor="#ff3c3b41"
+            android:textColor="#ffffff"
             android:textSize="17dip" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dip"
             android:layout_alignParentBottom="true"
-            android:background="#D4D4D4"></View>
+            android:background="#292929"></View>
     </RelativeLayout>
 
     <ImageView

@@ -119,7 +119,7 @@ public class PhotoUtil {
     public static Bitmap getCompressPhoto(String path) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = false;
-        options.inSampleSize = 10; // 图片的大小设置为原来的十分之一
+        options.inSampleSize = 8; // 图片的大小设置为原来的十分之一
         Bitmap bmp = BitmapFactory.decodeFile(path, options);
         options = null;
         return bmp;
@@ -135,6 +135,10 @@ public class PhotoUtil {
     public static String amendRotatePhoto(String originpath, Context context) {
 // 取得图片旋转角度
         int angle = readPictureDegree(originpath);
+
+        if (angle == 0) {
+            return originpath;
+        }
 // 把原图压缩后得到Bitmap对象
         Bitmap bmp = getCompressPhoto(originpath);
         ;
@@ -178,8 +182,8 @@ public class PhotoUtil {
     public static String newAmendRotatePhoto2(String filePath, Context context) {
 
         if (filePath != null) {
-            Bitmap bitmap = BitmapFactory.decodeFile(filePath);//根据Path读取资源图片
             int angle = readPictureDegree(filePath);
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath);//根据Path读取资源图片
             if (angle != 0) {
                 // 下面的方法主要作用是把图片转一个角度，也可以放大缩小等
                 Matrix m = new Matrix();
@@ -188,7 +192,7 @@ public class PhotoUtil {
                 m.setRotate(angle); // 旋转angle度
                 bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height,
                         m, true);// 从新生成图片
-
+                T.s("这张图片旋转了");
             }
             return savePhotoToSD(bitmap, context);
         }

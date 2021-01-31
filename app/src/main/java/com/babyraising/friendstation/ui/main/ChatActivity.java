@@ -152,6 +152,8 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     @ViewInject(R.id.layout_more)
     private LinearLayout moreLayout;
 
+    private boolean isShowLocalPic = false;
+
     @Event(R.id.tv_more1)
     private void tvMore1Click(View view) {
         T.s("该功能正在完善");
@@ -587,6 +589,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         chatList.add(message);
         adapter.notifyDataSetChanged();
         goToListBottom();
+        isShowLocalPic = false;
     }
 
     private void sendLocalVoiceMessage(String voiceUrl, int dur) {
@@ -594,6 +597,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         chatList.add(message);
         adapter.notifyDataSetChanged();
         goToListBottom();
+        isShowLocalPic = false;
     }
 
     private void sendLocalImageMessage(String picUrl) {
@@ -603,25 +607,25 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             return;
         }
 
-        File newFile = null;
-        try {
-            newFile = new CompressHelper.Builder(this)
-                    .setMaxWidth(198)  // 默认最大宽度为720
-                    .setQuality(80)    // 默认压缩质量为80
-                    .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
-                    .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
-                            Environment.DIRECTORY_PICTURES).getAbsolutePath())
-                    .build()
-                    .compressToFile(oldFile);
-        } catch (Exception e) {
-            newFile = oldFile;
-        }
+//        File newFile = null;
+//        try {
+//            newFile = new CompressHelper.Builder(this)
+//                    .setMaxWidth(198)  // 默认最大宽度为720
+//                    .setQuality(80)    // 默认压缩质量为80
+//                    .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
+//                    .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+//                            Environment.DIRECTORY_PICTURES).getAbsolutePath())
+//                    .build()
+//                    .compressToFile(oldFile);
+//        } catch (Exception e) {
+//            newFile = oldFile;
+//        }
 
-        V2TIMMessage message = V2TIMManager.getMessageManager().createImageMessage(newFile.getAbsolutePath());
+        V2TIMMessage message = V2TIMManager.getMessageManager().createImageMessage(picUrl);
         chatList.add(message);
         adapter.notifyDataSetChanged();
         goToListBottomForSpecialImage();
-
+        isShowLocalPic = true;
     }
 
     public void goToScrollImage(String filePath) {
@@ -932,11 +936,23 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 //                        }
 //                    }
 //                }
-                ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                for (int i = 0; i < images.size(); i++) {
-                    String filePath = PhotoUtil.newAmendRotatePhoto2(images.get(i).path, this);
-                    if (!TextUtils.isEmpty(filePath)) {
-                        uploadPic(filePath);
+                if (TypeUtil.isHuawei()) {
+                    ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+                    for (int i = 0; i < images.size(); i++) {
+                        String filePath = PhotoUtil.newAmendRotatePhoto2(images.get(i).path, this);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            uploadPic(filePath);
+                        }
+                    }
+
+                }  else {
+                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+                    for (Uri u : mSelected) {
+                        String oldFilePath = FileUtil.getFilePathByUri(this, u);
+                        String filePath = PhotoUtil.amendRotatePhoto(oldFilePath, this);
+                        if (!TextUtils.isEmpty(filePath)) {
+                            uploadPic(filePath);
+                        }
                     }
                 }
                 break;
@@ -1540,20 +1556,42 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 //                    .setEngine(new GlideEngine())
 //                    .forResult(RC_CHOOSE_PHOTO);
 //        }
-        ImagePicker imagePicker = ImagePicker.getInstance();
-        imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
-        imagePicker.setShowCamera(false);  //显示拍照按钮
-        imagePicker.setCrop(false);        //允许裁剪（单选才有效）
-        imagePicker.setSaveRectangle(true); //是否按矩形区域保存
-        imagePicker.setMultiMode(false); //是否按矩形区域保存
-        imagePicker.setSelectLimit(1);    //选中数量限制
-        imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
-        imagePicker.setFocusWidth(800);   //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
-        imagePicker.setFocusHeight(800);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
-        imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
-        imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
-        Intent intent = new Intent(this, ImageGridActivity.class);
-        startActivityForResult(intent, RC_CHOOSE_PHOTO);
+//        ImagePicker imagePicker = ImagePicker.getInstance();
+//        imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
+//        imagePicker.setShowCamera(false);  //显示拍照按钮
+//        imagePicker.setCrop(false);        //允许裁剪（单选才有效）
+//        imagePicker.setSaveRectangle(true); //是否按矩形区域保存
+//        imagePicker.setMultiMode(false); //是否按矩形区域保存
+//        imagePicker.setSelectLimit(1);    //选中数量限制
+//        imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
+//        imagePicker.setFocusWidth(800);   //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
+//        imagePicker.setFocusHeight(800);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
+//        imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
+//        imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
+//        Intent intent = new Intent(this, ImageGridActivity.class);
+//        startActivityForResult(intent, RC_CHOOSE_PHOTO);
+        if (TypeUtil.isHuawei()) {
+            ImagePicker imagePicker = ImagePicker.getInstance();
+            imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
+            imagePicker.setShowCamera(false);  //显示拍照按钮
+            imagePicker.setCrop(false);        //允许裁剪（单选才有效）
+            imagePicker.setSaveRectangle(true); //是否按矩形区域保存
+            imagePicker.setMultiMode(false); //是否按矩形区域保存
+            imagePicker.setSelectLimit(1);    //选中数量限制
+            imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
+            imagePicker.setFocusWidth(800);   //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
+            imagePicker.setFocusHeight(800);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
+            imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
+            imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
+            Intent intent = new Intent(this, ImageGridActivity.class);
+            startActivityForResult(intent, RC_CHOOSE_PHOTO);
+        } else {
+            Picker.from(this)
+                    .count(1)
+                    .enableCamera(false)
+                    .setEngine(new GlideEngine())
+                    .forResult(RC_CHOOSE_PHOTO);
+        }
     }
 
     private void initVoiceTip() {
@@ -1574,7 +1612,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onDeleteEvent(DeleteEvent event) {
         System.out.println("delete notify");
-        getMessageList();
+        if (!isShowLocalPic) {
+            getMessageList();
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)

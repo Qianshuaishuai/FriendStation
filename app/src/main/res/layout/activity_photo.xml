@@ -36,7 +36,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dip"
             android:text="编辑"
-            android:textColor="#F75184"
+            android:textColor="#ff3c3b41"
             android:textSize="14dip" />
 
         <View

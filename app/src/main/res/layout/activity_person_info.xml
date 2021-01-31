@@ -493,7 +493,7 @@
                                         android:layout_width="24dip"
                                         android:layout_height="24dip"
                                         android:layout_marginLeft="12dip"
-                                        android:src="@mipmap/common_pause" />
+                                        android:src="@mipmap/common_play" />
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
