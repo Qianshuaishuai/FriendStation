@@ -475,10 +475,12 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                 System.out.println("NoticeCount onSuccess");
                 List<V2TIMConversation> newList = v2TIMConversationResult.getConversationList();
                 int unreadCount = 0;
+                List<String> userIdList = new ArrayList<>();
                 for (int n = 0; n < newList.size(); n++) {
                     unreadCount = unreadCount + newList.get(n).getUnreadCount();
                     System.out.println("id:" + newList.get(n).getUserID());
                     System.out.println("unreadCount:" + newList.get(n).getUnreadCount());
+                    userIdList.add(newList.get(n).getUserID());
                 }
                 if (unreadCount == 0) {
                     count.setVisibility(View.GONE);
@@ -496,6 +498,10 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                     params.width = DisplayUtils.dp2px(NewMainActivity.this, 22);
                     params.height = DisplayUtils.dp2px(NewMainActivity.this, 22);
                     count.setLayoutParams(params);
+                }
+                if (!isFirstAutoSendMesage) {
+                    randomUserSendMessage(userIdList);
+                    isFirstAutoSendMesage = true;
                 }
             }
 
@@ -524,10 +530,6 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                         judgeIsAllInfo(response.getData());
                         initTimLogin();
                         uploadLocation();
-                        if (!isFirstAutoSendMesage) {
-//                            randomUserSendMessage();
-                            isFirstAutoSendMesage = true;
-                        }
 
                         break;
                     case 401:
@@ -590,10 +592,14 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
         }
     }
 
-    private void randomUserSendMessage() {
+    private void randomUserSendMessage(final List<String> userIdList) {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERRECOMMENDLIST);
-        params.addQueryStringParameter("userIdList", "");
+        System.out.println(new Gson().toJson(userIdList));
+        for (int u = 0; u < userIdList.size(); u++) {
+            params.addQueryStringParameter("userIdList", userIdList.get(u));
+        }
+        params.addQueryStringParameter("type", 0);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         x.http().get(params, new Callback.CommonCallback<String>() {
@@ -606,12 +612,13 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                     case 200:
                         List<UserMainPageBean> list = response.getData();
                         if (list != null) {
+                            System.out.println("randomUserSendMessageSize:" + list.size());
                             if (list.size() == 1) {
-                                adminSendMessage(list.get(0).getId(), allInfoBean.getId());
+                                adminSendMessage(list.get(0).getId(), allInfoBean.getId(), userIdList);
                             }
                             if (list.size() == 2) {
-                                adminSendMessage(list.get(0).getId(), allInfoBean.getId());
-                                adminSendMessage(list.get(1).getId(), allInfoBean.getId());
+                                adminSendMessage(list.get(0).getId(), allInfoBean.getId(), userIdList);
+                                adminSendMessage(list.get(1).getId(), allInfoBean.getId(), userIdList);
                             }
 
                             if (list.size() > 2) {
@@ -625,7 +632,7 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                                     firstId = list.get(0).getId();
                                 }
 
-                                adminSendMessage(firstId, allInfoBean.getId());
+                                adminSendMessage(firstId, allInfoBean.getId(), userIdList);
 
                                 n = random.nextInt(list.size());
                                 int secondId = 0;
@@ -649,7 +656,7 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                                     crashIndex++;
                                 }
 
-                                adminSendMessage(secondId, allInfoBean.getId());
+                                adminSendMessage(secondId, allInfoBean.getId(), userIdList);
                             }
                         }
                         break;
@@ -720,7 +727,23 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
         });
     }
 
-    private void adminSendMessage(int sendId, int receiveId) {
+    private boolean checkSendIsInChat(int sendId, List<String> userIdList) {
+        for (int u = 0; u < userIdList.size(); u++) {
+            if (userIdList.get(u).equals("" + sendId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void adminSendMessage(int sendId, int receiveId, List<String> userIdList) {
+        System.out.println("randomUserSendMessage-sendId:" + sendId);
+        if (checkSendIsInChat(sendId, userIdList)) {
+            System.out.println("randomUserSendMessage-exist:" + sendId);
+            return;
+        }
+        System.out.println("randomUserSendMessage:send");
         if (sendId == 0 || receiveId == 0) {
             System.out.println("接收方或发送方id为0");
             return;

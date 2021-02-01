@@ -185,7 +185,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.user.BuildUserNameActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.user.BuildUserSexActivity"
             android:screenOrientation="portrait" />

@@ -90,7 +90,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.xutils.common.Callback;
+import org.xutils.common.util.DensityUtil;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -103,9 +105,11 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -386,6 +390,30 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     @ViewInject(R.id.tip4)
     private TextView tip4;
+
+    @ViewInject(R.id.info_head)
+    private ImageView infoHead;
+
+    @ViewInject(R.id.info_sex)
+    private ImageView infoSex;
+
+    @ViewInject(R.id.info_name)
+    private TextView infoName;
+
+    @ViewInject(R.id.info_age)
+    private TextView infoAge;
+
+    @ViewInject(R.id.info_tip1)
+    private TextView infoTip1;
+
+    @ViewInject(R.id.info_tip2)
+    private TextView infoTip2;
+
+    @ViewInject(R.id.info_tip3)
+    private TextView infoTip3;
+
+    @ViewInject(R.id.layout_info)
+    private LinearLayout infoLayout;
 
     @ViewInject(R.id.layout_official)
     private LinearLayout officialLayout;
@@ -945,7 +973,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                         }
                     }
 
-                }  else {
+                } else {
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
                         String oldFilePath = FileUtil.getFilePathByUri(this, u);
@@ -1411,38 +1439,67 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             tvMore.setVisibility(View.GONE);
             anim.setVisibility(View.GONE);
         }
+
+        if (!TextUtils.isEmpty(currentUserBean.getUserExtra().getBirthday())) {
+            infoAge.setText("" + getAge(currentUserBean.getUserExtra().getBirthday()));
+        }
+//
+        if (!TextUtils.isEmpty(currentUserBean.getNickname())) {
+            infoName.setText(currentUserBean.getNickname());
+        }
+
+        if (currentUserBean.getSex() == 1) {
+            infoSex.setImageResource(R.mipmap.common_female);
+        } else {
+            infoSex.setImageResource(R.mipmap.common_male);
+        }
+
+        if (!TextUtils.isEmpty(currentUserBean.getAvatar())) {
+            ImageOptions options = new ImageOptions.Builder().
+                    setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
+            x.image().bind(infoHead, currentUserBean.getAvatar(), options);
+        } else {
+            infoHead.setImageResource(R.mipmap.look_me_head);
+        }
+
+        if (!TextUtils.isEmpty(currentUserBean.getUserExtra().getWork())) {
+            infoTip1.setText("我的职业是" + currentUserBean.getUserExtra().getWork());
+        } else {
+            infoTip1.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(currentUserBean.getUserExtra().getHeight()) && !currentUserBean.getUserExtra().getHeight().equals("未设置")) {
+            infoTip2.setText("我的身高是" + currentUserBean.getUserExtra().getHeight());
+        } else {
+            infoTip2.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(currentUserBean.getUserExtra().getWeight()) && !currentUserBean.getUserExtra().getWeight().equals("未设置")) {
+            infoTip3.setText("我的体重是" + currentUserBean.getUserExtra().getWeight());
+        } else {
+            infoTip3.setVisibility(View.GONE);
+        }
     }
 
-    public Bitmap getBitmap(String url) {
-        Bitmap bm = null;
-        try {
-            URL iconUrl = new URL(url);
-            URLConnection conn = iconUrl.openConnection();
-            HttpURLConnection http = (HttpURLConnection) conn;
+    private int getAge(String birthday) {
+        if (!TextUtils.isEmpty(birthday)) {
+            try {
+                String yearStr = birthday.substring(0, 4);
+                int year = Integer.parseInt(yearStr);
+                return Integer.parseInt(getCurrentYear()) - year;
+            } catch (Exception e) {
+                return 0;
+            }
 
-            int length = http.getContentLength();
-
-            conn.connect();
-            // 获得图像的字符流
-            InputStream is = conn.getInputStream();
-            BufferedInputStream bis = new BufferedInputStream(is, length);
-            Bitmap oldbm = BitmapFactory.decodeStream(bis);
-            bis.close();
-            is.close();// 关闭流
-            int width = background.getMeasuredWidth();
-            int height = background.getMeasuredHeight();
-            int src_w = oldbm.getWidth();
-            int src_h = oldbm.getHeight();
-            float scale_w = ((float) width) / src_w;
-            float scale_h = ((float) height) / src_h;
-            Matrix matrix = new Matrix();
-            matrix.postScale(scale_w, scale_h);
-            bm = Bitmap.createBitmap(oldbm, 0, 0, src_w, src_h, matrix, true);
-            EventBus.getDefault().post(new ImageEvent(bm));
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return bm;
+
+        return 0;
+    }
+
+    public static String getCurrentYear() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        Date date = new Date();
+        return sdf.format(date);
     }
 
     private void uploadPic(final String localPic) {

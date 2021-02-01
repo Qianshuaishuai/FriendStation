@@ -238,86 +238,181 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/layout_top">
 
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!--<com.jgabrielfreitas.core.BlurImageView-->
-            <!--android:id="@+id/background"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--app:radius="25" />-->
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/chat_list"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/find_tip"
-                android:layout_marginBottom="120dip"></android.support.v7.widget.RecyclerView>
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/auth_tip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dip"
-                android:layout_marginBottom="8dip"
-                android:background="@drawable/chat_auth_tip_bg"
-                android:paddingLeft="10dip"
-                android:paddingTop="5dip"
-                android:paddingRight="10dip"
-                android:paddingBottom="5dip"
-                android:text="对方已通过真人认证，可以放心交流。"
-                android:textColor="#ffffff"
-                android:textSize="15dip"
-                android:visibility="gone" />
+                <LinearLayout
+                    android:id="@+id/layout_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dip"
+                    android:background="@drawable/chat_auth_tip_bg"
+                    android:orientation="vertical"
+                    android:padding="12dip">
 
-            <TextView
-                android:id="@+id/moment_tip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/auth_tip"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="30dip"
-                android:layout_marginTop="10dip"
-                android:layout_marginRight="30dip"
-                android:layout_marginBottom="8dip"
-                android:background="@drawable/chat_auth_tip_bg"
-                android:paddingLeft="10dip"
-                android:paddingTop="5dip"
-                android:paddingRight="10dip"
-                android:paddingBottom="5dip"
-                android:text="对方已通过真人认证，可以放心交流。"
-                android:textColor="#ffffff"
-                android:textSize="15dip"
-                android:visibility="gone" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/find_tip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/moment_tip"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="30dip"
-                android:layout_marginTop="10dip"
-                android:layout_marginRight="30dip"
-                android:layout_marginBottom="8dip"
-                android:background="@drawable/chat_auth_tip_bg"
-                android:paddingLeft="10dip"
-                android:paddingTop="5dip"
-                android:paddingRight="10dip"
-                android:paddingBottom="5dip"
-                android:text="丘比特觉得你们两很有缘，赶快聊天吧，别错过缘分～"
-                android:textColor="#ffffff"
-                android:textSize="15dip"
-                android:visibility="gone" />
+                        <ImageView
+                            android:id="@+id/info_head"
+                            android:layout_width="60dip"
+                            android:layout_height="60dip" />
 
-        </RelativeLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="12dip"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/info_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:textColor="#ffffff"
+                                android:textSize="16dip" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dip"
+                                android:background="@drawable/shape_info_tip1_bg"
+                                android:orientation="horizontal"
+                                android:paddingLeft="8dip"
+                                android:paddingTop="5dip"
+                                android:paddingRight="8dip"
+                                android:paddingBottom="5dip">
+
+                                <ImageView
+                                    android:id="@+id/info_sex"
+                                    android:layout_width="18dip"
+                                    android:layout_height="18dip"
+                                    android:src="@mipmap/common_male" />
+
+                                <TextView
+                                    android:id="@+id/info_age"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="2dip"
+                                    android:text=""
+                                    android:textColor="#ffffff"
+                                    android:textSize="12dip" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/info_tip1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dip"
+                        android:text=""
+                        android:textColor="#ffffff"
+                        android:textSize="14dip" />
+
+                    <TextView
+                        android:id="@+id/info_tip2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dip"
+                        android:text=""
+                        android:textColor="#ffffff"
+                        android:textSize="14dip" />
+
+                    <TextView
+                        android:id="@+id/info_tip3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dip"
+                        android:text=""
+                        android:textColor="#ffffff"
+                        android:textSize="14dip" />
+                </LinearLayout>
+                <!--<com.jgabrielfreitas.core.BlurImageView-->
+                <!--android:id="@+id/background"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--app:radius="25" />-->
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/chat_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/find_tip"
+                    android:layout_marginBottom="120dip"></android.support.v7.widget.RecyclerView>
+
+                <TextView
+                    android:id="@+id/auth_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/layout_info"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dip"
+                    android:layout_marginBottom="8dip"
+                    android:background="@drawable/chat_auth_tip_bg"
+                    android:paddingLeft="10dip"
+                    android:paddingTop="5dip"
+                    android:paddingRight="10dip"
+                    android:paddingBottom="5dip"
+                    android:text="对方已通过真人认证，可以放心交流。"
+                    android:textColor="#ffffff"
+                    android:textSize="15dip"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/moment_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/auth_tip"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="30dip"
+                    android:layout_marginTop="10dip"
+                    android:layout_marginRight="30dip"
+                    android:layout_marginBottom="8dip"
+                    android:background="@drawable/chat_auth_tip_bg"
+                    android:paddingLeft="10dip"
+                    android:paddingTop="5dip"
+                    android:paddingRight="10dip"
+                    android:paddingBottom="5dip"
+                    android:text="对方已通过真人认证，可以放心交流。"
+                    android:textColor="#ffffff"
+                    android:textSize="15dip"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/find_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/moment_tip"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginLeft="30dip"
+                    android:layout_marginTop="10dip"
+                    android:layout_marginRight="30dip"
+                    android:layout_marginBottom="8dip"
+                    android:background="@drawable/chat_auth_tip_bg"
+                    android:paddingLeft="10dip"
+                    android:paddingTop="5dip"
+                    android:paddingRight="10dip"
+                    android:paddingBottom="5dip"
+                    android:text="丘比特觉得你们两很有缘，赶快聊天吧，别错过缘分～"
+                    android:textColor="#ffffff"
+                    android:textSize="15dip"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+        </ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
 

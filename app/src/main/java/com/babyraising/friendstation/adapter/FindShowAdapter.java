@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.ui.show.FindFragment;
+import com.google.gson.Gson;
 
 import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
