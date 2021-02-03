@@ -620,6 +620,17 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         isShowLocalPic = false;
     }
 
+    private void sendLocalGiftMessage(GiftDetailBean bean) {
+        TimCustomBean customBean = new TimCustomBean();
+        customBean.setGiftBean(bean);
+        customBean.setMsgType(Constant.GIFT_CHAT_CODE);
+        V2TIMMessage message = V2TIMManager.getMessageManager().createCustomMessage(gson.toJson(customBean).getBytes());
+        chatList.add(message);
+        adapter.notifyDataSetChanged();
+        goToListBottom();
+        isShowLocalPic = false;
+    }
+
     private void sendLocalVoiceMessage(String voiceUrl, int dur) {
         V2TIMMessage message = V2TIMManager.getMessageManager().createSoundMessage(voiceUrl, dur);
         chatList.add(message);
@@ -912,6 +923,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             if (data != null) {
                 GiftDetailBean giftDetailBean = gson.fromJson(data.getStringExtra("gift-bean"), GiftDetailBean.class);
                 sendGiftMessage(giftDetailBean);
+                sendLocalGiftMessage(giftDetailBean);
             }
         }
 
@@ -1440,7 +1452,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             anim.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(currentUserBean.getUserExtra().getBirthday())) {
+        if (currentUserBean.getUserExtra() != null && !TextUtils.isEmpty(currentUserBean.getUserExtra().getBirthday())) {
             infoAge.setText("" + getAge(currentUserBean.getUserExtra().getBirthday()));
         }
 //

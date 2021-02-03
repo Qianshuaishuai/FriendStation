@@ -135,8 +135,8 @@ public class WelcomeActivity extends BaseActivity {
 //        final TextView left = (TextView) contentView.findViewById(R.id.tip1);
 //        final TextView right = (TextView) contentView.findViewById(R.id.tip2);
 //
-//        final Button cancel = (Button) contentView.findViewById(R.id.cancel);
-//        final Button sure = (Button) contentView.findViewById(R.id.sure);
+//        final ButtonUtil cancel = (ButtonUtil) contentView.findViewById(R.id.cancel);
+//        final ButtonUtil sure = (ButtonUtil) contentView.findViewById(R.id.sure);
 //
 //        left.setOnClickListener(new View.OnClickListener() {
 //            @Override

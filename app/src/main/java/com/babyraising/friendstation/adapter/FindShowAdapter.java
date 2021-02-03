@@ -159,7 +159,6 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
         } else {
             holder.nameTxt.setText("昵称未设置");
         }
-
         if (mList.get(position).getUserExtra() == null) {
             holder.tip2Txt.setVisibility(View.GONE);
             holder.tip3Txt.setVisibility(View.GONE);
@@ -172,7 +171,7 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
                 holder.tip1Txt.setVisibility(View.GONE);
             }
 
-            if (!TextUtils.isEmpty(mList.get(position).getUserExtra().getSexPart())) {
+            if (!TextUtils.isEmpty(mList.get(position).getUserExtra().getConstellation())) {
                 holder.tip2Txt.setText(mList.get(position).getUserExtra().getConstellation());
                 holder.tip2Txt.setVisibility(View.VISIBLE);
             } else {

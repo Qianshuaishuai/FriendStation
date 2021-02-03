@@ -326,6 +326,7 @@ public class FindFragment extends BaseFragment {
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERRECOMMENDLIST);
         params.addQueryStringParameter("userIdList", "");
         params.addQueryStringParameter("type", 0);
+        params.addQueryStringParameter("userNum", 8);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         x.http().get(params, new Callback.CommonCallback<String>() {
@@ -694,7 +695,7 @@ public class FindFragment extends BaseFragment {
                 type = 2;
                 break;
         }
-        params.addQueryStringParameter("pageNum", 20);
+        params.addQueryStringParameter("pageNum", 100);
         params.addQueryStringParameter("pageSize", 1);
 //        params.addQueryStringParameter("type", type);
         params.setAsJsonContent(true);

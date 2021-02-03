@@ -60,6 +60,7 @@ public class Constant {
     public static final String URL_UMS_USER_USER_USERINFOV0LIST = "ums/user/user/userInfoVOList";
     public static final String URL_UMS_USER_USER_USERMESSAGELIST = "ums/user/user/userMessageList";
     public static final String URL_UMS_USER_USER_USERRECOMMENDLIST = "ums/user/user/userRecommendList";
+    public static final String URL_UMS_USER_USER_USERRECOMMENDONE = "ums/user/user/userRecommendOne";
     public static final String URL_UMS_USER_UPDATE_RECORDSIGN = "ums/user/update/recordSign";
     public static final String URL_USER_UPDATE_COORDINATE = "ums/user/update/coordinate";
 

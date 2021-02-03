@@ -6,8 +6,8 @@ android {
         applicationId "com.babyraising.friendstation"
         minSdkVersion 17
         targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
@@ -29,7 +29,7 @@ android {
     }
 }
 
-repositories  {   flatDir {        dirs 'libs'    }}
+repositories { flatDir { dirs 'libs' } }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])

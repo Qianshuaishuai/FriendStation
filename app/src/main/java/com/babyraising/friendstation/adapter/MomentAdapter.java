@@ -14,12 +14,16 @@ import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.bean.MomentDetailBean;
 import com.babyraising.friendstation.ui.main.ScrollImageActivity;
 import com.babyraising.friendstation.ui.show.MomentFragment;
+import com.babyraising.friendstation.util.TimeUtils;
 import com.google.gson.Gson;
 
 import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder> {
@@ -28,8 +32,8 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
     private MomentFragment context;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTxt, sexTxt, ageTxt, contentTxt, countTxt, addressTxt;
-        ImageView headIv, contentImgIv, shareIv, likeIv, commentIv;
+        TextView nameTxt, tip1Txt, contentTxt, countTxt, addressTxt;
+        ImageView headIv, contentImgIv, shareIv, likeIv, commentIv, sexIv;
 
         public ViewHolder(View view) {
             super(view);
@@ -37,8 +41,8 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             nameTxt = (TextView) view.findViewById(R.id.name);
             countTxt = (TextView) view.findViewById(R.id.count);
             addressTxt = (TextView) view.findViewById(R.id.address);
-            sexTxt = (TextView) view.findViewById(R.id.sex);
-            ageTxt = (TextView) view.findViewById(R.id.age);
+            sexIv = (ImageView) view.findViewById(R.id.sex);
+            tip1Txt = (TextView) view.findViewById(R.id.tip1);
             headIv = (ImageView) view.findViewById(R.id.head);
             contentImgIv = (ImageView) view.findViewById(R.id.content_img);
             shareIv = (ImageView) view.findViewById(R.id.share);
@@ -101,17 +105,17 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             holder.nameTxt.setText(mList.get(position).getNickname());
         }
 
-        holder.ageTxt.setText(mList.get(position).getAge() + "岁");
+        holder.tip1Txt.setText("" + getAge(mList.get(position).getBirthday()));
 
         switch (mList.get(position).getSex()) {
             case 0:
-                holder.sexTxt.setText("未知");
+                holder.sexIv.setImageResource(R.mipmap.common_female);
                 break;
             case 1:
-                holder.sexTxt.setText("男");
+                holder.sexIv.setImageResource(R.mipmap.common_female);
                 break;
             case 2:
-                holder.sexTxt.setText("女");
+                holder.sexIv.setImageResource(R.mipmap.common_male);
                 break;
         }
 
@@ -174,6 +178,47 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                 context.shareContent(position);
             }
         });
+
+        if (!TextUtils.isEmpty(mList.get(position).getGmtCreate())) {
+            try {
+                holder.countTxt.setVisibility(View.VISIBLE);
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                holder.countTxt.setText(TimeUtils.getTimeShow(mList.get(position).getGmtCreate(), df.format(new Date())));
+            } catch (Exception e) {
+                e.printStackTrace();
+                holder.countTxt.setVisibility(View.GONE);
+            }
+        } else {
+            holder.countTxt.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(mList.get(position).getCity())) {
+            holder.addressTxt.setVisibility(View.VISIBLE);
+            holder.addressTxt.setText(mList.get(position).getCity());
+        } else {
+            holder.addressTxt.setVisibility(View.GONE);
+        }
+    }
+
+    private int getAge(String birthday) {
+        if (!TextUtils.isEmpty(birthday)) {
+            try {
+                String yearStr = birthday.substring(0, 4);
+                int year = Integer.parseInt(yearStr);
+                return Integer.parseInt(getCurrentYear()) - year;
+            } catch (Exception e) {
+                return 0;
+            }
+
+        }
+
+        return 0;
+    }
+
+    public static String getCurrentYear() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        Date date = new Date();
+        return sdf.format(date);
     }
 
     @Override

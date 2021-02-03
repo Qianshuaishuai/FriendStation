@@ -125,6 +125,15 @@ public class PhotoUtil {
         return bmp;
     }
 
+    public static Bitmap getCompressPhoto2(String path, int scale) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = scale; // 图片的大小设置为原来的十分之一
+        Bitmap bmp = BitmapFactory.decodeFile(path, options);
+        options = null;
+        return bmp;
+    }
+
     /**
      * 处理旋转后的图片
      *
@@ -179,11 +188,23 @@ public class PhotoUtil {
         return "";
     }
 
-    public static String newAmendRotatePhoto2(String filePath, Context context) {
-
+    public static String newAmendRotatePhoto3(String filePath, Context context, double size) {
+//        T.s("空白处理的旧地址:" + filePath);
         if (filePath != null) {
             int angle = readPictureDegree(filePath);
-            Bitmap bitmap = BitmapFactory.decodeFile(filePath);//根据Path读取资源图片
+//            Bitmap bitmap = BitmapFactory.decodeFile(filePath);//根据Path读取资源图片
+            Bitmap bitmap = null;
+            if (size > 100 && size <= 1000) {
+                bitmap = getCompressPhoto2(filePath, 6);
+            } else if (size > 1000 && size < 2000) {
+                bitmap = getCompressPhoto2(filePath, 6);
+            } else if (size >= 2000 && size < 5000) {
+                bitmap = getCompressPhoto2(filePath, 8);
+            } else if (size >= 5000) {
+                bitmap = getCompressPhoto2(filePath, 12);
+            } else {
+                bitmap = BitmapFactory.decodeFile(filePath);
+            }
             if (angle != 0) {
                 // 下面的方法主要作用是把图片转一个角度，也可以放大缩小等
                 Matrix m = new Matrix();
@@ -192,9 +213,33 @@ public class PhotoUtil {
                 m.setRotate(angle); // 旋转angle度
                 bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height,
                         m, true);// 从新生成图片
-                T.s("这张图片旋转了");
             }
-            return savePhotoToSD(bitmap, context);
+            String newFilePath = savePhotoToSD(bitmap, context);
+//            T.s("空白处理的新地址:" + newFilePath);
+            return newFilePath;
+        }
+
+        return "";
+    }
+
+    public static String newAmendRotatePhoto2(String filePath, Context context) {
+//        T.s("空白处理的旧地址:" + filePath);
+        if (filePath != null) {
+            int angle = readPictureDegree(filePath);
+//            Bitmap bitmap = BitmapFactory.decodeFile(filePath);//根据Path读取资源图片
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+            if (angle != 0) {
+                // 下面的方法主要作用是把图片转一个角度，也可以放大缩小等
+                Matrix m = new Matrix();
+                int width = bitmap.getWidth();
+                int height = bitmap.getHeight();
+                m.setRotate(angle); // 旋转angle度
+                bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height,
+                        m, true);// 从新生成图片
+            }
+            String newFilePath = savePhotoToSD(bitmap, context);
+//            T.s("空白处理的新地址:" + newFilePath);
+            return newFilePath;
         }
 
         return "";

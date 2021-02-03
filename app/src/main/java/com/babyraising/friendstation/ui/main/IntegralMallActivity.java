@@ -1,11 +1,14 @@
 package com.babyraising.friendstation.ui.main;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -44,6 +47,8 @@ import java.util.List;
 public class IntegralMallActivity extends BaseActivity {
 
     private UserAllInfoBean userInfoBean;
+    private AlertDialog integralTip;
+    private int currentPosition;
 
     @Event(R.id.record)
     private void recordClick(View view) {
@@ -73,7 +78,7 @@ public class IntegralMallActivity extends BaseActivity {
     }
 
     private void initData() {
-
+        initIntegralTip();
     }
 
     @Override
@@ -138,16 +143,64 @@ public class IntegralMallActivity extends BaseActivity {
 
     }
 
+    private void initIntegralTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        // 创建一个view，并且将布局加入view中
+        View view = LayoutInflater.from(this).inflate(
+                R.layout.dialog_exchange_tip, null, false);
+        // 将view添加到builder中
+        builder.setView(view);
+        // 创建dialog
+        integralTip = builder.create();
+        // 初始化控件，注意这里是通过view.findViewById
+        final Button left = (Button) view.findViewById(R.id.cancel);
+        final Button right = (Button) view.findViewById(R.id.sure);
+
+        left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                integralTip.cancel();
+            }
+        });
+
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                translateScore(currentPosition);
+                integralTip.cancel();
+            }
+        });
+
+    }
+
+    public void doTranslateScore(int position) {
+        ScoreExchangeDetailBean bean = list.get(position);
+        currentPosition = position;
+
+        if (bean != null) {
+
+            if (!TextUtils.isEmpty(bean.getType()) && bean.getType().equals("金币")) {
+//                translateCoin(bean.getPrice(), bean.getId());
+                integralTip.show();
+            }
+
+            if (!TextUtils.isEmpty(bean.getType()) && bean.getType().equals("现金")) {
+                goToDrawal(bean);
+            }
+        }
+    }
+
     public void translateScore(int position) {
         double currentScore = userInfoBean.getUserCount().getNumScore();
         ScoreExchangeDetailBean bean = list.get(position);
 
         if (bean != null) {
 
-            if (currentScore < bean.getPrice()) {
-                T.s("你当前积分不足与兑换商品");
-                return;
-            }
+//            if (currentScore < bean.getPrice()) {
+//                T.s("你当前积分不足与兑换商品");
+//                return;
+//            }
 
             if (!TextUtils.isEmpty(bean.getType()) && bean.getType().equals("金币")) {
                 translateCoin(bean.getPrice(), bean.getId());

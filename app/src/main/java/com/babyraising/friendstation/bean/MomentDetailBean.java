@@ -21,6 +21,9 @@ public class MomentDetailBean {
     private int likeStatus;
     private int speakStatus;
     private String avatar;
+    private String time;
+    private String birthday;
+    private String city;
 
     public String getAvatar() {
         return avatar;
@@ -180,5 +183,29 @@ public class MomentDetailBean {
 
     public void setMomentId(int momentId) {
         this.momentId = momentId;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

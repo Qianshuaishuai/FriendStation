@@ -51,6 +51,7 @@ import com.babyraising.friendstation.ui.InwordActivity;
 import com.babyraising.friendstation.ui.user.PhotoActivity;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.PhotoUtil;
+import com.babyraising.friendstation.util.SizeUtil;
 import com.babyraising.friendstation.util.T;
 import com.babyraising.friendstation.util.TypeUtil;
 import com.babyraising.friendstation.view.CustomLayout;
@@ -215,10 +216,11 @@ public class PersonInfoActivity extends BaseActivity {
 
     @Event(R.id.layout_photo_show)
     private void photoLayoutClick(View view) {
-        if (mode == 1) {
-            return;
-        }
         Intent intent = new Intent(this, PhotoActivity.class);
+        if(mode == 1){
+            intent.putExtra("mode", 1);
+            intent.putExtra("currentUserId", currentUserId);
+        }
         startActivity(intent);
     }
 
@@ -1519,13 +1521,14 @@ public class PersonInfoActivity extends BaseActivity {
                 if (TypeUtil.isHuawei()) {
                     ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                     for (int i = 0; i < images.size(); i++) {
-                        String filePath = PhotoUtil.amendRotatePhoto(images.get(i).path, this);
+                        double oldSize = SizeUtil.getFileOrFilesSize(images.get(i).path, 2);
+                        String filePath = PhotoUtil.newAmendRotatePhoto3(images.get(i).path, this, oldSize);
                         if (!TextUtils.isEmpty(filePath)) {
                             uploadPic(filePath);
                         }
                     }
 
-                } else {
+                }else {
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
                         String oldFilePath = FileUtil.getFilePathByUri(this, u);

@@ -93,6 +93,8 @@ public class VoiceSendActivity extends BaseActivity {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERRECOMMENDLIST);
         params.addQueryStringParameter("userIdList", "");
+        params.addQueryStringParameter("type", 0);
+        params.addQueryStringParameter("userNum", 8);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         x.http().get(params, new Callback.CommonCallback<String>() {

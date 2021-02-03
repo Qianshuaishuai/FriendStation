@@ -55,6 +55,7 @@ import com.babyraising.friendstation.util.DisplayUtils;
 import com.babyraising.friendstation.util.GenerateTestUserSig;
 import com.babyraising.friendstation.util.RandomUtil;
 import com.babyraising.friendstation.util.T;
+import com.babyraising.friendstation.util.TimeUtils;
 import com.google.gson.Gson;
 import com.tencent.imsdk.v2.V2TIMCallback;
 import com.tencent.imsdk.v2.V2TIMConversation;
@@ -72,6 +73,7 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -600,6 +602,7 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
             params.addQueryStringParameter("userIdList", userIdList.get(u));
         }
         params.addQueryStringParameter("type", 0);
+        params.addQueryStringParameter("userNum", 2);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         x.http().get(params, new Callback.CommonCallback<String>() {
@@ -613,55 +616,59 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                         List<UserMainPageBean> list = response.getData();
                         if (list != null) {
                             System.out.println("randomUserSendMessageSize:" + list.size());
-                            if (list.size() == 1) {
-                                adminSendMessage(list.get(0).getId(), allInfoBean.getId(), userIdList);
+//                            if (list.size() == 1) {
+//                                adminSendMessage(list.get(0).getId(), allInfoBean.getId(), userIdList);
+//                            }
+//                            if (list.size() == 2) {
+//                                adminSendMessage(list.get(0).getId(), allInfoBean.getId(), userIdList);
+//                                adminSendMessage(list.get(1).getId(), allInfoBean.getId(), userIdList);
+//                            }
+
+                            for (int l = 0; l < list.size(); l++) {
+                                adminSendMessage(list.get(l).getId(), allInfoBean.getId(), userIdList);
                             }
-                            if (list.size() == 2) {
-                                adminSendMessage(list.get(0).getId(), allInfoBean.getId(), userIdList);
-                                adminSendMessage(list.get(1).getId(), allInfoBean.getId(), userIdList);
-                            }
 
-                            if (list.size() > 2) {
-                                Random random = new Random();
-                                int n = random.nextInt(list.size());
-                                int firstId = 0;
-                                int index = n - 1;
-                                if (index >= 0) {
-                                    firstId = list.get(index).getId();
-                                } else {
-                                    firstId = list.get(0).getId();
-                                }
-
-                                adminSendMessage(firstId, allInfoBean.getId(), userIdList);
-
-                                n = random.nextInt(list.size());
-                                int secondId = 0;
-                                index = n - 1;
-                                if (index >= 0) {
-                                    secondId = list.get(index).getId();
-                                } else {
-                                    secondId = list.get(0).getId();
-                                }
-                                int crashIndex = 0;
-                                while ((firstId == secondId) || crashIndex <= 20) {
-                                    n = random.nextInt(list.size());
-                                    secondId = 0;
-                                    index = n - 1;
-                                    if (index >= 0) {
-                                        secondId = list.get(index).getId();
-                                    } else {
-                                        secondId = list.get(0).getId();
-                                    }
-
-                                    crashIndex++;
-                                }
-
-                                adminSendMessage(secondId, allInfoBean.getId(), userIdList);
-                            }
+//                            if (list.size() > 2) {
+//                                Random random = new Random();
+//                                int n = random.nextInt(list.size());
+//                                int firstId = 0;
+//                                int index = n - 1;
+//                                if (index >= 0) {
+//                                    firstId = list.get(index).getId();
+//                                } else {
+//                                    firstId = list.get(0).getId();
+//                                }
+//
+//                                adminSendMessage(firstId, allInfoBean.getId(), userIdList);
+//
+//                                n = random.nextInt(list.size());
+//                                int secondId = 0;
+//                                index = n - 1;
+//                                if (index >= 0) {
+//                                    secondId = list.get(index).getId();
+//                                } else {
+//                                    secondId = list.get(0).getId();
+//                                }
+//                                int crashIndex = 0;
+//                                while ((firstId == secondId) || crashIndex <= 20) {
+//                                    n = random.nextInt(list.size());
+//                                    secondId = 0;
+//                                    index = n - 1;
+//                                    if (index >= 0) {
+//                                        secondId = list.get(index).getId();
+//                                    } else {
+//                                        secondId = list.get(0).getId();
+//                                    }
+//
+//                                    crashIndex++;
+//                                }
+//
+//                                adminSendMessage(secondId, allInfoBean.getId(), userIdList);
+//                            }
                         }
                         break;
                     default:
-                        T.s(response.getMsg());
+//                        T.s(response.getMsg());
                         break;
                 }
             }
@@ -681,6 +688,15 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+//        Intent i = new Intent(Intent.ACTION_MAIN);
+//        // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //如果是服务里调用，必须加入new task标识
+//        i.addCategory(Intent.CATEGORY_HOME);
+//        startActivity(i);
+        moveTaskToBack(true);
     }
 
     private void uploadLocation() {

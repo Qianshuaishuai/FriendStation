@@ -118,7 +118,6 @@ public class InviteFriendActivity extends BaseActivity {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
             //关闭文件输出流
             fos.close();
-            System.out.println(currentImgUrl);
         } catch (Exception e) {
 
         }
@@ -127,11 +126,17 @@ public class InviteFriendActivity extends BaseActivity {
 
 
     private String getFileName() {
-        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS)
-                .getAbsolutePath()
-                + File.separator
-                + "InviteCode"
-                + ".png";
+        File fileDir = new File(Environment.getExternalStorageDirectory() + File.separator + "加友站" + File.separator);
+        if (!fileDir.exists()) {
+            fileDir.mkdirs();
+        }
+//        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS)
+//                .getAbsolutePath()
+//                + File.separator
+//                + "InviteCode" + System.currentTimeMillis()
+//                + ".png";
+        File photoFile = new File(fileDir, "InviteCode" + System.currentTimeMillis() + ".png");
+        return photoFile.getAbsolutePath();
     }
 
     private void initView() {

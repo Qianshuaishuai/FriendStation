@@ -27,6 +27,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Size;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -54,6 +55,7 @@ import com.babyraising.friendstation.ui.main.LookPhotoActivity;
 import com.babyraising.friendstation.util.DisplayUtils;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.PhotoUtil;
+import com.babyraising.friendstation.util.SizeUtil;
 import com.babyraising.friendstation.util.T;
 import com.babyraising.friendstation.util.TypeUtil;
 import com.google.gson.Gson;
@@ -117,6 +119,8 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
     @ViewInject(R.id.layout_none)
     private LinearLayout noneLayout;
 
+    private int currentUserId = 0;
+
     @Event(R.id.edit)
     private void editClick(View view) {
         adapter.updateEditStatus(editStatus);
@@ -177,7 +181,19 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
-        getPhotoList();
+        initData();
+    }
+
+    private void initData() {
+        Intent intent = getIntent();
+        int mode = intent.getIntExtra("mode", 0);
+        currentUserId = intent.getIntExtra("currentUserId", 0);
+        if (mode == 1) {
+            edit.setVisibility(View.GONE);
+            getPhotoListForUser();
+        } else {
+            getPhotoList();
+        }
     }
 
     private void initView() {
@@ -341,6 +357,24 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
                     .build()
                     .compressToFile(oldFile);
         } catch (Exception e) {
+//            String filePath = PhotoUtil.newAmendRotatePhoto2(localPic, this);
+//            T.s("空白后处理的地址:" + filePath);
+//            try {
+//                oldFile = new File(filePath);
+//                newFile = new CompressHelper.Builder(this)
+//                        .setMaxWidth(1080)  // 默认最大宽度为720
+//                        .setMaxHeight(1920) // 默认最大高度为960
+//                        .setQuality(60)    // 默认压缩质量为80
+//                        .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
+//                        .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
+//                                Environment.DIRECTORY_PICTURES).getAbsolutePath())
+//                        .build()
+//                        .compressToFile(oldFile);
+//
+//            } catch (Exception e1) {
+//                T.s("空白后处理报错:" + e1.toString());
+//                newFile = oldFile;
+//            }
             newFile = oldFile;
         }
 //
@@ -387,6 +421,65 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
                         break;
                     default:
                         T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void getPhotoListForUser() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_ALBUM_PAGEBYID);
+        params.addQueryStringParameter("userId", currentUserId);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                AlbumResponse response = gson.fromJson(result, AlbumResponse.class);
+                System.out.println("albumListUserId:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        photoList.clear();
+                        for (int i = 0; i < response.getData().getRecords().size(); i++) {
+                            photoList.add(response.getData().getRecords().get(i));
+                        }
+                        if (editStatus) {
+                            if (photoList.size() == 0) {
+                                photoRecyleViewList.setVisibility(View.GONE);
+                                noneLayout.setVisibility(View.VISIBLE);
+                            }
+
+                            if (photoList.size() == 1) {
+                                if (TextUtils.isEmpty(photoList.get(0).getUrl())) {
+                                    photoRecyleViewList.setVisibility(View.GONE);
+                                    noneLayout.setVisibility(View.VISIBLE);
+                                }
+                            }
+                        } else {
+                            photoRecyleViewList.setVisibility(View.VISIBLE);
+                            noneLayout.setVisibility(View.GONE);
+                        }
+                        photoList.add(new AlbumDetailBean());
+                        adapter.notifyDataSetChanged();
+                        break;
+                    default:
+
                         break;
                 }
             }
@@ -627,7 +720,8 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
                 if (TypeUtil.isHuawei()) {
                     ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                     for (int i = 0; i < images.size(); i++) {
-                        String filePath = PhotoUtil.newAmendRotatePhoto2(images.get(i).path, this);
+                        double oldSize = SizeUtil.getFileOrFilesSize(images.get(i).path, 2);
+                        String filePath = PhotoUtil.newAmendRotatePhoto3(images.get(i).path, this, oldSize);
                         if (!TextUtils.isEmpty(filePath)) {
                             uploadPic(filePath);
                         }
@@ -637,6 +731,9 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
                         String oldFilePath = FileUtil.getFilePathByUri(this, u);
+                        System.out.println("oldFilePath:" + oldFilePath);
+                        double oldSize = SizeUtil.getFileOrFilesSize(oldFilePath, 2);
+                        System.out.println("oldSize:" + oldSize);
                         String filePath = PhotoUtil.amendRotatePhoto(oldFilePath, this);
                         if (!TextUtils.isEmpty(filePath)) {
                             uploadPic(filePath);

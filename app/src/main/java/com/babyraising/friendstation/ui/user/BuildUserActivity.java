@@ -44,6 +44,7 @@ import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.NameUtils;
 import com.babyraising.friendstation.util.NickNameUtil;
 import com.babyraising.friendstation.util.PhotoUtil;
+import com.babyraising.friendstation.util.SizeUtil;
 import com.babyraising.friendstation.util.T;
 import com.babyraising.friendstation.util.TypeUtil;
 import com.google.gson.Gson;
@@ -373,17 +374,18 @@ public class BuildUserActivity extends BaseActivity implements EasyPermissions.P
                 if (TypeUtil.isHuawei()) {
                     ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                     for (int i = 0; i < images.size(); i++) {
-                        String filePath = PhotoUtil.newAmendRotatePhoto2(images.get(i).path, this);
+                        double oldSize = SizeUtil.getFileOrFilesSize(images.get(i).path, 2);
+                        String filePath = PhotoUtil.newAmendRotatePhoto3(images.get(i).path, this, oldSize);
                         if (!TextUtils.isEmpty(filePath)) {
                             uploadPic(filePath);
                         }
                     }
 
-                } else {
+                }else {
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
                         String oldFilePath = FileUtil.getFilePathByUri(this, u);
-                        String filePath = PhotoUtil.newAmendRotatePhoto2(oldFilePath, this);
+                        String filePath = PhotoUtil.amendRotatePhoto(oldFilePath, this);
                         if (!TextUtils.isEmpty(filePath)) {
                             uploadPic(filePath);
                         }

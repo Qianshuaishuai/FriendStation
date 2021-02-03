@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TimeUtils {
-    public static String getShowTime(long second){
+    public static String getShowTime(long second) {
         String nowChatTime = "";
         long currentHours = TimeUtils.getHours(second);
         long currentMins = TimeUtils.getMins(second);
@@ -93,5 +93,24 @@ public class TimeUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    // 获取两个时间相差分钟数
+    public static String getTimeShow(String oldTime, String newTime) throws Exception {
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long NTime = df.parse(newTime).getTime();
+        //从对象中拿到时间
+        long OTime = df.parse(oldTime).getTime();
+        long diff = (NTime - OTime);
+        String showTip = "未知时间";
+        if (diff <= 60000 * 60) {
+            showTip = (diff / 1000 / 60) + "分钟前";
+        } else if (diff > 60000 * 60 && diff <= 60000 * 60 * 24) {
+            showTip = (diff / 1000 / 60 / 60) + "小时前";
+        } else if (diff > 60000 * 60 * 24) {
+            showTip = (diff / 1000 / 60 / 60 / 24) + "天前";
+        }
+        return showTip;
     }
 }

@@ -53,28 +53,31 @@
                 android:layout_marginRight="8dip"
                 android:background="#B9B8C1"></View>
 
-            <TextView
-                android:id="@+id/sex"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="未知"
-                android:textColor="#A6A8AD"
-                android:textSize="12dip" />
+                android:background="@drawable/shape_info_tip1_bg"
+                android:orientation="horizontal"
+                android:paddingLeft="5dip"
+                android:paddingTop="2dip"
+                android:paddingRight="5dip"
+                android:paddingBottom="2dip">
 
-            <View
-                android:layout_width="0.5dip"
-                android:layout_height="10dip"
-                android:layout_marginLeft="8dip"
-                android:layout_marginRight="8dip"
-                android:background="#B9B8C1"></View>
+                <ImageView
+                    android:id="@+id/sex"
+                    android:layout_width="18dip"
+                    android:layout_height="18dip"
+                    android:src="@mipmap/common_male" />
 
-            <TextView
-                android:id="@+id/age"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="27岁"
-                android:textColor="#A6A8AD"
-                android:textSize="12dip" />
+                <TextView
+                    android:id="@+id/tip1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dip"
+                    android:text=""
+                    android:textColor="#ffffff"
+                    android:textSize="12dip" />
+            </LinearLayout>
         </LinearLayout>
 
         <TextView
@@ -106,8 +109,7 @@
                 android:layout_height="wrap_content"
                 android:text="浏览5次"
                 android:textColor="#A6A8AD"
-                android:textSize="12dip"
-                android:visibility="gone" />
+                android:textSize="12dip" />
 
             <TextView
                 android:id="@+id/address"
@@ -116,8 +118,7 @@
                 android:layout_marginLeft="10dip"
                 android:text="深圳"
                 android:textColor="#A6A8AD"
-                android:textSize="12dip"
-                android:visibility="gone" />
+                android:textSize="12dip" />
 
             <LinearLayout
                 android:layout_width="match_parent"

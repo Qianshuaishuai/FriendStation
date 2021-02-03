@@ -13,6 +13,7 @@ import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.bean.ScoreExchangeBean;
 import com.babyraising.friendstation.bean.ScoreExchangeDetailBean;
 import com.babyraising.friendstation.ui.main.IntegralMallActivity;
+import com.babyraising.friendstation.util.ButtonUtil;
 
 import org.xutils.x;
 
@@ -66,7 +67,10 @@ public class IntegralMallAdapter extends RecyclerView.Adapter<IntegralMallAdapte
         holder.layoutMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                activity.translateScore(position);
+                if (ButtonUtil.isFastDoubleClick()) {
+                    return;
+                }
+                activity.doTranslateScore(position);
             }
         });
     }
