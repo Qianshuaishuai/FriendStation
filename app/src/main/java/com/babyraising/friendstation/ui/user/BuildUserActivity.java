@@ -83,6 +83,8 @@ public class BuildUserActivity extends BaseActivity implements EasyPermissions.P
 
     private List<AvatarBean> randomList = new ArrayList<>();
 
+    private List<String> checkWordList = new ArrayList<>();
+
     @Event(R.id.back)
     private void backClick(View view) {
         finish();
@@ -119,6 +121,11 @@ public class BuildUserActivity extends BaseActivity implements EasyPermissions.P
 
         if (TextUtils.isEmpty(newHeadIconUrl)) {
             T.s("请先设置头像");
+            return;
+        }
+
+        if (checkNickName(username.getText().toString())){
+            T.s("请昵称不要带有敏感词汇");
             return;
         }
         saveUsernameAndIcon(username.getText().toString());
@@ -166,7 +173,12 @@ public class BuildUserActivity extends BaseActivity implements EasyPermissions.P
         super.onCreate(savedInstanceState);
 
         initView();
+        initData();
         getRandomIcon();
+    }
+
+    private void initData() {
+        checkWordList = ((FriendStationApplication) getApplication()).getCheckWordList();
     }
 
     private void initView() {
@@ -321,6 +333,16 @@ public class BuildUserActivity extends BaseActivity implements EasyPermissions.P
         }
     }
 
+    private boolean checkNickName(String oldContent) {
+        String newContent = oldContent;
+        for (int c = 0; c < checkWordList.size(); c++) {
+            if (newContent.indexOf(checkWordList.get(c)) != -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -381,7 +403,7 @@ public class BuildUserActivity extends BaseActivity implements EasyPermissions.P
                         }
                     }
 
-                }else {
+                } else {
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
                         String oldFilePath = FileUtil.getFilePathByUri(this, u);

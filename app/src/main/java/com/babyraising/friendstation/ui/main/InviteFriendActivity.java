@@ -126,17 +126,17 @@ public class InviteFriendActivity extends BaseActivity {
 
 
     private String getFileName() {
-        File fileDir = new File(Environment.getExternalStorageDirectory() + File.separator + "加友站" + File.separator);
-        if (!fileDir.exists()) {
-            fileDir.mkdirs();
-        }
-//        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS)
-//                .getAbsolutePath()
-//                + File.separator
-//                + "InviteCode" + System.currentTimeMillis()
-//                + ".png";
-        File photoFile = new File(fileDir, "InviteCode" + System.currentTimeMillis() + ".png");
-        return photoFile.getAbsolutePath();
+//        File fileDir = new File(Environment.getExternalStorageDirectory() + File.separator + "加友站" + File.separator);
+//        if (!fileDir.exists()) {
+//            fileDir.mkdirs();
+//        }
+        return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_ALARMS)
+                .getAbsolutePath()
+                + File.separator
+                + "InviteCode" + System.currentTimeMillis()
+                + ".png";
+//        File photoFile = new File(fileDir, "InviteCode" + System.currentTimeMillis() + ".png");
+//        return photoFile.getAbsolutePath();
     }
 
     private void initView() {

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
@@ -34,6 +35,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt, tip1Txt, contentTxt, countTxt, addressTxt;
         ImageView headIv, contentImgIv, shareIv, likeIv, commentIv, sexIv;
+        LinearLayout rightLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -47,7 +49,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             contentImgIv = (ImageView) view.findViewById(R.id.content_img);
             shareIv = (ImageView) view.findViewById(R.id.share);
             likeIv = (ImageView) view.findViewById(R.id.like);
-            commentIv = (ImageView) view.findViewById(R.id.comment);
+            rightLayout = (LinearLayout) view.findViewById(R.id.layout_right);
         }
 
     }
@@ -128,27 +130,36 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
                 break;
         }
 
-        switch (mList.get(position).getSpeakStatus()) {
-            case 0:
-                holder.commentIv.setImageResource(R.mipmap.main_moment_comment_normal);
-                holder.commentIv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-//                        context.followUser(mList.get(position).getUserId());
-                        context.goToChat(position);
-                    }
-                });
-                break;
-            case 1:
-                holder.commentIv.setImageResource(R.mipmap.main_moment_comment);
-                holder.commentIv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-//                        context.cancelFollowUser(mList.get(position).getUserId());
-                    }
-                });
-                break;
-        }
+//        switch (mList.get(position).getSpeakStatus()) {
+////            case 0:
+////                holder.commentIv.setImageResource(R.mipmap.main_moment_comment_normal);
+////                holder.commentIv.setOnClickListener(new View.OnClickListener() {
+////                    @Override
+////                    public void onClick(View view) {
+//////                        context.followUser(mList.get(position).getUserId());
+////                        context.goToChat(position);
+////                    }
+////                });
+////                break;
+////            case 1:
+////                holder.commentIv.setImageResource(R.mipmap.main_moment_comment);
+////                holder.commentIv.setOnClickListener(new View.OnClickListener() {
+////                    @Override
+////                    public void onClick(View view) {
+//////                        context.cancelFollowUser(mList.get(position).getUserId());
+////                    }
+////                });
+////                break;
+//
+//        }
+
+        holder.rightLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.goToChat(position);
+            }
+        });
+
 
         switch (mList.get(position).getLikeStatus()) {
             case 0:

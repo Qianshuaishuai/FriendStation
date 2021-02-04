@@ -99,7 +99,8 @@ public class DrawalActivity extends BaseActivity {
                         T.s("提交成功，72小时会有审核结果，请耐心等待");
                         break;
                     default:
-                        T.s("你当前积分不足与兑换商品");
+//                        T.s("你当前积分不足与兑换商品");
+                        T.s(response.getMsg());
                         break;
                 }
             }

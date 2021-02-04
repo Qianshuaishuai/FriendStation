@@ -9,6 +9,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
@@ -55,6 +56,7 @@ import com.babyraising.friendstation.util.SizeUtil;
 import com.babyraising.friendstation.util.T;
 import com.babyraising.friendstation.util.TypeUtil;
 import com.babyraising.friendstation.view.CustomLayout;
+import com.bumptech.glide.Glide;
 import com.github.lassana.recorder.AudioRecorder;
 import com.github.lassana.recorder.AudioRecorderBuilder;
 import com.google.gson.Gson;
@@ -217,7 +219,7 @@ public class PersonInfoActivity extends BaseActivity {
     @Event(R.id.layout_photo_show)
     private void photoLayoutClick(View view) {
         Intent intent = new Intent(this, PhotoActivity.class);
-        if(mode == 1){
+        if (mode == 1) {
             intent.putExtra("mode", 1);
             intent.putExtra("currentUserId", currentUserId);
         }
@@ -1388,7 +1390,7 @@ public class PersonInfoActivity extends BaseActivity {
             newFile = new CompressHelper.Builder(this)
                     .setMaxWidth(1080)  // 默认最大宽度为720
                     .setMaxHeight(1920) // 默认最大高度为960
-                    .setQuality(60)    // 默认压缩质量为80
+                    .setQuality(80)    // 默认压缩质量为80
                     .setCompressFormat(Bitmap.CompressFormat.JPEG) // 设置默认压缩为jpg格式
                     .setDestinationDirectoryPath(Environment.getExternalStoragePublicDirectory(
                             Environment.DIRECTORY_PICTURES).getAbsolutePath())
@@ -1413,7 +1415,7 @@ public class PersonInfoActivity extends BaseActivity {
                 UploadPicResponse response = gson.fromJson(result, UploadPicResponse.class);
                 switch (response.getCode()) {
                     case 200:
-                        T.s("上传成功");
+//                        T.s("上传成功");
 //                        AlbumDetailBean bean = new AlbumDetailBean();
 //                        bean.setUrl(response.getData());
 //                        photoList.add(photoList.size() - 1, bean);
@@ -1522,17 +1524,18 @@ public class PersonInfoActivity extends BaseActivity {
                     ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
                     for (int i = 0; i < images.size(); i++) {
                         double oldSize = SizeUtil.getFileOrFilesSize(images.get(i).path, 2);
-                        String filePath = PhotoUtil.newAmendRotatePhoto3(images.get(i).path, this, oldSize);
+                        String filePath = PhotoUtil.newAmendRotatePhoto4(images.get(i).path, this, oldSize);
                         if (!TextUtils.isEmpty(filePath)) {
                             uploadPic(filePath);
                         }
                     }
 
-                }else {
+                } else {
                     List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
                     for (Uri u : mSelected) {
-                        String oldFilePath = FileUtil.getFilePathByUri(this, u);
-                        String filePath = PhotoUtil.amendRotatePhoto(oldFilePath, this);
+                        final String oldFilePath = FileUtil.getFilePathByUri(this, u);
+                        double oldSize = SizeUtil.getFileOrFilesSize(oldFilePath, 2);
+                        String filePath = PhotoUtil.newAmendRotatePhoto4(oldFilePath, PersonInfoActivity.this, oldSize);
                         if (!TextUtils.isEmpty(filePath)) {
                             uploadPic(filePath);
                         }

@@ -21,7 +21,9 @@ import com.babyraising.friendstation.util.T;
 import com.google.gson.Gson;
 
 import org.xutils.common.Callback;
+import org.xutils.common.util.DensityUtil;
 import org.xutils.http.RequestParams;
+import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -117,6 +119,9 @@ public class VoiceSendActivity extends BaseActivity {
                             }
                             tip.setText("配对成功");
                             name.setText(userMainPageBean.getNickName());
+                            ImageOptions options = new ImageOptions.Builder().
+                                    setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
+                            x.image().bind(head, userMainPageBean.getAvatar(), options);
                         }
                         break;
                     default:

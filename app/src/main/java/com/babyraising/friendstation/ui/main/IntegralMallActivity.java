@@ -243,7 +243,8 @@ public class IntegralMallActivity extends BaseActivity {
                         getIntegralList();
                         break;
                     default:
-                        T.s("你当前积分不足与兑换商品");
+//                        T.s("你当前积分不足与兑换商品");
+                        T.s(response.getMsg());
                         break;
                 }
             }

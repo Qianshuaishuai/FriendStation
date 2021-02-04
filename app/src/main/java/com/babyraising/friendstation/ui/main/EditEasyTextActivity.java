@@ -29,6 +29,9 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @ContentView(R.layout.activity_edit_easy_text)
 public class EditEasyTextActivity extends BaseActivity {
 
@@ -36,6 +39,8 @@ public class EditEasyTextActivity extends BaseActivity {
     private void backClick(View view) {
         finish();
     }
+
+    private List<String> checkWordList = new ArrayList<>();
 
     private int mode = 0;
 
@@ -83,6 +88,18 @@ public class EditEasyTextActivity extends BaseActivity {
             content.setText(intent.getStringExtra("value"));
             content.setSelection(intent.getStringExtra("value").length());
         }
+
+        checkWordList = ((FriendStationApplication) getApplication()).getCheckWordList();
+    }
+
+    private boolean checkNickName(String oldContent) {
+        String newContent = oldContent;
+        for (int c = 0; c < checkWordList.size(); c++) {
+            if (newContent.indexOf(checkWordList.get(c)) != -1) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void saveUserInfo() {
@@ -90,6 +107,10 @@ public class EditEasyTextActivity extends BaseActivity {
         String requestStr = "";
         switch (mode) {
             case 1:
+                if (checkNickName(content.getText().toString())){
+                    T.s("请昵称不要带有敏感词汇");
+                    return;
+                }
                 SetUserNameRequest request = new SetUserNameRequest();
                 request.setNickname(content.getText().toString());
                 requestStr = gson.toJson(request);
