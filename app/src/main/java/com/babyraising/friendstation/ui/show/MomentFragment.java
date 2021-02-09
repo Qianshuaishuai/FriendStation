@@ -269,6 +269,8 @@ public class MomentFragment extends BaseFragment {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recycleList.setAdapter(adapter);
         recycleList.setLayoutManager(manager);
+        recycleList.setHasFixedSize(true);
+        recycleList.setNestedScrollingEnabled(false);
     }
 
     public void goToPersonInfo(int userId) {

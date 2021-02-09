@@ -586,15 +586,17 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
 
     private void choosePhoto() {
 
-////        Intent intent = new Intent();
-////        intent.addCategory(Intent.CATEGORY_OPENABLE);
-////        intent.setType("image/*");
-////        if (Build.VERSION.SDK_INT < 19) {
-////            intent.setAction(Intent.ACTION_GET_CONTENT);
-////        } else {
-////            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-////        }
-////        startActivityForResult(intent, RC_CHOOSE_PHOTO);
+        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+//        Intent intent = new Intent();
+//        intent.addCategory(Intent.CATEGORY_OPENABLE);
+//        intent.setType("image/*");
+//        if (Build.VERSION.SDK_INT < 19) {
+//            intent.setAction(Intent.ACTION_GET_CONTENT);
+//        } else {
+//            intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+//        }
+        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
 //        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
 //        YUtils.startForPickGalleryPhotoVideo(this, new BaseCallBack() {
 //            @Override
@@ -613,28 +615,28 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
 //            }
 //        });
 
-        if (TypeUtil.isHuawei()) {
-            ImagePicker imagePicker = ImagePicker.getInstance();
-            imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
-            imagePicker.setShowCamera(false);  //显示拍照按钮
-            imagePicker.setCrop(false);        //允许裁剪（单选才有效）
-            imagePicker.setSaveRectangle(true); //是否按矩形区域保存
-            imagePicker.setMultiMode(false); //是否按矩形区域保存
-            imagePicker.setSelectLimit(1);    //选中数量限制
-            imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
-            imagePicker.setFocusWidth(800);   //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
-            imagePicker.setFocusHeight(800);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
-            imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
-            imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
-            Intent intent = new Intent(this, ImageGridActivity.class);
-            startActivityForResult(intent, RC_CHOOSE_PHOTO);
-        } else {
-            Picker.from(this)
-                    .count(1)
-                    .enableCamera(false)
-                    .setEngine(new GlideEngine())
-                    .forResult(RC_CHOOSE_PHOTO);
-        }
+//        if (TypeUtil.isHuawei()) {
+//            ImagePicker imagePicker = ImagePicker.getInstance();
+//            imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
+//            imagePicker.setShowCamera(false);  //显示拍照按钮
+//            imagePicker.setCrop(false);        //允许裁剪（单选才有效）
+//            imagePicker.setSaveRectangle(true); //是否按矩形区域保存
+//            imagePicker.setMultiMode(false); //是否按矩形区域保存
+//            imagePicker.setSelectLimit(1);    //选中数量限制
+//            imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
+//            imagePicker.setFocusWidth(800);   //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
+//            imagePicker.setFocusHeight(800);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
+//            imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
+//            imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
+//            Intent intent = new Intent(this, ImageGridActivity.class);
+//            startActivityForResult(intent, RC_CHOOSE_PHOTO);
+//        } else {
+//            Picker.from(this)
+//                    .count(1)
+//                    .enableCamera(false)
+//                    .setEngine(new GlideEngine())
+//                    .forResult(RC_CHOOSE_PHOTO);
+//        }
 
     }
 
@@ -717,28 +719,36 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
                 if (data == null) {
                     return;
                 }
-                if (TypeUtil.isHuawei()) {
-                    ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                    for (int i = 0; i < images.size(); i++) {
-                        double oldSize = SizeUtil.getFileOrFilesSize(images.get(i).path, 2);
-                        String filePath = PhotoUtil.newAmendRotatePhoto3(images.get(i).path, this, oldSize);
-                        if (!TextUtils.isEmpty(filePath)) {
-                            uploadPic(filePath);
-                        }
-                    }
-
-                } else {
-                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
-                    for (Uri u : mSelected) {
-                        String oldFilePath = FileUtil.getFilePathByUri(this, u);
-                        System.out.println("oldFilePath:" + oldFilePath);
-                        double oldSize = SizeUtil.getFileOrFilesSize(oldFilePath, 2);
-                        System.out.println("oldSize:" + oldSize);
-                        String filePath = PhotoUtil.amendRotatePhoto(oldFilePath, this);
-                        if (!TextUtils.isEmpty(filePath)) {
-                            uploadPic(filePath);
-                        }
-                    }
+//                if (TypeUtil.isHuawei()) {
+//                    ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+//                    for (int i = 0; i < images.size(); i++) {
+//                        double oldSize = SizeUtil.getFileOrFilesSize(images.get(i).path, 2);
+//                        String filePath = PhotoUtil.newAmendRotatePhoto3(images.get(i).path, this, oldSize);
+//                        if (!TextUtils.isEmpty(filePath)) {
+//                            uploadPic(filePath);
+//                        }
+//                    }
+//
+//                } else {
+//                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+//                    for (Uri u : mSelected) {
+//                        String oldFilePath = FileUtil.getFilePathByUri(this, u);
+//                        System.out.println("oldFilePath:" + oldFilePath);
+//                        double oldSize = SizeUtil.getFileOrFilesSize(oldFilePath, 2);
+//                        System.out.println("oldSize:" + oldSize);
+//                        String filePath = PhotoUtil.amendRotatePhoto(oldFilePath, this);
+//                        if (!TextUtils.isEmpty(filePath)) {
+//                            uploadPic(filePath);
+//                        }
+//                    }
+//                }
+                Uri uri = data.getData();
+                String oldFilePath = FileUtil.getFilePathByUri(this, uri);
+                double oldSize = SizeUtil.getFileOrFilesSize(oldFilePath, 2);
+                System.out.println("oldSize:"+oldSize);
+                String filePath = PhotoUtil.newAmendRotatePhoto3(oldFilePath, this, oldSize);
+                if (!TextUtils.isEmpty(filePath)) {
+                    uploadPic(filePath);
                 }
 
                 break;

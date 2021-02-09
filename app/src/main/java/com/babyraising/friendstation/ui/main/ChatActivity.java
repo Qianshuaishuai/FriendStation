@@ -23,19 +23,24 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
@@ -60,6 +65,7 @@ import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.ui.user.PhotoActivity;
 import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.PhotoUtil;
+import com.babyraising.friendstation.util.SizeUtil;
 import com.babyraising.friendstation.util.T;
 import com.babyraising.friendstation.util.TypeUtil;
 import com.bumptech.glide.Glide;
@@ -140,6 +146,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     @ViewInject(R.id.anim)
     private LVRingProgress anim;
+
+    @ViewInject(R.id.layout_send)
+    private RelativeLayout layoutSend;
 
     @ViewInject(R.id.name)
     private TextView name;
@@ -250,6 +259,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     @ViewInject(R.id.chat_list)
     private RecyclerView chatListRecycleView;
+
+    @ViewInject(R.id.scrollview)
+    private ScrollView scrollview;
 
     @ViewInject(R.id.background)
     private ImageView background;
@@ -377,6 +389,12 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     private void tip4Click(View view) {
         Intent intent = new Intent(this, PersonAuthActivity.class);
         startActivity(intent);
+    }
+
+    @Event(R.id.send)
+    private void sendClick(View view) {
+        useCoin(1, "", "", "", 0);
+        sendLocalTextMessage(content.getText().toString());
     }
 
     @ViewInject(R.id.tip1)
@@ -557,11 +575,18 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     public void playSound(String url) {
         try {
-            mediaPlayer.reset();
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.pause();
+                mediaPlayer.seekTo(0);
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            }
+            mediaPlayer = new MediaPlayer();
             mediaPlayer.setDataSource(url);
             mediaPlayer.prepare();
             mediaPlayer.start();
-        } catch (IOException e) {
+        } catch (Exception e) {
+            T.s("加载中，请稍后");
             e.printStackTrace();
         }
     }
@@ -799,16 +824,16 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         tip3.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         tip4.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
-        content.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    useCoin(1, "", "", "", 0);
-                    sendLocalTextMessage(content.getText().toString());
-                }
-                return false;
-            }
-        });
+//        content.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                if (actionId == EditorInfo.IME_ACTION_SEND) {
+//                    useCoin(1, "", "", "", 0);
+//                    sendLocalTextMessage(content.getText().toString());
+//                }
+//                return false;
+//            }
+//        });
 
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -833,7 +858,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                         recorder.start(new AudioRecorder.OnStartListener() {
                             @Override
                             public void onStarted() {
-                                System.out.println("sdsdsdss");
+
                             }
 
                             @Override
@@ -861,6 +886,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                                 @Override
                                 public void onPaused(String activeRecordFileName) {
                                     uploadRecord(activeRecordFileName, (int) timeOffset);
+                                    if (recorder != null) {
+                                        initRecorder();
+                                    }
                                 }
 
                                 @Override
@@ -888,7 +916,28 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             }
         });
         content.clearFocus();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        content.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (TextUtils.isEmpty(s.toString())) {
+                    layoutSend.setVisibility(View.GONE);
+                } else {
+                    layoutSend.setVisibility(View.VISIBLE);
+                }
+                content.requestFocus();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         anim.setPorBarStartColor(getResources().getColor(R.color.colorPink));
         anim.setPorBarEndColor(getResources().getColor(R.color.colorPink));
@@ -907,6 +956,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Constant.ACTIVITY_COMMON_REQUEST) {
+            if (data == null) {
+                return;
+            }
             String word = data.getStringExtra("common-word");
             if (!TextUtils.isEmpty(word)) {
                 useCoin(4, "", "", word, 0);
@@ -976,25 +1028,34 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 //                        }
 //                    }
 //                }
-                if (TypeUtil.isHuawei()) {
-                    ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
-                    for (int i = 0; i < images.size(); i++) {
-                        String filePath = PhotoUtil.newAmendRotatePhoto2(images.get(i).path, this);
-                        if (!TextUtils.isEmpty(filePath)) {
-                            uploadPic(filePath);
-                        }
-                    }
+//                if (TypeUtil.isHuawei()) {
+//                    ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+//                    for (int i = 0; i < images.size(); i++) {
+//                        String filePath = PhotoUtil.newAmendRotatePhoto2(images.get(i).path, this);
+//                        if (!TextUtils.isEmpty(filePath)) {
+//                            uploadPic(filePath);
+//                        }
+//                    }
+//
+//                } else {
+//                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
+//                    for (Uri u : mSelected) {
+//                        String oldFilePath = FileUtil.getFilePathByUri(this, u);
+//                        String filePath = PhotoUtil.amendRotatePhoto(oldFilePath, this);
+//                        if (!TextUtils.isEmpty(filePath)) {
+//                            uploadPic(filePath);
+//                        }
+//                    }
+//                }
 
-                } else {
-                    List<Uri> mSelected = PicturePickerUtils.obtainResult(data);
-                    for (Uri u : mSelected) {
-                        String oldFilePath = FileUtil.getFilePathByUri(this, u);
-                        String filePath = PhotoUtil.amendRotatePhoto(oldFilePath, this);
-                        if (!TextUtils.isEmpty(filePath)) {
-                            uploadPic(filePath);
-                        }
-                    }
+                Uri uri = data.getData();
+                String oldFilePath = FileUtil.getFilePathByUri(this, uri);
+                double oldSize = SizeUtil.getFileOrFilesSize(oldFilePath, 2);
+                String filePath = PhotoUtil.newAmendRotatePhoto3(oldFilePath, this, oldSize);
+                if (!TextUtils.isEmpty(filePath)) {
+                    uploadPic(filePath);
                 }
+
                 break;
             case RC_TAKE_PHOTO:
                 if (!TextUtils.isEmpty(mTempPhotoPath)) {
@@ -1341,38 +1402,48 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 //        chatListRecycleView.scrollToPosition(chatList.size() + 1);
 
 //        chatListRecycleView.scrollToPosition(chatList.size() - 1);
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                //execute the task
-                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
-                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
+//        new Handler().postDelayed(new Runnable() {
+//            public void run() {
+//                //execute the task
+//                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
+//                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
+//            }
+//        }, 250);
+//
+//        new Handler().postDelayed(new Runnable() {
+//            public void run() {
+//                //execute the task
+//                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
+//                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
+//            }
+//        }, 500);
+//
+//        new Handler().postDelayed(new Runnable() {
+//            public void run() {
+//                //execute the task
+//                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
+//                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
+//            }
+//        }, 750);
+//
+//        new Handler().postDelayed(new Runnable() {
+//            public void run() {
+//                //execute the task
+//                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
+//                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
+//            }
+//        }, 1000);
+//        ;
+        scrollview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                scrollview.post(new Runnable() {
+                    public void run() {
+                        scrollview.fullScroll(View.FOCUS_DOWN);
+                    }
+                });
             }
-        }, 250);
-
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                //execute the task
-                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
-                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
-            }
-        }, 500);
-
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                //execute the task
-                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
-                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
-            }
-        }, 750);
-
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                //execute the task
-                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
-                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
-            }
-        }, 1000);
-        ;
+        });
     }
 
     public void goToListBottomForSpecialImage() {
@@ -1385,37 +1456,47 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
 //        chatListRecycleView.scrollToPosition(chatList.size() - 1);
 
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                //execute the task
-                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
-                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
+//        new Handler().postDelayed(new Runnable() {
+//            public void run() {
+//                //execute the task
+//                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
+//                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
+//            }
+//        }, 250);
+//
+//        new Handler().postDelayed(new Runnable() {
+//            public void run() {
+//                //execute the task
+//                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
+//                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
+//            }
+//        }, 500);
+//
+//        new Handler().postDelayed(new Runnable() {
+//            public void run() {
+//                //execute the task
+//                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
+//                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
+//            }
+//        }, 750);
+//
+//        new Handler().postDelayed(new Runnable() {
+//            public void run() {
+//                //execute the task
+//                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
+//                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
+//            }
+//        }, 1000);
+        scrollview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                scrollview.post(new Runnable() {
+                    public void run() {
+                        scrollview.fullScroll(View.FOCUS_DOWN);
+                    }
+                });
             }
-        }, 250);
-
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                //execute the task
-                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
-                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
-            }
-        }, 500);
-
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                //execute the task
-                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
-                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
-            }
-        }, 750);
-
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                //execute the task
-                LinearLayoutManager mLayoutManager = (LinearLayoutManager) chatListRecycleView.getLayoutManager();
-                mLayoutManager.scrollToPositionWithOffset(chatList.size() - 1, -400);
-            }
-        }, 1000);
+        });
     }
 
     private void updateCurrentInfo() {
@@ -1639,28 +1720,32 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 //        imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
 //        Intent intent = new Intent(this, ImageGridActivity.class);
 //        startActivityForResult(intent, RC_CHOOSE_PHOTO);
-        if (TypeUtil.isHuawei()) {
-            ImagePicker imagePicker = ImagePicker.getInstance();
-            imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
-            imagePicker.setShowCamera(false);  //显示拍照按钮
-            imagePicker.setCrop(false);        //允许裁剪（单选才有效）
-            imagePicker.setSaveRectangle(true); //是否按矩形区域保存
-            imagePicker.setMultiMode(false); //是否按矩形区域保存
-            imagePicker.setSelectLimit(1);    //选中数量限制
-            imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
-            imagePicker.setFocusWidth(800);   //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
-            imagePicker.setFocusHeight(800);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
-            imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
-            imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
-            Intent intent = new Intent(this, ImageGridActivity.class);
-            startActivityForResult(intent, RC_CHOOSE_PHOTO);
-        } else {
-            Picker.from(this)
-                    .count(1)
-                    .enableCamera(false)
-                    .setEngine(new GlideEngine())
-                    .forResult(RC_CHOOSE_PHOTO);
-        }
+//        if (TypeUtil.isHuawei()) {
+//            ImagePicker imagePicker = ImagePicker.getInstance();
+//            imagePicker.setImageLoader(new PicassoImageLoader());   //设置图片加载器
+//            imagePicker.setShowCamera(false);  //显示拍照按钮
+//            imagePicker.setCrop(false);        //允许裁剪（单选才有效）
+//            imagePicker.setSaveRectangle(true); //是否按矩形区域保存
+//            imagePicker.setMultiMode(false); //是否按矩形区域保存
+//            imagePicker.setSelectLimit(1);    //选中数量限制
+//            imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
+//            imagePicker.setFocusWidth(800);   //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
+//            imagePicker.setFocusHeight(800);  //裁剪框的高度。单位像素（圆形自动取宽高最小值）
+//            imagePicker.setOutPutX(1000);//保存文件的宽度。单位像素
+//            imagePicker.setOutPutY(1000);//保存文件的高度。单位像素
+//            Intent intent = new Intent(this, ImageGridActivity.class);
+//            startActivityForResult(intent, RC_CHOOSE_PHOTO);
+//        } else {
+//            Picker.from(this)
+//                    .count(1)
+//                    .enableCamera(false)
+//                    .setEngine(new GlideEngine())
+//                    .forResult(RC_CHOOSE_PHOTO);
+//        }
+
+        Intent intentToPickPic = new Intent(Intent.ACTION_PICK, null);
+        intentToPickPic.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(intentToPickPic, RC_CHOOSE_PHOTO);
     }
 
     private void initVoiceTip() {

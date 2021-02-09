@@ -6,8 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#faf9fe"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
     tools:context=".ui.main.ChatActivity">
 
     <ImageView
@@ -21,9 +19,7 @@
         android:id="@+id/layout_top"
         android:layout_width="match_parent"
         android:layout_height="48dip"
-        android:background="#00000000"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:background="#00000000">
 
         <ImageView
             android:id="@+id/back"
@@ -239,6 +235,7 @@
         android:layout_below="@+id/layout_top">
 
         <ScrollView
+            android:id="@+id/scrollview"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -450,36 +447,62 @@
                 android:textSize="12dip"
                 android:visibility="gone" />
 
-            <RelativeLayout
-                android:id="@+id/layout_input_content"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="34dip"
-                android:layout_marginRight="20dip">
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/content"
-                    android:layout_width="match_parent"
+                <RelativeLayout
+                    android:layout_weight="3"
+                    android:id="@+id/layout_input_content"
+                    android:layout_width="0dip"
                     android:layout_height="34dip"
-                    android:background="@drawable/shape_chat_content_bg"
-                    android:gravity="center_vertical"
-                    android:imeOptions="actionSend"
-                    android:maxLines="1"
-                    android:paddingLeft="12dip"
-                    android:paddingRight="36dip"
-                    android:singleLine="true"
-                    android:textSize="15dip" />
+                    android:layout_marginRight="20dip">
 
-                <TextView
-                    android:id="@+id/common_word"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="20dip"
-                    android:text="..."
-                    android:textColor="#F75184"
-                    android:textSize="15dip" />
-            </RelativeLayout>
+                    <EditText
+                        android:id="@+id/content"
+                        android:layout_width="match_parent"
+                        android:layout_height="34dip"
+                        android:background="@drawable/shape_chat_content_bg"
+                        android:gravity="center_vertical"
+                        android:maxLines="1"
+                        android:paddingLeft="12dip"
+                        android:paddingRight="36dip"
+                        android:singleLine="true"
+                        android:textSize="15dip" />
+
+                    <TextView
+                        android:id="@+id/common_word"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="20dip"
+                        android:text="..."
+                        android:textColor="#F75184"
+                        android:textSize="15dip" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:visibility="gone"
+                    android:id="@+id/layout_send"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:layout_width="0dip"
+                    android:layout_height="match_parent">
+                    <Button
+                        android:layout_centerInParent="true"
+                        android:id="@+id/send"
+                        android:layout_width="60dip"
+                        android:layout_height="34dip"
+                        android:background="@drawable/build_user_save_bg"
+                        android:text="发送"
+                        android:textColor="#ffffff"
+                        android:textSize="15dip" />
+                </RelativeLayout>
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

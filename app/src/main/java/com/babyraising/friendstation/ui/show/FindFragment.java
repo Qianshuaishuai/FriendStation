@@ -530,7 +530,8 @@ public class FindFragment extends BaseFragment {
                 getUserList();
             }
         });
-
+        recycleList.setHasFixedSize(true);
+        recycleList.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -695,8 +696,8 @@ public class FindFragment extends BaseFragment {
                 type = 2;
                 break;
         }
-        params.addQueryStringParameter("pageNum", 100);
-        params.addQueryStringParameter("pageSize", 1);
+        params.addQueryStringParameter("pageNum", 1);
+        params.addQueryStringParameter("pageSize", 100);
 //        params.addQueryStringParameter("type", type);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());

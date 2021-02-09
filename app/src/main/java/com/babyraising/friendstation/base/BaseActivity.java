@@ -18,6 +18,4 @@ public class BaseActivity extends AppCompatActivity {
     public String getTagName() {
         return this.getClass().getName();
     }
-
 }
-

@@ -255,15 +255,18 @@ public class PersonAuthActivity extends BaseActivity implements EasyPermissions.
                 System.out.println("uploadAuth:" + result);
                 switch (response.getCode()) {
                     case 200:
+                        if(!response.getMsg().equals("OK")){
+                            T.s(response.getMsg());
+                        }
                         switch (response.getData().getStatusCert()) {
                             case "NOT_PASS":
-                                T.s("认证失败，请重新上传");
+//                                T.s("认证失败，请重新上传");
                                 x.image().bind(ivMain, newPath);
                                 retake.setText("重新拍摄");
                                 errorLayout.setVisibility(View.VISIBLE);
                                 break;
                             default:
-                                T.s("认证成功");
+//                                T.s("认证成功");
                                 x.image().bind(ivMain, newPath);
                                 retake.setText("马上搭讪");
                                 retake.setOnClickListener(new View.OnClickListener() {

@@ -122,7 +122,7 @@
             android:layout_marginRight="52.5dip"
             android:layout_marginBottom="50dip"
             android:background="@drawable/build_user_save_bg"
-            android:text="保存资料"
+            android:text="提交资料"
             android:textColor="#ffffff"
             android:textSize="15dip" />
     </LinearLayout>

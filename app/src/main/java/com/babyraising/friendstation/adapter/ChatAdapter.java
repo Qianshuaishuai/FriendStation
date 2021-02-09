@@ -158,7 +158,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                                     String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
                                     ImageView imageView = new ImageView(context);
                                     LinearLayout.LayoutParams params = new
-                                            LinearLayout.LayoutParams(25, 25);
+                                            LinearLayout.LayoutParams(60, 60);
                                     imageView.setLayoutParams(params);
                                     x.image().bind(imageView, emojiList.get(e).getUrl());
                                     holder.rightContentLayout.addView(imageView);
@@ -175,7 +175,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
                                     ImageView imageView = new ImageView(context);
                                     LinearLayout.LayoutParams params = new
-                                            LinearLayout.LayoutParams(25, 25);
+                                            LinearLayout.LayoutParams(60, 60);
                                     imageView.setLayoutParams(params);
                                     x.image().bind(imageView, emojiList.get(e).getUrl());
                                     holder.rightContentLayout.addView(imageView);
@@ -303,7 +303,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                                         String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
                                         ImageView imageView = new ImageView(context);
                                         LinearLayout.LayoutParams params = new
-                                                LinearLayout.LayoutParams(25, 25);
+                                                LinearLayout.LayoutParams(60, 60);
                                         imageView.setLayoutParams(params);
                                         x.image().bind(imageView, emojiList.get(e).getUrl());
                                         holder.leftContentLayout.addView(imageView);
@@ -320,7 +320,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
                                         ImageView imageView = new ImageView(context);
                                         LinearLayout.LayoutParams params = new
-                                                LinearLayout.LayoutParams(25, 25);
+                                                LinearLayout.LayoutParams(60, 60);
                                         imageView.setLayoutParams(params);
                                         x.image().bind(imageView, emojiList.get(e).getUrl());
                                         holder.leftContentLayout.addView(imageView);
@@ -444,7 +444,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                                         String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
                                         ImageView imageView = new ImageView(context);
                                         LinearLayout.LayoutParams params = new
-                                                LinearLayout.LayoutParams(25, 25);
+                                                LinearLayout.LayoutParams(60, 60);
                                         imageView.setLayoutParams(params);
                                         x.image().bind(imageView, emojiList.get(e).getUrl());
                                         holder.rightContentLayout.addView(imageView);
@@ -461,7 +461,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
                                         ImageView imageView = new ImageView(context);
                                         LinearLayout.LayoutParams params = new
-                                                LinearLayout.LayoutParams(25, 25);
+                                                LinearLayout.LayoutParams(60, 60);
                                         imageView.setLayoutParams(params);
                                         x.image().bind(imageView, emojiList.get(e).getUrl());
                                         holder.rightContentLayout.addView(imageView);

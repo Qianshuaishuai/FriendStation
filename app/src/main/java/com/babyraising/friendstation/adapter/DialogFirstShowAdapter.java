@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
@@ -28,12 +29,14 @@ public class DialogFirstShowAdapter extends RecyclerView.Adapter<DialogFirstShow
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt;
         ImageView iconIv, selectIv;
+        RelativeLayout mainLayout;
 
         public ViewHolder(View view) {
             super(view);
             iconIv = (ImageView) view.findViewById(R.id.icon);
             selectIv = (ImageView) view.findViewById(R.id.select);
             nameTxt = (TextView) view.findViewById(R.id.name);
+            mainLayout = (RelativeLayout)view.findViewById(R.id.layout_main);
         }
 
     }
@@ -78,7 +81,7 @@ public class DialogFirstShowAdapter extends RecyclerView.Adapter<DialogFirstShow
                 break;
         }
 
-        holder.selectIv.setOnClickListener(new View.OnClickListener() {
+        holder.mainLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mList.get(position).getIsSelect() == 0) {

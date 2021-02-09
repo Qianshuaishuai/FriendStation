@@ -83,7 +83,7 @@ public class DrawalActivity extends BaseActivity {
         request.setIdCard(alipayAccount.getText().toString());
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
         Gson gson = new Gson();
-        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_COINORDER_BEFORESAVE);
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_SCORE_ORDER_SAVE);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         params.setBodyContent(gson.toJson(request));
