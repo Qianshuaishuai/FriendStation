@@ -10,6 +10,7 @@ import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -115,6 +116,7 @@ public class FriendStationApplication extends Application {
         initCamera();
 //        initAMapTrack();
 //        initShowTip();
+        MultiDex.install(this);
     }
 
     private void initShowTip() {

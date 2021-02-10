@@ -3,7 +3,10 @@ package com.babyraising.friendstation.ui.show;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,14 +15,19 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
+
+import com.andview.refreshview.XRefreshView;
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
@@ -39,6 +47,8 @@ import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.decoration.FirstShowSpaceItemDecoration;
 import com.babyraising.friendstation.decoration.SpaceItemDecoration;
+import com.babyraising.friendstation.event.DeleteEvent;
+import com.babyraising.friendstation.event.ScrollEvent;
 import com.babyraising.friendstation.event.UpdateMessageEvent;
 import com.babyraising.friendstation.response.FriendResponse;
 import com.babyraising.friendstation.response.NoticeResponse;
@@ -55,11 +65,14 @@ import com.babyraising.friendstation.util.DisplayUtils;
 import com.babyraising.friendstation.util.GenerateTestUserSig;
 import com.babyraising.friendstation.util.RandomUtil;
 import com.babyraising.friendstation.util.T;
+import com.babyraising.friendstation.view.DScrollView;
 import com.google.gson.Gson;
 
 import net.nightwhistler.htmlspanner.TextUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
@@ -71,6 +84,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.LogRecord;
 
 @ContentView(R.layout.fragment_find)
 public class FindFragment extends BaseFragment {
@@ -79,6 +93,10 @@ public class FindFragment extends BaseFragment {
     private FindShowAdapter adapter;
     private DialogFirstShowAdapter showAdapter;
     private List<FriendDetailBean> mlist;
+    private int lastVisibleItem = 0;
+    private LinearLayoutManager manager;
+
+    private int pageNum = 0;
 
     private boolean isFirstShow = true;
 
@@ -93,6 +111,9 @@ public class FindFragment extends BaseFragment {
 
     @ViewInject(R.id.list)
     private RecyclerView recycleList;
+
+    @ViewInject(R.id.scrollView)
+    private DScrollView scrollView;
 
     @ViewInject(R.id.main_layout)
     private RelativeLayout mainLayout;
@@ -135,6 +156,9 @@ public class FindFragment extends BaseFragment {
         Intent intent = new Intent(getActivity(), VoiceSendActivity.class);
         startActivity(intent);
     }
+
+    @ViewInject(R.id.tips)
+    private TextView tips;
 
     @Event(R.id.layout_find)
     private void findLayoutClick(View view) {
@@ -318,11 +342,27 @@ public class FindFragment extends BaseFragment {
         initAuthTip();
         initVoiceTip();
         initLoadingTip();
+        EventBus.getDefault().register(this);
     }
 
     private void initData() {
         commonWordList = ((FriendStationApplication) getActivity().getApplication()).getCommonWordData();
 
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onScrollEvent(ScrollEvent event) {
+        if (tips.getVisibility() == View.GONE){
+            getUserListMore();
+            tips.setVisibility(View.VISIBLE);
+            scrollView.fullScroll(View.FOCUS_DOWN);
+        }
     }
 
     private void translateOneUser2() {
@@ -525,7 +565,8 @@ public class FindFragment extends BaseFragment {
 
         userList = new ArrayList<>();
         adapter = new FindShowAdapter(this, userList);
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+//        adapter = new FindShowAdapter(this, userList);
+        manager = new LinearLayoutManager(getActivity());
         recycleList.setLayoutManager(manager);
         recycleList.setAdapter(adapter);
 
@@ -537,7 +578,30 @@ public class FindFragment extends BaseFragment {
         });
         recycleList.setHasFixedSize(true);
         recycleList.setNestedScrollingEnabled(false);
+//        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                View view = ((ScrollView)v).getChildAt(((ScrollView)v).getChildCount()-1);
+//                int d = view.getBottom();
+//                d -= (((ScrollView)v).getHeight()+scrollY);
+//                if (d == 0) {
+//                    System.out.println("------滚动到最下方------");
+//                } else {
+//                    System.out.println("------没有滚到最下方------");
+//                }
+//            }
+//        });
+
+        scrollView.setOnScrollChanged(new DScrollView.OnScrollChanged() {
+            @Override
+            public void onScroll(int l, int t, int oldl, int oldt) {
+
+            }
+        });
+
     }
+
+
 
     @Override
     public void onResume() {
@@ -707,7 +771,7 @@ public class FindFragment extends BaseFragment {
                 break;
         }
         params.addQueryStringParameter("pageNum", 1);
-        params.addQueryStringParameter("pageSize", 100);
+        params.addQueryStringParameter("pageSize", 20);
 //        params.addQueryStringParameter("type", type);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
@@ -725,6 +789,7 @@ public class FindFragment extends BaseFragment {
                         }
 
                         adapter.notifyDataSetChanged();
+                        pageNum = 2;
                         break;
                     default:
                         T.s(response.getMsg());
@@ -737,6 +802,65 @@ public class FindFragment extends BaseFragment {
 
                 if (loadingDialog.isShowing()) {
                     loadingDialog.cancel();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void getUserListMore() {
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_USER_USERINFOV0LIST);
+        int type = 0;
+        switch (selectType) {
+            case 1:
+                type = 1;
+                break;
+            case 2:
+                type = 0;
+                break;
+            case 3:
+                type = 2;
+                break;
+        }
+        params.addQueryStringParameter("pageNum", pageNum);
+        params.addQueryStringParameter("pageSize", 20);
+//        params.addQueryStringParameter("type", type);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UserMainPageResponse response = gson.fromJson(result, UserMainPageResponse.class);
+                System.out.println("getUserListMore:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        for (int u = 0; u < response.getData().size(); u++) {
+                            userList.add(response.getData().get(u));
+                        }
+
+                        adapter.notifyDataSetChanged();
+                        pageNum++;
+                        tips.setVisibility(View.GONE);
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
                 }
             }
 

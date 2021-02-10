@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.adapter;
 
+import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -20,8 +21,10 @@ import org.xutils.x;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Handler;
 
 public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHolder> {
 
@@ -244,4 +247,12 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
         this.listener = listener;
     }
 
+    class FootHolder extends RecyclerView.ViewHolder {
+        private TextView tips;
+
+        public FootHolder(View itemView) {
+            super(itemView);
+            tips = (TextView) itemView.findViewById(R.id.tips);
+        }
+    }
 }

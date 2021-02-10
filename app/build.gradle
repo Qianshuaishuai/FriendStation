@@ -12,6 +12,7 @@ android {
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
         }
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -64,6 +65,8 @@ dependencies {
     implementation 'com.lzy.widget:imagepicker:0.6.1'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'com.jaywei:compresstool:1.2.1'
+    implementation 'com.huxq17.xrefreshview:xrefreshview:3.6.9'
+    implementation 'com.android.support:multidex:1.0.3'
 //    implementation (name: 'alipaySdk-15.6.8-20191021122514', ext: 'aar')
 //    compile (name: 'alipaysdk-15.8.01.210112203525', ext: 'aar')
 //    implementation 'com.tencent.imsdk:tuikit:5.0.10'

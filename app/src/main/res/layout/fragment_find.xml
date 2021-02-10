@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+        <com.babyraising.friendstation.view.DScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -250,13 +251,23 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_below="@+id/layout_select"></android.support.v7.widget.RecyclerView>
 
-
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tips"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/list"
+                    android:layout_marginBottom="1dp"
+                    android:gravity="center"
+                    android:padding="30dp"
+                    android:text="正在加载更多数据中"
+                    android:textSize="15sp" />
             </RelativeLayout>
 
-        </ScrollView>
+        </com.babyraising.friendstation.view.DScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <RelativeLayout
