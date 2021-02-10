@@ -624,6 +624,10 @@ public class MomentSendActivity extends BaseActivity implements EasyPermissions.
                 Uri uri = data.getData();
                 String oldFilePath = FileUtil.getFilePathByUri(this, uri);
                 double oldSize = SizeUtil.getFileOrFilesSize(oldFilePath, 2);
+                if (oldSize<=30){
+                    T.s("太模糊了,请上传高清图");
+                    return;
+                }
                 String filePath = PhotoUtil.newAmendRotatePhoto3(oldFilePath, this, oldSize);
                 if (!TextUtils.isEmpty(filePath)) {
                     uploadPic(filePath);

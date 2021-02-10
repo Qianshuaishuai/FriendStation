@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -243,6 +244,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             context.playSound(element.getSoundDownloadUrl());
                         }
                     });
+//                    try {
+//                        cachePlayer.setDataSource(element.getSoundDownloadUrl());
+//                        cachePlayer.prepare();
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                        System.out.println("loading-sound:" + e.toString());
+//                        System.out.println("loading-sound:" + element.getSoundDownloadUrl());
+//                    }
                 }
 
                 if (elements.get(0) instanceof CustomElement) {
@@ -384,6 +393,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                                 context.playSound(element.getSoundDownloadUrl());
                             }
                         });
+//                        try {
+//                            cachePlayer.setDataSource(element.getSoundDownloadUrl());
+//                            cachePlayer.prepare();
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                            System.out.println("loading-sound:" + e.toString());
+//                            System.out.println("loading-sound:" + element.getSoundDownloadUrl());
+//                        }
                     }
 
                     if (elements.get(0) instanceof CustomElement) {
@@ -529,6 +546,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                                 context.playSound(element.getSoundDownloadUrl());
                             }
                         });
+//                        try {
+//                            cachePlayer.setDataSource(element.getSoundDownloadUrl());
+//                            cachePlayer.prepare();
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                            System.out.println("loading-sound:" + e.toString());
+//                            System.out.println("loading-sound:" + element.getSoundDownloadUrl());
+//                        }
                     }
 
                     if (elements.get(0) instanceof CustomElement) {

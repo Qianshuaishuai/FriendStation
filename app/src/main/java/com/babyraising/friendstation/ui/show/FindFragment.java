@@ -80,6 +80,10 @@ public class FindFragment extends BaseFragment {
     private DialogFirstShowAdapter showAdapter;
     private List<FriendDetailBean> mlist;
 
+    private boolean isFirstShow = true;
+
+    private AlertDialog loadingDialog;
+
     private List<String> commonWordList;
 
     private AlertDialog findDialog;
@@ -313,6 +317,7 @@ public class FindFragment extends BaseFragment {
         initData();
         initAuthTip();
         initVoiceTip();
+        initLoadingTip();
     }
 
     private void initData() {
@@ -539,6 +544,11 @@ public class FindFragment extends BaseFragment {
         super.onResume();
         getUserList();
         getNotice();
+        if (isFirstShow) {
+            loadingDialog.show();
+            isFirstShow = false;
+        }
+
     }
 
     public void goToChat(int userId) {
@@ -724,6 +734,10 @@ public class FindFragment extends BaseFragment {
                 if (refreshLayout.isRefreshing()) {
                     refreshLayout.setRefreshing(false);
                 }
+
+                if (loadingDialog.isShowing()) {
+                    loadingDialog.cancel();
+                }
             }
 
             @Override
@@ -872,5 +886,20 @@ public class FindFragment extends BaseFragment {
         // 初始化控件，注意这里是通过view.findViewById
         final TextView content = (TextView) view.findViewById(R.id.content);
         findDialog.setCanceledOnTouchOutside(false);
+    }
+
+    private void initLoadingTip() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // 创建一个view，并且将布局加入view中
+        View view = LayoutInflater.from(getActivity()).inflate(
+                R.layout.dialog_first_loading_tip, null, false);
+        // 将view添加到builder中
+        builder.setView(view);
+        // 创建dialog
+        loadingDialog = builder.create();
+        // 初始化控件，注意这里是通过view.findViewById
+        final TextView content = (TextView) view.findViewById(R.id.content);
+        loadingDialog.setCanceledOnTouchOutside(false);
     }
 }

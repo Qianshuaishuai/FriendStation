@@ -745,7 +745,11 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
                 Uri uri = data.getData();
                 String oldFilePath = FileUtil.getFilePathByUri(this, uri);
                 double oldSize = SizeUtil.getFileOrFilesSize(oldFilePath, 2);
-                System.out.println("oldSize:"+oldSize);
+                if (oldSize <= 15) {
+                    T.s("太模糊了,请上传高清图");
+                    return;
+                }
+                System.out.println("oldSize:" + oldSize);
                 String filePath = PhotoUtil.newAmendRotatePhoto3(oldFilePath, this, oldSize);
                 if (!TextUtils.isEmpty(filePath)) {
                     uploadPic(filePath);

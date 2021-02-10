@@ -575,18 +575,20 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     public void playSound(String url) {
         try {
-            if (mediaPlayer.isPlaying()) {
-                mediaPlayer.pause();
-                mediaPlayer.seekTo(0);
-                mediaPlayer.stop();
-                mediaPlayer.release();
-            }
-            mediaPlayer = new MediaPlayer();
+//            if (mediaPlayer.isPlaying()) {
+//                mediaPlayer.pause();
+//                mediaPlayer.seekTo(0);
+//                mediaPlayer.stop();
+//                mediaPlayer.release();
+//            }
+//            mediaPlayer = new MediaPlayer();
+            mediaPlayer.reset();
             mediaPlayer.setDataSource(url);
             mediaPlayer.prepare();
             mediaPlayer.start();
         } catch (Exception e) {
             T.s("加载中，请稍后");
+            System.out.println(e.toString());
             e.printStackTrace();
         }
     }
@@ -848,6 +850,20 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             }
         });
 
+        content.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        content.requestFocus();
+                    }
+                },200);
+                return false;
+            }
+        });
+
         sendVoice.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -915,7 +931,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 }
             }
         });
-        content.clearFocus();
+//        content.clearFocus();
         content.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -929,7 +945,12 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 } else {
                     layoutSend.setVisibility(View.VISIBLE);
                 }
-                content.requestFocus();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        content.requestFocus();
+                    }
+                },200);
             }
 
             @Override

@@ -1547,6 +1547,11 @@ public class PersonInfoActivity extends BaseActivity {
                 Uri uri = data.getData();
                 String oldFilePath = FileUtil.getFilePathByUri(this, uri);
                 double oldSize = SizeUtil.getFileOrFilesSize(oldFilePath, 2);
+                if (oldSize<=30){
+                    T.s("太模糊了,请上传高清图");
+                    return;
+                }
+                System.out.println("size:"+oldSize);
                 String filePath = PhotoUtil.newAmendRotatePhoto4(oldFilePath, this, oldSize);
                 if (!TextUtils.isEmpty(filePath)) {
                     uploadPic(filePath);
