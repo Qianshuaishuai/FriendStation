@@ -44,6 +44,22 @@
                 android:layout_width="18dip"
                 android:layout_height="13dip"
                 android:src="@mipmap/look_me_card" />
+
+            <LinearLayout
+                android:id="@+id/sex_layout"
+                android:background="@drawable/shape_info_male_bg"
+                android:layout_width="18dip"
+                android:layout_height="18dip"
+                android:layout_marginLeft="8dip"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/sex"
+                    android:layout_width="14dip"
+                    android:layout_height="14dip"
+                    android:src="@mipmap/common_male" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -63,12 +79,6 @@
                 android:paddingRight="5dip"
                 android:paddingBottom="2dip">
 
-                <ImageView
-                    android:id="@+id/sex"
-                    android:layout_width="18dip"
-                    android:layout_height="18dip"
-                    android:src="@mipmap/common_male" />
-
                 <TextView
                     android:id="@+id/tip1"
                     android:layout_width="wrap_content"
@@ -76,7 +86,7 @@
                     android:layout_marginLeft="2dip"
                     android:text=""
                     android:textColor="#ffffff"
-                    android:textSize="12dip" />
+                    android:textSize="10dip" />
             </LinearLayout>
 
             <!--<View-->
@@ -98,7 +108,7 @@
                 android:paddingBottom="2dip"
                 android:text=""
                 android:textColor="#ffffff"
-                android:textSize="12dip" />
+                android:textSize="10dip" />
 
             <!--<View-->
             <!--android:layout_width="0.5dip"-->
@@ -119,7 +129,7 @@
                 android:paddingBottom="2dip"
                 android:text=""
                 android:textColor="#ffffff"
-                android:textSize="12dip" />
+                android:textSize="10dip" />
 
             <!--<View-->
             <!--android:layout_width="0.5dip"-->
@@ -154,13 +164,13 @@
         </LinearLayout>
 
         <TextView
-            android:singleLine="true"
-            android:ellipsize="end"
-            android:maxWidth="200dip"
             android:id="@+id/sign"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
+            android:ellipsize="end"
+            android:maxWidth="200dip"
+            android:singleLine="true"
             android:text="用户暂未设置签名"
             android:textColor="#444463"
             android:textSize="12dip" />

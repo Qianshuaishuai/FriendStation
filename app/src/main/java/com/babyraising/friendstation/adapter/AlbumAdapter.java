@@ -69,11 +69,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
                 }
             });
 
-            if (editStatus) {
-                holder.addIv.setVisibility(View.VISIBLE);
-            } else {
-                holder.addIv.setVisibility(View.GONE);
-            }
+//            if (editStatus) {
+//                holder.addIv.setVisibility(View.VISIBLE);
+//            } else {
+//                holder.addIv.setVisibility(View.GONE);
+//            }
+
+            holder.addIv.setVisibility(View.VISIBLE);
         } else {
             holder.iconIv.setVisibility(View.VISIBLE);
             holder.deleteIv.setVisibility(View.VISIBLE);
@@ -84,6 +86,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
             } else {
                 holder.deleteIv.setVisibility(View.GONE);
             }
+
+//            holder.deleteIv.setVisibility(View.VISIBLE);
         }
 
         holder.iconIv.setOnClickListener(new View.OnClickListener() {

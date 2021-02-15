@@ -1,6 +1,8 @@
 package com.babyraising.friendstation.ui.main;
 
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
@@ -43,6 +45,7 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +60,8 @@ public class VoiceSelfActivity extends BaseActivity {
     private UserAllInfoBean userAllInfoBean;
     private Gson gson = new Gson();
 
+    private MediaPlayer mediaPlayer;
+
     @Event(R.id.layout_time_cancel)
     private void cancelLayoutClick(View view) {
 //        if (chat_time == 0){
@@ -66,6 +71,7 @@ public class VoiceSelfActivity extends BaseActivity {
 //        }
         cancelTIMRTC();
     }
+
 
     @ViewInject(R.id.voice_default_head)
     private ImageView voiceDefaultHead;
@@ -100,6 +106,7 @@ public class VoiceSelfActivity extends BaseActivity {
 
         initData();
         initRTCMessage();
+        initMediaPlayer();
     }
 
     private void initData() {
@@ -138,6 +145,19 @@ public class VoiceSelfActivity extends BaseActivity {
     private void refuseTIMRTC() {
         sendResultMessage(-1);
         finish();
+    }
+
+    public void playSound() {
+        try {
+            AssetFileDescriptor fileDescriptor = getAssets().openFd("voice_tip.mp3");
+            mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(),fileDescriptor.getStartOffset(),
+                    fileDescriptor.getStartOffset());
+            mediaPlayer.setLooping(true);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void cancelTIMRTC2() {
@@ -246,6 +266,7 @@ public class VoiceSelfActivity extends BaseActivity {
             @Override
             public void onSuccess(V2TIMMessage message) {
                 System.out.println("rtc callBack sendMessage success:" + gson.toJson(message));
+                EventBus.getDefault().post(new DeleteEvent());
             }
 
             @Override
@@ -326,6 +347,18 @@ public class VoiceSelfActivity extends BaseActivity {
         V2TIMManager.getMessageManager().markC2CMessageAsRead(userId, callback);
     }
 
+    private void initMediaPlayer() {
+        mediaPlayer = new MediaPlayer();
+        playSound();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mediaPlayer.stop();
+        mediaPlayer.release();
+    }
+
     private void deleteMessage(V2TIMMessage message) {
         List<V2TIMMessage> messageList = new ArrayList<>();
         messageList.add(message);
@@ -342,5 +375,10 @@ public class VoiceSelfActivity extends BaseActivity {
             }
         };
         V2TIMManager.getMessageManager().deleteMessages(messageList, callback);
+    }
+
+    @Override
+    public void onBackPressed() {
+        cancelTIMRTC();
     }
 }

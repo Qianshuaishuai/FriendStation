@@ -1,6 +1,5 @@
 package com.babyraising.friendstation.adapter;
 
-import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,18 +12,14 @@ import android.widget.TextView;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.ui.show.FindFragment;
-import com.google.gson.Gson;
 
 import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Handler;
 
 public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHolder> {
 
@@ -34,7 +29,7 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tip1Txt, tip2Txt, tip3Txt, signTxt, nameTxt;
         ImageView ivSelected, ivNormal, ivHead, ivSex;
-        LinearLayout mainLayout, rightLayout;
+        LinearLayout mainLayout, rightLayout, sexLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -50,6 +45,7 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
             ivSex = (ImageView) view.findViewById(R.id.sex);
             mainLayout = (LinearLayout) view.findViewById(R.id.layout_main);
             rightLayout = (LinearLayout) view.findViewById(R.id.layout_right);
+            sexLayout = (LinearLayout) view.findViewById(R.id.sex_layout);
         }
 
     }
@@ -86,7 +82,8 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
 //                    holder.nameTxt.setText(mList.get(position).getNickName());
 //                }
 
-                holder.ivSex.setImageResource(R.mipmap.common_female);
+                holder.ivSex.setImageResource(R.mipmap.common_male);
+                holder.sexLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_info_male_bg));
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
@@ -113,7 +110,8 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
 //                    holder.nameTxt.setText(mList.get(position).getNickName());
 //                }
 
-                holder.ivSex.setImageResource(R.mipmap.common_female);
+                holder.ivSex.setImageResource(R.mipmap.common_male);
+                holder.sexLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_info_male_bg));
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
@@ -140,7 +138,8 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
 //                    holder.nameTxt.setText(mList.get(position).getNickName());
 //                }
 
-                holder.ivSex.setImageResource(R.mipmap.common_male);
+                holder.ivSex.setImageResource(R.mipmap.common_female);
+                holder.sexLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_info_female_bg));
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
@@ -168,7 +167,7 @@ public class FindShowAdapter extends RecyclerView.Adapter<FindShowAdapter.ViewHo
             holder.tip1Txt.setText("" + 0);
         } else {
             if (!TextUtils.isEmpty(mList.get(position).getUserExtra().getBirthday())) {
-                holder.tip1Txt.setText("" + getAge(mList.get(position).getUserExtra().getBirthday()));
+                holder.tip1Txt.setText("" + getAge(mList.get(position).getUserExtra().getBirthday()) + "岁");
                 holder.tip1Txt.setVisibility(View.VISIBLE);
             } else {
                 holder.tip1Txt.setVisibility(View.GONE);

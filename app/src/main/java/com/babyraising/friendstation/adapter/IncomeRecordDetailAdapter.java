@@ -1,5 +1,6 @@
 package com.babyraising.friendstation.adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -57,8 +58,10 @@ public class IncomeRecordDetailAdapter extends RecyclerView.Adapter<IncomeRecord
 
         if (mList.get(position).getChangeNum() > 0) {
             holder.countTxt.setText("+" + mList.get(position).getChangeNum() + " 金币");
+            holder.countTxt.setTextColor(Color.GREEN);
         } else {
             holder.countTxt.setText(mList.get(position).getChangeNum() + " 金币");
+            holder.countTxt.setTextColor(Color.RED);
         }
 
 

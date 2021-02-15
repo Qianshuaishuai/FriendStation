@@ -341,7 +341,7 @@ public class FindFragment extends BaseFragment {
         initData();
         initAuthTip();
         initVoiceTip();
-        initLoadingTip();
+//        initLoadingTip();
         EventBus.getDefault().register(this);
     }
 
@@ -608,10 +608,10 @@ public class FindFragment extends BaseFragment {
         super.onResume();
         getUserList();
         getNotice();
-        if (isFirstShow) {
-            loadingDialog.show();
-            isFirstShow = false;
-        }
+//        if (isFirstShow) {
+//            loadingDialog.show();
+//            isFirstShow = false;
+//        }
 
     }
 
@@ -800,9 +800,9 @@ public class FindFragment extends BaseFragment {
                     refreshLayout.setRefreshing(false);
                 }
 
-                if (loadingDialog.isShowing()) {
-                    loadingDialog.cancel();
-                }
+//                if (loadingDialog.isShowing()) {
+//                    loadingDialog.cancel();
+//                }
             }
 
             @Override

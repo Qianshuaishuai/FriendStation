@@ -3,12 +3,10 @@ package com.babyraising.friendstation.ui.main;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -20,13 +18,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,9 +32,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.EditText;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -49,6 +45,7 @@ import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.adapter.ChatAdapter;
 import com.babyraising.friendstation.adapter.EmojiAdapter;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.AudioLoadingBean;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.EmojiBean;
 import com.babyraising.friendstation.bean.GiftDetailBean;
@@ -67,21 +64,16 @@ import com.babyraising.friendstation.util.FileUtil;
 import com.babyraising.friendstation.util.PhotoUtil;
 import com.babyraising.friendstation.util.SizeUtil;
 import com.babyraising.friendstation.util.T;
-import com.babyraising.friendstation.util.TypeUtil;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.github.lassana.recorder.AudioRecorder;
 import com.github.lassana.recorder.AudioRecorderBuilder;
 import com.google.gson.Gson;
 import com.ldoublem.loadingviewlib.view.LVRingProgress;
-import com.lzy.imagepicker.ImagePicker;
-import com.lzy.imagepicker.bean.ImageItem;
-import com.lzy.imagepicker.ui.ImageGridActivity;
-import com.lzy.imagepicker.view.CropImageView;
-import com.nanchen.compresshelper.CompressHelper;
 import com.tencent.imsdk.message.CustomElement;
 import com.tencent.imsdk.message.ImageElement;
 import com.tencent.imsdk.message.MessageBaseElement;
+import com.tencent.imsdk.message.SoundElement;
 import com.tencent.imsdk.v2.V2TIMAdvancedMsgListener;
 import com.tencent.imsdk.v2.V2TIMCallback;
 import com.tencent.imsdk.v2.V2TIMManager;
@@ -104,13 +96,7 @@ import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -119,12 +105,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import io.valuesfeng.picker.Picker;
-import io.valuesfeng.picker.engine.GlideEngine;
-import io.valuesfeng.picker.utils.PicturePickerUtils;
 import jp.wasabeef.blurry.Blurry;
 import jp.wasabeef.glide.transformations.BlurTransformation;
-import loader.PicassoImageLoader;
 import pub.devrel.easypermissions.EasyPermissions;
 
 @ContentView(R.layout.activity_chat)
@@ -137,6 +119,8 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     private int currentChatId = 0;
     private int currentRoomId = 0;
     private Gson gson = new Gson();
+
+    private List<AudioLoadingBean> audioLoadingList = new ArrayList<>();
 
     private int voiceOrTextStatus = 0;
 
@@ -252,7 +236,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     private RelativeLayout mainLayout;
 
     @ViewInject(R.id.content)
-    private EditText content;
+    private AppCompatEditText content;
 
     @ViewInject(R.id.official)
     private ImageView official;
@@ -393,6 +377,10 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     @Event(R.id.send)
     private void sendClick(View view) {
+        if (TextUtils.isEmpty(content.getText().toString())) {
+            T.s("发送内容不能为空");
+            return;
+        }
         useCoin(1, "", "", "", 0);
         sendLocalTextMessage(content.getText().toString());
     }
@@ -574,6 +562,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     }
 
     public void playSound(String url) {
+        String realUrl = ((FriendStationApplication) getApplication()).getAudioCurrentUrl(url);
         try {
 //            if (mediaPlayer.isPlaying()) {
 //                mediaPlayer.pause();
@@ -583,7 +572,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 //            }
 //            mediaPlayer = new MediaPlayer();
             mediaPlayer.reset();
-            mediaPlayer.setDataSource(url);
+            mediaPlayer.setDataSource(realUrl);
             mediaPlayer.prepare();
             mediaPlayer.start();
         } catch (Exception e) {
@@ -643,8 +632,8 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         V2TIMMessage message = V2TIMManager.getMessageManager().createTextMessage(text);
         chatList.add(message);
         adapter.notifyDataSetChanged();
-        goToListBottom();
-        isShowLocalPic = false;
+//        goToListBottom();
+        isShowLocalPic = true;
     }
 
     private void sendLocalGiftMessage(GiftDetailBean bean) {
@@ -819,7 +808,24 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         animation.setRepeatCount(1);
     }
 
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive()) {
+            if (this.getCurrentFocus().getWindowToken() != null) {
+                imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }
+    }
+
     private void initView() {
+        chatListRecycleView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideKeyboard();
+                emojiRecycleView.setVisibility(View.GONE);
+                return false;
+            }
+        });
         findTip.setVisibility(View.VISIBLE);
         tip1.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         tip2.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
@@ -859,7 +865,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                     public void run() {
                         content.requestFocus();
                     }
-                },200);
+                }, 200);
                 return false;
             }
         });
@@ -926,9 +932,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         content.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-                if (b) {
-                    emojiRecycleView.setVisibility(View.GONE);
-                }
+//                if (b) {
+//                    emojiRecycleView.setVisibility(View.GONE);
+//                }
             }
         });
 //        content.clearFocus();
@@ -940,17 +946,17 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (TextUtils.isEmpty(s.toString())) {
-                    layoutSend.setVisibility(View.GONE);
-                } else {
-                    layoutSend.setVisibility(View.VISIBLE);
-                }
+//                if (TextUtils.isEmpty(s.toString())) {
+//                    layoutSend.setVisibility(View.GONE);
+//                } else {
+//                    layoutSend.setVisibility(View.VISIBLE);
+//                }
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         content.requestFocus();
                     }
-                },200);
+                }, 200);
             }
 
             @Override
@@ -1140,6 +1146,22 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                                 isNoneMessage = true;
                             }
                         }
+
+                        if (elements.get(0) instanceof SoundElement) {
+                            String soundUrl = ((SoundElement) elements.get(0)).getSoundDownloadUrl();
+                            String fileUrl = ((FriendStationApplication) getApplication()).getAudioCurrentUrl(soundUrl);
+
+                            AudioLoadingBean loadingBean = new AudioLoadingBean();
+                            loadingBean.setWebUrl(soundUrl);
+
+                            if (fileUrl.equals(soundUrl)) {
+                                downloadAudioFile(soundUrl);
+                                loadingBean.setComplete(false);
+                            } else {
+                                loadingBean.setComplete(true);
+                            }
+                            audioLoadingList.add(loadingBean);
+                        }
                     }
                     if (!isNoneMessage) {
                         chatList.add(v2TIMMessages.get(n));
@@ -1173,6 +1195,61 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         V2TIMManager.getMessageManager().getC2CHistoryMessageList(String.valueOf(currentChatId), 10, null, callback);
     }
 
+    private void downloadAudioFile(final String webUrl) {
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + System.currentTimeMillis() + ".mp3";
+            // mDownloadUrl为JSON从服务器端解析出来的下载地址
+            RequestParams requestParams = new RequestParams(webUrl);
+            // 为RequestParams设置文件下载后的保存路径
+            requestParams.setSaveFilePath(path);
+            // 下载完成后自动为文件命名
+            requestParams.setAutoRename(true);
+            x.http().get(requestParams, new Callback.ProgressCallback<File>() {
+
+                @Override
+                public void onSuccess(File result) {
+                    ((FriendStationApplication) getApplication()).saveLocalAudioToCache(webUrl, result.getAbsolutePath());
+                    for (int a = 0; a < audioLoadingList.size(); a++) {
+                        if (audioLoadingList.get(a).getWebUrl().equals(webUrl)) {
+                            audioLoadingList.get(a).setComplete(true);
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+
+                }
+
+                @Override
+                public void onCancelled(CancelledException cex) {
+
+                }
+
+                @Override
+                public void onFinished() {
+
+                }
+
+                @Override
+                public void onWaiting() {
+
+                }
+
+                @Override
+                public void onStarted() {
+
+                }
+
+                @Override
+                public void onLoading(long total, long current, boolean isDownloading) {
+
+                }
+            });
+        }
+    }
+
     private void getMessageListMore(V2TIMMessage lastMessage) {
         V2TIMValueCallback<List<V2TIMMessage>> callback = new V2TIMValueCallback<List<V2TIMMessage>>() {
             @Override
@@ -1189,6 +1266,22 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                             } else if (bean.getMsgType() == Constant.RESULT_CHAT_ROOM_CODE && bean.getResultBean().getReceipt() == 1) {
                                 isNoneMessage = true;
                             }
+                        }
+
+                        if (elements.get(0) instanceof SoundElement) {
+                            String soundUrl = ((SoundElement) elements.get(0)).getSoundDownloadUrl();
+                            String fileUrl = ((FriendStationApplication) getApplication()).getAudioCurrentUrl(soundUrl);
+
+                            AudioLoadingBean loadingBean = new AudioLoadingBean();
+                            loadingBean.setWebUrl(soundUrl);
+
+                            if (fileUrl.equals(soundUrl)) {
+                                downloadAudioFile(soundUrl);
+                                loadingBean.setComplete(false);
+                            } else {
+                                loadingBean.setComplete(true);
+                            }
+                            audioLoadingList.add(loadingBean);
                         }
                     }
                     if (!isNoneMessage) {
@@ -1455,16 +1548,47 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 //            }
 //        }, 1000);
 //        ;
+//        scrollview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                scrollview.post(new Runnable() {
+//                    public void run() {
+//                        scrollview.fullScroll(View.FOCUS_DOWN);
+//                    }
+//                });
+//            }
+//        });
+//        Handler handler = new Handler();
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                //设置ScrollView滚动到顶部
+//                scrollview.fullScroll(ScrollView.FOCUS_DOWN);
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        content.requestFocus();
+//                    }
+//                }, 200);
+//            }
+//        });
         scrollview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 scrollview.post(new Runnable() {
                     public void run() {
                         scrollview.fullScroll(View.FOCUS_DOWN);
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                content.requestFocus();
+                            }
+                        }, 200);
                     }
                 });
             }
         });
+
     }
 
     public void goToListBottomForSpecialImage() {
@@ -1523,7 +1647,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     private void updateCurrentInfo() {
         name.setText(currentUserBean.getNickname());
         chatList = new ArrayList<>();
-        adapter = new ChatAdapter(this, chatList, emojiList, checkWordList, selfUserBean, currentUserBean);
+        adapter = new ChatAdapter(this, chatList, emojiList, checkWordList, selfUserBean, currentUserBean, audioLoadingList);
         LinearLayoutManager manager = new LinearLayoutManager(this);
         chatListRecycleView.setLayoutManager(manager);
         chatListRecycleView.setAdapter(adapter);
@@ -1563,9 +1687,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         }
 
         if (currentUserBean.getSex() == 1) {
-            infoSex.setImageResource(R.mipmap.common_female);
-        } else {
             infoSex.setImageResource(R.mipmap.common_male);
+        } else {
+            infoSex.setImageResource(R.mipmap.common_female);
         }
 
         if (!TextUtils.isEmpty(currentUserBean.getAvatar())) {

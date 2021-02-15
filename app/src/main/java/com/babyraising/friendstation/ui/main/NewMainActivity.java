@@ -124,9 +124,9 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
             lastfragment = 0;
 
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ivFind.getLayoutParams();
-            params.width = DisplayUtils.dp2px(this, 48);
-            params.height = DisplayUtils.dp2px(this, 48);
-            params.bottomMargin = DisplayUtils.dp2px(this, 16);
+            params.width = DisplayUtils.dp2px(this, 36);
+            params.height = DisplayUtils.dp2px(this, 36);
+            params.bottomMargin = DisplayUtils.dp2px(this, 22);
             ivFind.setLayoutParams(params);
 
             RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams) ivMoment.getLayoutParams();
@@ -171,9 +171,9 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
             ivFind.setLayoutParams(params);
 
             RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams) ivMoment.getLayoutParams();
-            params1.width = DisplayUtils.dp2px(this, 48);
-            params1.height = DisplayUtils.dp2px(this, 48);
-            params1.bottomMargin = DisplayUtils.dp2px(this, 16);
+            params1.width = DisplayUtils.dp2px(this, 36);
+            params1.height = DisplayUtils.dp2px(this, 36);
+            params1.bottomMargin = DisplayUtils.dp2px(this, 22);
             ivMoment.setLayoutParams(params1);
 
             RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) ivNotice.getLayoutParams();
@@ -218,9 +218,9 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
             ivMoment.setLayoutParams(params1);
 
             RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) ivNotice.getLayoutParams();
-            params2.width = DisplayUtils.dp2px(this, 48);
-            params2.height = DisplayUtils.dp2px(this, 48);
-            params2.bottomMargin = DisplayUtils.dp2px(this, 16);
+            params2.width = DisplayUtils.dp2px(this, 36);
+            params2.height = DisplayUtils.dp2px(this, 36);
+            params2.bottomMargin = DisplayUtils.dp2px(this, 22);
             ivNotice.setLayoutParams(params2);
 
             RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) ivPerson.getLayoutParams();
@@ -269,9 +269,9 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
             ivNotice.setLayoutParams(params2);
 
             RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) ivPerson.getLayoutParams();
-            params3.width = DisplayUtils.dp2px(this, 48);
-            params3.height = DisplayUtils.dp2px(this, 48);
-            params3.bottomMargin = DisplayUtils.dp2px(this, 16);
+            params3.width = DisplayUtils.dp2px(this, 36);
+            params3.height = DisplayUtils.dp2px(this, 36);
+            params3.bottomMargin = DisplayUtils.dp2px(this, 22);
             ivPerson.setLayoutParams(params3);
         }
     }
@@ -347,9 +347,9 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
         lastfragment = 0;
 
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ivFind.getLayoutParams();
-        params.width = DisplayUtils.dp2px(this, 48);
-        params.height = DisplayUtils.dp2px(this, 48);
-        params.bottomMargin = DisplayUtils.dp2px(this, 16);
+        params.width = DisplayUtils.dp2px(this, 36);
+        params.height = DisplayUtils.dp2px(this, 36);
+        params.bottomMargin = DisplayUtils.dp2px(this, 22);
         ivFind.setLayoutParams(params);
 
         RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams) ivMoment.getLayoutParams();
@@ -972,9 +972,9 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                 ivFind.setLayoutParams(params13);
 
                 RelativeLayout.LayoutParams params14 = (RelativeLayout.LayoutParams) ivMoment.getLayoutParams();
-                params14.width = DisplayUtils.dp2px(this, 48);
-                params14.height = DisplayUtils.dp2px(this, 48);
-                params14.bottomMargin = DisplayUtils.dp2px(this, 16);
+                params14.width = DisplayUtils.dp2px(this, 36);
+                params14.height = DisplayUtils.dp2px(this, 36);
+                params14.bottomMargin = DisplayUtils.dp2px(this, 22);
                 ivMoment.setLayoutParams(params14);
 
                 RelativeLayout.LayoutParams params15 = (RelativeLayout.LayoutParams) ivNotice.getLayoutParams();
@@ -1003,9 +1003,9 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                 lastfragment = 0;
 
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ivFind.getLayoutParams();
-                params.width = DisplayUtils.dp2px(this, 48);
-                params.height = DisplayUtils.dp2px(this, 48);
-                params.bottomMargin = DisplayUtils.dp2px(this, 16);
+                params.width = DisplayUtils.dp2px(this, 36);
+                params.height = DisplayUtils.dp2px(this, 36);
+                params.bottomMargin = DisplayUtils.dp2px(this, 22);
                 ivFind.setLayoutParams(params);
 
                 RelativeLayout.LayoutParams params1 = (RelativeLayout.LayoutParams) ivMoment.getLayoutParams();
@@ -1040,9 +1040,9 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                 lastfragment = 0;
 
                 RelativeLayout.LayoutParams params8 = (RelativeLayout.LayoutParams) ivFind.getLayoutParams();
-                params8.width = DisplayUtils.dp2px(this, 48);
-                params8.height = DisplayUtils.dp2px(this, 48);
-                params8.bottomMargin = DisplayUtils.dp2px(this, 16);
+                params8.width = DisplayUtils.dp2px(this, 36);
+                params8.height = DisplayUtils.dp2px(this, 36);
+                params8.bottomMargin = DisplayUtils.dp2px(this, 22);
                 ivFind.setLayoutParams(params8);
 
                 RelativeLayout.LayoutParams params9 = (RelativeLayout.LayoutParams) ivMoment.getLayoutParams();
@@ -1089,9 +1089,9 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                 ivMoment.setLayoutParams(params5);
 
                 RelativeLayout.LayoutParams params6 = (RelativeLayout.LayoutParams) ivNotice.getLayoutParams();
-                params6.width = DisplayUtils.dp2px(this, 48);
-                params6.height = DisplayUtils.dp2px(this, 48);
-                params6.bottomMargin = DisplayUtils.dp2px(this, 16);
+                params6.width = DisplayUtils.dp2px(this, 36);
+                params6.height = DisplayUtils.dp2px(this, 36);
+                params6.bottomMargin = DisplayUtils.dp2px(this, 22);
                 ivNotice.setLayoutParams(params6);
 
                 RelativeLayout.LayoutParams params7 = (RelativeLayout.LayoutParams) ivPerson.getLayoutParams();

@@ -67,7 +67,7 @@
                     android:id="@+id/sex"
                     android:layout_width="18dip"
                     android:layout_height="18dip"
-                    android:src="@mipmap/common_male" />
+                    android:src="@mipmap/common_female" />
 
                 <TextView
                     android:id="@+id/tip1"

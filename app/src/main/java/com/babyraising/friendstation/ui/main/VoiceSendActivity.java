@@ -1,6 +1,8 @@
 package com.babyraising.friendstation.ui.main;
 
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -65,6 +67,8 @@ public class VoiceSendActivity extends BaseActivity {
     @ViewInject(R.id.tip)
     private TextView tip;
 
+    private MediaPlayer mediaPlayer;
+
     @Event(R.id.close)
     private void closeClick(View view) {
         finish();
@@ -75,6 +79,32 @@ public class VoiceSendActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         initData();
+        initMediaPlayer();
+    }
+
+    private void initMediaPlayer() {
+        mediaPlayer = new MediaPlayer();
+        playSound();
+    }
+
+    public void playSound() {
+        try {
+            AssetFileDescriptor fileDescriptor = getAssets().openFd("voice_tip.mp3");
+            mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(),fileDescriptor.getStartOffset(),
+                    fileDescriptor.getStartOffset());
+            mediaPlayer.setLooping(true);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mediaPlayer.stop();
+        mediaPlayer.release();
     }
 
     private void initData() {

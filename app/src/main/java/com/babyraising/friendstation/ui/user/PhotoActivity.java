@@ -281,7 +281,8 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
 
     public void goToLookPhoto(int position) {
         Intent intent = new Intent(this, LookPhotoActivity.class);
-        intent.putExtra("img", photoList.get(position).getUrl());
+        intent.putExtra("position", position);
+        intent.putExtra("list", new Gson().toJson(photoList));
         startActivity(intent);
     }
 

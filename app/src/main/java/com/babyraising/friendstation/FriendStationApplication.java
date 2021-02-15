@@ -28,6 +28,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.babyraising.friendstation.adapter.NoticeAdapter;
+import com.babyraising.friendstation.bean.AudioBean;
 import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.EmojiBean;
 import com.babyraising.friendstation.bean.HelpAllBean;
@@ -881,5 +882,38 @@ public class FriendStationApplication extends Application {
         animation.setRepeatCount(1);
 
         isShowCoinAnimation = true;
+    }
+
+    public List<AudioBean> getLocalAudioList() {
+        return gson.fromJson(sp.getString("audio-list", ""), new TypeToken<List<AudioBean>>() {
+        }.getType());
+    }
+
+    public void saveLocalAudioToCache(String webUrl, String fileUrl) {
+        AudioBean newBean = new AudioBean();
+        newBean.setWebUrl(webUrl);
+        newBean.setFileUrl(fileUrl);
+        List<AudioBean> currentList = getLocalAudioList();
+        if (currentList == null) {
+            currentList = new ArrayList<>();
+        }
+        currentList.add(newBean);
+        String beanString = gson.toJson(currentList);
+        editor.putString("audio-list", beanString);
+        editor.commit();
+    }
+
+    public String getAudioCurrentUrl(String webUrl) {
+        List<AudioBean> currentList = getLocalAudioList();
+        if (currentList == null) {
+            currentList = new ArrayList<>();
+        }
+        for (int c = 0; c < currentList.size(); c++) {
+            if (currentList.get(c).getWebUrl().equals(webUrl)) {
+                return currentList.get(c).getFileUrl();
+            }
+        }
+
+        return webUrl;
     }
 }

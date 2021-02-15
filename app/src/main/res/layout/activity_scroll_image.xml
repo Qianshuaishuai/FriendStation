@@ -40,8 +40,7 @@
         android:id="@+id/main"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/layout_top"
-        android:src="@mipmap/test1" />
+        android:layout_below="@+id/layout_top" />
 
     <RelativeLayout
         android:layout_width="100dip"

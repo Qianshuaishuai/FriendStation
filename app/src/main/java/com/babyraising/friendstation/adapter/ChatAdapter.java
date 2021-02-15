@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.R;
+import com.babyraising.friendstation.bean.AudioLoadingBean;
 import com.babyraising.friendstation.bean.EmojiBean;
 import com.babyraising.friendstation.bean.TIMChatBean;
 import com.babyraising.friendstation.bean.TIMChatMessageBaseElementsBean;
@@ -68,11 +69,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
     private ChatActivity context;
     private List<EmojiBean> emojiList;
     private List<String> checkWordList;
+    private List<AudioLoadingBean> audioLoadingList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView leftSoundTip, rightSoundTip, leftRtcTip, rightRtcTip, leftGiftTip, rightGiftTip;
         TextView leftContentTxt, rightContentTxt, timeTxt;
-        ImageView leftIcon, leftIvContent, rightIcon, rightIvContent, leftGiftIcon, rightGiftIcon;
+        ImageView leftIcon, leftIvContent, rightIcon, rightIvContent, leftGiftIcon, rightGiftIcon, leftRtcLoading, rightRtcLoading, leftSoundIcon, rightSoundIcon;
         LinearLayout leftLayout, leftVoiceLayout, rightLayout, rightVoiceLayout, rightRtcLayout, leftRtcLayout, leftGiftLayout, rightGiftLayout, leftContentLayout, rightContentLayout;
 
 
@@ -85,6 +87,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             leftIcon = (ImageView) view.findViewById(R.id.left_icon);
             leftGiftIcon = (ImageView) view.findViewById(R.id.left_iv_gift);
             leftIvContent = (ImageView) view.findViewById(R.id.left_iv_content);
+            leftRtcLoading = (ImageView) view.findViewById(R.id.left_layout_loading);
+            rightRtcLoading = (ImageView) view.findViewById(R.id.right_layout_loading);
+            leftSoundIcon = (ImageView) view.findViewById(R.id.left_sound_icon);
+            rightSoundIcon = (ImageView) view.findViewById(R.id.right_sound_icon);
             leftLayout = (LinearLayout) view.findViewById(R.id.left_layout);
             leftVoiceLayout = (LinearLayout) view.findViewById(R.id.left_layout_voice);
             leftRtcLayout = (LinearLayout) view.findViewById(R.id.left_layout_rtc);
@@ -109,13 +115,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 
     }
 
-    public ChatAdapter(ChatActivity context, List<V2TIMMessage> mList, List<EmojiBean> emojiList, List<String> checkWordList, UserAllInfoBean selfUserInfoBean, UserAllInfoBean currentUserInfoBean) {
+    public ChatAdapter(ChatActivity context, List<V2TIMMessage> mList, List<EmojiBean> emojiList, List<String> checkWordList, UserAllInfoBean selfUserInfoBean, UserAllInfoBean currentUserInfoBean, List<AudioLoadingBean> audioLoadingList) {
         this.selfUserInfoBean = selfUserInfoBean;
         this.currentUserInfoBean = currentUserInfoBean;
         this.mList = mList;
         this.context = context;
         this.emojiList = emojiList;
         this.checkWordList = checkWordList;
+        this.audioLoadingList = audioLoadingList;
     }
 
     @Override
@@ -124,6 +131,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
+
+//    public void updateAudioLoading(List<AudioLoadingBean> newAudioLoadingList){
+//        this.audioLoadingList.clear();
+//        for(int n=0;n<newAudioLoadingList.size();n++){
+//            this.audioLoadingList.add(au)
+//        }
+//    }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
@@ -140,6 +154,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         holder.leftContentLayout.setVisibility(View.GONE);
         holder.rightContentLayout.setVisibility(View.GONE);
         holder.timeTxt.setVisibility(View.GONE);
+        holder.leftRtcLoading.setVisibility(View.GONE);
+        holder.rightRtcLoading.setVisibility(View.GONE);
+        holder.leftSoundIcon.setVisibility(View.GONE);
+        holder.rightSoundIcon.setVisibility(View.GONE);
         if (mList.get(position).getMessage().getReceiverUserID() == null) {
             holder.leftLayout.setVisibility(View.GONE);
             holder.rightLayout.setVisibility(View.VISIBLE);
@@ -236,14 +254,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 if (elements.get(0) instanceof SoundElement) {
                     holder.rightVoiceLayout.setVisibility(View.VISIBLE);
                     final SoundElement element = (SoundElement) elements.get(0);
-                    int showDur = element.getSoundDuration() / 1000;
-                    holder.rightSoundTip.setText(showDur + "s");
-                    holder.rightVoiceLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            context.playSound(element.getSoundDownloadUrl());
-                        }
-                    });
+//                    int showDur = element.getSoundDuration() / 1000;
+//                    holder.rightSoundTip.setText(showDur + "s");
+//                    holder.rightVoiceLayout.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            context.playSound(element.getSoundDownloadUrl());
+//                        }
+//                    });
 //                    try {
 //                        cachePlayer.setDataSource(element.getSoundDownloadUrl());
 //                        cachePlayer.prepare();
@@ -252,6 +270,22 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 //                        System.out.println("loading-sound:" + e.toString());
 //                        System.out.println("loading-sound:" + element.getSoundDownloadUrl());
 //                    }
+                    if (isAudioLoading(element.getSoundDownloadUrl())) {
+                        int showDur = element.getSoundDuration() / 1000;
+                        holder.rightSoundTip.setText(showDur + "s");
+                        holder.rightVoiceLayout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                context.playSound(element.getSoundDownloadUrl());
+                            }
+                        });
+                        holder.rightSoundIcon.setVisibility(View.VISIBLE);
+                        holder.rightSoundTip.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.rightSoundTip.setVisibility(View.INVISIBLE);
+                        holder.rightRtcLoading.setVisibility(View.VISIBLE);
+                        holder.rightSoundIcon.setVisibility(View.INVISIBLE);
+                    }
                 }
 
                 if (elements.get(0) instanceof CustomElement) {
@@ -385,14 +419,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     if (elements.get(0) instanceof SoundElement) {
                         holder.leftVoiceLayout.setVisibility(View.VISIBLE);
                         final SoundElement element = (SoundElement) elements.get(0);
-                        int showDur = element.getSoundDuration() / 1000;
-                        holder.leftSoundTip.setText(showDur + "s");
-                        holder.leftVoiceLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                context.playSound(element.getSoundDownloadUrl());
-                            }
-                        });
+//                        int showDur = element.getSoundDuration() / 1000;
+//                        holder.leftSoundTip.setText(showDur + "s");
+//                        holder.leftVoiceLayout.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                context.playSound(element.getSoundDownloadUrl());
+//                            }
+//                        });
 //                        try {
 //                            cachePlayer.setDataSource(element.getSoundDownloadUrl());
 //                            cachePlayer.prepare();
@@ -401,6 +435,23 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 //                            System.out.println("loading-sound:" + e.toString());
 //                            System.out.println("loading-sound:" + element.getSoundDownloadUrl());
 //                        }
+
+                        if (isAudioLoading(element.getSoundDownloadUrl())) {
+                            int showDur = element.getSoundDuration() / 1000;
+                            holder.leftSoundTip.setText(showDur + "s");
+                            holder.leftVoiceLayout.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    context.playSound(element.getSoundDownloadUrl());
+                                }
+                            });
+                            holder.leftSoundIcon.setVisibility(View.VISIBLE);
+                            holder.leftSoundTip.setVisibility(View.VISIBLE);
+                        } else {
+                            holder.leftSoundTip.setVisibility(View.INVISIBLE);
+                            holder.leftRtcLoading.setVisibility(View.VISIBLE);
+                            holder.leftSoundIcon.setVisibility(View.INVISIBLE);
+                        }
                     }
 
                     if (elements.get(0) instanceof CustomElement) {
@@ -469,13 +520,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                                     } else {
                                         String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
                                         String text = showContent.substring(0, emojiStartIndex);
+                                        for (int a = 0; a < emojiList.size(); a++) {
+                                            System.out.println("sdfsdfds:"+text);
+                                            while (text.indexOf(emojiList.get(a).getName()) != -1) {
+                                                String regexp1 = emojiList.get(a).getName().replace("[", "\\[").replace("]", "\\]");
+                                                ImageView imageView = new ImageView(context);
+                                                LinearLayout.LayoutParams params = new
+                                                        LinearLayout.LayoutParams(60, 60);
+                                                imageView.setLayoutParams(params);
+                                                x.image().bind(imageView, emojiList.get(a).getUrl());
+                                                holder.rightContentLayout.addView(imageView);
+                                                text = text.replaceFirst(regexp1, "");
+                                            }
+                                        }
                                         TextView textView = new TextView(context);
                                         textView.setText(text);
                                         textView.setTextSize(14);
                                         textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
                                         holder.rightContentLayout.addView(textView);
                                         showContent = showContent.replace(text, "");
-
                                         ImageView imageView = new ImageView(context);
                                         LinearLayout.LayoutParams params = new
                                                 LinearLayout.LayoutParams(60, 60);
@@ -538,14 +601,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                     if (elements.get(0) instanceof SoundElement) {
                         holder.rightVoiceLayout.setVisibility(View.VISIBLE);
                         final SoundElement element = (SoundElement) elements.get(0);
-                        int showDur = element.getSoundDuration() / 1000;
-                        holder.rightSoundTip.setText(showDur + "s");
-                        holder.rightVoiceLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                context.playSound(element.getSoundDownloadUrl());
-                            }
-                        });
+//                        int showDur = element.getSoundDuration() / 1000;
+//                        holder.rightSoundTip.setText(showDur + "s");
+//                        holder.rightVoiceLayout.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                context.playSound(element.getSoundDownloadUrl());
+//                            }
+//                        });
 //                        try {
 //                            cachePlayer.setDataSource(element.getSoundDownloadUrl());
 //                            cachePlayer.prepare();
@@ -554,6 +617,24 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
 //                            System.out.println("loading-sound:" + e.toString());
 //                            System.out.println("loading-sound:" + element.getSoundDownloadUrl());
 //                        }
+
+                        if (isAudioLoading(element.getSoundDownloadUrl())) {
+                            int showDur = element.getSoundDuration() / 1000;
+                            holder.rightSoundTip.setText(showDur + "s");
+                            holder.rightSoundTip.setVisibility(View.VISIBLE);
+                            holder.rightVoiceLayout.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    context.playSound(element.getSoundDownloadUrl());
+                                }
+                            });
+                            holder.rightSoundIcon.setVisibility(View.VISIBLE);
+                            holder.rightRtcLoading.setVisibility(View.GONE);
+                        } else {
+                            holder.rightSoundTip.setVisibility(View.INVISIBLE);
+                            holder.rightRtcLoading.setVisibility(View.VISIBLE);
+                            holder.rightSoundIcon.setVisibility(View.INVISIBLE);
+                        }
                     }
 
                     if (elements.get(0) instanceof CustomElement) {
@@ -622,6 +703,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                 holder.timeTxt.setVisibility(View.GONE);
             }
         }
+    }
+
+    private boolean isAudioLoading(String webUrl) {
+        for (int a = 0; a < audioLoadingList.size(); a++) {
+            if (audioLoadingList.get(a).getWebUrl().equals(webUrl)) {
+                return audioLoadingList.get(a).isComplete();
+            }
+        }
+
+        return false;
     }
 
     private String handleDate(long time) {

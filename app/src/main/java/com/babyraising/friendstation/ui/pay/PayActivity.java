@@ -179,7 +179,7 @@ public class PayActivity extends BaseActivity {
     @Event(R.id.layout_wechat)
     private void wechatlick(View view) {
         payType = 1;
-        cbWechat.setImageResource(R.drawable.shape_pay_checkbox_pay);
+        cbWechat.setImageResource(R.mipmap.common_selected);
         cbAli.setImageResource(R.mipmap.pay_cb_normal);
     }
 
@@ -187,7 +187,7 @@ public class PayActivity extends BaseActivity {
     private void alilick(View view) {
         payType = 2;
         cbWechat.setImageResource(R.mipmap.pay_cb_normal);
-        cbAli.setImageResource(R.drawable.shape_pay_checkbox_pay);
+        cbAli.setImageResource(R.mipmap.common_selected);
     }
 
     @Override

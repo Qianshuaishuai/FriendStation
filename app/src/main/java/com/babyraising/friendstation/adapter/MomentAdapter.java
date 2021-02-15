@@ -1,6 +1,5 @@
 package com.babyraising.friendstation.adapter;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -22,7 +21,6 @@ import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -111,13 +109,13 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
 
         switch (mList.get(position).getSex()) {
             case 0:
-                holder.sexIv.setImageResource(R.mipmap.common_female);
+                holder.sexIv.setImageResource(R.mipmap.common_male);
                 break;
             case 1:
-                holder.sexIv.setImageResource(R.mipmap.common_female);
+                holder.sexIv.setImageResource(R.mipmap.common_male);
                 break;
             case 2:
-                holder.sexIv.setImageResource(R.mipmap.common_male);
+                holder.sexIv.setImageResource(R.mipmap.common_female);
                 break;
         }
 

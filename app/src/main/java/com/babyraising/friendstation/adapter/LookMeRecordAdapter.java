@@ -17,7 +17,6 @@ import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -30,7 +29,7 @@ public class LookMeRecordAdapter extends RecyclerView.Adapter<LookMeRecordAdapte
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tip1Txt, tip2Txt, tip3Txt, signTxt, nameTxt;
         ImageView ivSelected, ivNormal, ivHead, ivSex;
-        LinearLayout mainLayout, rightLayout;
+        LinearLayout mainLayout, rightLayout, sexLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -46,6 +45,7 @@ public class LookMeRecordAdapter extends RecyclerView.Adapter<LookMeRecordAdapte
             ivSex = (ImageView) view.findViewById(R.id.sex);
             mainLayout = (LinearLayout) view.findViewById(R.id.layout_main);
             rightLayout = (LinearLayout) view.findViewById(R.id.layout_right);
+            sexLayout = (LinearLayout) view.findViewById(R.id.sex_layout);
         }
 
     }
@@ -82,7 +82,8 @@ public class LookMeRecordAdapter extends RecyclerView.Adapter<LookMeRecordAdapte
 //                    holder.nameTxt.setText(mList.get(position).getNickName());
 //                }
 
-                holder.ivSex.setImageResource(R.mipmap.common_female);
+                holder.ivSex.setImageResource(R.mipmap.common_male);
+                holder.sexLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_info_male_bg));
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
@@ -107,7 +108,8 @@ public class LookMeRecordAdapter extends RecyclerView.Adapter<LookMeRecordAdapte
 //                    holder.nameTxt.setText(mList.get(position).getNickName());
 //                }
 
-                holder.ivSex.setImageResource(R.mipmap.common_female);
+                holder.ivSex.setImageResource(R.mipmap.common_male);
+                holder.sexLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_info_male_bg));
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
@@ -132,7 +134,8 @@ public class LookMeRecordAdapter extends RecyclerView.Adapter<LookMeRecordAdapte
 //                    holder.nameTxt.setText(mList.get(position).getNickName());
 //                }
 
-                holder.ivSex.setImageResource(R.mipmap.common_male);
+                holder.ivSex.setImageResource(R.mipmap.common_female);
+                holder.sexLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_info_female_bg));
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
@@ -154,10 +157,10 @@ public class LookMeRecordAdapter extends RecyclerView.Adapter<LookMeRecordAdapte
         if (mList.get(position).getUserExtra() == null) {
             holder.tip2Txt.setVisibility(View.GONE);
             holder.tip3Txt.setVisibility(View.GONE);
-            holder.tip1Txt.setText("" + 0);
+            holder.tip1Txt.setText("" + 0 + "岁");
         } else {
             if (!TextUtils.isEmpty(mList.get(position).getUserExtra().getBirthday())) {
-                holder.tip1Txt.setText("" + getAge(mList.get(position).getUserExtra().getBirthday()));
+                holder.tip1Txt.setText("" + getAge(mList.get(position).getUserExtra().getBirthday()) + "岁");
                 holder.tip1Txt.setVisibility(View.VISIBLE);
             } else {
                 holder.tip1Txt.setVisibility(View.GONE);
@@ -177,9 +180,9 @@ public class LookMeRecordAdapter extends RecyclerView.Adapter<LookMeRecordAdapte
                 holder.tip3Txt.setVisibility(View.GONE);
             }
 
-            if (!TextUtils.isEmpty(mList.get(position).getUserExtra().getIntroduce())){
+            if (!TextUtils.isEmpty(mList.get(position).getUserExtra().getIntroduce())) {
                 holder.signTxt.setText(mList.get(position).getUserExtra().getIntroduce());
-            }else{
+            } else {
                 holder.signTxt.setText("用户暂未设置签名");
             }
         }

@@ -10,10 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.babyraising.friendstation.R;
-import com.babyraising.friendstation.bean.UserLookMeBean;
 import com.babyraising.friendstation.bean.UserMainPageBean;
 import com.babyraising.friendstation.ui.main.CloseActivity;
-import com.babyraising.friendstation.ui.main.LookMeRecordActivity;
 
 import org.xutils.common.util.DensityUtil;
 import org.xutils.image.ImageOptions;
@@ -31,7 +29,7 @@ public class CloseRecordAdapter extends RecyclerView.Adapter<CloseRecordAdapter.
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tip1Txt, tip2Txt, tip3Txt, signTxt, nameTxt;
         ImageView ivSelected, ivNormal, ivHead, ivSex;
-        LinearLayout mainLayout, rightLayout;
+        LinearLayout mainLayout, rightLayout,sexLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -47,6 +45,7 @@ public class CloseRecordAdapter extends RecyclerView.Adapter<CloseRecordAdapter.
             ivSex = (ImageView) view.findViewById(R.id.sex);
             mainLayout = (LinearLayout) view.findViewById(R.id.layout_main);
             rightLayout = (LinearLayout) view.findViewById(R.id.layout_right);
+            sexLayout = (LinearLayout) view.findViewById(R.id.sex_layout);
         }
 
     }
@@ -83,7 +82,8 @@ public class CloseRecordAdapter extends RecyclerView.Adapter<CloseRecordAdapter.
 //                    holder.nameTxt.setText(mList.get(position).getNickName());
 //                }
 
-                holder.ivSex.setImageResource(R.mipmap.common_female);
+                holder.ivSex.setImageResource(R.mipmap.common_male);
+                holder.sexLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_info_male_bg));
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
@@ -108,8 +108,8 @@ public class CloseRecordAdapter extends RecyclerView.Adapter<CloseRecordAdapter.
 //                    holder.nameTxt.setText(mList.get(position).getNickName());
 //                }
 
-                holder.ivSex.setImageResource(R.mipmap.common_female);
-
+                holder.ivSex.setImageResource(R.mipmap.common_male);
+                holder.sexLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_info_male_bg));
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
                             setRadius(DensityUtil.dip2px(8)).setCrop(true).build();
@@ -133,7 +133,8 @@ public class CloseRecordAdapter extends RecyclerView.Adapter<CloseRecordAdapter.
 //                    holder.nameTxt.setText(mList.get(position).getNickName());
 //                }
 
-                holder.ivSex.setImageResource(R.mipmap.common_male);
+                holder.ivSex.setImageResource(R.mipmap.common_female);
+                holder.sexLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_info_female_bg));
 
                 if (!TextUtils.isEmpty(mList.get(position).getAvatar())) {
                     ImageOptions options = new ImageOptions.Builder().
@@ -155,7 +156,7 @@ public class CloseRecordAdapter extends RecyclerView.Adapter<CloseRecordAdapter.
         if (mList.get(position).getUserExtra() == null) {
             holder.tip2Txt.setVisibility(View.GONE);
             holder.tip3Txt.setVisibility(View.GONE);
-            holder.tip1Txt.setText("" + 0);
+            holder.tip1Txt.setText("" + 0 + "岁");
         } else {
             if (!TextUtils.isEmpty(mList.get(position).getUserExtra().getBirthday())) {
                 holder.tip1Txt.setText("" + getAge(mList.get(position).getUserExtra().getBirthday()));

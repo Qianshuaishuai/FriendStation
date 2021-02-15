@@ -1,11 +1,13 @@
 package com.babyraising.friendstation.ui.user;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -282,6 +284,76 @@ public class CodeActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable editable) {
 
+            }
+        });
+
+        code1.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                //You can identify which key pressed buy checking keyCode value with KeyEvent.KEYCODE_
+                if(keyCode == KeyEvent.KEYCODE_DEL) {
+                    if (!TextUtils.isEmpty(code1.getText().toString())){
+                        code1.setText("");
+                    }
+                }
+                return false;
+            }
+        });
+
+        code2.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                //You can identify which key pressed buy checking keyCode value with KeyEvent.KEYCODE_
+                if(keyCode == KeyEvent.KEYCODE_DEL) {
+                    code2.setText("");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            code1.setFocusable(true);
+                            code1.setFocusableInTouchMode(true);
+                            code1.requestFocus();
+                        }
+                    },50);
+                }
+                return false;
+            }
+        });
+
+        code3.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                //You can identify which key pressed buy checking keyCode value with KeyEvent.KEYCODE_
+                if(keyCode == KeyEvent.KEYCODE_DEL) {
+                    code3.setText("");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            code2.setFocusable(true);
+                            code2.setFocusableInTouchMode(true);
+                            code2.requestFocus();
+                        }
+                    },50);
+                }
+                return false;
+            }
+        });
+
+        code4.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                //You can identify which key pressed buy checking keyCode value with KeyEvent.KEYCODE_
+                if(keyCode == KeyEvent.KEYCODE_DEL) {
+                    code4.setText("");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            code3.setFocusable(true);
+                            code3.setFocusableInTouchMode(true);
+                            code3.requestFocus();
+                        }
+                    },50);
+                }
+                return false;
             }
         });
     }

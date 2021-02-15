@@ -80,6 +80,27 @@ public class MomentFragment extends BaseFragment {
     @ViewInject(R.id.main_layout)
     private RelativeLayout mainLayout;
 
+    @Event(R.id.main_layout)
+    private void mainLayoutClick(View view){
+        if (shareAllLayout.getVisibility() == View.VISIBLE){
+            shareAllLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Event(R.id.content_layout)
+    private void contentLayoutClick(View view){
+        if (shareAllLayout.getVisibility() == View.VISIBLE){
+            shareAllLayout.setVisibility(View.GONE);
+        }
+    }
+
+    @Event(R.id.layout_share_all)
+    private void shareLayoutClick(View view){
+        if (shareAllLayout.getVisibility() == View.VISIBLE){
+            shareAllLayout.setVisibility(View.GONE);
+        }
+    }
+
     @ViewInject(R.id.type_tv1)
     private TextView typeTv1;
 

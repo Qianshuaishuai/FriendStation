@@ -10,7 +10,7 @@
         android:layout_width="48dip"
         android:layout_height="48dip"
         android:layout_marginLeft="6dip"
-        android:src="@mipmap/recharge_icon_big" />
+        android:src="@mipmap/recharge_icon_small" />
 
     <LinearLayout
         android:layout_width="wrap_content"

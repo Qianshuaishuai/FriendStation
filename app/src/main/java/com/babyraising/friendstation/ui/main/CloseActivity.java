@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -53,16 +54,16 @@ public class CloseActivity extends BaseActivity {
     private void tv1Click(View view) {
         if (type != 1) {
             tv1.setTextColor(getResources().getColor(R.color.colorShowSelected));
-            tv1.setTextSize(17);
+            tv1.setTextSize(TypedValue.COMPLEX_UNIT_DIP,18);
 
             tv2.setTextColor(getResources().getColor(R.color.colorShowNormal));
-            tv2.setTextSize(15);
+            tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
 
             tv3.setTextColor(getResources().getColor(R.color.colorShowNormal));
-            tv3.setTextSize(15);
+            tv3.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
 
             tv4.setTextColor(getResources().getColor(R.color.colorShowNormal));
-            tv4.setTextSize(15);
+            tv4.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
 
             type = 1;
 
@@ -74,16 +75,16 @@ public class CloseActivity extends BaseActivity {
     private void tv2Click(View view) {
         if (type != 2) {
             tv1.setTextColor(getResources().getColor(R.color.colorShowNormal));
-            tv1.setTextSize(15);
+            tv1.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
 
             tv2.setTextColor(getResources().getColor(R.color.colorShowSelected));
-            tv2.setTextSize(17);
+            tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP,18);
 
             tv3.setTextColor(getResources().getColor(R.color.colorShowNormal));
-            tv3.setTextSize(15);
+            tv3.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
 
             tv4.setTextColor(getResources().getColor(R.color.colorShowNormal));
-            tv4.setTextSize(15);
+            tv4.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
 
             type = 2;
 
@@ -95,16 +96,16 @@ public class CloseActivity extends BaseActivity {
     private void tv3Click(View view) {
         if (type != 3) {
             tv1.setTextColor(getResources().getColor(R.color.colorShowNormal));
-            tv1.setTextSize(15);
+            tv1.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
 
             tv2.setTextColor(getResources().getColor(R.color.colorShowNormal));
-            tv2.setTextSize(17);
+            tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
 
             tv3.setTextColor(getResources().getColor(R.color.colorShowSelected));
-            tv3.setTextSize(15);
+            tv3.setTextSize(TypedValue.COMPLEX_UNIT_DIP,18);
 
             tv4.setTextColor(getResources().getColor(R.color.colorShowNormal));
-            tv4.setTextSize(15);
+            tv4.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
 
             type = 3;
 
@@ -116,16 +117,16 @@ public class CloseActivity extends BaseActivity {
     private void tv4Click(View view) {
         if (type != 4) {
             tv1.setTextColor(getResources().getColor(R.color.colorShowNormal));
-            tv1.setTextSize(15);
+            tv1.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
 
             tv2.setTextColor(getResources().getColor(R.color.colorShowNormal));
-            tv2.setTextSize(15);
+            tv2.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
 
             tv3.setTextColor(getResources().getColor(R.color.colorShowNormal));
-            tv3.setTextSize(15);
+            tv3.setTextSize(TypedValue.COMPLEX_UNIT_DIP,16);
 
             tv4.setTextColor(getResources().getColor(R.color.colorShowSelected));
-            tv4.setTextSize(17);
+            tv4.setTextSize(TypedValue.COMPLEX_UNIT_DIP,18);
 
             type = 4;
 

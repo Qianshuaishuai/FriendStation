@@ -7,7 +7,7 @@ android {
         minSdkVersion 17
         targetSdkVersion 29
         versionCode 2
-        versionName "1.1.0"
+        versionName "1.2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "arm64-v8a"
@@ -67,6 +67,8 @@ dependencies {
     implementation 'com.jaywei:compresstool:1.2.1'
     implementation 'com.huxq17.xrefreshview:xrefreshview:3.6.9'
     implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'com.github.loonggg:RecyclerViewBanner:v1.2.3'
 //    implementation (name: 'alipaySdk-15.6.8-20191021122514', ext: 'aar')
 //    compile (name: 'alipaysdk-15.8.01.210112203525', ext: 'aar')
 //    implementation 'com.tencent.imsdk:tuikit:5.0.10'
