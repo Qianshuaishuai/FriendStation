@@ -33,7 +33,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTxt, tip1Txt, contentTxt, countTxt, addressTxt;
         ImageView headIv, contentImgIv, shareIv, likeIv, commentIv, sexIv;
-        LinearLayout rightLayout;
+        LinearLayout rightLayout,sexLayout;
 
         public ViewHolder(View view) {
             super(view);
@@ -48,6 +48,7 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             shareIv = (ImageView) view.findViewById(R.id.share);
             likeIv = (ImageView) view.findViewById(R.id.like);
             rightLayout = (LinearLayout) view.findViewById(R.id.layout_right);
+            sexLayout = (LinearLayout) view.findViewById(R.id.sex_layout);
         }
 
     }
@@ -105,17 +106,20 @@ public class MomentAdapter extends RecyclerView.Adapter<MomentAdapter.ViewHolder
             holder.nameTxt.setText(mList.get(position).getNickname());
         }
 
-        holder.tip1Txt.setText("" + getAge(mList.get(position).getBirthday()));
+        holder.tip1Txt.setText("" + getAge(mList.get(position).getBirthday())+"岁");
 
         switch (mList.get(position).getSex()) {
             case 0:
                 holder.sexIv.setImageResource(R.mipmap.common_male);
+                holder.sexLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_info_male_bg));
                 break;
             case 1:
                 holder.sexIv.setImageResource(R.mipmap.common_male);
+                holder.sexLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_info_male_bg));
                 break;
             case 2:
                 holder.sexIv.setImageResource(R.mipmap.common_female);
+                holder.sexLayout.setBackground(context.getResources().getDrawable(R.drawable.shape_info_female_bg));
                 break;
         }
 

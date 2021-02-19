@@ -122,6 +122,8 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     private List<AudioLoadingBean> audioLoadingList = new ArrayList<>();
 
+    private boolean isFirstShow = true;
+
     private int voiceOrTextStatus = 0;
 
     private AlertDialog voiceLoadingTip;
@@ -832,6 +834,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         tip3.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         tip4.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
 
+        chatListRecycleView.setHasFixedSize(true);
+        chatListRecycleView.setNestedScrollingEnabled(false);
+
 //        content.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 //            @Override
 //            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -956,7 +961,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                     public void run() {
                         content.requestFocus();
                     }
-                }, 200);
+                }, 10);
             }
 
             @Override
@@ -1176,7 +1181,12 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 });
 
                 adapter.notifyDataSetChanged();
-                goToListBottom();
+//                goToListBottom();
+                if (isFirstShow) {
+                    isFirstShow = false;
+                } else {
+                    goToListBottom();
+                }
 
 //                if (anim != null) {
 //                    anim.stopAnim();
@@ -1572,23 +1582,74 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 //                }, 200);
 //            }
 //        });
-        scrollview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                scrollview.post(new Runnable() {
-                    public void run() {
-                        scrollview.fullScroll(View.FOCUS_DOWN);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
+//        scrollview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                scrollview.post(new Runnable() {
+//                    public void run() {
+//                        scrollview.fullScroll(View.FOCUS_DOWN);
+//                        new Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                content.requestFocus();
+//                            }
+//                        }, 100);
+//                    }
+//                });
+//            }
+//        });
+        View child = scrollview.getChildAt(0);
+        if (child != null) {
+            int childHeight = child.getHeight();
+            if (scrollview.getHeight() < childHeight) {
+//                scrollview.post(new Runnable() {
+//                    public void run() {
+//                        scrollview.fullScroll(View.FOCUS_DOWN);
+//                        new Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                content.requestFocus();
+//                            }
+//                        }, 100);
+//                    }
+//                });
+                scrollview.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        scrollview.post(new Runnable() {
                             public void run() {
-                                content.requestFocus();
+                                if (scrollview.getScrollY() > 0) {
+                                    scrollview.fullScroll(View.FOCUS_DOWN);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            content.requestFocus();
+                                        }
+                                    }, 100);
+                                } else {
+//                                    new Handler().postDelayed(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            if (!refreshLayout.isRefreshing()) {
+//                                                scrollview.fullScroll(View.FOCUS_DOWN);
+//                                                new Handler().postDelayed(new Runnable() {
+//                                                    @Override
+//                                                    public void run() {
+//                                                        content.requestFocus();
+//                                                    }
+//                                                }, 100);
+//                                            }
+//                                        }
+//                                    }, 50);
+//                                    scrollview.smoothScrollTo(1,1);
+                                }
+
                             }
-                        }, 200);
+                        });
                     }
                 });
             }
-        });
-
+        }
     }
 
     public void goToListBottomForSpecialImage() {
@@ -1637,7 +1698,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             public void onGlobalLayout() {
                 scrollview.post(new Runnable() {
                     public void run() {
-                        scrollview.fullScroll(View.FOCUS_DOWN);
+                        if (scrollview.getScrollY() > 0) {
+                            scrollview.fullScroll(View.FOCUS_DOWN);
+                        }
                     }
                 });
             }

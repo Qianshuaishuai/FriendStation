@@ -258,7 +258,7 @@ public class ForgetActivity extends BaseActivity {
                             code1.setFocusableInTouchMode(true);
                             code1.requestFocus();
                         }
-                    },50);
+                    },1);
                 }
                 return false;
             }
@@ -277,7 +277,7 @@ public class ForgetActivity extends BaseActivity {
                             code2.setFocusableInTouchMode(true);
                             code2.requestFocus();
                         }
-                    },50);
+                    },1);
                 }
                 return false;
             }
@@ -296,7 +296,7 @@ public class ForgetActivity extends BaseActivity {
                             code3.setFocusableInTouchMode(true);
                             code3.requestFocus();
                         }
-                    },50);
+                    },1);
                 }
                 return false;
             }

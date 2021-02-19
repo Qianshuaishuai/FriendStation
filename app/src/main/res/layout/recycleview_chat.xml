@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <TextView
@@ -28,7 +29,7 @@
             android:layout_marginLeft="15dip"
             android:layout_marginRight="15dip" />
 
-        <LinearLayout
+        <com.babyraising.friendstation.view.WarpLinearLayout
             android:id="@+id/layout_left_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,7 +41,8 @@
             android:paddingTop="10dip"
             android:paddingRight="15dip"
             android:paddingBottom="10dip"
-            android:visibility="gone"></LinearLayout>
+            android:visibility="gone"
+            app:grivate="left"></com.babyraising.friendstation.view.WarpLinearLayout>
 
         <TextView
             android:id="@+id/left_content"
@@ -162,7 +164,7 @@
         android:gravity="right"
         android:orientation="horizontal">
 
-        <LinearLayout
+        <com.babyraising.friendstation.view.WarpLinearLayout
             android:id="@+id/layout_right_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -174,7 +176,8 @@
             android:paddingTop="10dip"
             android:paddingRight="15dip"
             android:paddingBottom="10dip"
-            android:visibility="gone"></LinearLayout>
+            android:visibility="gone"
+            app:grivate="left"></com.babyraising.friendstation.view.WarpLinearLayout>
 
         <TextView
             android:id="@+id/right_content"

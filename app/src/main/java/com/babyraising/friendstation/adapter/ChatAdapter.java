@@ -33,6 +33,7 @@ import com.babyraising.friendstation.ui.main.ChatActivity;
 import com.babyraising.friendstation.util.ChatUtil;
 import com.babyraising.friendstation.util.DatesUtil;
 import com.babyraising.friendstation.util.TimeUtils;
+import com.babyraising.friendstation.view.WarpLinearLayout;
 import com.google.gson.Gson;
 import com.tencent.imsdk.message.CustomElement;
 import com.tencent.imsdk.message.ImageElement;
@@ -75,7 +76,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         TextView leftSoundTip, rightSoundTip, leftRtcTip, rightRtcTip, leftGiftTip, rightGiftTip;
         TextView leftContentTxt, rightContentTxt, timeTxt;
         ImageView leftIcon, leftIvContent, rightIcon, rightIvContent, leftGiftIcon, rightGiftIcon, leftRtcLoading, rightRtcLoading, leftSoundIcon, rightSoundIcon;
-        LinearLayout leftLayout, leftVoiceLayout, rightLayout, rightVoiceLayout, rightRtcLayout, leftRtcLayout, leftGiftLayout, rightGiftLayout, leftContentLayout, rightContentLayout;
+        LinearLayout leftLayout, leftVoiceLayout, rightLayout, rightVoiceLayout, rightRtcLayout, leftRtcLayout, leftGiftLayout, rightGiftLayout;
+        WarpLinearLayout leftContentLayout,rightContentLayout;
 
 
         public ViewHolder(View view) {
@@ -95,7 +97,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             leftVoiceLayout = (LinearLayout) view.findViewById(R.id.left_layout_voice);
             leftRtcLayout = (LinearLayout) view.findViewById(R.id.left_layout_rtc);
             leftGiftLayout = (LinearLayout) view.findViewById(R.id.layout_gift_left);
-            leftContentLayout = (LinearLayout) view.findViewById(R.id.layout_left_content);
+            leftContentLayout = (WarpLinearLayout) view.findViewById(R.id.layout_left_content);
 
             rightContentTxt = (TextView) view.findViewById(R.id.right_content);
             rightSoundTip = (TextView) view.findViewById(R.id.right_sound_tip);
@@ -108,7 +110,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
             rightVoiceLayout = (LinearLayout) view.findViewById(R.id.right_layout_voice);
             rightRtcLayout = (LinearLayout) view.findViewById(R.id.right_layout_rtc);
             rightGiftLayout = (LinearLayout) view.findViewById(R.id.layout_gift_right);
-            rightContentLayout = (LinearLayout) view.findViewById(R.id.layout_right_content);
+            rightContentLayout = (WarpLinearLayout) view.findViewById(R.id.layout_right_content);
 
             timeTxt = (TextView) view.findViewById(R.id.time);
         }
@@ -169,40 +171,87 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                         holder.rightContentLayout.removeAllViews();
                         String showContent = checkContent(((TextElement) elements.get(0)).getTextContent());
                         boolean isHaveEmoji = false;
-                        for (int e = 0; e < emojiList.size(); e++) {
-                            while (showContent.indexOf(emojiList.get(e).getName()) != -1) {
-                                isHaveEmoji = true;
-                                int emojiStartIndex = showContent.indexOf(emojiList.get(e).getName());
-                                if (emojiStartIndex == 0) {
-                                    String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
-                                    ImageView imageView = new ImageView(context);
-                                    LinearLayout.LayoutParams params = new
-                                            LinearLayout.LayoutParams(60, 60);
-                                    imageView.setLayoutParams(params);
-                                    x.image().bind(imageView, emojiList.get(e).getUrl());
-                                    holder.rightContentLayout.addView(imageView);
-                                    showContent = showContent.replaceFirst(regexp, "");
-                                } else {
-                                    String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
-                                    String text = showContent.substring(0, emojiStartIndex);
+//                        for (int e = 0; e < emojiList.size(); e++) {
+//                            while (showContent.indexOf(emojiList.get(e).getName()) != -1) {
+//                                isHaveEmoji = true;
+//                                int emojiStartIndex = showContent.indexOf(emojiList.get(e).getName());
+//                                if (emojiStartIndex == 0) {
+//                                    String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+//                                    ImageView imageView = new ImageView(context);
+//                                    LinearLayout.LayoutParams params = new
+//                                            LinearLayout.LayoutParams(60, 60);
+//                                    imageView.setLayoutParams(params);
+//                                    x.image().bind(imageView, emojiList.get(e).getUrl());
+//                                    holder.rightContentLayout.addView(imageView);
+//                                    showContent = showContent.replaceFirst(regexp, "");
+//                                } else {
+//                                    String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+//                                    String text = showContent.substring(0, emojiStartIndex);
+//                                    TextView textView = new TextView(context);
+//                                    textView.setText(text);
+//                                    textView.setTextSize(14);
+//                                    textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
+//                                    holder.rightContentLayout.addView(textView);
+//                                    showContent = showContent.replace(text, "");
+//
+//                                    ImageView imageView = new ImageView(context);
+//                                    LinearLayout.LayoutParams params = new
+//                                            LinearLayout.LayoutParams(60, 60);
+//                                    imageView.setLayoutParams(params);
+//                                    x.image().bind(imageView, emojiList.get(e).getUrl());
+//                                    holder.rightContentLayout.addView(imageView);
+//                                    showContent = showContent.replaceFirst(regexp, "");
+//                                }
+//                            }
+////
+////
+//                        }
+
+
+                        String checkContent = checkContent(((TextElement) elements.get(0)).getTextContent());
+                        String checkRegexp = "\\[.*?\\]";
+                        Pattern pattern = Pattern.compile(checkRegexp);
+                        Matcher matcher = pattern.matcher(checkContent);
+                        while (matcher.find()) {
+                            isHaveEmoji = true;
+                            String name = matcher.group();
+                            String url = "";
+                            for (int e = 0; e < emojiList.size(); e++) {
+                                if (name.equals(emojiList.get(e).getName())) {
+                                    url = emojiList.get(e).getUrl();
+                                }
+                            }
+                            int emojiStartIndex = showContent.indexOf(name);
+                            if (emojiStartIndex == 0 && !TextUtils.isEmpty(url)) {
+                                String regexp = name.replace("[", "\\[").replace("]", "\\]");
+                                ImageView imageView = new ImageView(context);
+                                LinearLayout.LayoutParams params = new
+                                        LinearLayout.LayoutParams(60, 60);
+                                imageView.setLayoutParams(params);
+                                x.image().bind(imageView, url);
+                                holder.rightContentLayout.addView(imageView);
+                                showContent = showContent.replaceFirst(regexp, "");
+                            } else {
+                                String regexp = name.replace("[", "\\[").replace("]", "\\]");
+                                String text = showContent.substring(0, emojiStartIndex);
+
+                                if (!TextUtils.isEmpty(text)) {
                                     TextView textView = new TextView(context);
                                     textView.setText(text);
                                     textView.setTextSize(14);
                                     textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
                                     holder.rightContentLayout.addView(textView);
                                     showContent = showContent.replace(text, "");
-
                                     ImageView imageView = new ImageView(context);
                                     LinearLayout.LayoutParams params = new
                                             LinearLayout.LayoutParams(60, 60);
                                     imageView.setLayoutParams(params);
-                                    x.image().bind(imageView, emojiList.get(e).getUrl());
+                                    x.image().bind(imageView, url);
                                     holder.rightContentLayout.addView(imageView);
                                     showContent = showContent.replaceFirst(regexp, "");
                                 }
                             }
-//
-//
+
                         }
 
                         if (!isHaveEmoji || !TextUtils.isEmpty(showContent)) {
@@ -337,43 +386,89 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             holder.leftContentLayout.removeAllViews();
                             String showContent = checkContent(((TextElement) elements.get(0)).getTextContent());
                             boolean isHaveEmoji = false;
-                            for (int e = 0; e < emojiList.size(); e++) {
-                                int brokenInt = 0;
-                                while (showContent.indexOf(emojiList.get(e).getName()) != -1 && brokenInt <= 100) {
-                                    isHaveEmoji = true;
-                                    int emojiStartIndex = showContent.indexOf(emojiList.get(e).getName());
-                                    if (emojiStartIndex == 0) {
-                                        String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
-                                        ImageView imageView = new ImageView(context);
-                                        LinearLayout.LayoutParams params = new
-                                                LinearLayout.LayoutParams(60, 60);
-                                        imageView.setLayoutParams(params);
-                                        x.image().bind(imageView, emojiList.get(e).getUrl());
-                                        holder.leftContentLayout.addView(imageView);
-                                        showContent = showContent.replaceFirst(regexp, "");
-                                    } else {
-                                        String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
-                                        String text = showContent.substring(0, emojiStartIndex);
+//                            for (int e = 0; e < emojiList.size(); e++) {
+//                                int brokenInt = 0;
+//                                while (showContent.indexOf(emojiList.get(e).getName()) != -1 && brokenInt <= 100) {
+//                                    isHaveEmoji = true;
+//                                    int emojiStartIndex = showContent.indexOf(emojiList.get(e).getName());
+//                                    if (emojiStartIndex == 0) {
+//                                        String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+//                                        ImageView imageView = new ImageView(context);
+//                                        LinearLayout.LayoutParams params = new
+//                                                LinearLayout.LayoutParams(60, 60);
+//                                        imageView.setLayoutParams(params);
+//                                        x.image().bind(imageView, emojiList.get(e).getUrl());
+//                                        holder.leftContentLayout.addView(imageView);
+//                                        showContent = showContent.replaceFirst(regexp, "");
+//                                    } else {
+//                                        String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+//                                        String text = showContent.substring(0, emojiStartIndex);
+//                                        TextView textView = new TextView(context);
+//                                        textView.setText(text);
+//                                        textView.setTextSize(14);
+//                                        textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
+//                                        holder.leftContentLayout.addView(textView);
+//                                        showContent = showContent.replace(text, "");
+//
+//                                        ImageView imageView = new ImageView(context);
+//                                        LinearLayout.LayoutParams params = new
+//                                                LinearLayout.LayoutParams(60, 60);
+//                                        imageView.setLayoutParams(params);
+//                                        x.image().bind(imageView, emojiList.get(e).getUrl());
+//                                        holder.leftContentLayout.addView(imageView);
+//                                        showContent = showContent.replaceFirst(regexp, "");
+//                                    }
+//
+//                                    brokenInt++;
+//                                }
+////
+////
+//                            }
+
+                            String checkContent = checkContent(((TextElement) elements.get(0)).getTextContent());
+                            String checkRegexp = "\\[.*?\\]";
+                            Pattern pattern = Pattern.compile(checkRegexp);
+                            Matcher matcher = pattern.matcher(checkContent);
+                            while (matcher.find()) {
+                                isHaveEmoji = true;
+                                String name = matcher.group();
+                                String url = "";
+                                for (int e = 0; e < emojiList.size(); e++) {
+                                    if (name.equals(emojiList.get(e).getName())) {
+                                        url = emojiList.get(e).getUrl();
+                                    }
+                                }
+                                int emojiStartIndex = showContent.indexOf(name);
+                                if (emojiStartIndex == 0 && !TextUtils.isEmpty(url)) {
+                                    String regexp = name.replace("[", "\\[").replace("]", "\\]");
+                                    ImageView imageView = new ImageView(context);
+                                    LinearLayout.LayoutParams params = new
+                                            LinearLayout.LayoutParams(60, 60);
+                                    imageView.setLayoutParams(params);
+                                    x.image().bind(imageView, url);
+                                    holder.leftContentLayout.addView(imageView);
+                                    showContent = showContent.replaceFirst(regexp, "");
+                                } else {
+                                    String regexp = name.replace("[", "\\[").replace("]", "\\]");
+                                    String text = showContent.substring(0, emojiStartIndex);
+
+                                    if (!TextUtils.isEmpty(text)) {
                                         TextView textView = new TextView(context);
                                         textView.setText(text);
                                         textView.setTextSize(14);
                                         textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
                                         holder.leftContentLayout.addView(textView);
                                         showContent = showContent.replace(text, "");
-
                                         ImageView imageView = new ImageView(context);
                                         LinearLayout.LayoutParams params = new
                                                 LinearLayout.LayoutParams(60, 60);
                                         imageView.setLayoutParams(params);
-                                        x.image().bind(imageView, emojiList.get(e).getUrl());
+                                        x.image().bind(imageView, url);
                                         holder.leftContentLayout.addView(imageView);
                                         showContent = showContent.replaceFirst(regexp, "");
                                     }
-
-                                    brokenInt++;
                                 }
-//
-//
+
                             }
 
                             if (!isHaveEmoji || !TextUtils.isEmpty(showContent)) {
@@ -504,35 +599,82 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                             holder.rightContentLayout.removeAllViews();
                             String showContent = checkContent(((TextElement) elements.get(0)).getTextContent());
                             boolean isHaveEmoji = false;
-                            for (int e = 0; e < emojiList.size(); e++) {
-                                while (showContent.indexOf(emojiList.get(e).getName()) != -1) {
-                                    isHaveEmoji = true;
-                                    int emojiStartIndex = showContent.indexOf(emojiList.get(e).getName());
-                                    if (emojiStartIndex == 0) {
-                                        String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
-                                        ImageView imageView = new ImageView(context);
-                                        LinearLayout.LayoutParams params = new
-                                                LinearLayout.LayoutParams(60, 60);
-                                        imageView.setLayoutParams(params);
-                                        x.image().bind(imageView, emojiList.get(e).getUrl());
-                                        holder.rightContentLayout.addView(imageView);
-                                        showContent = showContent.replaceFirst(regexp, "");
-                                    } else {
-                                        String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
-                                        String text = showContent.substring(0, emojiStartIndex);
-                                        for (int a = 0; a < emojiList.size(); a++) {
-                                            System.out.println("sdfsdfds:"+text);
-                                            while (text.indexOf(emojiList.get(a).getName()) != -1) {
-                                                String regexp1 = emojiList.get(a).getName().replace("[", "\\[").replace("]", "\\]");
-                                                ImageView imageView = new ImageView(context);
-                                                LinearLayout.LayoutParams params = new
-                                                        LinearLayout.LayoutParams(60, 60);
-                                                imageView.setLayoutParams(params);
-                                                x.image().bind(imageView, emojiList.get(a).getUrl());
-                                                holder.rightContentLayout.addView(imageView);
-                                                text = text.replaceFirst(regexp1, "");
-                                            }
-                                        }
+//                            for (int e = 0; e < emojiList.size(); e++) {
+//                                while (showContent.indexOf(emojiList.get(e).getName()) != -1) {
+//                                    isHaveEmoji = true;
+//                                    int emojiStartIndex = showContent.indexOf(emojiList.get(e).getName());
+//                                    if (emojiStartIndex == 0) {
+//                                        String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+//                                        ImageView imageView = new ImageView(context);
+//                                        LinearLayout.LayoutParams params = new
+//                                                LinearLayout.LayoutParams(60, 60);
+//                                        imageView.setLayoutParams(params);
+//                                        x.image().bind(imageView, emojiList.get(e).getUrl());
+//                                        holder.rightContentLayout.addView(imageView);
+//                                        showContent = showContent.replaceFirst(regexp, "");
+//                                    } else {
+//                                        String regexp = emojiList.get(e).getName().replace("[", "\\[").replace("]", "\\]");
+//                                        String text = showContent.substring(0, emojiStartIndex);
+//                                        for (int a = 0; a < emojiList.size(); a++) {
+//                                            System.out.println("sdfsdfds:"+text);
+//                                            while (text.indexOf(emojiList.get(a).getName()) != -1) {
+//                                                String regexp1 = emojiList.get(a).getName().replace("[", "\\[").replace("]", "\\]");
+//                                                ImageView imageView = new ImageView(context);
+//                                                LinearLayout.LayoutParams params = new
+//                                                        LinearLayout.LayoutParams(60, 60);
+//                                                imageView.setLayoutParams(params);
+//                                                x.image().bind(imageView, emojiList.get(a).getUrl());
+//                                                holder.rightContentLayout.addView(imageView);
+//                                                text = text.replaceFirst(regexp1, "");
+//                                            }
+//                                        }
+//                                        TextView textView = new TextView(context);
+//                                        textView.setText(text);
+//                                        textView.setTextSize(14);
+//                                        textView.setTextColor(context.getResources().getColor(R.color.colorInviteSelected));
+//                                        holder.rightContentLayout.addView(textView);
+//                                        showContent = showContent.replace(text, "");
+//                                        ImageView imageView = new ImageView(context);
+//                                        LinearLayout.LayoutParams params = new
+//                                                LinearLayout.LayoutParams(60, 60);
+//                                        imageView.setLayoutParams(params);
+//                                        x.image().bind(imageView, emojiList.get(e).getUrl());
+//                                        holder.rightContentLayout.addView(imageView);
+//                                        showContent = showContent.replaceFirst(regexp, "");
+//                                    }
+//                                }
+//
+//
+//                            }
+
+                            String checkContent = checkContent(((TextElement) elements.get(0)).getTextContent());
+                            String checkRegexp = "\\[.*?\\]";
+                            Pattern pattern = Pattern.compile(checkRegexp);
+                            Matcher matcher = pattern.matcher(checkContent);
+                            while (matcher.find()) {
+                                isHaveEmoji = true;
+                                String name = matcher.group();
+                                String url = "";
+                                for (int e = 0; e < emojiList.size(); e++) {
+                                    if (name.equals(emojiList.get(e).getName())) {
+                                        url = emojiList.get(e).getUrl();
+                                    }
+                                }
+                                int emojiStartIndex = showContent.indexOf(name);
+                                if (emojiStartIndex == 0 && !TextUtils.isEmpty(url)) {
+                                    String regexp = name.replace("[", "\\[").replace("]", "\\]");
+                                    ImageView imageView = new ImageView(context);
+                                    LinearLayout.LayoutParams params = new
+                                            LinearLayout.LayoutParams(60, 60);
+                                    imageView.setLayoutParams(params);
+                                    x.image().bind(imageView, url);
+                                    holder.rightContentLayout.addView(imageView);
+                                    showContent = showContent.replaceFirst(regexp, "");
+                                } else {
+                                    String regexp = name.replace("[", "\\[").replace("]", "\\]");
+                                    String text = showContent.substring(0, emojiStartIndex);
+
+                                    if (!TextUtils.isEmpty(text)) {
                                         TextView textView = new TextView(context);
                                         textView.setText(text);
                                         textView.setTextSize(14);
@@ -543,15 +685,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
                                         LinearLayout.LayoutParams params = new
                                                 LinearLayout.LayoutParams(60, 60);
                                         imageView.setLayoutParams(params);
-                                        x.image().bind(imageView, emojiList.get(e).getUrl());
+                                        x.image().bind(imageView, url);
                                         holder.rightContentLayout.addView(imageView);
                                         showContent = showContent.replaceFirst(regexp, "");
                                     }
                                 }
-//
-//
+
                             }
 
+//                            while (showContent.indexOf(emojiList.get(e).getName()) != -1) {
+//
+//                            }
                             if (!isHaveEmoji || !TextUtils.isEmpty(showContent)) {
                                 TextView textView = new TextView(context);
                                 textView.setText(showContent);

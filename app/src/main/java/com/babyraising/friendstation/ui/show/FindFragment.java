@@ -358,11 +358,12 @@ public class FindFragment extends BaseFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onScrollEvent(ScrollEvent event) {
-        if (tips.getVisibility() == View.GONE){
-            getUserListMore();
-            tips.setVisibility(View.VISIBLE);
-            scrollView.fullScroll(View.FOCUS_DOWN);
-        }
+//        System.out.println("fffffff");
+//        if (tips.getVisibility() == View.GONE){
+//            getUserListMore();
+//            tips.setVisibility(View.VISIBLE);
+//            scrollView.fullScroll(View.FOCUS_DOWN);
+//        }
     }
 
     private void translateOneUser2() {
@@ -594,13 +595,18 @@ public class FindFragment extends BaseFragment {
 
         scrollView.setOnScrollChanged(new DScrollView.OnScrollChanged() {
             @Override
-            public void onScroll(int l, int t, int oldl, int oldt) {
-
+            public void onScroll(int l, int t, int oldl, int oldt, boolean isBottom) {
+               if (isBottom){
+                   if (tips.getVisibility() == View.GONE) {
+                       getUserListMore();
+                       tips.setVisibility(View.VISIBLE);
+                       scrollView.fullScroll(View.FOCUS_DOWN);
+                   }
+               }
             }
         });
 
     }
-
 
 
     @Override

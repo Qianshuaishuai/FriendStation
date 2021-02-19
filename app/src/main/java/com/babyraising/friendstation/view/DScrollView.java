@@ -34,14 +34,15 @@ public class DScrollView extends ScrollView {
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
         if (mOnScrollChanged != null){
-            mOnScrollChanged.onScroll(l, t, oldl, oldt);
-        }
+            if (getScrollY() + getHeight() >= computeVerticalScrollRange()) {
+                System.out.println("------滚动到最下方------");
+//                EventBus.getDefault().post(new ScrollEvent());
+                mOnScrollChanged.onScroll(l, t, oldl, oldt,true);
+            } else {
+                System.out.println("------没有到最下方------");
+                mOnScrollChanged.onScroll(l, t, oldl, oldt,false);
+            }
 
-        if (getScrollY() + getHeight() >= computeVerticalScrollRange()) {
-            System.out.println("------滚动到最下方------");
-            EventBus.getDefault().post(new ScrollEvent());
-        } else {
-            System.out.println("------没有到最下方------");
         }
     }
 
@@ -50,6 +51,6 @@ public class DScrollView extends ScrollView {
     }
 
     public interface OnScrollChanged {
-        void onScroll(int l, int t, int oldl, int oldt);
+        void onScroll(int l, int t, int oldl, int oldt, boolean isBottom);
     }
 }
