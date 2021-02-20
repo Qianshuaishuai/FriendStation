@@ -56,6 +56,8 @@ public class LookPhotoActivity extends BaseActivity {
     private int currentPosition = 0;
     private long currentSystemTime = 0;
 
+    private int mode = 0;
+
     ArrayList<ImageView> imageViewList;
     private MyPagerAdapter myPagerAdapter;
 
@@ -64,11 +66,7 @@ public class LookPhotoActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         initView();
-        try {
-            initData();
-        } catch (Exception e) {
-            System.out.println("fsfsfs:" + e.toString());
-        }
+        initData();
     }
 
     private void initView() {
@@ -154,12 +152,17 @@ public class LookPhotoActivity extends BaseActivity {
     private void initData() {
         Intent intent = getIntent();
         currentPosition = intent.getIntExtra("position", 0);
-        list = new Gson().fromJson(intent.getStringExtra("list"), new TypeToken<List<AlbumDetailBean>>() {
-        }.getType());
+        mode = intent.getIntExtra("mode", 0);
 
-        if (list == null) {
-            list = new ArrayList<>();
-        }
+        if (mode == 0) {
+            main.setVisibility(View.GONE);
+            viewPager.setVisibility(View.VISIBLE);
+            list = new Gson().fromJson(intent.getStringExtra("list"), new TypeToken<List<AlbumDetailBean>>() {
+            }.getType());
+
+            if (list == null) {
+                list = new ArrayList<>();
+            }
 
 //        if (!TextUtils.isEmpty(list.get(currentPosition).getUrl())) {
 //
@@ -170,45 +173,59 @@ public class LookPhotoActivity extends BaseActivity {
 //            x.image().bind(main, list.get(currentPosition).getUrl(), options);
 //        }
 
-        imageViewList = new ArrayList<>();
-        for (int l = 0; l < list.size(); l++) {
-            if (l != list.size() - 1) {
-                ImageView imageView = new ImageView(this);
+            imageViewList = new ArrayList<>();
+            for (int l = 0; l < list.size(); l++) {
+                if (l != list.size() - 1) {
+                    ImageView imageView = new ImageView(this);
+                    ImageOptions options = new ImageOptions.Builder().
+                            setImageScaleType(ImageView.ScaleType.FIT_CENTER).
+                            build();
+
+                    x.image().bind(imageView, list.get(l).getUrl(), options);
+//            Glide.with(this).load(imagePath).into(imageView);
+                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                    imageViewList.add(imageView);
+                }
+            }
+
+            // 进行适配
+            myPagerAdapter = new MyPagerAdapter();
+            if (viewPager != null) {
+                viewPager.setAdapter(myPagerAdapter);
+            }
+
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    currentPosition = position;
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+
+            viewPager.setCurrentItem(currentPosition);
+        } else {
+            main.setVisibility(View.VISIBLE);
+            viewPager.setVisibility(View.GONE);
+
+            if (!TextUtils.isEmpty(intent.getStringExtra("img"))) {
+
                 ImageOptions options = new ImageOptions.Builder().
                         setImageScaleType(ImageView.ScaleType.FIT_CENTER).
                         build();
 
-                x.image().bind(imageView, list.get(l).getUrl(), options);
-//            Glide.with(this).load(imagePath).into(imageView);
-                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                imageViewList.add(imageView);
+                x.image().bind(main, intent.getStringExtra("img"), options);
             }
         }
 
-        // 进行适配
-        myPagerAdapter = new MyPagerAdapter();
-        if (viewPager != null) {
-            viewPager.setAdapter(myPagerAdapter);
-        }
-
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                currentPosition = position;
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-        viewPager.setCurrentItem(currentPosition);
 
     }
 

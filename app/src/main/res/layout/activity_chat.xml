@@ -413,12 +413,8 @@
         </ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <ScrollView
-        android:layout_alignParentBottom="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
         <LinearLayout
+            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ffffff"
@@ -465,8 +461,7 @@
                         android:layout_weight="3">
 
 
-                        <android.support.v7.widget.AppCompatEditText
-                            android:layout_alignParentBottom="true"
+                        <EditText
                             android:id="@+id/content"
                             android:layout_width="match_parent"
                             android:layout_height="34dip"
@@ -591,8 +586,20 @@
                 android:layout_marginLeft="18dip"
                 android:layout_marginRight="18dip"
                 android:visibility="gone"></android.support.v7.widget.RecyclerView>
+
+
+            <EditText
+                android:id="@+id/hide_content"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:background="@drawable/shape_chat_content_bg"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:paddingLeft="12dip"
+                android:paddingRight="36dip"
+                android:singleLine="true"
+                android:textSize="15dip" />
         </LinearLayout>
-    </ScrollView>
 
     <RelativeLayout
         android:id="@+id/layout_main_tip"

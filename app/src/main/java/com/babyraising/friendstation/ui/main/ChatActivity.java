@@ -33,6 +33,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -74,6 +75,7 @@ import com.tencent.imsdk.message.CustomElement;
 import com.tencent.imsdk.message.ImageElement;
 import com.tencent.imsdk.message.MessageBaseElement;
 import com.tencent.imsdk.message.SoundElement;
+import com.tencent.imsdk.message.TextElement;
 import com.tencent.imsdk.v2.V2TIMAdvancedMsgListener;
 import com.tencent.imsdk.v2.V2TIMCallback;
 import com.tencent.imsdk.v2.V2TIMManager;
@@ -122,7 +124,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     private List<AudioLoadingBean> audioLoadingList = new ArrayList<>();
 
-    private boolean isFirstShow = true;
+    private boolean isFirstShow = false;
 
     private int voiceOrTextStatus = 0;
 
@@ -238,7 +240,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     private RelativeLayout mainLayout;
 
     @ViewInject(R.id.content)
-    private AppCompatEditText content;
+    private EditText content;
 
     @ViewInject(R.id.official)
     private ImageView official;
@@ -389,6 +391,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     @ViewInject(R.id.tip1)
     private TextView tip1;
+
+    @ViewInject(R.id.hide_content)
+    private EditText hideContent;
 
     @ViewInject(R.id.tip2)
     private TextView tip2;
@@ -634,7 +639,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         V2TIMMessage message = V2TIMManager.getMessageManager().createTextMessage(text);
         chatList.add(message);
         adapter.notifyDataSetChanged();
-//        goToListBottom();
+        goToListBottom();
         isShowLocalPic = true;
     }
 
@@ -688,6 +693,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     public void goToScrollImage(String filePath) {
         Intent intent = new Intent(this, LookPhotoActivity.class);
         intent.putExtra("img", filePath);
+        intent.putExtra("mode", 1);
         startActivity(intent);
     }
 
@@ -737,7 +743,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                     }
                 }
 
-                if (!(elements.get(0) instanceof ImageElement)) {
+                if ((!(elements.get(0) instanceof ImageElement)) && (!(elements.get(0) instanceof TextElement))) {
                     getMessageList();
                 }
 
@@ -868,10 +874,27 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        content.requestFocus();
+                        hideContent.requestFocus();
                     }
                 }, 200);
                 return false;
+            }
+        });
+
+        hideContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                content.setText(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -937,9 +960,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         content.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
-//                if (b) {
-//                    emojiRecycleView.setVisibility(View.GONE);
-//                }
+//                hideContent.requestFocus();
             }
         });
 //        content.clearFocus();
@@ -956,12 +977,12 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 //                } else {
 //                    layoutSend.setVisibility(View.VISIBLE);
 //                }
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        content.requestFocus();
-                    }
-                }, 10);
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        content.requestFocus();
+//                    }
+//                }, 10);
             }
 
             @Override
@@ -1182,11 +1203,12 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
                 adapter.notifyDataSetChanged();
 //                goToListBottom();
-                if (isFirstShow) {
-                    isFirstShow = false;
-                } else {
-                    goToListBottom();
-                }
+//                if (isFirstShow) {
+//                    isFirstShow = false;
+//                } else {
+//                    goToListBottom();
+//                }
+                goToListBottom();
 
 //                if (anim != null) {
 //                    anim.stopAnim();
@@ -1358,6 +1380,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                             case 1:
                                 sendTextMessage(content.getText().toString());
                                 content.setText("");
+                                hideContent.setText("");
                                 break;
                             case 2:
                                 sendImageMessage(localPic);
@@ -1623,10 +1646,15 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            content.requestFocus();
+                                            hideContent.requestFocus();
                                         }
                                     }, 100);
                                 } else {
+                                    if (isFirstShow) {
+                                        isFirstShow = true;
+                                    } else {
+                                        scrollview.fullScroll(View.FOCUS_DOWN);
+                                    }
 //                                    new Handler().postDelayed(new Runnable() {
 //                                        @Override
 //                                        public void run() {
@@ -1763,19 +1791,19 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             infoHead.setImageResource(R.mipmap.look_me_head);
         }
 
-        if (!TextUtils.isEmpty(currentUserBean.getUserExtra().getWork())) {
+        if (currentUserBean.getUserExtra() != null && !TextUtils.isEmpty(currentUserBean.getUserExtra().getWork())) {
             infoTip1.setText("我的职业是" + currentUserBean.getUserExtra().getWork());
         } else {
             infoTip1.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(currentUserBean.getUserExtra().getHeight()) && !currentUserBean.getUserExtra().getHeight().equals("未设置")) {
+        if (currentUserBean.getUserExtra() != null && !TextUtils.isEmpty(currentUserBean.getUserExtra().getHeight()) && !currentUserBean.getUserExtra().getHeight().equals("未设置")) {
             infoTip2.setText("我的身高是" + currentUserBean.getUserExtra().getHeight());
         } else {
             infoTip2.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(currentUserBean.getUserExtra().getWeight()) && !currentUserBean.getUserExtra().getWeight().equals("未设置")) {
+        if (currentUserBean.getUserExtra() != null && !TextUtils.isEmpty(currentUserBean.getUserExtra().getWeight()) && !currentUserBean.getUserExtra().getWeight().equals("未设置")) {
             infoTip3.setText("我的体重是" + currentUserBean.getUserExtra().getWeight());
         } else {
             infoTip3.setVisibility(View.GONE);

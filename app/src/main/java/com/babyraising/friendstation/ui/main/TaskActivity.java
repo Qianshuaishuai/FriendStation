@@ -98,6 +98,12 @@ public class TaskActivity extends BaseActivity {
         LinearLayoutManager everyManager = new LinearLayoutManager(this);
         everyRecycleList.setLayoutManager(everyManager);
         everyRecycleList.setAdapter(everyAdapter);
+
+        newRecycleList.setHasFixedSize(true);
+        newRecycleList.setNestedScrollingEnabled(false);
+
+        everyRecycleList.setHasFixedSize(true);
+        everyRecycleList.setNestedScrollingEnabled(false);
     }
 
     public void doTask(TaskNewBean bean) {
@@ -183,6 +189,8 @@ public class TaskActivity extends BaseActivity {
                                 everyList.add(taskList.get(l));
                             }
                         }
+                        System.out.println("newList:"+newList.size());
+                        System.out.println("everyList:"+everyList.size());
                         newAdapter.notifyDataSetChanged();
                         everyAdapter.notifyDataSetChanged();
                         break;

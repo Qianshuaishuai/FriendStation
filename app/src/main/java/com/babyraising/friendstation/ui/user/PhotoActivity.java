@@ -202,8 +202,8 @@ public class PhotoActivity extends BaseActivity implements EasyPermissions.Permi
 
 
         WindowManager wm1 = this.getWindowManager();
-        int width1 = wm1.getDefaultDisplay().getWidth() - DisplayUtils.dp2px(this, 60);
-        int itemWidth = DisplayUtils.dp2px(this, 60); //每个item的宽度
+        int width1 = wm1.getDefaultDisplay().getWidth() - DisplayUtils.dp2px(this, 46);
+        int itemWidth = DisplayUtils.dp2px(this, 72); //每个item的宽度
 
         photoRecyleViewList.setLayoutManager(manager);
         photoRecyleViewList.setAdapter(adapter);
