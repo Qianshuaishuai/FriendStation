@@ -6,6 +6,11 @@ public class Constant {
 
     public static final String WX_APPID = "wx78c7973cb4092c03";
 
+    public static final long USER_ACTION_SET_ID = 11444;
+    public static final String APP_SECRET_KEY = "3293968eb9d7e7238c3934cec4dd34ab";
+    public static final String REGISTER = "REGISTER";            // 注册
+    public static final String PURCHASE = "PURCHASE";            // 付费
+
     public static final int GIFT_CHAT_CODE = 9997;
     public static final int RESULT_CHAT_ROOM_CODE = 9998;
     public static final int INVITE_CHAT_ROOM_CODE = 9999;

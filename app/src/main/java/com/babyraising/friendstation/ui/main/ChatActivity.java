@@ -254,6 +254,11 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     @ViewInject(R.id.background)
     private ImageView background;
 
+    @Event(R.id.background)
+    private void backgroundClick(View view) {
+
+    }
+
     @ViewInject(R.id.layout_gift_tip)
     private RelativeLayout giftTipLayout;
 
@@ -272,6 +277,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     @ViewInject(R.id.refresh_layout)
     private SwipeRefreshLayout refreshLayout;
+
+    @ViewInject(R.id.chat_layout)
+    private RelativeLayout chatLayout;
 
     @ViewInject(R.id.send_voice)
     private TextView sendVoice;
@@ -351,6 +359,8 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         }
 
         content.clearFocus();
+        hideContent.clearFocus();
+        hideKeyboard();
     }
 
     @Event(R.id.tip1)
@@ -438,6 +448,8 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     private ChatAdapter adapter;
     private MediaPlayer mediaPlayer;
 
+    private boolean isClearContent = false;
+
     @Event(R.id.recharge_coin)
     private void rechargeCoin(View view) {
         Intent intent = new Intent(this, RechargeActivity.class);
@@ -458,6 +470,9 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     @ViewInject(R.id.layout_take_photo)
     private LinearLayout photoLayout;
 
+    @ViewInject(R.id.bottom_scroll)
+    private ScrollView bottomScroll;
+
     @Event(R.id.layout_camera)
     private void cameraClick(View view) {
         sendRTCInvite(Constant.TIM_RTC_CLOUD_ROOM_PREFIX + selfUserBean.getId(), 1);
@@ -469,6 +484,8 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         sendRTCInvite(Constant.TIM_RTC_CLOUD_ROOM_PREFIX + selfUserBean.getId(), 2);
         photoLayout.setVisibility(View.GONE);
     }
+
+    private boolean hideContentFocus;
 
     @ViewInject(R.id.photo_list)
     private RecyclerView photoRecyleViewList;
@@ -501,7 +518,8 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         initView();
         initData();
         initTim();
@@ -664,7 +682,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     private void sendLocalImageMessage(String picUrl) {
         File oldFile = new File(picUrl);
-        if (oldFile.getTotalSpace() == 0) {
+        if (oldFile.length() == 0) {
             System.out.println("未找到图片");
             return;
         }
@@ -819,10 +837,15 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm.isActive()) {
-            if (this.getCurrentFocus().getWindowToken() != null) {
+            if (this.getCurrentFocus() != null && this.getCurrentFocus().getWindowToken() != null) {
                 imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }
+    }
+
+    private boolean isShowKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        return imm.isActive();
     }
 
     private void initView() {
@@ -831,6 +854,22 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             public boolean onTouch(View v, MotionEvent event) {
                 hideKeyboard();
                 emojiRecycleView.setVisibility(View.GONE);
+                hideContent.clearFocus();
+                content.clearFocus();
+                hideContentFocus = false;
+                isClearContent = true;
+                return false;
+            }
+        });
+        chatLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                hideKeyboard();
+                emojiRecycleView.setVisibility(View.GONE);
+                hideContent.clearFocus();
+                content.clearFocus();
+                hideContentFocus = false;
+                isClearContent = true;
                 return false;
             }
         });
@@ -866,20 +905,105 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 }
             }
         });
+//        content.setCursorVisible(false);
+//        content.setFocusable(false);
+//        content.setFocusableInTouchMode(false);
+//        content.setFocusable(false);
 
+//        content.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                System.out.println("ssssss:" + hasFocus);
+//                if (hasFocus) {
+//                    content.clearFocus();
+//                    hideContent.requestFocus();
+//                }
+//            }
+//        });
+
+        hideContent.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+            }
+        });
+        content.setFocusable(false);
+//        content.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                System.out.println("fssfs");
+//            }
+//        });
         content.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        hideContent.requestFocus();
-                    }
-                }, 200);
+//                if (!hideContentFocus) {
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (!isShowKeyboard()) {
+//                                hideContent.requestFocus();
+//                            }
+//                        }
+//                    }, 100);
+//                }
+                hideContent.requestFocus();
+                showKeyboard(hideContent);
+                if (emojiRecycleView.getVisibility() == View.VISIBLE) {
+                    emojiRecycleView.setVisibility(View.GONE);
+                }
                 return false;
             }
         });
+//        content.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if (!hideContentFocus) {
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            if (!isShowKeyboard()) {
+//                                hideContent.requestFocus();
+//                            }
+//                            System.out.println("ssss:" + hideContentFocus);
+//                        }
+//                    }, 100);
+//                }
+//
+////                new Handler().post(new Runnable() {
+////                    @Override
+////                    public void run() {
+////                        bottomScroll.fullScroll(ScrollView.FOCUS_DOWN);
+////                    }
+////                });
+//
+////               }
+////                hideContent.requestFocus();
+//                if (emojiRecycleView.getVisibility() == View.VISIBLE) {
+//                    emojiRecycleView.setVisibility(View.GONE);
+//                }
+//                return false;
+//            }
+//        });
+//        content.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                 new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (!hideContentFocus) {
+//                            hideContentFocus = true;
+//                            hideContent.requestFocus();
+//                        }
+//                    }
+//                }, 100);
+////               }
+////                hideContent.requestFocus();
+//                if (emojiRecycleView.getVisibility() == View.VISIBLE) {
+//                    emojiRecycleView.setVisibility(View.GONE);
+//                }
+//            }
+//        });
 
         hideContent.addTextChangedListener(new TextWatcher() {
             @Override
@@ -957,12 +1081,6 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             }
         });
 
-        content.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-//                hideContent.requestFocus();
-            }
-        });
 //        content.clearFocus();
         content.addTextChangedListener(new TextWatcher() {
             @Override
@@ -996,6 +1114,16 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         anim.setPorBarEndColor(getResources().getColor(R.color.colorPink));
         anim.setViewColor(getResources().getColor(R.color.colorPink));
 //        anim.setTextColor(getResources().getColor(R.color.colorPink));
+
+    }
+
+    private void showKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext()
+                .getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            view.requestFocus();
+            imm.showSoftInput(view, 0);
+        }
     }
 
     private void startVoiceSelfActivity(TimRTCInviteBean bean) {
@@ -1676,6 +1804,18 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                         });
                     }
                 });
+//                new Handler().post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        scrollview.fullScroll(ScrollView.FOCUS_DOWN);
+//                        new Handler().postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                hideContent.requestFocus();
+//                            }
+//                        }, 100);
+//                    }
+//                });
             }
         }
     }
@@ -1832,6 +1972,11 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     }
 
     private void uploadPic(final String localPic) {
+        File oldFile = new File(localPic);
+        if (oldFile.length() == 0) {
+            System.out.println("拍照-取消");
+            return;
+        }
         useCoin(2, localPic, "", "", 0);
         sendLocalImageMessage(localPic);
     }

@@ -28,6 +28,9 @@ import com.babyraising.friendstation.response.AliPayParamResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.response.WxPayParamResponse;
 import com.babyraising.friendstation.util.T;
+import com.baidu.mobads.action.ActionParam;
+import com.baidu.mobads.action.ActionType;
+import com.baidu.mobads.action.BaiduAction;
 import com.google.gson.Gson;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -36,6 +39,8 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
@@ -162,6 +167,15 @@ public class PayActivity extends BaseActivity {
                 String payTotal = result.getAlipay_trade_app_pay_response().getTotal_amount();
 //                DoPayOrder(Constant.PAY_TYPE_ALI, orderNo, Double.parseDouble(payTotal), balancePayPrice);
                 T.s("支付成功");
+
+                try {
+                    JSONObject actionParam = new JSONObject();
+                    actionParam.put(ActionParam.Key.PURCHASE_MONEY, payDetailBean.getPrice() * 100);
+                    BaiduAction.logAction(ActionType.PURCHASE, actionParam);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
             } else if (TextUtils.equals(resultStatus, "4000")) {
                 T.s("请先下载支付宝客户端!");
             } else {
@@ -257,13 +271,6 @@ public class PayActivity extends BaseActivity {
         api.registerApp(bean.getAppId());
         //转换为Date类
 
-        System.out.println("timestamp:" + bean.getTimeStamp());
-        System.out.println(bean.getAppId());
-        System.out.println(bean.getMchId());
-        System.out.println(bean.getPrepayId());
-        System.out.println(bean.getNonceStr());
-        System.out.println(bean.getTimeStamp());
-        System.out.println(bean.getSign());
         PayReq req = new PayReq();
         req.appId = bean.getAppId();
         req.partnerId = bean.getMchId();
@@ -279,6 +286,13 @@ public class PayActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(PayResultEvent event) {
         T.s("支付成功");
+        try {
+            JSONObject actionParam = new JSONObject();
+            actionParam.put(ActionParam.Key.PURCHASE_MONEY, payDetailBean.getPrice() * 100);
+            BaiduAction.logAction(ActionType.PURCHASE, actionParam);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

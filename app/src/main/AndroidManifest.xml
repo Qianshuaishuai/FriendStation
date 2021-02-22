@@ -101,9 +101,9 @@
             android:value="ece27e15ec1f4059a8fe0c2653760fb4" />
 
         <activity
+            android:windowSoftInputMode="adjustPan|stateHidden"
             android:name=".ui.main.ChatActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ui.main.MomentSendActivity"
             android:screenOrientation="portrait"

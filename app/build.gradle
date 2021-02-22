@@ -69,7 +69,8 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
 
     implementation 'com.github.loonggg:RecyclerViewBanner:v1.2.3'
-//    implementation (name: 'alipaySdk-15.6.8-20191021122514', ext: 'aar')
+//    implementation files('libs/Baidu_ocpc_action_1_8.aar')
+    implementation (name: 'Baidu_ocpc_action_1_8', ext: 'aar')
 //    compile (name: 'alipaysdk-15.8.01.210112203525', ext: 'aar')
 //    implementation 'com.tencent.imsdk:tuikit:5.0.10'
 

@@ -29,6 +29,8 @@ import com.babyraising.friendstation.ui.MainActivity;
 import com.babyraising.friendstation.ui.main.NewMainActivity;
 import com.babyraising.friendstation.ui.main.PrivacyActivity;
 import com.babyraising.friendstation.util.T;
+import com.baidu.mobads.action.ActionType;
+import com.baidu.mobads.action.BaiduAction;
 import com.google.gson.Gson;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -163,6 +165,7 @@ public class LoginPhoneActivity extends BaseActivity {
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
         if (bean != null && !TextUtils.isEmpty(bean.getAccessToken())) {
             startMainActivity();
+            BaiduAction.logAction(ActionType.LOGIN);
         } else {
             if (((FriendStationApplication) getApplication()).getIsFirstTip() == 0) {
                 initNoticeTip();
@@ -270,6 +273,7 @@ public class LoginPhoneActivity extends BaseActivity {
                             startBuildActivity();
                         } else {
                             startMainActivity();
+                            BaiduAction.logAction(ActionType.LOGIN);
                         }
                         break;
                     default:

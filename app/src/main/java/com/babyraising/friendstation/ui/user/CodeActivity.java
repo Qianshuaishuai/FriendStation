@@ -25,8 +25,13 @@ import com.babyraising.friendstation.response.UmsLoginByMobileResponse;
 import com.babyraising.friendstation.ui.MainActivity;
 import com.babyraising.friendstation.ui.main.NewMainActivity;
 import com.babyraising.friendstation.util.T;
+import com.baidu.mobads.action.ActionParam;
+import com.baidu.mobads.action.ActionType;
+import com.baidu.mobads.action.BaiduAction;
 import com.google.gson.Gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
@@ -433,6 +438,7 @@ public class CodeActivity extends BaseActivity {
                         T.s("登录成功");
                         ((FriendStationApplication) getApplication()).saveUserInfo(response.getData());
                         startLoginDetailActivity();
+                        BaiduAction.logAction(ActionType.REGISTER);
                         break;
                     default:
                         T.s(response.getMsg());

@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 
 import com.babyraising.friendstation.Constant;
+import com.baidu.mobads.action.ActionType;
+import com.baidu.mobads.action.BaiduAction;
 import com.nanchen.compresshelper.BitmapUtil;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 import com.tencent.mm.opensdk.modelmsg.WXImageObject;
@@ -123,6 +125,7 @@ public class WxShareUtils {
             @Override
             public void onFinished() {
                 System.out.println("share onFinished");
+                BaiduAction.logAction(ActionType.SHARE);
             }
 
             @Override

@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
@@ -45,6 +46,9 @@ import com.babyraising.friendstation.ui.main.PrivacyActivity;
 import com.babyraising.friendstation.ui.user.NoticeActivity;
 import com.babyraising.friendstation.util.DisplayUtils;
 import com.babyraising.friendstation.util.T;
+import com.baidu.mobads.action.ActionParam;
+import com.baidu.mobads.action.ActionType;
+import com.baidu.mobads.action.BaiduAction;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tencent.imsdk.v2.V2TIMManager;
@@ -118,6 +122,20 @@ public class FriendStationApplication extends Application {
 //        initAMapTrack();
 //        initShowTip();
         MultiDex.install(this);
+
+        initBaidu();
+    }
+
+    private void initBaidu() {
+        // 调用SDK初始化接口：
+        // 1. 调用位置：必须在Application的onCreate方法中调用。
+        // 2. 必须在其他的数据上报接口调用之前调用，否则其他接口都将无法使用。
+        // USER_ACTION_SET_ID：SDK应用ID,需要在百度申请; Constants.APP_SECRET_KEY:SDK应用密钥，需要在百度申请
+        // 是否在控制台输出⽇志，可⽤于观察⽤⼾⾏为⽇志上报情况，建议仅在调试时使⽤，release版 请设置为false ！
+        BaiduAction.setPrintLog(true);
+        BaiduAction.init(this, Constant.USER_ACTION_SET_ID, Constant.APP_SECRET_KEY);
+        // 设置应用激活的间隔（默认30天）
+        BaiduAction.setActivateInterval(this, 7);
     }
 
     private void initShowTip() {

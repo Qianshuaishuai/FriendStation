@@ -20,6 +20,7 @@
         android:id="@+id/layout_top"
         android:layout_width="match_parent"
         android:layout_height="48dip"
+        android:layout_alignParentTop="true"
         android:background="#00000000">
 
         <ImageView
@@ -241,6 +242,7 @@
             android:layout_height="match_parent">
 
             <RelativeLayout
+                android:id="@+id/chat_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -344,7 +346,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/chat_list"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_below="@+id/find_tip"
                     android:layout_marginBottom="120dip"></android.support.v7.widget.RecyclerView>
 
@@ -413,11 +415,18 @@
         </ScrollView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <ScrollView
+        android:id="@+id/bottom_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:scrollbars="none">
+
         <LinearLayout
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ffffff"
+            android:fitsSystemWindows="true"
             android:orientation="vertical">
 
             <LinearLayout
@@ -600,6 +609,7 @@
                 android:singleLine="true"
                 android:textSize="15dip" />
         </LinearLayout>
+    </ScrollView>
 
     <RelativeLayout
         android:id="@+id/layout_main_tip"
