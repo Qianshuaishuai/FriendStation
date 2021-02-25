@@ -136,6 +136,15 @@ public class FriendStationApplication extends Application {
         BaiduAction.init(this, Constant.USER_ACTION_SET_ID, Constant.APP_SECRET_KEY);
         // 设置应用激活的间隔（默认30天）
         BaiduAction.setActivateInterval(this, 7);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                BaiduAction.logAction(ActionType.LOGIN);
+                BaiduAction.logAction(ActionType.REGISTER);
+                BaiduAction.logAction(ActionType.PURCHASE);
+                BaiduAction.logAction(ActionType.SHARE);
+            }
+        }, 2000);
     }
 
     private void initShowTip() {

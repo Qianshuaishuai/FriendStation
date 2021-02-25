@@ -17,1025 +17,1031 @@
         android:scaleType="fitXY" />
 
     <RelativeLayout
-        android:id="@+id/layout_top"
+        android:background="#00000000"
         android:layout_width="match_parent"
-        android:layout_height="48dip"
-        android:layout_alignParentTop="true"
-        android:background="#00000000">
-
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="16dip"
-            android:layout_height="16dip"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="15dip"
-            android:src="@mipmap/common_white_back" />
+        android:layout_height="match_parent">
 
         <RelativeLayout
-            android:id="@+id/layout_number"
-            android:layout_width="20dip"
-            android:layout_height="20dip"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="6dip"
-            android:layout_toRightOf="@id/back"
-            android:background="@mipmap/rank_number_bg"
-            android:visibility="gone">
+            android:id="@+id/layout_top"
+            android:layout_width="match_parent"
+            android:layout_height="48dip"
+            android:layout_alignParentTop="true"
+            android:background="#00000000">
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="16dip"
+                android:layout_height="16dip"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dip"
+                android:src="@mipmap/common_white_back" />
+
+            <RelativeLayout
+                android:id="@+id/layout_number"
+                android:layout_width="20dip"
+                android:layout_height="20dip"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="6dip"
+                android:layout_toRightOf="@id/back"
+                android:background="@mipmap/rank_number_bg"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/chat_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="1"
+                    android:textColor="#ffffff"
+                    android:textSize="12dip" />
+            </RelativeLayout>
 
             <TextView
-                android:id="@+id/chat_number"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="1"
+                android:text=""
                 android:textColor="#ffffff"
-                android:textSize="12dip" />
+                android:textSize="17dip"
+                android:textStyle="bold" />
+
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="1dip"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:background="#D4D4D4"></View>-->
+
+            <TextView
+                android:id="@+id/tv_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dip"
+                android:text="···"
+                android:textColor="#ffffff"
+                android:textSize="20dip"
+                android:textStyle="bold" />
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text=""
-            android:textColor="#ffffff"
-            android:textSize="17dip"
-            android:textStyle="bold" />
-
-        <!--<View-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="1dip"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:background="#D4D4D4"></View>-->
-
-        <TextView
-            android:id="@+id/tv_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dip"
-            android:text="···"
-            android:textColor="#ffffff"
-            android:textSize="20dip"
-            android:textStyle="bold" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_official"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/layout_top"
-        android:layout_marginTop="10dip"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="12月3日下午3:20"
-            android:textColor="#B9B8C1"
-            android:textSize="11dip" />
-
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/layout_official"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dip"
-            android:layout_marginTop="20dip"
-            android:orientation="horizontal">
+            android:layout_below="@+id/layout_top"
+            android:layout_marginTop="10dip"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/official"
-                android:layout_width="38dip"
-                android:layout_height="38dip"
-                android:src="@mipmap/test2" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="12月3日下午3:20"
+                android:textColor="#B9B8C1"
+                android:textSize="11dip" />
 
             <LinearLayout
-                android:layout_width="240dip"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dip"
-                android:background="@drawable/shape_chat_content"
-                android:orientation="vertical"
-                android:paddingLeft="15dip"
-                android:paddingTop="10dip"
-                android:paddingRight="15dip"
-                android:paddingBottom="10dip">
+                android:layout_marginTop="20dip"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="脱单上XXX；"
-                    android:textColor="#3C3B41"
-                    android:textSize="14dip" />
+                <ImageView
+                    android:id="@+id/official"
+                    android:layout_width="38dip"
+                    android:layout_height="38dip"
+                    android:src="@mipmap/test2" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="240dip"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dip"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:layout_marginLeft="15dip"
+                    android:background="@drawable/shape_chat_content"
+                    android:orientation="vertical"
+                    android:paddingLeft="15dip"
+                    android:paddingTop="10dip"
+                    android:paddingRight="15dip"
+                    android:paddingBottom="10dip">
 
                     <TextView
-                        android:id="@+id/tip1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="上传4张照片"
-                        android:textColor="#F75184"
+                        android:text="脱单上XXX；"
+                        android:textColor="#3C3B41"
                         android:textSize="14dip" />
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dip"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tip1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="上传4张照片"
+                            android:textColor="#F75184"
+                            android:textSize="14dip" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="，领红包；"
+                            android:textColor="#3C3B41"
+                            android:textSize="14dip" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dip"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tip2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="完善个人资料"
+                            android:textColor="#F75184"
+                            android:textSize="14dip" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="，领红包；"
+                            android:textColor="#3C3B41"
+                            android:textSize="14dip" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dip"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tip3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="发布最新动态"
+                            android:textColor="#F75184"
+                            android:textSize="14dip" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="，领红包；"
+                            android:textColor="#3C3B41"
+                            android:textSize="14dip" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dip"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tip4"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="提交真人认证"
+                            android:textColor="#F75184"
+                            android:textSize="14dip" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="后所有收益翻倍，"
+                            android:textColor="#3C3B41"
+                            android:textSize="14dip" />
+                    </LinearLayout>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="，领红包；"
+                        android:layout_marginTop="12dip"
+                        android:text="交友成功率翻倍。"
                         android:textColor="#3C3B41"
                         android:textSize="14dip" />
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dip"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tip2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="完善个人资料"
-                        android:textColor="#F75184"
-                        android:textSize="14dip" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="，领红包；"
-                        android:textColor="#3C3B41"
-                        android:textSize="14dip" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dip"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tip3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="发布最新动态"
-                        android:textColor="#F75184"
-                        android:textSize="14dip" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="，领红包；"
-                        android:textColor="#3C3B41"
-                        android:textSize="14dip" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dip"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/tip4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="提交真人认证"
-                        android:textColor="#F75184"
-                        android:textSize="14dip" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="后所有收益翻倍，"
-                        android:textColor="#3C3B41"
-                        android:textSize="14dip" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dip"
-                    android:text="交友成功率翻倍。"
-                    android:textColor="#3C3B41"
-                    android:textSize="14dip" />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/refresh_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/layout_top">
-
-        <ScrollView
-            android:id="@+id/scrollview"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_below="@+id/layout_top">
 
-            <RelativeLayout
-                android:id="@+id/chat_layout"
+            <ScrollView
+                android:id="@+id/scrollview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:id="@+id/layout_info"
+                <RelativeLayout
+                    android:id="@+id/chat_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="12dip"
-                    android:background="@drawable/chat_auth_tip_bg"
-                    android:orientation="vertical"
-                    android:padding="12dip">
+                    android:layout_height="match_parent">
 
                     <LinearLayout
+                        android:id="@+id/layout_info"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/info_head"
-                            android:layout_width="60dip"
-                            android:layout_height="60dip" />
+                        android:layout_margin="12dip"
+                        android:background="@drawable/chat_auth_tip_bg"
+                        android:orientation="vertical"
+                        android:padding="12dip">
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="12dip"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
-                            <TextView
-                                android:id="@+id/info_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text=""
-                                android:textColor="#ffffff"
-                                android:textSize="16dip" />
+                            <ImageView
+                                android:id="@+id/info_head"
+                                android:layout_width="60dip"
+                                android:layout_height="60dip" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="6dip"
-                                android:background="@drawable/shape_info_tip1_bg"
-                                android:orientation="horizontal"
-                                android:paddingLeft="8dip"
-                                android:paddingTop="5dip"
-                                android:paddingRight="8dip"
-                                android:paddingBottom="5dip">
-
-                                <ImageView
-                                    android:id="@+id/info_sex"
-                                    android:layout_width="18dip"
-                                    android:layout_height="18dip"
-                                    android:src="@mipmap/common_female" />
+                                android:layout_marginLeft="12dip"
+                                android:orientation="vertical">
 
                                 <TextView
-                                    android:id="@+id/info_age"
+                                    android:id="@+id/info_name"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="2dip"
                                     android:text=""
                                     android:textColor="#ffffff"
-                                    android:textSize="12dip" />
+                                    android:textSize="16dip" />
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="6dip"
+                                    android:background="@drawable/shape_info_tip1_bg"
+                                    android:orientation="horizontal"
+                                    android:paddingLeft="8dip"
+                                    android:paddingTop="5dip"
+                                    android:paddingRight="8dip"
+                                    android:paddingBottom="5dip">
+
+                                    <ImageView
+                                        android:id="@+id/info_sex"
+                                        android:layout_width="18dip"
+                                        android:layout_height="18dip"
+                                        android:src="@mipmap/common_female" />
+
+                                    <TextView
+                                        android:id="@+id/info_age"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="2dip"
+                                        android:text=""
+                                        android:textColor="#ffffff"
+                                        android:textSize="12dip" />
+                                </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/info_tip1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dip"
+                            android:text=""
+                            android:textColor="#ffffff"
+                            android:textSize="14dip" />
+
+                        <TextView
+                            android:id="@+id/info_tip2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dip"
+                            android:text=""
+                            android:textColor="#ffffff"
+                            android:textSize="14dip" />
+
+                        <TextView
+                            android:id="@+id/info_tip3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dip"
+                            android:text=""
+                            android:textColor="#ffffff"
+                            android:textSize="14dip" />
                     </LinearLayout>
+                    <!--<com.jgabrielfreitas.core.BlurImageView-->
+                    <!--android:id="@+id/background"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_alignParentTop="true"-->
+                    <!--android:layout_centerHorizontal="true"-->
+                    <!--app:radius="25" />-->
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/chat_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/find_tip"
+                        android:layout_marginBottom="120dip"></android.support.v7.widget.RecyclerView>
 
                     <TextView
-                        android:id="@+id/info_tip1"
+                        android:id="@+id/auth_tip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/layout_info"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dip"
-                        android:text=""
+                        android:layout_marginBottom="8dip"
+                        android:background="@drawable/chat_auth_tip_bg"
+                        android:paddingLeft="10dip"
+                        android:paddingTop="5dip"
+                        android:paddingRight="10dip"
+                        android:paddingBottom="5dip"
+                        android:text="对方已通过真人认证，可以放心交流。"
                         android:textColor="#ffffff"
-                        android:textSize="14dip" />
+                        android:textSize="15dip"
+                        android:visibility="gone" />
 
                     <TextView
-                        android:id="@+id/info_tip2"
+                        android:id="@+id/moment_tip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dip"
-                        android:text=""
+                        android:layout_below="@+id/auth_tip"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="30dip"
+                        android:layout_marginTop="10dip"
+                        android:layout_marginRight="30dip"
+                        android:layout_marginBottom="8dip"
+                        android:background="@drawable/chat_auth_tip_bg"
+                        android:paddingLeft="10dip"
+                        android:paddingTop="5dip"
+                        android:paddingRight="10dip"
+                        android:paddingBottom="5dip"
+                        android:text="对方已通过真人认证，可以放心交流。"
                         android:textColor="#ffffff"
-                        android:textSize="14dip" />
+                        android:textSize="15dip"
+                        android:visibility="gone" />
 
                     <TextView
-                        android:id="@+id/info_tip3"
+                        android:id="@+id/find_tip"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="6dip"
-                        android:text=""
+                        android:layout_below="@+id/moment_tip"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="30dip"
+                        android:layout_marginTop="10dip"
+                        android:layout_marginRight="30dip"
+                        android:layout_marginBottom="8dip"
+                        android:background="@drawable/chat_auth_tip_bg"
+                        android:paddingLeft="10dip"
+                        android:paddingTop="5dip"
+                        android:paddingRight="10dip"
+                        android:paddingBottom="5dip"
+                        android:text="丘比特觉得你们两很有缘，赶快聊天吧，别错过缘分～"
                         android:textColor="#ffffff"
-                        android:textSize="14dip" />
-                </LinearLayout>
-                <!--<com.jgabrielfreitas.core.BlurImageView-->
-                <!--android:id="@+id/background"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_alignParentTop="true"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--app:radius="25" />-->
+                        android:textSize="15dip"
+                        android:visibility="gone" />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/chat_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/find_tip"
-                    android:layout_marginBottom="120dip"></android.support.v7.widget.RecyclerView>
+                </RelativeLayout>
+            </ScrollView>
+        </android.support.v4.widget.SwipeRefreshLayout>
 
-                <TextView
-                    android:id="@+id/auth_tip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/layout_info"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dip"
-                    android:layout_marginBottom="8dip"
-                    android:background="@drawable/chat_auth_tip_bg"
-                    android:paddingLeft="10dip"
-                    android:paddingTop="5dip"
-                    android:paddingRight="10dip"
-                    android:paddingBottom="5dip"
-                    android:text="对方已通过真人认证，可以放心交流。"
-                    android:textColor="#ffffff"
-                    android:textSize="15dip"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/moment_tip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/auth_tip"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="30dip"
-                    android:layout_marginTop="10dip"
-                    android:layout_marginRight="30dip"
-                    android:layout_marginBottom="8dip"
-                    android:background="@drawable/chat_auth_tip_bg"
-                    android:paddingLeft="10dip"
-                    android:paddingTop="5dip"
-                    android:paddingRight="10dip"
-                    android:paddingBottom="5dip"
-                    android:text="对方已通过真人认证，可以放心交流。"
-                    android:textColor="#ffffff"
-                    android:textSize="15dip"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/find_tip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/moment_tip"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="30dip"
-                    android:layout_marginTop="10dip"
-                    android:layout_marginRight="30dip"
-                    android:layout_marginBottom="8dip"
-                    android:background="@drawable/chat_auth_tip_bg"
-                    android:paddingLeft="10dip"
-                    android:paddingTop="5dip"
-                    android:paddingRight="10dip"
-                    android:paddingBottom="5dip"
-                    android:text="丘比特觉得你们两很有缘，赶快聊天吧，别错过缘分～"
-                    android:textColor="#ffffff"
-                    android:textSize="15dip"
-                    android:visibility="gone" />
-
-            </RelativeLayout>
-        </ScrollView>
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-    <ScrollView
-        android:id="@+id/bottom_scroll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:scrollbars="none">
-
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/bottom_scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#ffffff"
-            android:fitsSystemWindows="true"
-            android:orientation="vertical">
+            android:layout_alignParentBottom="true"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="55dip"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/voice"
-                    android:layout_width="20dip"
-                    android:layout_height="20dip"
-                    android:layout_marginLeft="20dip"
-                    android:layout_marginRight="20dip"
-                    android:src="@mipmap/chat_icon3" />
-
-                <TextView
-                    android:id="@+id/send_voice"
-                    android:layout_width="match_parent"
-                    android:layout_height="34dip"
-                    android:layout_marginRight="20dip"
-                    android:background="@drawable/shape_chat_content_bg"
-                    android:gravity="center"
-                    android:padding="0dip"
-                    android:text="按住说话"
-                    android:textColor="#DD20AF"
-                    android:textSize="12dip"
-                    android:visibility="gone" />
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:fitsSystemWindows="true"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="55dip"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/voice"
+                        android:layout_width="20dip"
+                        android:layout_height="20dip"
+                        android:layout_marginLeft="20dip"
+                        android:layout_marginRight="20dip"
+                        android:src="@mipmap/chat_icon3" />
+
+                    <TextView
+                        android:id="@+id/send_voice"
+                        android:layout_width="match_parent"
+                        android:layout_height="34dip"
+                        android:layout_marginRight="20dip"
+                        android:background="@drawable/shape_chat_content_bg"
+                        android:gravity="center"
+                        android:padding="0dip"
+                        android:text="按住说话"
+                        android:textColor="#DD20AF"
+                        android:textSize="12dip"
+                        android:visibility="gone" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RelativeLayout
+                            android:id="@+id/layout_input_content"
+                            android:layout_width="0dip"
+                            android:layout_height="34dip"
+                            android:layout_marginRight="20dip"
+                            android:layout_weight="3">
+
+
+                            <EditText
+                                android:id="@+id/content"
+                                android:layout_width="match_parent"
+                                android:layout_height="34dip"
+                                android:background="@drawable/shape_chat_content_bg"
+                                android:gravity="center_vertical"
+                                android:maxLines="1"
+                                android:paddingLeft="12dip"
+                                android:paddingRight="36dip"
+                                android:singleLine="true"
+                                android:textSize="15dip" />
+
+                            <TextView
+                                android:id="@+id/common_word"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="20dip"
+                                android:text="..."
+                                android:textColor="#F75184"
+                                android:textSize="15dip" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/layout_send"
+                            android:layout_width="0dip"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/send"
+                                android:layout_width="60dip"
+                                android:layout_height="34dip"
+                                android:layout_centerInParent="true"
+                                android:background="@drawable/build_user_save_bg"
+                                android:text="发送"
+                                android:textColor="#ffffff"
+                                android:textSize="15dip" />
+                        </RelativeLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dip"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <RelativeLayout
-                        android:id="@+id/layout_input_content"
                         android:layout_width="0dip"
-                        android:layout_height="34dip"
-                        android:layout_marginRight="20dip"
-                        android:layout_weight="3">
+                        android:layout_height="55dip"
+                        android:layout_weight="1">
 
-
-                        <EditText
-                            android:id="@+id/content"
-                            android:layout_width="match_parent"
-                            android:layout_height="34dip"
-                            android:background="@drawable/shape_chat_content_bg"
-                            android:gravity="center_vertical"
-                            android:maxLines="1"
-                            android:paddingLeft="12dip"
-                            android:paddingRight="36dip"
-                            android:singleLine="true"
-                            android:textSize="15dip" />
-
-                        <TextView
-                            android:id="@+id/common_word"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="20dip"
-                            android:text="..."
-                            android:textColor="#F75184"
-                            android:textSize="15dip" />
+                        <ImageView
+                            android:id="@+id/chat1"
+                            android:layout_width="25.5dip"
+                            android:layout_height="25.5dip"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/chat_icon2" />
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/layout_send"
                         android:layout_width="0dip"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="horizontal">
+                        android:layout_height="55dip"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/chat2"
+                            android:layout_width="25.5dip"
+                            android:layout_height="25.5dip"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/chat_icon4" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dip"
+                        android:layout_height="55dip"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/chat3"
+                            android:layout_width="25.5dip"
+                            android:layout_height="25.5dip"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/chat_icon5" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dip"
+                        android:layout_height="55dip"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/chat4"
+                            android:layout_width="25.5dip"
+                            android:layout_height="25.5dip"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/chat_icon8" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dip"
+                        android:layout_height="55dip"
+                        android:layout_weight="1">
+
+                        <ImageView
+                            android:id="@+id/chat5"
+                            android:layout_width="25.5dip"
+                            android:layout_height="25.5dip"
+                            android:layout_centerInParent="true"
+                            android:src="@mipmap/chat_icon1" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <!--emoji-->
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/emoji_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dip"
+                    android:layout_marginLeft="18dip"
+                    android:layout_marginRight="18dip"
+                    android:visibility="gone"></android.support.v7.widget.RecyclerView>
+
+
+                <EditText
+                    android:id="@+id/hide_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dip"
+                    android:background="@drawable/shape_chat_content_bg"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingLeft="12dip"
+                    android:paddingRight="36dip"
+                    android:singleLine="true"
+                    android:textSize="15dip" />
+            </LinearLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/layout_main_tip"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#48000000"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+                <LinearLayout
+                    android:layout_width="225dip"
+                    android:layout_height="62.5dip"
+                    android:layout_centerHorizontal="true"
+                    android:background="@mipmap/dialog_top_bg"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="15dip"
+                        android:layout_height="1.5dip"
+                        android:background="#ffffff"></View>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dip"
+                        android:text="充值有礼"
+                        android:textColor="#ffffff"
+                        android:textSize="16dip"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="262dip"
+                    android:layout_height="228dip"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="48dip"
+                    android:background="@mipmap/dialog_bottom_bg"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dip"
+                        android:text="首次充值送额外金币"
+                        android:textColor="#9692B1"
+                        android:textSize="16dip" />
+
+                    <ImageView
+                        android:layout_width="80dip"
+                        android:layout_height="80dip"
+                        android:layout_marginTop="18dip"
+                        android:src="@mipmap/sign_icon" />
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dip"
+                        android:layout_marginTop="18dip"
+                        android:layout_marginRight="15dip">
 
                         <Button
-                            android:id="@+id/send"
-                            android:layout_width="60dip"
-                            android:layout_height="34dip"
-                            android:layout_centerInParent="true"
+                            android:id="@+id/get_coin"
+                            android:layout_width="100dip"
+                            android:layout_height="40dip"
                             android:background="@drawable/build_user_save_bg"
-                            android:text="发送"
+                            android:text="免费赚金币"
+                            android:textColor="#ffffff"
+                            android:textSize="15dip" />
+
+                        <Button
+                            android:id="@+id/recharge_coin"
+                            android:layout_width="100dp"
+                            android:layout_height="40dip"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/build_user_save_bg"
+                            android:text="充值金币"
                             android:textColor="#ffffff"
                             android:textSize="15dip" />
                     </RelativeLayout>
-
                 </LinearLayout>
-            </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--相册-->
+        <LinearLayout
+            android:id="@+id/layout_take_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <LinearLayout
+                android:id="@+id/layout_camera"
                 android:layout_width="match_parent"
-                android:layout_height="55dip"
-                android:gravity="center_vertical"
+                android:layout_height="50dip"
+                android:gravity="center"
                 android:orientation="horizontal">
 
-                <RelativeLayout
-                    android:layout_width="0dip"
-                    android:layout_height="55dip"
-                    android:layout_weight="1">
+                <ImageView
+                    android:layout_width="17dip"
+                    android:layout_height="14.5dip"
+                    android:src="@mipmap/build_user_camera" />
 
-                    <ImageView
-                        android:id="@+id/chat1"
-                        android:layout_width="25.5dip"
-                        android:layout_height="25.5dip"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/chat_icon2" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dip"
-                    android:layout_height="55dip"
-                    android:layout_weight="1">
-
-                    <ImageView
-                        android:id="@+id/chat2"
-                        android:layout_width="25.5dip"
-                        android:layout_height="25.5dip"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/chat_icon4" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dip"
-                    android:layout_height="55dip"
-                    android:layout_weight="1">
-
-                    <ImageView
-                        android:id="@+id/chat3"
-                        android:layout_width="25.5dip"
-                        android:layout_height="25.5dip"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/chat_icon5" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dip"
-                    android:layout_height="55dip"
-                    android:layout_weight="1">
-
-                    <ImageView
-                        android:id="@+id/chat4"
-                        android:layout_width="25.5dip"
-                        android:layout_height="25.5dip"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/chat_icon8" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dip"
-                    android:layout_height="55dip"
-                    android:layout_weight="1">
-
-                    <ImageView
-                        android:id="@+id/chat5"
-                        android:layout_width="25.5dip"
-                        android:layout_height="25.5dip"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/chat_icon1" />
-                </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:text="语音通话"
+                    android:textColor="#3C3B41"
+                    android:textSize="14dip" />
             </LinearLayout>
 
-            <!--emoji-->
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/emoji_list"
-                android:layout_width="match_parent"
-                android:layout_height="160dip"
-                android:layout_marginLeft="18dip"
-                android:layout_marginRight="18dip"
-                android:visibility="gone"></android.support.v7.widget.RecyclerView>
-
-
-            <EditText
-                android:id="@+id/hide_content"
+            <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dip"
-                android:background="@drawable/shape_chat_content_bg"
-                android:gravity="center_vertical"
-                android:maxLines="1"
-                android:paddingLeft="12dip"
-                android:paddingRight="36dip"
-                android:singleLine="true"
-                android:textSize="15dip" />
-        </LinearLayout>
-    </ScrollView>
-
-    <RelativeLayout
-        android:id="@+id/layout_main_tip"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#48000000"
-        android:visibility="gone">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
+                android:layout_marginLeft="15dip"
+                android:layout_marginRight="15dip"
+                android:background="#D4D4D4"></View>
 
             <LinearLayout
-                android:layout_width="225dip"
-                android:layout_height="62.5dip"
-                android:layout_centerHorizontal="true"
-                android:background="@mipmap/dialog_top_bg"
+                android:id="@+id/layout_photo"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
                 android:gravity="center"
-                android:orientation="vertical">
-
-                <View
-                    android:layout_width="15dip"
-                    android:layout_height="1.5dip"
-                    android:background="#ffffff"></View>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dip"
-                    android:text="充值有礼"
-                    android:textColor="#ffffff"
-                    android:textSize="16dip"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="262dip"
-                android:layout_height="228dip"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="48dip"
-                android:background="@mipmap/dialog_bottom_bg"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dip"
-                    android:text="首次充值送额外金币"
-                    android:textColor="#9692B1"
-                    android:textSize="16dip" />
+                android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="80dip"
-                    android:layout_height="80dip"
-                    android:layout_marginTop="18dip"
-                    android:src="@mipmap/sign_icon" />
+                    android:layout_width="18dip"
+                    android:layout_height="18dip"
+                    android:src="@mipmap/build_user_photo" />
 
-                <RelativeLayout
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dip"
-                    android:layout_marginTop="18dip"
-                    android:layout_marginRight="15dip">
+                    android:layout_marginLeft="10dip"
+                    android:text="视频通话"
+                    android:textColor="#3C3B41"
+                    android:textSize="14dip" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:background="#D4D4D4"></View>
+
+            <LinearLayout
+                android:id="@+id/layout_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:text="取消"
+                    android:textColor="#3C3B41"
+                    android:textSize="14dip" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_gift_tip"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#48000000"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:id="@+id/layout_gift_tip_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true">
+
+                <LinearLayout
+                    android:layout_width="246dip"
+                    android:layout_height="62.5dip"
+                    android:layout_centerHorizontal="true"
+                    android:background="@mipmap/dialog_top_bg"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <View
+                        android:layout_width="15dip"
+                        android:layout_height="1.5dip"
+                        android:background="#ffffff"></View>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dip"
+                        android:text="收到礼物"
+                        android:textColor="#ffffff"
+                        android:textSize="16dip"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="267dip"
+                    android:layout_height="205dip"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="48dip"
+                    android:background="@mipmap/dialog_bottom_bg"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/iv_gift_receive"
+                        android:layout_width="90dip"
+                        android:layout_height="90dip"
+                        android:layout_marginTop="30dip"
+                        android:layout_marginBottom="20dip" />
 
                     <Button
-                        android:id="@+id/get_coin"
+                        android:id="@+id/gift_sure"
                         android:layout_width="100dip"
                         android:layout_height="40dip"
                         android:background="@drawable/build_user_save_bg"
-                        android:text="免费赚金币"
+                        android:text="确定"
                         android:textColor="#ffffff"
                         android:textSize="15dip" />
-
-                    <Button
-                        android:id="@+id/recharge_coin"
-                        android:layout_width="100dp"
-                        android:layout_height="40dip"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/build_user_save_bg"
-                        android:text="充值金币"
-                        android:textColor="#ffffff"
-                        android:textSize="15dip" />
-                </RelativeLayout>
-            </LinearLayout>
-        </RelativeLayout>
-    </RelativeLayout>
-
-    <!--相册-->
-    <LinearLayout
-        android:id="@+id/layout_take_photo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#ffffff"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:id="@+id/layout_camera"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center"
-            android:orientation="horizontal">
+                </LinearLayout>
+            </RelativeLayout>
 
             <ImageView
-                android:layout_width="17dip"
-                android:layout_height="14.5dip"
-                android:src="@mipmap/build_user_camera" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:text="语音通话"
-                android:textColor="#3C3B41"
-                android:textSize="14dip" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:layout_marginLeft="15dip"
-            android:layout_marginRight="15dip"
-            android:background="#D4D4D4"></View>
-
-        <LinearLayout
-            android:id="@+id/layout_photo"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="18dip"
-                android:layout_height="18dip"
-                android:src="@mipmap/build_user_photo" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:text="视频通话"
-                android:textColor="#3C3B41"
-                android:textSize="14dip" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:background="#D4D4D4"></View>
-
-        <LinearLayout
-            android:id="@+id/layout_cancel"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:text="取消"
-                android:textColor="#3C3B41"
-                android:textSize="14dip" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <RelativeLayout
-        android:id="@+id/layout_gift_tip"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#48000000"
-        android:visibility="gone">
-
-        <RelativeLayout
-            android:id="@+id/layout_gift_tip_main"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
-
-            <LinearLayout
-                android:layout_width="246dip"
-                android:layout_height="62.5dip"
+                android:id="@+id/dialog_close"
+                android:layout_width="28dip"
+                android:layout_height="28dip"
+                android:layout_below="@+id/layout_gift_tip_main"
                 android:layout_centerHorizontal="true"
-                android:background="@mipmap/dialog_top_bg"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <View
-                    android:layout_width="15dip"
-                    android:layout_height="1.5dip"
-                    android:background="#ffffff"></View>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dip"
-                    android:text="收到礼物"
-                    android:textColor="#ffffff"
-                    android:textSize="16dip"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="267dip"
-                android:layout_height="205dip"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="48dip"
-                android:background="@mipmap/dialog_bottom_bg"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/iv_gift_receive"
-                    android:layout_width="90dip"
-                    android:layout_height="90dip"
-                    android:layout_marginTop="30dip"
-                    android:layout_marginBottom="20dip" />
-
-                <Button
-                    android:id="@+id/gift_sure"
-                    android:layout_width="100dip"
-                    android:layout_height="40dip"
-                    android:background="@drawable/build_user_save_bg"
-                    android:text="确定"
-                    android:textColor="#ffffff"
-                    android:textSize="15dip" />
-            </LinearLayout>
+                android:layout_marginTop="24dip"
+                android:src="@mipmap/common_dialog_close" />
         </RelativeLayout>
 
         <ImageView
-            android:id="@+id/dialog_close"
-            android:layout_width="28dip"
-            android:layout_height="28dip"
-            android:layout_below="@+id/layout_gift_tip_main"
+            android:id="@+id/anim_show"
+            android:layout_width="200dip"
+            android:layout_height="200dip"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="24dip"
-            android:src="@mipmap/common_dialog_close" />
-    </RelativeLayout>
-
-    <ImageView
-        android:id="@+id/anim_show"
-        android:layout_width="200dip"
-        android:layout_height="200dip"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="-100dip"
-        android:src="@mipmap/test4"
-        android:visibility="gone" />
-
-
-    <!--更多-->
-    <LinearLayout
-        android:id="@+id/layout_more"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#ffffff"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/tv_more1"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center"
-            android:text="分享"
-            android:textColor="#3C3B41"
-            android:textSize="16dip"
+            android:layout_marginTop="-100dip"
+            android:src="@mipmap/test4"
             android:visibility="gone" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:background="#D4D4D4"
-            android:visibility="gone"></View>
 
-        <TextView
-            android:id="@+id/tv_more2"
+        <!--更多-->
+        <LinearLayout
+            android:id="@+id/layout_more"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_more1"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:gravity="center"
+                android:text="分享"
+                android:textColor="#3C3B41"
+                android:textSize="16dip"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:background="#D4D4D4"
+                android:visibility="gone"></View>
+
+            <TextView
+                android:id="@+id/tv_more2"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:gravity="center"
+                android:text="举报"
+                android:textColor="#3C3B41"
+                android:textSize="16dip" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:background="#D4D4D4"></View>
+
+            <TextView
+                android:id="@+id/tv_more3"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:gravity="center"
+                android:text="拉黑"
+                android:textColor="#3C3B41"
+                android:textSize="16dip" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:background="#D4D4D4"></View>
+
+            <TextView
+                android:id="@+id/tv_more_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="#3C3B41"
+                android:textSize="16dip" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:background="#D4D4D4"></View>
+        </LinearLayout>
+
+        <!--举报-->
+        <LinearLayout
+            android:id="@+id/layout_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#ffffff"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_report1"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:gravity="center"
+                android:text="恶意骚扰"
+                android:textColor="#3C3B41"
+                android:textSize="16dip" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:layout_marginLeft="15dip"
+                android:layout_marginRight="15dip"
+                android:background="#D4D4D4"></View>
+
+            <TextView
+                android:id="@+id/tv_report2"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:gravity="center"
+                android:text="色情信息"
+                android:textColor="#3C3B41"
+                android:textSize="16dip" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:background="#D4D4D4"></View>
+
+            <TextView
+                android:id="@+id/tv_report3"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:gravity="center"
+                android:text="性别不符"
+                android:textColor="#3C3B41"
+                android:textSize="16dip" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:background="#D4D4D4"></View>
+
+
+            <TextView
+                android:id="@+id/tv_report4"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:gravity="center"
+                android:text="垃圾广告"
+                android:textColor="#3C3B41"
+                android:textSize="16dip" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:background="#D4D4D4"></View>
+
+
+            <TextView
+                android:id="@+id/tv_report5"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:gravity="center"
+                android:text="盗用他人资料"
+                android:textColor="#3C3B41"
+                android:textSize="16dip" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:background="#D4D4D4"></View>
+
+            <TextView
+                android:id="@+id/tv_report_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="50dip"
+                android:gravity="center"
+                android:text="取消"
+                android:textColor="#3C3B41"
+                android:textSize="16dip" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dip"
+                android:background="#D4D4D4"></View>
+
+        </LinearLayout>
+
+        <com.ldoublem.loadingviewlib.view.LVRingProgress
+            android:id="@+id/anim"
+            android:layout_width="50dip"
             android:layout_height="50dip"
-            android:gravity="center"
-            android:text="举报"
-            android:textColor="#3C3B41"
-            android:textSize="16dip" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:background="#D4D4D4"></View>
-
-        <TextView
-            android:id="@+id/tv_more3"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center"
-            android:text="拉黑"
-            android:textColor="#3C3B41"
-            android:textSize="16dip" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:background="#D4D4D4"></View>
-
-        <TextView
-            android:id="@+id/tv_more_cancel"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center"
-            android:text="取消"
-            android:textColor="#3C3B41"
-            android:textSize="16dip" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:background="#D4D4D4"></View>
-    </LinearLayout>
-
-    <!--举报-->
-    <LinearLayout
-        android:id="@+id/layout_report"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#ffffff"
-        android:orientation="vertical"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/tv_report1"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center"
-            android:text="恶意骚扰"
-            android:textColor="#3C3B41"
-            android:textSize="16dip" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:layout_marginLeft="15dip"
-            android:layout_marginRight="15dip"
-            android:background="#D4D4D4"></View>
-
-        <TextView
-            android:id="@+id/tv_report2"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center"
-            android:text="色情信息"
-            android:textColor="#3C3B41"
-            android:textSize="16dip" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:background="#D4D4D4"></View>
-
-        <TextView
-            android:id="@+id/tv_report3"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center"
-            android:text="性别不符"
-            android:textColor="#3C3B41"
-            android:textSize="16dip" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:background="#D4D4D4"></View>
-
-
-        <TextView
-            android:id="@+id/tv_report4"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center"
-            android:text="垃圾广告"
-            android:textColor="#3C3B41"
-            android:textSize="16dip" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:background="#D4D4D4"></View>
-
-
-        <TextView
-            android:id="@+id/tv_report5"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center"
-            android:text="盗用他人资料"
-            android:textColor="#3C3B41"
-            android:textSize="16dip" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:background="#D4D4D4"></View>
-
-        <TextView
-            android:id="@+id/tv_report_cancel"
-            android:layout_width="match_parent"
-            android:layout_height="50dip"
-            android:gravity="center"
-            android:text="取消"
-            android:textColor="#3C3B41"
-            android:textSize="16dip" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dip"
-            android:background="#D4D4D4"></View>
-
-    </LinearLayout>
-
-    <com.ldoublem.loadingviewlib.view.LVRingProgress
-        android:id="@+id/anim"
-        android:layout_width="50dip"
-        android:layout_height="50dip"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+    </RelativeLayout>
 </RelativeLayout>

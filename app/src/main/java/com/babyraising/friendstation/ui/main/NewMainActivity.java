@@ -602,7 +602,7 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
             params.addQueryStringParameter("userIdList", userIdList.get(u));
         }
         params.addQueryStringParameter("type", 0);
-        params.addQueryStringParameter("userNum", 2);
+//        params.addQueryStringParameter("userNum", 2);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
         x.http().get(params, new Callback.CommonCallback<String>() {

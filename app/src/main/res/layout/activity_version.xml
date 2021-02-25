@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dip"
-            android:text="V1.2.0"
+            android:text="V1.2.1"
             android:textColor="#ff3c3b41"
             android:textSize="15dip" />
     </LinearLayout>
@@ -74,7 +74,7 @@
         android:layout_marginRight="32dip"
         android:layout_marginBottom="32dip"
         android:gravity="center_horizontal"
-        android:text="加友站V1.2.0 Copyright© 2020 深圳互达科技有限公司版权所有"
+        android:text="加友站V1.2.1 Copyright© 2020 深圳互达科技有限公司版权所有"
         android:textColor="#ff3c3b41"
         android:textSize="15dip" />
 </RelativeLayout>
