@@ -25,6 +25,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -32,6 +33,7 @@ import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -56,7 +58,9 @@ import com.babyraising.friendstation.bean.TimRTCResultBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.event.DeleteEvent;
 import com.babyraising.friendstation.event.ImageEvent;
+import com.babyraising.friendstation.request.UseCoin3Request;
 import com.babyraising.friendstation.request.UseCoinRequest;
+import com.babyraising.friendstation.response.CheckCoinResponse;
 import com.babyraising.friendstation.response.MomentByUserIDResponse;
 import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
 import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
@@ -302,6 +306,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     @Event(R.id.common_word)
     private void commonWordClick(View view) {
         Intent intent = new Intent(this, CommonWordActivity.class);
+        intent.putExtra("sex", selfUserBean.getSex());
         startActivityForResult(intent, Constant.ACTIVITY_COMMON_REQUEST);
     }
 
@@ -395,8 +400,11 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             T.s("发送内容不能为空");
             return;
         }
-        useCoin(1, "", "", "", 0);
+        String contentStr = content.getText().toString();
+        useCoin(1, contentStr, "", "", "", 0);
         sendLocalTextMessage(content.getText().toString());
+        content.setText("");
+        hideContent.setText("");
     }
 
     @ViewInject(R.id.tip1)
@@ -475,14 +483,30 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
 
     @Event(R.id.layout_camera)
     private void cameraClick(View view) {
-        sendRTCInvite(Constant.TIM_RTC_CLOUD_ROOM_PREFIX + selfUserBean.getId(), 1);
+//        useCoin(7, "", "", "", "", 0);
         photoLayout.setVisibility(View.GONE);
+
+//        if (selfUserBean.getUserCount().getNumCoin() <= 0) {
+//            mainTipLayout.setVisibility(View.VISIBLE);
+//            T.s("你当前金币余额不足，请充值");
+//            return;
+//        }
+        checkCoin(1);
+//        sendRTCInvite(Constant.TIM_RTC_CLOUD_ROOM_PREFIX + selfUserBean.getId(), 1);
     }
 
     @Event(R.id.layout_photo)
     private void selectPhoto(View view) {
-        sendRTCInvite(Constant.TIM_RTC_CLOUD_ROOM_PREFIX + selfUserBean.getId(), 2);
+//        useCoin(6, "", "", "", "", 0);
         photoLayout.setVisibility(View.GONE);
+//        if (selfUserBean.getUserCount().getNumCoin() <= 0) {
+//            mainTipLayout.setVisibility(View.VISIBLE);
+//            T.s("你当前金币余额不足，请充值");
+//            return;
+//        }
+//
+        checkCoin(2);
+//        sendRTCInvite(Constant.TIM_RTC_CLOUD_ROOM_PREFIX + selfUserBean.getId(), 2);
     }
 
     private boolean hideContentFocus;
@@ -525,13 +549,12 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         initVoiceTip();
         initRecorder();
         initMediaPlayer();
-        initRTCListener();
 
         initDeleteEvent();
 
         initEmoji();
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        getWindow().setSoftInputMode( WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     private void initEmoji() {
@@ -542,6 +565,67 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         emojiRecycleView.setAdapter(emojiAdapter);
     }
 
+    private void checkCoin(final int type) {
+        Gson gson = new Gson();
+        final CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        UseCoin3Request request = new UseCoin3Request();
+        if (type == 1) {
+            request.setType("record");
+        } else {
+            request.setType("video");
+        }
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_COIN_RECORD_QUERYCOINISRICH);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                CheckCoinResponse response = gson.fromJson(result, CheckCoinResponse.class);
+                System.out.println("checkCoin:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        if (response.getData() >= 0) {
+                            if (type == 1) {
+                                sendRTCInvite((int) System.currentTimeMillis() + bean.getUserId(), 1);
+                            } else {
+                                sendRTCInvite((int) System.currentTimeMillis() + bean.getUserId(), 2);
+                            }
+                        } else {
+                            mainTipLayout.setVisibility(View.VISIBLE);
+                            T.s("你当前金币余额不足，请充值");
+                        }
+
+                        break;
+
+                    case 500:
+                        mainTipLayout.setVisibility(View.VISIBLE);
+                        T.s("你当前金币余额不足，请充值");
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
     private void initDeleteEvent() {
         EventBus.getDefault().register(this);
     }
@@ -550,27 +634,6 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    private void initRTCListener() {
-        TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
-        mTRTCCloud.setListener(new TRTCCloudListener() {
-            @Override
-            public void onError(int i, String s, Bundle bundle) {
-                super.onError(i, s, bundle);
-                System.out.println("trtcCloud init :" + s);
-            }
-
-            @Override
-            public void onEnterRoom(long l) {
-                super.onEnterRoom(l);
-                if (l > 0) {
-                    System.out.println("进房成功，总计耗时:" + l);
-                } else {
-                    System.out.println("进房失败，错误码:" + l);
-                }
-            }
-        });
     }
 
     private void initMediaPlayer() {
@@ -955,6 +1018,24 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                 return false;
             }
         });
+
+        hideContent.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    if (TextUtils.isEmpty(content.getText().toString())) {
+                        T.s("发送内容不能为空");
+                        return true;
+                    }
+                    String contentStr = content.getText().toString();
+                    useCoin(1, contentStr, "", "", "", 0);
+                    sendLocalTextMessage(content.getText().toString());
+                    content.setText("");
+                    hideContent.setText("");
+                }
+                return true;
+            }
+        });
 //        content.setOnTouchListener(new View.OnTouchListener() {
 //            @Override
 //            public boolean onTouch(View v, MotionEvent event) {
@@ -1129,6 +1210,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
     private void startVoiceSelfActivity(TimRTCInviteBean bean) {
         Intent intent = new Intent(this, VoiceSelfActivity.class);
         intent.putExtra("voice-send-bean", gson.toJson(bean));
+        System.out.println("startVoiceSelfActivity");
         startActivity(intent);
     }
 
@@ -1142,7 +1224,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             }
             String word = data.getStringExtra("common-word");
             if (!TextUtils.isEmpty(word)) {
-                useCoin(4, "", "", word, 0);
+                useCoin(4, "", "", "", word, 0);
                 sendLocalTextMessage(word);
             }
         }
@@ -1482,7 +1564,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         startActivity(intent);
     }
 
-    private void useCoin(final int msgType, final String localPic, final String recordPic, final String commonWord, final int timeOffset) {
+    private void useCoin(final int msgType, final String contentStr, final String localPic, final String recordPic, final String commonWord, final int timeOffset) {
         if (selfUserBean.getUserCount().getNumCoin() <= 0) {
             mainTipLayout.setVisibility(View.VISIBLE);
             T.s("你当前金币余额不足，请充值");
@@ -1492,6 +1574,13 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
         CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
         UseCoinRequest request = new UseCoinRequest();
         request.setGivenId(String.valueOf(currentChatId));
+        request.setType("message");
+        if (msgType == 6) {
+            request.setType("record");
+        }
+        if (msgType == 7) {
+            request.setType("video");
+        }
         RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_COIN_RECORD_SAVE);
         params.setAsJsonContent(true);
         params.addHeader("Authorization", bean.getAccessToken());
@@ -1506,7 +1595,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                     case 200:
                         switch (msgType) {
                             case 1:
-                                sendTextMessage(content.getText().toString());
+                                sendTextMessage(contentStr);
                                 content.setText("");
                                 hideContent.setText("");
                                 break;
@@ -1519,6 +1608,12 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                                 break;
                             case 4:
                                 sendTextMessage(commonWord);
+                                break;
+                            case 6:
+                                sendRTCInvite(Constant.TIM_RTC_CLOUD_ROOM_PREFIX + selfUserBean.getId(), 2);
+                                break;
+                            case 7:
+                                sendRTCInvite(Constant.TIM_RTC_CLOUD_ROOM_PREFIX + selfUserBean.getId(), 1);
                                 break;
                         }
 
@@ -1575,7 +1670,18 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                             sendRTCInvite(Constant.TIM_RTC_CLOUD_ROOM_PREFIX + selfUserBean.getId(), 1);
                         }
                         if (isChatUp == 1) {
-                            List<String> wordList = ((FriendStationApplication) getApplication()).getCommonWordData();
+                            List<String> wordList = new ArrayList<>();
+                            switch (((FriendStationApplication) getApplication()).getUserAllInfo().getSex()) {
+                                case 0:
+                                    wordList = ((FriendStationApplication) getApplication()).getCommonWordBoyData();
+                                    break;
+                                case 1:
+                                    wordList = ((FriendStationApplication) getApplication()).getCommonWordBoyData();
+                                    break;
+                                case 2:
+                                    wordList = ((FriendStationApplication) getApplication()).getCommonWordGirlData();
+                                    break;
+                            }
                             Random random = new Random();
                             int n = random.nextInt(wordList.size());
                             String word = "";
@@ -1585,7 +1691,7 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
                             } else {
                                 word = wordList.get(0);
                             }
-                            useCoin(4, "", "", word, 0);
+                            useCoin(4, "", "", "", word, 0);
                             sendLocalTextMessage(word);
                         }
 
@@ -1977,12 +2083,12 @@ public class ChatActivity extends BaseActivity implements EasyPermissions.Permis
             System.out.println("拍照-取消");
             return;
         }
-        useCoin(2, localPic, "", "", 0);
+        useCoin(2, "", localPic, "", "", 0);
         sendLocalImageMessage(localPic);
     }
 
     private void uploadRecord(final String recordPic, final int timeOffset) {
-        useCoin(3, "", recordPic, "", timeOffset);
+        useCoin(3, "", "", recordPic, "", timeOffset);
         sendLocalVoiceMessage(recordPic, timeOffset);
     }
 

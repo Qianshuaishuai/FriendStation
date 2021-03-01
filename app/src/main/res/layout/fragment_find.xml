@@ -382,4 +382,93 @@
         android:layout_centerInParent="true"
         android:src="@mipmap/main_find_top_left"
         android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/layout_main_tip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#48000000"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <LinearLayout
+                android:layout_width="225dip"
+                android:layout_height="62.5dip"
+                android:layout_centerHorizontal="true"
+                android:background="@mipmap/dialog_top_bg"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="15dip"
+                    android:layout_height="1.5dip"
+                    android:background="#ffffff"></View>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dip"
+                    android:text="充值有礼"
+                    android:textColor="#ffffff"
+                    android:textSize="16dip"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="262dip"
+                android:layout_height="228dip"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="48dip"
+                android:background="@mipmap/dialog_bottom_bg"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dip"
+                    android:text="首次充值送额外金币"
+                    android:textColor="#9692B1"
+                    android:textSize="16dip" />
+
+                <ImageView
+                    android:layout_width="80dip"
+                    android:layout_height="80dip"
+                    android:layout_marginTop="18dip"
+                    android:src="@mipmap/sign_icon" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dip"
+                    android:layout_marginTop="18dip"
+                    android:layout_marginRight="15dip">
+
+                    <Button
+                        android:id="@+id/get_coin"
+                        android:layout_width="100dip"
+                        android:layout_height="40dip"
+                        android:background="@drawable/build_user_save_bg"
+                        android:text="免费赚金币"
+                        android:textColor="#ffffff"
+                        android:textSize="15dip" />
+
+                    <Button
+                        android:id="@+id/recharge_coin"
+                        android:layout_width="100dp"
+                        android:layout_height="40dip"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/build_user_save_bg"
+                        android:text="充值金币"
+                        android:textColor="#ffffff"
+                        android:textSize="15dip" />
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
 </RelativeLayout>

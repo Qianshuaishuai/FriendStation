@@ -1,6 +1,9 @@
 package com.babyraising.friendstation.service;
 
+import android.app.ActivityManager;
 import android.app.Service;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -27,6 +30,10 @@ import java.util.List;
 public class RTCService extends Service {
 
     private Gson gson = new Gson();
+
+    protected ActivityManager mActivityManager;
+
+    private long currentTime = 0;
 
     @Nullable
     @Override
@@ -64,6 +71,15 @@ public class RTCService extends Service {
                         String objectStr = new String(((CustomElement) elements.get(0)).getData());
                         TimCustomBean bean = gson.fromJson(objectStr, TimCustomBean.class);
                         System.out.println("接收到音视频邀请：" + objectStr);
+                        if (isTopActivity(getTopTask(), "com.babyraising.friendstation", ".ui.main.VoiceTipActivity")) {
+                            return;
+                        }
+                        System.out.println("接收到音视频邀请:" + (System.currentTimeMillis() - currentTime));
+                        System.out.println("接收到音视频邀请currentTime:" + currentTime);
+                        if (System.currentTimeMillis() - currentTime < 1000) {
+                            return;
+                        }
+                        currentTime = System.currentTimeMillis();
                         switch (bean.getMsgType()) {
                             case Constant.INVITE_CHAT_ROOM_CODE:
                                 startVoiceActivity(bean.getInviteBean());
@@ -128,5 +144,28 @@ public class RTCService extends Service {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("voice-invite-bean", gson.toJson(bean));
         this.startActivity(intent);
+    }
+
+    public boolean isTopActivity(ActivityManager.RunningTaskInfo topTask, String packageName, String activityName) {
+        if (topTask != null) {
+            ComponentName topActivity = topTask.topActivity;
+
+            if (topActivity.getPackageName().equals(packageName) &&
+                    topActivity.getClassName().equals(activityName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public ActivityManager.RunningTaskInfo getTopTask() {
+        mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = mActivityManager.getRunningTasks(1);
+        if (tasks != null && !tasks.isEmpty()) {
+            return tasks.get(0);
+        }
+
+        return null;
     }
 }

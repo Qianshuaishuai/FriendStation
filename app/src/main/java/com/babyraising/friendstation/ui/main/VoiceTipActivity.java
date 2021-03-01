@@ -104,14 +104,44 @@ public class VoiceTipActivity extends BaseActivity {
 
     private MediaPlayer mediaPlayer;
 
+    private int connectStatus = -999;
+
+    private TRTCCloud mTRTCCloud;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+//        initTRTCClound();
         initData();
         initRTCMessage();
         initMediaPlayer();
     }
+
+//    private void initTRTCClound() {
+//        // 创建 trtcCloud 实例
+//        mTRTCCloud = TRTCCloud.sharedInstance(getApplicationContext());
+//        mTRTCCloud.setLogLevel(TRTCCloudDef.TRTC_LOG_LEVEL_DEBUG);
+//        mTRTCCloud.setConsoleEnabled(true);
+//
+//        mTRTCCloud.setListener(new TRTCCloudListener() {
+//            @Override
+//            public void onError(int i, String s, Bundle bundle) {
+//                super.onError(i, s, bundle);
+//                System.out.println("trtcCloud init :" + s);
+//            }
+//
+//            @Override
+//            public void onEnterRoom(long l) {
+//                super.onEnterRoom(l);
+//                if (l > 0) {
+//                    System.out.println("进房成功，总计耗时:" + l);
+//                } else {
+//                    System.out.println("进房失败，错误码:" + l);
+//                }
+//            }
+//        });
+//    }
 
     private void initData() {
         Gson gson = new Gson();
@@ -136,52 +166,60 @@ public class VoiceTipActivity extends BaseActivity {
 
     private void refuseTIMRTC() {
         sendReceiptMessage(-1);
+        connectStatus = -1;
         finish();
     }
 
 
     private void cancelTIMRTC() {
         timeHander.removeCallbacks(mCounter);
-        TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
-        mTRTCCloud.stopLocalPreview();
-        mTRTCCloud.stopAllRemoteView();
-        mTRTCCloud.stopRemoteView(String.valueOf(bean.getInviteId()), TRTC_VIDEO_STREAM_TYPE_SMALL);
-        mTRTCCloud.stopLocalAudio();
-        mTRTCCloud.exitRoom();
+//        mTRTCCloud.stopLocalPreview();
+//        mTRTCCloud.stopAllRemoteView();
+//        mTRTCCloud.stopRemoteView(String.valueOf(bean.getInviteId()), TRTC_VIDEO_STREAM_TYPE_SMALL);
+//        mTRTCCloud.stopLocalAudio();
+//        mTRTCCloud.exitRoom();
         sendReceiptMessage(0);
+        connectStatus = 0;
         finish();
     }
 
     private void cancelTIMRTC2() {
         timeHander.removeCallbacks(mCounter);
-        TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
-        mTRTCCloud.stopLocalPreview();
-        mTRTCCloud.stopAllRemoteView();
-        mTRTCCloud.stopRemoteView(String.valueOf(bean.getInviteId()), TRTC_VIDEO_STREAM_TYPE_SMALL);
-        mTRTCCloud.stopLocalAudio();
-        mTRTCCloud.exitRoom();
+//        mTRTCCloud.stopLocalPreview();
+//        mTRTCCloud.stopAllRemoteView();
+//        mTRTCCloud.stopRemoteView(String.valueOf(bean.getInviteId()), TRTC_VIDEO_STREAM_TYPE_SMALL);
+//        mTRTCCloud.stopLocalAudio();
+//        mTRTCCloud.exitRoom();
+        connectStatus = 0;
         finish();
     }
 
     private void receiptTMRTC() {
         sendReceiptMessage(1);
+        connectStatus = 1;
         enterRoomTIMRTC();
     }
 
     private void enterRoomTIMRTC() {
+        connectStatus = 1;
         int APP_SCENE = TRTC_APP_SCENE_VIDEOCALL;
         if (bean.getType() == 1) {
             APP_SCENE = TRTC_APP_SCENE_AUDIOCALL;
         } else {
             APP_SCENE = TRTC_APP_SCENE_VIDEOCALL;
         }
-        final TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
+        mTRTCCloud = TRTCCloud.sharedInstance(getApplicationContext());
+        mTRTCCloud.setLogLevel(TRTCCloudDef.TRTC_LOG_LEVEL_DEBUG);
+        mTRTCCloud.setConsoleEnabled(true);
+
         TRTCCloudDef.TRTCParams trtcParams = new TRTCCloudDef.TRTCParams();
         trtcParams.sdkAppId = Constant.RTC_SDK_APPID;
         trtcParams.userId = String.valueOf(userAllInfoBean.getId());
         trtcParams.roomId = bean.getRoomId();
         trtcParams.userSig = GenerateTestUserSigForRTC.genTestUserSig(String.valueOf(userAllInfoBean.getId()));
         mTRTCCloud.setDefaultStreamRecvMode(true, true);
+        mTRTCCloud.enterRoom(trtcParams, APP_SCENE);
+        T.s("连接中");
         if (APP_SCENE == TRTC_APP_SCENE_AUDIOCALL) {
             mTRTCCloud.startLocalAudio();
         } else {
@@ -216,15 +254,38 @@ public class VoiceTipActivity extends BaseActivity {
                 System.out.println("onMicDidReady");
             }
 
+            @Override
+            public void onError(int i, String s, Bundle bundle) {
+                super.onError(i, s, bundle);
+                System.out.println("trtcCloud init :" + s);
+            }
+
+            @Override
+            public void onEnterRoom(long l) {
+                super.onEnterRoom(l);
+                if (l > 0) {
+                    System.out.println("进房成功，总计耗时:" + l);
+                } else {
+                    System.out.println("进房失败，错误码:" + l);
+                }
+            }
+
         });
-        mTRTCCloud.enterRoom(trtcParams, APP_SCENE);
-        T.s("连接中");
 
         buttonLayout.setVisibility(View.GONE);
         timeLayout.setVisibility(View.VISIBLE);
 
         chat_time = 0;
         timeHander.post(mCounter);
+
+        if (mediaPlayer != null) {
+            try{
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            }catch (Exception e){
+
+            }
+        }
     }
 
     private Runnable mCounter = new Runnable() {
@@ -284,6 +345,9 @@ public class VoiceTipActivity extends BaseActivity {
                         TimCustomBean bean = gson.fromJson(objectStr, TimCustomBean.class);
                         System.out.println("接收方收到发送方反馈 result：" + gson.toJson(bean));
                         setMessageRead(msg.getUserID());
+//                        if (connectStatus != -999) {
+//                            return;
+//                        }
                         switch (bean.getMsgType()) {
                             case Constant.RESULT_CHAT_ROOM_CODE:
                                 switch (bean.getResultBean().getReceipt()) {
@@ -291,7 +355,7 @@ public class VoiceTipActivity extends BaseActivity {
                                         cancelTIMRTC2();
                                         break;
                                     case -1:
-                                        T.s("对方挂断语音邀请");
+//                                        T.s("对方挂断语音邀请");
                                         finish();
                                         break;
                                     case 1:
@@ -361,7 +425,7 @@ public class VoiceTipActivity extends BaseActivity {
     public void playSound() {
         try {
             AssetFileDescriptor fileDescriptor = getAssets().openFd("voice_tip.mp3");
-            mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(),fileDescriptor.getStartOffset(),
+            mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(),
                     fileDescriptor.getStartOffset());
             mediaPlayer.setLooping(true);
             mediaPlayer.prepare();
@@ -374,7 +438,23 @@ public class VoiceTipActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mediaPlayer.stop();
-        mediaPlayer.release();
+        if (mediaPlayer != null) {
+            try{
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            }catch (Exception e){
+
+            }
+        }
+
+        //销毁 trtc 实例
+        if (mTRTCCloud != null) {
+            mTRTCCloud.stopLocalAudio();
+            mTRTCCloud.stopLocalPreview();
+            mTRTCCloud.exitRoom();
+            mTRTCCloud.setListener(null);
+        }
+        mTRTCCloud = null;
+        TRTCCloud.destroySharedInstance();
     }
 }

@@ -223,6 +223,17 @@ public class VoiceSignActivity extends BaseActivity implements EasyPermissions.P
                             });
                         } else {
                             T.s("语音太短！");
+                            recorder.pause(new AudioRecorder.OnPauseListener() {
+                                @Override
+                                public void onPaused(String activeRecordFileName) {
+
+                                }
+
+                                @Override
+                                public void onException(Exception e) {
+
+                                }
+                            });
                         }
 
                         clickViewTime = 0;

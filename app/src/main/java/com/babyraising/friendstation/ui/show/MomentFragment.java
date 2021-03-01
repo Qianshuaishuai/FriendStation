@@ -35,13 +35,18 @@ import com.babyraising.friendstation.request.FollowRequest;
 import com.babyraising.friendstation.request.LikeDetailRequest;
 import com.babyraising.friendstation.request.LikeRequest;
 import com.babyraising.friendstation.request.UpdateAlbumRequest;
+import com.babyraising.friendstation.request.UseCoinRequest;
 import com.babyraising.friendstation.response.MomentResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
+import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
+import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UploadPicResponse;
 import com.babyraising.friendstation.ui.main.ChatActivity;
 import com.babyraising.friendstation.ui.main.MomentSendActivity;
 import com.babyraising.friendstation.ui.main.PersonAuthActivity;
 import com.babyraising.friendstation.ui.main.PersonInfoActivity;
+import com.babyraising.friendstation.ui.main.RechargeActivity;
+import com.babyraising.friendstation.ui.main.TaskActivity;
 import com.babyraising.friendstation.ui.main.VoiceSignActivity;
 import com.babyraising.friendstation.util.GenerateTestUserSig;
 import com.babyraising.friendstation.util.RandomUtil;
@@ -80,26 +85,44 @@ public class MomentFragment extends BaseFragment {
     @ViewInject(R.id.main_layout)
     private RelativeLayout mainLayout;
 
+    @ViewInject(R.id.layout_main_tip)
+    private RelativeLayout mainTipLayout;
+
     @Event(R.id.main_layout)
-    private void mainLayoutClick(View view){
-        if (shareAllLayout.getVisibility() == View.VISIBLE){
+    private void mainLayoutClick(View view) {
+        if (shareAllLayout.getVisibility() == View.VISIBLE) {
             shareAllLayout.setVisibility(View.GONE);
         }
     }
 
     @Event(R.id.content_layout)
-    private void contentLayoutClick(View view){
-        if (shareAllLayout.getVisibility() == View.VISIBLE){
+    private void contentLayoutClick(View view) {
+        if (shareAllLayout.getVisibility() == View.VISIBLE) {
             shareAllLayout.setVisibility(View.GONE);
         }
     }
 
     @Event(R.id.layout_share_all)
-    private void shareLayoutClick(View view){
-        if (shareAllLayout.getVisibility() == View.VISIBLE){
+    private void shareLayoutClick(View view) {
+        if (shareAllLayout.getVisibility() == View.VISIBLE) {
             shareAllLayout.setVisibility(View.GONE);
         }
     }
+
+    @Event(R.id.recharge_coin)
+    private void rechargeCoin(View view) {
+        Intent intent = new Intent(getActivity(), RechargeActivity.class);
+        startActivity(intent);
+        mainTipLayout.setVisibility(View.GONE);
+    }
+
+    @Event(R.id.get_coin)
+    private void getCoin(View view) {
+        Intent intent = new Intent(getActivity(), TaskActivity.class);
+        startActivity(intent);
+        mainTipLayout.setVisibility(View.GONE);
+    }
+
 
     @ViewInject(R.id.type_tv1)
     private TextView typeTv1;
@@ -227,7 +250,17 @@ public class MomentFragment extends BaseFragment {
     }
 
     private void initData() {
-        commonWordList = ((FriendStationApplication) getActivity().getApplication()).getCommonWordData();
+        switch (((FriendStationApplication) getActivity().getApplication()).getUserAllInfo().getSex()) {
+            case 0:
+                commonWordList = ((FriendStationApplication) getActivity().getApplication()).getCommonWordBoyData();
+                break;
+            case 1:
+                commonWordList = ((FriendStationApplication) getActivity().getApplication()).getCommonWordBoyData();
+                break;
+            case 2:
+                commonWordList = ((FriendStationApplication) getActivity().getApplication()).getCommonWordGirlData();
+                break;
+        }
     }
 
     @Override
@@ -441,6 +474,45 @@ public class MomentFragment extends BaseFragment {
         });
     }
 
+    private void getUserFullInfo() {
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_FULL);
+        params.addHeader("Authorization", bean.getAccessToken());
+        System.out.println(bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
+                System.out.println("getUserFullInfo" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        ((FriendStationApplication) getActivity().getApplication()).saveUserAllInfo(response.getData());
+                        System.out.println("coin_num:" + response.getData().getUserCount().getNumCoin());
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
     public void cancelLikeUser(int momentId) {
         LikeRequest request = new LikeRequest();
         LikeDetailRequest request1 = new LikeDetailRequest();
@@ -487,6 +559,63 @@ public class MomentFragment extends BaseFragment {
         });
     }
 
+    private void useCoin(final int selfId, final int userId) {
+        final UserAllInfoBean userBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
+        if (userBean.getUserCount().getNumCoin() <= 0) {
+            mainTipLayout.setVisibility(View.VISIBLE);
+            T.s("你当前金币余额不足，请充值");
+            return;
+        }
+        Gson gson = new Gson();
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        UseCoinRequest request = new UseCoinRequest();
+        request.setGivenId(String.valueOf(userId));
+        request.setType("message");
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_COIN_RECORD_SAVE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUpdatePasswordResponse response = gson.fromJson(result, UmsUpdatePasswordResponse.class);
+                System.out.println("useCoin:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        adminSendMessage(selfId, userId);
+                        T.s("搭讪成功");
+                        showAnimation();
+                        getUserFullInfo();
+                        break;
+
+                    case 500:
+                        mainTipLayout.setVisibility(View.VISIBLE);
+                        T.s("你当前金币余额不足，请充值");
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
     public void goToChat(int position) {
         UserAllInfoBean userBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
         if (userBean == null || userBean.getId() == 0) {
@@ -498,13 +627,10 @@ public class MomentFragment extends BaseFragment {
             authDialog.show();
             return;
         }
-
+        useCoin(userBean.getId(), list.get(position).getUserId());
 //        Intent intent = new Intent(getActivity(), ChatActivity.class);
 //        intent.putExtra("chat-user-id", list.get(position).getUserId());
 //        startActivity(intent);
-        adminSendMessage(userBean.getId(), list.get(position).getUserId());
-        T.s("搭讪成功");
-        showAnimation();
     }
 
     private void getMomentList() {

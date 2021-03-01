@@ -1,7 +1,10 @@
 package com.babyraising.friendstation.ui.main;
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -321,7 +324,6 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
 
     private void initData() {
         bean = ((FriendStationApplication) getApplication()).getUserInfo();
-        commonWordList = ((FriendStationApplication) getApplication()).getCommonWordData();
     }
 
     private void initFragment() {
@@ -532,7 +534,17 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
                         judgeIsAllInfo(response.getData());
                         initTimLogin();
                         uploadLocation();
-
+                        switch (allInfoBean.getSex()) {
+                            case 0:
+                                commonWordList = ((FriendStationApplication) getApplication()).getCommonWordBoyData();
+                                break;
+                            case 1:
+                                commonWordList = ((FriendStationApplication) getApplication()).getCommonWordBoyData();
+                                break;
+                            case 2:
+                                commonWordList = ((FriendStationApplication) getApplication()).getCommonWordGirlData();
+                                break;
+                        }
                         break;
                     case 401:
                         T.s("登录已失效");
@@ -1107,4 +1119,26 @@ public class NewMainActivity extends BaseActivity implements EasyPermissions.Per
         }
     }
 
+    public boolean isTopActivity(ActivityManager.RunningTaskInfo topTask, String packageName, String activityName) {
+        if (topTask != null) {
+            ComponentName topActivity = topTask.topActivity;
+
+            if (topActivity.getPackageName().equals(packageName) &&
+                    topActivity.getClassName().equals(activityName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public ActivityManager.RunningTaskInfo getTopTask() {
+        ActivityManager mActivityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> tasks = mActivityManager.getRunningTasks(1);
+        if (tasks != null && !tasks.isEmpty()) {
+            return tasks.get(0);
+        }
+
+        return null;
+    }
 }

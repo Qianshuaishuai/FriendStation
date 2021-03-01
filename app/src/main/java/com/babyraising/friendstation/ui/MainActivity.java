@@ -252,7 +252,17 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
     private void initData() {
         bean = ((FriendStationApplication) getApplication()).getUserInfo();
-        commonWordList = ((FriendStationApplication) getApplication()).getCommonWordData();
+        switch (((FriendStationApplication) getApplication()).getUserAllInfo().getSex()){
+            case 0:
+                commonWordList = ((FriendStationApplication) getApplication()).getCommonWordBoyData();
+                break;
+            case 1:
+                commonWordList = ((FriendStationApplication) getApplication()).getCommonWordBoyData();
+                break;
+            case 2:
+                commonWordList = ((FriendStationApplication) getApplication()).getCommonWordGirlData();
+                break;
+        }
     }
 
     private void initNavigationBar() {

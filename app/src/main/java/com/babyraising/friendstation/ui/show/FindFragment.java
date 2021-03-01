@@ -50,15 +50,21 @@ import com.babyraising.friendstation.decoration.SpaceItemDecoration;
 import com.babyraising.friendstation.event.DeleteEvent;
 import com.babyraising.friendstation.event.ScrollEvent;
 import com.babyraising.friendstation.event.UpdateMessageEvent;
+import com.babyraising.friendstation.request.UseCoin2Request;
+import com.babyraising.friendstation.request.UseCoinRequest;
 import com.babyraising.friendstation.response.FriendResponse;
 import com.babyraising.friendstation.response.NoticeResponse;
 import com.babyraising.friendstation.response.OnlineTimUserResponse;
 import com.babyraising.friendstation.response.ScoreRecordResponse;
+import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
+import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.response.UserMainPageResponse;
 import com.babyraising.friendstation.ui.main.ChatActivity;
 import com.babyraising.friendstation.ui.main.PersonAuthActivity;
 import com.babyraising.friendstation.ui.main.PersonInfoActivity;
 import com.babyraising.friendstation.ui.main.RankActivity;
+import com.babyraising.friendstation.ui.main.RechargeActivity;
+import com.babyraising.friendstation.ui.main.TaskActivity;
 import com.babyraising.friendstation.ui.main.VoiceSendActivity;
 import com.babyraising.friendstation.ui.main.VoiceSignActivity;
 import com.babyraising.friendstation.util.DisplayUtils;
@@ -81,6 +87,7 @@ import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -111,6 +118,9 @@ public class FindFragment extends BaseFragment {
 
     @ViewInject(R.id.list)
     private RecyclerView recycleList;
+
+    @ViewInject(R.id.layout_main_tip)
+    private RelativeLayout mainTipLayout;
 
     @ViewInject(R.id.scrollView)
     private DScrollView scrollView;
@@ -156,6 +166,21 @@ public class FindFragment extends BaseFragment {
         Intent intent = new Intent(getActivity(), VoiceSendActivity.class);
         startActivity(intent);
     }
+
+    @Event(R.id.recharge_coin)
+    private void rechargeCoin(View view) {
+        Intent intent = new Intent(getActivity(), RechargeActivity.class);
+        startActivity(intent);
+        mainTipLayout.setVisibility(View.GONE);
+    }
+
+    @Event(R.id.get_coin)
+    private void getCoin(View view) {
+        Intent intent = new Intent(getActivity(), TaskActivity.class);
+        startActivity(intent);
+        mainTipLayout.setVisibility(View.GONE);
+    }
+
 
     @ViewInject(R.id.tips)
     private TextView tips;
@@ -270,14 +295,7 @@ public class FindFragment extends BaseFragment {
             return;
         }
 
-        UserAllInfoBean userAllInfoBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
-        for (int a = 0; a < selectInt.size(); a++) {
-            adminSendMessage(userAllInfoBean.getId(), selectInt.get(a));
-        }
-        T.s("搭讪成功");
-        showAnimation();
-        ((FriendStationApplication) getActivity().getApplication()).isUpdateDoTask(getActivity(), mainLayout, 11);
-        tipFirstLayout.setVisibility(View.GONE);
+        useCoin2(selectInt);
     }
 
     private void showAnimation() {
@@ -346,7 +364,22 @@ public class FindFragment extends BaseFragment {
     }
 
     private void initData() {
-        commonWordList = ((FriendStationApplication) getActivity().getApplication()).getCommonWordData();
+        if (((FriendStationApplication) getActivity().getApplication()).getUserAllInfo() != null) {
+            switch (((FriendStationApplication) getActivity().getApplication()).getUserAllInfo().getSex()) {
+                case 0:
+                    commonWordList = ((FriendStationApplication) getActivity().getApplication()).getCommonWordBoyData();
+                    break;
+                case 1:
+                    commonWordList = ((FriendStationApplication) getActivity().getApplication()).getCommonWordBoyData();
+                    break;
+                case 2:
+                    commonWordList = ((FriendStationApplication) getActivity().getApplication()).getCommonWordGirlData();
+                    break;
+            }
+        } else {
+            commonWordList = ((FriendStationApplication) getActivity().getApplication()).getCommonWordBoyData();
+        }
+
 
     }
 
@@ -574,7 +607,8 @@ public class FindFragment extends BaseFragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getUserList();
+//                getUserList();
+                randomUserList();
             }
         });
         recycleList.setHasFixedSize(true);
@@ -596,18 +630,186 @@ public class FindFragment extends BaseFragment {
         scrollView.setOnScrollChanged(new DScrollView.OnScrollChanged() {
             @Override
             public void onScroll(int l, int t, int oldl, int oldt, boolean isBottom) {
-               if (isBottom){
-                   if (tips.getVisibility() == View.GONE) {
-                       getUserListMore();
-                       tips.setVisibility(View.VISIBLE);
-                       scrollView.fullScroll(View.FOCUS_DOWN);
-                   }
-               }
+                if (isBottom) {
+                    if (tips.getVisibility() == View.GONE) {
+                        getUserListMore();
+                        tips.setVisibility(View.VISIBLE);
+                        scrollView.fullScroll(View.FOCUS_DOWN);
+                    }
+                }
             }
         });
 
     }
 
+    private void getUserFullInfo() {
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_FULL);
+        params.addHeader("Authorization", bean.getAccessToken());
+        System.out.println(bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
+                System.out.println("getUserFullInfo" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        ((FriendStationApplication) getActivity().getApplication()).saveUserAllInfo(response.getData());
+                        System.out.println("coin_num:" + response.getData().getUserCount().getNumCoin());
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void useCoin2(final List<Integer> selectInt) {
+        final UserAllInfoBean userBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
+        if (userBean.getUserCount().getNumCoin() <= 0) {
+            mainTipLayout.setVisibility(View.VISIBLE);
+            T.s("你当前金币余额不足，请充值");
+            return;
+        }
+        Gson gson = new Gson();
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        UseCoin2Request request = new UseCoin2Request();
+//        request.setGivenId(String.valueOf(userId));
+        request.setType("message");
+        request.setSendNum(selectInt.size());
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_COIN_RECORD_SAVE_BYNUM);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        System.out.println("useCoin2:" + gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUpdatePasswordResponse response = gson.fromJson(result, UmsUpdatePasswordResponse.class);
+                System.out.println("useCoin2:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        UserAllInfoBean userAllInfoBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
+                        for (int a = 0; a < selectInt.size(); a++) {
+                            adminSendMessage(userAllInfoBean.getId(), selectInt.get(a));
+                        }
+                        T.s("搭讪成功");
+                        showAnimation();
+                        ((FriendStationApplication) getActivity().getApplication()).isUpdateDoTask(getActivity(), mainLayout, 11);
+                        tipFirstLayout.setVisibility(View.GONE);
+                        break;
+
+                    case 500:
+                        mainTipLayout.setVisibility(View.VISIBLE);
+                        T.s("你当前金币余额不足，请充值");
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void useCoin(final int selfId, final int userId) {
+        final UserAllInfoBean userBean = ((FriendStationApplication) getActivity().getApplication()).getUserAllInfo();
+        if (userBean.getUserCount().getNumCoin() <= 0) {
+            mainTipLayout.setVisibility(View.VISIBLE);
+            T.s("你当前金币余额不足，请充值");
+            return;
+        }
+        Gson gson = new Gson();
+        CommonLoginBean bean = ((FriendStationApplication) getActivity().getApplication()).getUserInfo();
+        UseCoinRequest request = new UseCoinRequest();
+        request.setGivenId(String.valueOf(userId));
+        request.setType("message");
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_COIN_RECORD_SAVE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUpdatePasswordResponse response = gson.fromJson(result, UmsUpdatePasswordResponse.class);
+                System.out.println("useCoin:" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        adminSendMessage(selfId, userId);
+                        T.s("搭讪成功");
+                        ((FriendStationApplication) getActivity().getApplication()).isUpdateDoTask(getActivity(), mainLayout, 11);
+                        showAnimation();
+                        getUserFullInfo();
+                        break;
+
+                    case 500:
+                        mainTipLayout.setVisibility(View.VISIBLE);
+                        T.s("你当前金币余额不足，请充值");
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+
+    private void randomUserList() {
+        Collections.shuffle(userList); // 混乱的意思
+        adapter.notifyDataSetChanged();
+        if (refreshLayout.isRefreshing()) {
+            refreshLayout.setRefreshing(false);
+        }
+    }
 
     @Override
     public void onResume() {
@@ -636,11 +838,7 @@ public class FindFragment extends BaseFragment {
 //        Intent intent = new Intent(getActivity(), ChatActivity.class);
 //        intent.putExtra("chat-user-id", userId);
 //        startActivity(intent);
-
-        adminSendMessage(userBean.getId(), userId);
-        T.s("搭讪成功");
-        ((FriendStationApplication) getActivity().getApplication()).isUpdateDoTask(getActivity(), mainLayout, 11);
-        showAnimation();
+        useCoin(userBean.getId(), userId);
     }
 
     public void goToChat2(int userId) {

@@ -159,12 +159,13 @@
                     android:orientation="horizontal">
 
                     <EditText
+                        android:singleLine="true"
                         android:id="@+id/invite"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:gravity="right"
-                        android:imeOptions="actionNext" />
+                        android:imeOptions="actionDone" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

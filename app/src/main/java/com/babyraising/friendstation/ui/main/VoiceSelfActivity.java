@@ -15,11 +15,15 @@ import com.babyraising.friendstation.Constant;
 import com.babyraising.friendstation.FriendStationApplication;
 import com.babyraising.friendstation.R;
 import com.babyraising.friendstation.base.BaseActivity;
+import com.babyraising.friendstation.bean.CommonLoginBean;
 import com.babyraising.friendstation.bean.TimCustomBean;
 import com.babyraising.friendstation.bean.TimRTCInviteBean;
 import com.babyraising.friendstation.bean.TimRTCResultBean;
 import com.babyraising.friendstation.bean.UserAllInfoBean;
 import com.babyraising.friendstation.event.DeleteEvent;
+import com.babyraising.friendstation.request.UseCoinRequest;
+import com.babyraising.friendstation.response.UmsUpdatePasswordResponse;
+import com.babyraising.friendstation.response.UmsUserAllInfoResponse;
 import com.babyraising.friendstation.util.GenerateTestUserSigForRTC;
 import com.babyraising.friendstation.util.T;
 import com.babyraising.friendstation.util.TimeUtils;
@@ -38,7 +42,9 @@ import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCCloudListener;
 
 import org.greenrobot.eventbus.EventBus;
+import org.xutils.common.Callback;
 import org.xutils.common.util.DensityUtil;
+import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -62,6 +68,8 @@ public class VoiceSelfActivity extends BaseActivity {
 
     private MediaPlayer mediaPlayer;
 
+    private int useCoinStatus = 0;
+
     @Event(R.id.layout_time_cancel)
     private void cancelLayoutClick(View view) {
 //        if (chat_time == 0){
@@ -72,6 +80,22 @@ public class VoiceSelfActivity extends BaseActivity {
         cancelTIMRTC();
     }
 
+    @ViewInject(R.id.layout_main_tip)
+    private RelativeLayout mainTipLayout;
+
+    @Event(R.id.recharge_coin)
+    private void rechargeCoin(View view) {
+        Intent intent = new Intent(this, RechargeActivity.class);
+        startActivity(intent);
+        mainTipLayout.setVisibility(View.GONE);
+    }
+
+    @Event(R.id.get_coin)
+    private void getCoin(View view) {
+        Intent intent = new Intent(this, TaskActivity.class);
+        startActivity(intent);
+        mainTipLayout.setVisibility(View.GONE);
+    }
 
     @ViewInject(R.id.voice_default_head)
     private ImageView voiceDefaultHead;
@@ -99,15 +123,44 @@ public class VoiceSelfActivity extends BaseActivity {
 
     private long chat_time = 0;
     private Handler timeHander = new Handler();
+    private int connectStatus = -999;
+
+    private TRTCCloud mTRTCCloud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         initData();
         initRTCMessage();
         initMediaPlayer();
+
+        System.out.println("VoiceSelfActivity");
     }
+
+//    private void initTRTCClound() {
+//        // 创建 trtcCloud 实例
+//        mTRTCCloud = TRTCCloud.sharedInstance(getApplicationContext());
+//        mTRTCCloud.setLogLevel(TRTCCloudDef.TRTC_LOG_LEVEL_DEBUG);
+//        mTRTCCloud.setConsoleEnabled(true);
+//
+//        mTRTCCloud.setListener(new TRTCCloudListener() {
+//            @Override
+//            public void onError(int i, String s, Bundle bundle) {
+//                super.onError(i, s, bundle);
+//                System.out.println("trtcCloud init :" + s);
+//            }
+//
+//            @Override
+//            public void onEnterRoom(long l) {
+//                super.onEnterRoom(l);
+//                if (l > 0) {
+//                    System.out.println("进房成功，总计耗时:" + l);
+//                } else {
+//                    System.out.println("进房失败，错误码:" + l);
+//                }
+//            }
+//        });
+//    }
 
     private void initData() {
         Intent intent = getIntent();
@@ -132,25 +185,26 @@ public class VoiceSelfActivity extends BaseActivity {
 
     private void cancelTIMRTC() {
         timeHander.removeCallbacks(mCounter);
-        TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
-        mTRTCCloud.stopLocalPreview();
-        mTRTCCloud.stopAllRemoteView();
-        mTRTCCloud.stopLocalAudio();
-        mTRTCCloud.stopRemoteView(String.valueOf(bean.getReceiveId()), TRTC_VIDEO_STREAM_TYPE_SMALL);
-        mTRTCCloud.exitRoom();
+//        mTRTCCloud.stopLocalPreview();
+//        mTRTCCloud.stopAllRemoteView();
+//        mTRTCCloud.stopLocalAudio();
+//        mTRTCCloud.stopRemoteView(String.valueOf(bean.getReceiveId()), TRTC_VIDEO_STREAM_TYPE_SMALL);
+//        mTRTCCloud.exitRoom();
         sendResultMessage(0);
+        connectStatus = 0;
         finish();
     }
 
     private void refuseTIMRTC() {
         sendResultMessage(-1);
+        connectStatus = -1;
         finish();
     }
 
     public void playSound() {
         try {
             AssetFileDescriptor fileDescriptor = getAssets().openFd("voice_tip.mp3");
-            mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(),fileDescriptor.getStartOffset(),
+            mediaPlayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(),
                     fileDescriptor.getStartOffset());
             mediaPlayer.setLooping(true);
             mediaPlayer.prepare();
@@ -162,36 +216,41 @@ public class VoiceSelfActivity extends BaseActivity {
 
     private void cancelTIMRTC2() {
         timeHander.removeCallbacks(mCounter);
-        TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
-        mTRTCCloud.stopLocalPreview();
-        mTRTCCloud.stopAllRemoteView();
-        mTRTCCloud.stopLocalAudio();
-        mTRTCCloud.stopRemoteView(String.valueOf(bean.getReceiveId()), TRTC_VIDEO_STREAM_TYPE_SMALL);
-        mTRTCCloud.exitRoom();
+//        mTRTCCloud.stopLocalPreview();
+//        mTRTCCloud.stopAllRemoteView();
+//        mTRTCCloud.stopLocalAudio();
+//        mTRTCCloud.stopRemoteView(String.valueOf(bean.getReceiveId()), TRTC_VIDEO_STREAM_TYPE_SMALL);
+//        mTRTCCloud.exitRoom();
+        connectStatus = 0;
         finish();
     }
 
     private void enterRoomTIMRTC() {
+//        connectStatus = 1;
         int APP_SCENE = TRTC_APP_SCENE_VIDEOCALL;
         if (bean.getType() == 1) {
             APP_SCENE = TRTC_APP_SCENE_AUDIOCALL;
         } else {
             APP_SCENE = TRTC_APP_SCENE_VIDEOCALL;
         }
-        final TRTCCloud mTRTCCloud = ((FriendStationApplication) getApplication()).getmTRTCCloud();
+        mTRTCCloud = TRTCCloud.sharedInstance(getApplicationContext());
+        mTRTCCloud.setLogLevel(TRTCCloudDef.TRTC_LOG_LEVEL_DEBUG);
+        mTRTCCloud.setConsoleEnabled(true);
+
         TRTCCloudDef.TRTCParams trtcParams = new TRTCCloudDef.TRTCParams();
         trtcParams.sdkAppId = Constant.RTC_SDK_APPID;
         trtcParams.userId = String.valueOf(userAllInfoBean.getId());
         trtcParams.roomId = bean.getRoomId();
         trtcParams.userSig = GenerateTestUserSigForRTC.genTestUserSig(String.valueOf(userAllInfoBean.getId()));
         mTRTCCloud.setDefaultStreamRecvMode(true, true);
+        mTRTCCloud.enterRoom(trtcParams, APP_SCENE);
         if (APP_SCENE == TRTC_APP_SCENE_AUDIOCALL) {
             mTRTCCloud.startLocalAudio();
         } else {
             smallVideo.setVisibility(View.VISIBLE);
             matchVideo.setVisibility(View.VISIBLE);
-            mTRTCCloud.startLocalPreview(true, smallVideo);
             mTRTCCloud.startLocalAudio();
+            mTRTCCloud.startLocalPreview(true, smallVideo);
             mTRTCCloud.startRemoteView(String.valueOf(bean.getReceiveId()), TRTC_VIDEO_STREAM_TYPE_SMALL, matchVideo);
         }
         mTRTCCloud.setListener(new TRTCCloudListener() {
@@ -204,13 +263,31 @@ public class VoiceSelfActivity extends BaseActivity {
             @Override
             public void onError(int i, String s, Bundle bundle) {
                 super.onError(i, s, bundle);
-                System.out.println("mTRTCCloud:" + s + ",code:" + i);
+                System.out.println("onError:" + s + ",code:" + i);
+            }
+
+            @Override
+            public void onWarning(int i, String s, Bundle bundle) {
+                super.onWarning(i, s, bundle);
+                System.out.println("onWarning:" + s + ",code:" + i + ",s:" + s);
             }
 
             @Override
             public void onFirstAudioFrame(String s) {
                 super.onFirstAudioFrame(s);
                 System.out.println("onUserAudioAvailable:" + s);
+            }
+
+            @Override
+            public void onSendFirstLocalVideoFrame(int i) {
+                super.onSendFirstLocalVideoFrame(i);
+                System.out.println("onSendFirstLocalVideoFrame:" + i);
+            }
+
+            @Override
+            public void onFirstVideoFrame(String s, int i, int i1, int i2) {
+                super.onFirstVideoFrame(s, i, i1, i2);
+                System.out.println("onFirstVideoFrame:" + s + " ,i:" + i + " ,i1:" + i1 + " ,i2:" + i2);
             }
 
             @Override
@@ -229,13 +306,39 @@ public class VoiceSelfActivity extends BaseActivity {
             public void onUserVideoAvailable(String s, boolean b) {
                 super.onUserVideoAvailable(s, b);
             }
+
+            @Override
+            public void onEnterRoom(long l) {
+                super.onEnterRoom(l);
+                if (l > 0) {
+                    System.out.println("进房成功，总计耗时:" + l);
+                } else {
+                    System.out.println("进房失败，错误码:" + l);
+                }
+            }
+
+            @Override
+            public void onCameraDidReady() {
+                super.onCameraDidReady();
+                System.out.println("onCameraDidReady");
+            }
         });
-        mTRTCCloud.enterRoom(trtcParams, APP_SCENE);
 
         timeTipLayout.setVisibility(View.VISIBLE);
 
         chat_time = 0;
         timeHander.post(mCounter);
+        if (useCoinStatus == 0) {
+            useCoin(bean.getType(), bean.getReceiveId());
+        }
+        if (mediaPlayer != null) {
+            try {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            } catch (Exception e) {
+
+            }
+        }
     }
 
     private Runnable mCounter = new Runnable() {
@@ -308,6 +411,7 @@ public class VoiceSelfActivity extends BaseActivity {
                                         break;
                                     case 1:
                                         enterRoomTIMRTC();
+//                                        useCoin(VoiceSelfActivity.this.bean.getType(), VoiceSelfActivity.this.bean.getReceiveId());
                                         break;
                                 }
                                 break;
@@ -355,8 +459,24 @@ public class VoiceSelfActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mediaPlayer.stop();
-        mediaPlayer.release();
+        if (mediaPlayer != null) {
+            try {
+                mediaPlayer.stop();
+                mediaPlayer.release();
+            } catch (Exception e) {
+
+            }
+        }
+
+        //销毁 trtc 实例
+        if (mTRTCCloud != null) {
+            mTRTCCloud.stopLocalAudio();
+            mTRTCCloud.stopLocalPreview();
+            mTRTCCloud.exitRoom();
+            mTRTCCloud.setListener(null);
+        }
+        mTRTCCloud = null;
+        TRTCCloud.destroySharedInstance();
     }
 
     private void deleteMessage(V2TIMMessage message) {
@@ -380,5 +500,98 @@ public class VoiceSelfActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         cancelTIMRTC();
+    }
+
+    private void useCoin(int type, int currentChatId) {
+        useCoinStatus = 1;
+        Gson gson = new Gson();
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        UseCoinRequest request = new UseCoinRequest();
+        request.setGivenId(String.valueOf(currentChatId));
+        if (type == 1) {
+            request.setType("record");
+        } else {
+            request.setType("video");
+        }
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_FRIENDS_COIN_RECORD_SAVE);
+        params.setAsJsonContent(true);
+        params.addHeader("Authorization", bean.getAccessToken());
+        params.setBodyContent(gson.toJson(request));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUpdatePasswordResponse response = gson.fromJson(result, UmsUpdatePasswordResponse.class);
+                System.out.println("useCoin:" + result);
+                switch (response.getCode()) {
+                    case 200:
+
+                        getUserFullInfo();
+                        break;
+
+                    case 500:
+                        mainTipLayout.setVisibility(View.VISIBLE);
+                        T.s("你当前金币余额不足，请充值");
+                        break;
+                    default:
+                        T.s(response.getMsg());
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void getUserFullInfo() {
+        CommonLoginBean bean = ((FriendStationApplication) getApplication()).getUserInfo();
+        RequestParams params = new RequestParams(Constant.BASE_URL + Constant.URL_UMS_USER_FULL);
+        params.addHeader("Authorization", bean.getAccessToken());
+        System.out.println(bean.getAccessToken());
+        x.http().get(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                UmsUserAllInfoResponse response = gson.fromJson(result, UmsUserAllInfoResponse.class);
+                System.out.println("getUserFullInfo" + result);
+                switch (response.getCode()) {
+                    case 200:
+                        ((FriendStationApplication) getApplication()).saveUserAllInfo(response.getData());
+                        System.out.println("coin_num:" + response.getData().getUserCount().getNumCoin());
+                        break;
+                    default:
+
+                        break;
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                System.out.println("错误处理:" + ex);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 }

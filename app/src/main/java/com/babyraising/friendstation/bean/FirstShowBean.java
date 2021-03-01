@@ -1,7 +1,7 @@
 package com.babyraising.friendstation.bean;
 
 public class FirstShowBean {
-    private int isSelect = 0;
+    private int isSelect = 1;
     private int userId = 0;
 
     public int getIsSelect() {

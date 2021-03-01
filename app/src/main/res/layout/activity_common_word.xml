@@ -38,7 +38,8 @@
             android:layout_marginRight="24dip"
             android:text="添加"
             android:textColor="#F75184"
-            android:textSize="14dip" />
+            android:textSize="14dip"
+            android:visibility="gone" />
 
         <View
             android:layout_width="match_parent"

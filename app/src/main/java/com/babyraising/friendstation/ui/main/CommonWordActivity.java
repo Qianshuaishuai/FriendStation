@@ -42,7 +42,20 @@ public class CommonWordActivity extends BaseActivity {
     }
 
     private void initView() {
-        list = ((FriendStationApplication) getApplication()).getCommonWordData();
+        Intent intent = getIntent();
+        int sex = intent.getIntExtra("sex",0);
+        switch (sex){
+            case 0:
+                list = ((FriendStationApplication) getApplication()).getCommonWordBoyData();
+                break;
+            case 1:
+                list = ((FriendStationApplication) getApplication()).getCommonWordBoyData();
+                break;
+            case 2:
+                list = ((FriendStationApplication) getApplication()).getCommonWordGirlData();
+                break;
+        }
+
         adapter = new CommonWordAdapter(this, list);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
